@@ -16,7 +16,7 @@
                 <input type="email" name="email" id="email" placeholder="proba@gmail.com"><br>
                 <label for="password">Jelszó</label><br>
                 <input type="password" name="password" id="password" placeholder="Jelszó"><br>
-                <a href="">Elfelejtette a jelszavát?</a><br>
+                <a href="">Nincs még fiókja? Regisztráljon!</a><br>
                 <input type="submit" name="login" id="button_login" value="Bejelentkezés">
             </form>
         </div>
