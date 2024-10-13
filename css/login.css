@@ -21,10 +21,10 @@ body{
     background-color: white;
     color: black;
     height: fit-content;
-    padding: 5px;
     width: 450px;
+    padding: 5px;
     border: 1px solid black;
-    border-radius: 15px 15px 15px 15px;
+    border-radius: 15px;
     justify-content:center;
 }
 
@@ -32,20 +32,22 @@ body{
     height: fit-content;
 }
 
-form h1{
+h1{
     text-align: center;
 }
 
-form{
-    margin-right: 0px;
-    width: 100%;
+label{
     text-align: left;
+    width: 100%;
+    height: 30px;
 }
 
-form input,label{
-    width: 430px;
-    height: 20px;
-    margin: 5px;
+input{
+    border: 1px solid grey;
+    width: 445px;
+    height: 30px;
+    margin-bottom: 20px;
+    border-radius: 5px;
 }
 
 form a{
@@ -59,11 +61,13 @@ form a:hover{
 }
 
 #button_login{
+    display: block;
+    justify-content: center;
     height: 40px;
+    width: 100%;
     background-color: #5271ff;
-    border-radius: 15px 15px 15px 15px;
-    border: 1px solid #5271ff;
+    border-radius: 15px;
+    border: none;
     color: white;
-    padding: 15px;
     text-align: center;
 }
