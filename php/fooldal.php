@@ -11,7 +11,7 @@
     <div class="header">
         <div class="header_buttons">
             <input type="button" id="login_button" value="Bejelentkezés" onclick="openLogin()"/>
-            <input type="button" id="signup_button" value="Regisztráció"/>
+            <input type="button" id="signup_button" value="Regisztráció" onclick="openSignup()"/>
         </div>
     </div>
     <div class="footer">
