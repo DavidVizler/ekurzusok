@@ -40,7 +40,6 @@ form{
     margin-right: 0px;
     width: 100%;
     text-align: left;
-    justify-items: center;
 }
 
 form input,label{
@@ -52,6 +51,8 @@ form input,label{
 form a{
     color: #5271ff;
     padding: 15px;
+    display: block;
+    text-align: center;
 }
 form a:hover{
     color:blue;
