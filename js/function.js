@@ -1,7 +1,7 @@
 function openLogin(){
-    window.open('../php/login.php','_self')
+    window.open('../html/login.html','_self')
 }
 
 function openSignup(){
-    window.open('../php/signup.php','_self')
+    window.open('../html/signup.html','_self')
 }
