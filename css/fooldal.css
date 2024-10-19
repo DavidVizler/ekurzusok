@@ -16,6 +16,7 @@
     height: 60px;
     width: 200px;
     margin: 5px;
+    cursor: pointer;
 }
 
 #signup_button{
@@ -27,6 +28,7 @@
     height: 60px;
     width: 200px;
     margin: 5px;
+    cursor: pointer;
 }
 
 .header_buttons{
