@@ -114,3 +114,87 @@ body{
 #menuContent #addedCourses{
     margin-bottom: 5px;
 }
+
+.plusIcon{
+    height: 50px;
+    width: 50px;
+    z-index: 10;
+    padding-inline: 0;
+}
+
+.plusIcon a{
+    text-decoration: none;
+    color: white;
+}
+
+.calendarIcon{
+    height: 50px;
+    width: 50px;
+    z-index: 10;
+    padding-inline: 0;
+}
+
+.calendarIcon a{
+    text-decoration: none;
+    color: white;
+}
+
+/* Popup Css */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; 
+}
+
+/* Popup content box */
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 250px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+}
+
+/* Close button styling */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: black;
+}
+
+.courseCodeAdd > input{
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.createCourse a{
+    text-decoration: none;
+    height: 20px;
+    color: white;
+    background-color: #5271FF;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.createCourse a:hover{
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+    border: 1px solid #4864e1;
+}
+
+.createCourse{
+    margin-top: 20px;
+}
