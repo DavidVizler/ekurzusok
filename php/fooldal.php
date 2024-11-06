@@ -16,6 +16,12 @@
             <a href="../php/signup.php" target="_self" id="signup_button">Regisztráció</a>
         </div>
     </div>
+
+    <div class="contentDiv">
+        <h1>eKurzusok</h1>
+        <p>Az innovatív tanulást segítő program</p>
+    </div>
+
     <div class="footer">
         <div class="links">
             <a href="#">Rólunk</a>

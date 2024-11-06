@@ -1,3 +1,9 @@
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 .header{
     background-color: #5271ff;
     display: flex;
@@ -86,4 +92,27 @@ body{
     width: 100%;
     justify-content: space-between;
     align-items: center;
+}
+
+.contentDiv{
+    flex: 1;
+    background-image: url("../img/main_background.png");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.contentDiv h1{
+    font-size: 50px;
+    font-weight: 550;
+    margin-bottom: 0;
+}
+
+.contentDiv p{
+    font-size: 25px;
 }
