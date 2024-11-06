@@ -118,6 +118,7 @@ body{
 .plusIcon{
     height: 50px;
     width: 50px;
+    margin-right: 10px;
     z-index: 10;
     padding-inline: 0;
 }
@@ -130,6 +131,7 @@ body{
 .calendarIcon{
     height: 50px;
     width: 50px;
+    margin-right: 10px;
     z-index: 10;
     padding-inline: 0;
 }
@@ -170,7 +172,8 @@ body{
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 30px;
+    height: 30px;
+    width: 30px;
     cursor: pointer;
     color: black;
 }
@@ -179,6 +182,7 @@ body{
     height: 30px;
     border-radius: 10px;
     border: 1px solid black;
+    margin-top: 10px;
 }
 
 .createCourse a{
