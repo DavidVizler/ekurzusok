@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/kurzusok.css">
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Varela+Round&display=swap" rel="stylesheet">
     <title>Kurzusok</title>
 </head>
 <body>
@@ -57,21 +61,29 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </a>
-            <div class="popup-content-title">
-                <h3>Kurzus felvétele</h3>
-            </div>
+            <h3 class="popup-content-title">Kurzus hozzáadása</h3>
             <hr>
-            <div class="courseCodeAdd">
-                <h7>Kurzus kód megadása: </h7>
-                <input type="text" name="coursedCode">
+            <div class="addCourseMode">
+                <form method="post">
+                    <select name="selectAddCourse" id="selectAddCourse">
+                        <option value="">Kérem válasszon!</option>
+                        <option value="addCourseCode">Kód megadása</option>
+                        <option value="createCourse">Létrehozás</option>
+                    </select>
+                </form>
             </div>
-            <hr>
-            <div class="createCourse">
-                <a href="">Kurzus létrehozása</a>
+            <div class="codeForm" id="codeForm" style="display:none">
+                <hr>
+                <form method="post">
+                    <label for="codeInput">Jelentkezés kurzusra</label>
+                    <input type="text" name="codeInput" id="codeInput">
+                    <input type="button" class="codeAddButton" value="Jelentkezés">
+                </form>
             </div>
         </div>
     </div>
 
-    <script src="../js/toggle.js"></script>
+
+    <script src="../js/coursePage.js"></script>
 </body>
 </html>

@@ -9,6 +9,16 @@ function closePopup() {
    document.getElementById("popup").style.display = "none";
 }
 
+document.getElementById("selectAddCourse").addEventListener('change',()=>{
+   let selectedValue = document.querySelector("option:checked").value
+   let codeForm = document.getElementById("codeForm")
+   if(selectedValue == "addCourseCode"){
+      codeForm.style.display = "block"
+   }else{
+      codeForm.style.display = "none"
+   }
+})
+
 function clickHandler(){
    menu.classList.toggle("active");
 }

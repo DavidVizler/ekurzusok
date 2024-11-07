@@ -10,9 +10,7 @@
 <body>
     <div class="header">
         <div class="header_buttons">
-            <!-- <input type="button" id="login_button" value="Bejelentkezés" onclick="openLogin()"/> -->
             <a href="../php/login.php" target="_self" id="login_button">Bejelentkezés</a>
-            <!-- <input type="button" id="signup_button" value="Regisztráció" onclick="openSignup()"/> -->
             <a href="../php/signup.php" target="_self" id="signup_button">Regisztráció</a>
         </div>
     </div>
