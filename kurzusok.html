@@ -71,7 +71,7 @@
 
         <!-- Calendar icon -->
         <div class="calendarIcon">
-            <a href="">
+            <a onclick="openCalendarPopUp()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <!-- Popup -->
+    <!-- Popup - kód hozzáadása-->
     <div id="popup" class="popup-overlay" style="display:none">
         <div class="popup-content">
             <a class="close-btn" onclick="closePopup()">
@@ -108,6 +108,22 @@
                     <input type="text" name="codeInput" id="codeInput">
                     <input type="button" class="codeAddButton" value="Jelentkezés">
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PopUP - Naptár megjelenítése -->
+    <div id="popupCalendar" class="calendar-popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <label for="calendarCloseButton">Határidős feladatok</label>
+            <a class="close-btn" onclick="closePopup()" id="calendarCloseButton" name="calendarCloseButton">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </a>
+            <div class="toDoExercises">
+                <p>Egyenlőre nincsenek határidős feladatai!</p>
             </div>
         </div>
     </div>

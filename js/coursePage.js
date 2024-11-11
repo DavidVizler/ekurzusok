@@ -4,9 +4,14 @@ function openPopUp() {
    document.getElementById("popup").style.display = "flex";
 }
 
+function openCalendarPopUp(){
+   document.getElementById("popupCalendar").style.display = "flex";
+}
+
 // Function to close the popup
 function closePopup() {
    document.getElementById("popup").style.display = "none";
+   document.getElementById("popupCalendar").style.display = "none";
 }
 
 document.getElementById("selectAddCourse").addEventListener('change',()=>{
