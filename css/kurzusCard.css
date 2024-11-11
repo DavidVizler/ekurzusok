@@ -1,7 +1,7 @@
 .cards-container{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 16px;
 }
 
 .row{
@@ -27,7 +27,7 @@
 }
 
 .card{
-    width: 250px;
+    width: 270px;
     height: 400px;
     border-radius: 15px;
     border: 1px solid grey;
