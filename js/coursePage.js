@@ -22,6 +22,9 @@ document.getElementById("selectAddCourse").addEventListener('change',()=>{
    }else{
       codeForm.style.display = "none"
    }
+   if(selectedValue == "createCourse"){
+      window.open("./kurzusAdd.html", "_self")
+   }
 })
 
 function clickHandler(){

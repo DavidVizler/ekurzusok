@@ -33,20 +33,41 @@ body{
     overflow-y: auto;
 }
 
-#createButton{
-    height: 50px;
-    background-color: #5271ff;
+#createButton, #closeButton {
+    flex: 1;                 
+    height: 30px;
     font-family: "Varela Round";
-    border: none;
     border-radius: 10px;
-    color: white;
-    margin-bottom: 10px;
     text-align: center;
+    margin: 0;              
 }
 
-#createButton:hover{
+#createButton {
+    background-color: #5271ff;
+    border: none;
+    color: white;
+}
+
+#createButton:hover {
     cursor: pointer;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
+#closeButton {
+    background-color: white;
+    border: 1px solid #5271ff;
+    color: black;
+}
+
+#closeButton:hover {
+    cursor: pointer;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
+.formButtons{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 .formDiv input, select{
@@ -71,10 +92,6 @@ form{
     justify-content: flex-start;
     height: 100%;
 }
-
-/* label{
-    margin-left: 5px;
-} */
 
 .preView{
     display: flex;
