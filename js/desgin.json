@@ -1,0 +1,17 @@
+[
+    {
+        "designId" : 1,
+        "designName" : "Geography",
+        "image" : "./img/courseThemes/Geography_background.png"
+    },
+    {
+        "designId" : 2,
+        "designName" : "Literature",
+        "image" : "./img/courseThemes/Literature_background.png"
+    },
+    {
+        "designId" : 3,
+        "designName" : "Math",
+        "image" : "./img/courseThemes/Math_background.png"
+    }
+]
