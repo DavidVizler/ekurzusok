@@ -73,15 +73,13 @@ body{
 .formDiv input, select{
     border: 1px solid grey;
     border-radius: 5px;
-    /* margin: 5px; */
     box-sizing: border-box;
-    height: 50px;
+    height: 30px;
 }
 
 #Leiras{
-    height: 100px;
+    height: 150px;
     resize: vertical;
-    /* margin: 5px; */
     border-radius: 5px;
 }
 
@@ -93,10 +91,23 @@ form{
     height: 100%;
 }
 
-.preView{
+.preViewDiv{
     display: flex;
     flex-grow: 1;
     border: 1px solid gray;
     border-radius: 10px;
     margin-top: 0;
+}
+
+#preViewImage {
+    border-radius: 10px;
+    width: max-content;
+    height: max-content;
+    margin-left: 5px;
+}
+
+img{
+    height: 300px;
+    width: 600px;
+    border-radius: 10px;
 }
