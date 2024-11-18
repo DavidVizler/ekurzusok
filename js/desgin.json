@@ -13,5 +13,10 @@
         "designId" : 3,
         "designName" : "Matematika",
         "image" : "./img/courseThemes/Math_background.png"
+    },
+    {
+        "designId" : 4,
+        "designName" : "Gyümölcsös",
+        "image" : "./img/courseThemes/Fruit_background.png"
     }
 ]
