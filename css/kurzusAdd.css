@@ -5,7 +5,6 @@
 .content{
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     padding: 5px;
     border: 1px solid grey;
     border-radius: 10px;
@@ -19,17 +18,15 @@ body{
     margin: 0;
     padding: 10px;
     height: 100vh;
-    overflow: hidden;
     display: flex;
 }
 
 .formDiv{
     display: flex;
     flex-direction: column;
-    flex: 1;
     width: 100%;
     max-height: 100vh;
-    padding: 5px;
+    padding: 10px;
     overflow-y: auto;
 }
 
@@ -73,14 +70,8 @@ body{
 .formDiv input, select{
     border: 1px solid grey;
     border-radius: 5px;
-    box-sizing: border-box;
     height: 30px;
-}
-
-#Leiras{
-    height: 150px;
-    resize: vertical;
-    border-radius: 5px;
+    min-height: 30px;
 }
 
 form{
@@ -91,9 +82,7 @@ form{
     height: 100%;
 }
 
-.preViewDiv{
-    display: flex;
-    flex-grow: 1;
+.preView{
     border: 1px solid gray;
     border-radius: 10px;
     margin-top: 0;
@@ -106,8 +95,35 @@ form{
     margin-left: 5px;
 }
 
-img{
-    height: 300px;
-    width: 600px;
-    border-radius: 10px;
+.preView h1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: white;
+}
+
+.card{
+    width: 270px;
+    height: 400px;
+    border-radius: 15px;
+    border: 1px solid grey;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+}
+
+.card-header{
+    height: 40%;
+    overflow: hidden;
+}
+
+.card-img-top{
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-body{
+    padding: 10px;
 }

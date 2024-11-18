@@ -23,17 +23,15 @@
                 <label for="OktatoNeve">Oktatók neve: </label>
                 <input type="text" name="OktatoNeve" id="OktatoNeve"><br>
                 <label for="Leiras">Kurzus leírása: </label>
-                <textarea name="Leiras" id="Leiras"></textarea><br>
+                <input type="text" name="Leiras" id="Leiras"/><br>
                 <label for="DesignSelect">Kurzus témája: </label>
                 <select name="DesignSelect" id="DesignSelect"></select><br>
+                <div id="preView" style="display: none;"></div>
                 <div class="formButtons">
                     <button type="submit" id="createButton" name="createButton">Létrehozás</button>
                     <button type="button" id="closeButton">Mégse</button>
                 </div>
             </form>
-        </div>
-        <div id="preView" style="display: none;">
-            <div id="preViewImage"></div>
         </div>
     </div>
     <script type="module" src="./js/courseAddPage.js"></script>
