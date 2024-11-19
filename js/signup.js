@@ -17,7 +17,7 @@ async function signup() {
             password
         };
 
-        let response = await fetch("/php/user_manager.php/signup", {
+        let response = await fetch("./php/user_manager.php/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
