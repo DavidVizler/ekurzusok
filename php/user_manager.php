@@ -24,10 +24,12 @@ function Signup() {
 
         $eredmeny = AdatModositas($sql_felhasznalo_feltoltes);
 
-        echo "Felhasználó feltöltése: " . $eredmeny;
+        $valasz = ["regisztracio" => $eredmeny];
     } else {
-        echo "Már regisztráltak ezen az e-mail címen!";
+        $valasz = ["regisztracio" => "email mar regisztralt"];
     }
+
+    echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
 }
 
 function Login() {
@@ -43,13 +45,29 @@ function Login() {
     if (is_array($hashed_password)) {
         // Jelszó ellenőrzése
         if (password_verify($password, $hashed_password[0]["Jelszo"])) {
-            echo "Sikeres bejelentkezés!";
+            $valasz = ["bejelentkezes" => "sikeres"];
         } else {
-            echo "Helytelen e-mail cím vagy jelszó!";
+            $valasz = ["bejelentjezes" => "sikertelen"];
         }
     } else {
-        echo "Helytelen e-mail cím!";
+        $valasz = ["bejelentkezes" => "sikertelen"];
     }
+    
+    echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
+}
+
+function Delete() {
+    $adatok = json_decode(file_get_contents("php://input"), true);
+
+    $sql_felhasznalo_torles = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = {$adatok['id']};";
+
+    $valasz = AdatModositas($sql_felhasznalo_torles);
+    
+    echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
+
+    // TODO: 
+    // Csak akkor lehessen felhasználót törölni, ha érkezik a hashelt jelszó is és az megegyezik az adatbázisban lévővel,
+    // így nem lehet egy sima POST kéréssel kívűlről ID alapján törölni
 }
 
 switch ($url_vege) {
@@ -58,6 +76,9 @@ switch ($url_vege) {
         break;
     case "login":
         Login();
+        break;
+    case "delete":
+        Delete();
         break;
     default:
         break;
