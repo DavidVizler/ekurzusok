@@ -13,28 +13,17 @@
                     $kurzusKod = GenerateCourseCode();
                     $courseAdd_sql = "INSERT INTO kurzus(FelhasznaloID, KurzusNev, Oktatok, Kod, Leiras, Design) VALUES(13,'{$kurzusNev}','{$oktatok}', '{$kurzusKod}', '{$leiras}', {$design})";
                     $courseAdd = AdatModositas($courseAdd_sql);
+                    header('Location: ../kurzusok.html');
+                    exit;
                 }
-            }
-        }
-
-    }
-
-    function selectCardData(){
-        if($_SERVER["REQUEST_METHOD"] == "GET"){
-            $cardDatas_sql = "SELECT KurzusID, KurzusNev, Oktatok, Kod, Leiras, Design FROM kurzus";
-            $cardDatas = AdatLekerdezes($cardDatas_sql);
-            if(is_array($cardDatas)){
-                echo json_encode($cardDatas,JSON_UNESCAPED_UNICODE);
             }else{
-                header("BAD REQUEST", true, 400);
-                echo json_encode(["valasz" => "Nincsenek találatok!"],JSON_UNESCAPED_UNICODE);
+                echo "Nem érvényesítették az űrlapot!";
             }
         }else{
-            header("BAD REQUEST",true, 400);
-            echo json_encode(["valasz" => "Hibás metódus!"],JSON_UNESCAPED_UNICODE);
+            echo "Hibás metódus!";
         }
+
     }
-    selectCardData();
 
     function GenerateCourseCode(){
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

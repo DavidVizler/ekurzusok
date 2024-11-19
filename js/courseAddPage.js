@@ -45,8 +45,8 @@ function previewLoad(){
             cardTitle.classList.add("card-title")
 
             let cardOktatok = document.createElement("h6")
-            cardOktatok.classList.add("card-teachers")
             cardOktatok.textContent = oktatoNeve.value
+            cardOktatok.classList.add("card-teachers")
 
             cardBody.appendChild(cardTitle)
             cardBody.appendChild(cardOktatok)

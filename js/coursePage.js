@@ -42,7 +42,7 @@ let cardData;
 import design from "./desgin.json" with {type : "json"}
 async function getCardsData() {
    try {
-      let eredmeny = await fetch("./php/courseAdd_manager.php");
+      let eredmeny = await fetch("./php/courseCard_manager.php");
         if(eredmeny.ok){
             cardData = await eredmeny.json()
             GenerateCards()
