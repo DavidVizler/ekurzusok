@@ -1,0 +1,38 @@
+function $(id) {
+    return document.getElementById(id);
+}
+
+// Ezek a függvények kijelölik az aktív linket a navbaron
+function changeActiveTab(id) {
+    document.getElementsByClassName("active")[0].classList.remove("active");
+    $(id).classList.add("active");
+}
+
+function listStatistics() {
+    changeActiveTab("nav-home");
+}
+
+function listUsers() {
+    changeActiveTab("nav-users");
+}
+
+function listCourses() {
+    changeActiveTab("nav-courses");
+}
+
+// Felhasználó törlése
+async function deleteUser(id, lastname, firstname, email) {
+    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nevű, ${email} e-mail című felhasználót?`)) {
+        let deleteData = {"id" : id};
+        let deleteRequest = await fetch("../php/user_manager.php/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(deleteData)
+        });
+        let result = await deleteRequest.json();
+        console.log(result);
+        location.reload();
+    }
+}
