@@ -59,15 +59,33 @@ function Login() {
 function Delete() {
     $adatok = json_decode(file_get_contents("php://input"), true);
 
-    $sql_felhasznalo_torles = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = {$adatok['id']};";
+    // Érkezett adatok ellenőrzése
+    if (!empty($adatok["id"]) && !empty($adatok["password"])) {
+        $id = $adatok["id"];
+        $password = $adatok["password"];
 
-    $valasz = AdatModositas($sql_felhasznalo_torles);
-    
+        // Titkosított jelszó lekérdezése
+        $sql_felhasznalo_jelszo_ellenorzes = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
+        $jelszo = AdatLekerdezes($sql_felhasznalo_jelszo_ellenorzes);
+
+        // Ha van az ID-hez felhasználó, akkor jelszó összehasonlítása
+        if (is_array($jelszo)) {
+            if ($password == $jelszo[0]["Jelszo"]) {
+                $sql_felhasznalo_torles = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
+                $eredmeny = AdatModositas($sql_felhasznalo_torles);
+                $valasz = ["torles" => $eredmeny];
+            } else {
+                $valasz = ["torles" => "sikertelen"];
+            }
+        } else {
+            $valasz = ["torles" => "sikertelen"];
+        }
+    } else {
+        $valasz = ["torles" => "hianyos adatok"];
+        header("bad request", true, 400);
+    }
+
     echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
-
-    // TODO: 
-    // Csak akkor lehessen felhasználót törölni, ha érkezik a hashelt jelszó is és az megegyezik az adatbázisban lévővel,
-    // így nem lehet egy sima POST kéréssel kívűlről ID alapján törölni
 }
 
 switch ($url_vege) {
@@ -83,5 +101,11 @@ switch ($url_vege) {
     default:
         break;
 }
+
+/*
+TODO
+Érkezett adatok ellenőrzése
+Metódus ellenőrzése
+*/
 
 ?>

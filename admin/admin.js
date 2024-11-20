@@ -21,9 +21,12 @@ function listCourses() {
 }
 
 // Felhasználó törlése
-async function deleteUser(id, lastname, firstname, email) {
-    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nevű, ${email} e-mail című felhasználót?`)) {
-        let deleteData = {"id" : id};
+async function deleteUser(id, lastname, firstname, email, password) {
+    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nesvű, ${email} e-mail című felhasználót?`)) {
+        let deleteData = {
+            "id" : id,
+            "password" : password
+        };
         let deleteRequest = await fetch("../php/user_manager.php/delete", {
             method: "POST",
             headers: {
