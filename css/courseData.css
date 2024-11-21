@@ -1,0 +1,134 @@
+body{
+   margin: 0px;
+   transition: filter 0.3s ease-in-out;
+   display: flex;
+   margin: 0 !important;
+   font-family: "Varela Round";
+}
+
+.header{
+    /* display: flex; */
+    width: 100%;
+    z-index: 10;
+    padding-inline: 0;
+    background-image: url("../img/courseThemes/IT_background.png");
+    height: 350px;
+    background-size: cover;
+}
+
+.contentBody{
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.line{
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.77,0.2,0.05,1.0);
+    height: 5px;
+}
+
+#line1{
+    top: 0%;
+}
+
+#line2{
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#line3{
+    top: 100%;
+    transform: translateY(-100%);
+}
+
+.hamburger-icon{
+    user-select: none;
+    position: absolute;
+    top: 5;
+    left: 0;
+    margin: 15px;
+    width: 40px;
+    height: 30px;
+    box-sizing: border-box;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#hamburger-menu{
+    position: relative;
+    width: 100vw;
+    margin-inline: auto;
+    height: 50px;
+}
+
+.hamburger-menu:hover.line{
+    background-color: white;
+    visibility: visible;
+}
+
+#hamburger-menu.active #line2{
+    transform: scale(0.1,0.1);
+    opacity: 0;
+}
+
+#hamburger-menu.active #line1{
+    transform: translateY(15px) rotate(45deg);
+    background-color: black;
+}
+
+#hamburger-menu.active #line3{
+    transform: translateY(-15px) rotate(-45deg);
+    background-color: black;
+}
+
+#hamburger-menu .hamburger-menu-content{
+    position:absolute;
+    left: 200px;
+    top: 200%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100vh;
+    margin: -100px 0 0 -50px;
+    padding: 50px;
+    border: 1px solid grey;
+    overflow: hidden;
+    border-radius: 0px 15px 15px 0px;
+    list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+    transition: opacity 0.5s, visibility 0.5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+}
+
+#hamburger-menu.active .hamburger-menu-content{
+    background-color: white;
+    opacity: 1;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+    visibility: visible;
+    z-index: 1;
+}
+
+.hamburger-menu-content li{
+    padding: 5px 0;
+    color: black;
+    font-size: 20px;
+}
+
+.hamburger-menu-content a{
+    text-decoration: none;
+}
+
+.courseDatas{
+    display: inline;
+    color: white;
+    position: absolute;
+    top:150px;
+    margin: 15px;
+    padding: 5px;
+}
