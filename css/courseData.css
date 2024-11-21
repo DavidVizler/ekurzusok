@@ -1,13 +1,17 @@
 body{
-   margin: 0px;
-   transition: filter 0.3s ease-in-out;
-   display: flex;
-   margin: 0 !important;
-   font-family: "Varela Round";
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    transition: filter 0.3s ease-in-out;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: 0 !important;
+    font-family: "Varela Round";
 }
 
 .header{
-    /* display: flex; */
+    display: flex;
     width: 100%;
     z-index: 10;
     padding-inline: 0;
@@ -131,4 +135,39 @@ body{
     top:150px;
     margin: 15px;
     padding: 5px;
+}
+
+.houseIcon{
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    height: 30px;
+    width: 40px;
+    box-sizing: border-box;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.houseIcon svg{
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.3);
+}
+
+.houseIcon a{
+    text-decoration: none;
+    color: white;
+}
+
+.functionIcons a{
+    display: flex;
+    height: 50px;
+    width: 50px;
+}
+
+.functionIcons svg{
+    color:black;
 }
