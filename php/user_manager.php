@@ -47,7 +47,7 @@ function Login() {
         if (password_verify($password, $hashed_password[0]["Jelszo"])) {
             $valasz = ["bejelentkezes" => "sikeres"];
         } else {
-            $valasz = ["bejelentjezes" => "sikertelen"];
+            $valasz = ["bejelentkezes" => "sikertelen"];
         }
     } else {
         $valasz = ["bejelentkezes" => "sikertelen"];
