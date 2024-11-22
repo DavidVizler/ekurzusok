@@ -164,10 +164,18 @@ body{
 
 .functionIcons a{
     display: flex;
-    height: 50px;
-    width: 50px;
+    margin-right: 15px;
+    height: 60px;
+    width: 60px;
 }
 
 .functionIcons svg{
     color:black;
+}
+
+.functionIcons{
+    display: flex;
+    flex-direction: row;
+    margin-left: 15px;
+    margin-top: 5px;
 }
