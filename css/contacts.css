@@ -1,0 +1,60 @@
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: "Varela Round";
+    font-weight: lighter;
+}
+
+.backToMainPageIcon svg{
+    height: 30px;
+    width: 30px;
+    color: black;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.backToMainPageIcon{
+    display: flex;
+    margin: 15px;
+}
+
+table {
+    width: fit-content;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f4f4f4;
+}
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.contactDiv{
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+#contactTable{
+    display: flex;
+}
