@@ -65,7 +65,7 @@
             }
 
             function FetchUserCourses() {
-                if (!empty($_GET["id"])) {
+                if (!empty($_GET["id"]) && is_numeric($_GET["id"])) {
                     $id = $_GET["id"];
 
                     $sql_user_info_query = "SELECT `VezetekNev`, `KeresztNev`, `Email` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id}";
@@ -81,61 +81,60 @@
                     $user_courses = AdatLekerdezes($sql_user_courses_query);
 
                     if (is_array($user_courses)) {   
-                    echo "<table><thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Név</th>
-                            <th>Leirás</th>
-                            <th>Tanár</th>
-                            <th>Tagok száma</th>
-                            <th>Kód</th>
-                            <th>Tulajdonos</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
+                        echo "<table><thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Név</th>
+                                <th>Leirás</th>
+                                <th>Tanár</th>
+                                <th>Tagok száma</th>
+                                <th>Kód</th>
+                                <th>Tulajdonos</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
-                    foreach ($user_courses as $course) {
-                        $sql_user_course_owner_query = "SELECT `VezetekNev`, `KeresztNev`, `Email` FROM `felhasznalo`
-                        WHERE `FelhasznaloID` = {$course["FelhasznaloID"]};";
-                        $owner = AdatLekerdezes($sql_user_course_owner_query)[0];
+                        foreach ($user_courses as $course) {
+                            $sql_user_course_owner_query = "SELECT `VezetekNev`, `KeresztNev`, `Email` FROM `felhasznalo`
+                            WHERE `FelhasznaloID` = {$course["FelhasznaloID"]};";
+                            $owner = AdatLekerdezes($sql_user_course_owner_query)[0];
 
-                        $sql_user_course_teacher_query = "SELECT `Tanar` FROM `kurzustag`
-                        WHERE `FelhasznaloID` = {$id} AND `KurzusID` = {$course["KurzusID"]}";
-                        $user_course_teacher = AdatLekerdezes($sql_user_course_teacher_query)[0]["Tanar"];
-                        if ($user_course_teacher == 1) {
-                            $teacher = "Igen";
-                        } else {
-                            $teacher = "Nem";
+                            $sql_user_course_teacher_query = "SELECT `Tanar` FROM `kurzustag`
+                            WHERE `FelhasznaloID` = {$id} AND `KurzusID` = {$course["KurzusID"]}";
+                            $user_course_teacher = AdatLekerdezes($sql_user_course_teacher_query)[0]["Tanar"];
+                            if ($user_course_teacher == 1) {
+                                $teacher = "Igen";
+                            } else {
+                                $teacher = "Nem";
+                            }
+
+                            if ($user_info["Email"] == $owner["Email"]) {
+                                $owner_class = " class='owner'";
+                            } else {
+                                $owner_class = "";
+                            }
+
+                            $sql_course_member_count_query = "SELECT COUNT(`ID`) AS member_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']};";
+                            $course_member_count = AdatLekerdezes($sql_course_member_count_query)[0]["member_count"];
+
+                            $sql_course_teachers_count_query = "SELECT COUNT(`ID`) AS teachers_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']} AND `Tanar` = '1';";
+                            $course_teachers_count = AdatLekerdezes($sql_course_teachers_count_query)[0]["teachers_count"];
+
+                            echo "<tr{$owner_class}>
+                                <td>{$course["KurzusID"]}</td>
+                                <td>{$course["KurzusNev"]}</td>
+                                <td>{$course["Leiras"]}</td>
+                                <td>{$teacher}</td>
+                                <td>{$course_member_count} ({$course_teachers_count} tanár)</td>     
+                                <td>{$course["Kod"]}</td>   
+                                <td><a href='usercourses?id={$course["FelhasznaloID"]}'>{$owner["VezetekNev"]} {$owner["KeresztNev"]} ({$owner["Email"]})<a></td>
+                            </tr>";
                         }
 
-                        if ($user_info["Email"] == $owner["Email"]) {
-                            $owner_class = " class='owner'";
-                        } else {
-                            $owner_class = "";
-                        }
-
-                        $sql_course_member_count_query = "SELECT COUNT(`ID`) AS member_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']};";
-                        $course_member_count = AdatLekerdezes($sql_course_member_count_query)[0]["member_count"];
-
-                        $sql_course_teachers_count_query = "SELECT COUNT(`ID`) AS teachers_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']} AND `Tanar` = '1';";
-                        $course_teachers_count = AdatLekerdezes($sql_course_teachers_count_query)[0]["teachers_count"];
-
-                        echo "<tr>
-                            <td>{$course["KurzusID"]}</td>
-                            <td>{$course["KurzusNev"]}</td>
-                            <td>{$course["Leiras"]}</td>
-                            <td>{$teacher}</td>
-                            <td>{$course_member_count} ({$course_teachers_count} tanár)</td>     
-                            <td>{$course["Kod"]}</td>   
-                            <td{$owner_class}><a href='usercourses?id={$course["FelhasznaloID"]}'>{$owner["VezetekNev"]} {$owner["KeresztNev"]} ({$owner["Email"]})<a></td>
-                        </tr>";
+                        echo "</tbody></table>";
+                    } else {
+                        echo "<div style='margin: 10px;'>A felhasználó nem tagja egy kurzushoz sem!</div>";
                     }
-
-                    echo "</tbody></table>";
-                } else {
-                    echo "<div style='margin: 10px;'>A felhasználó nem tagja egy kurzushoz sem!</div>";
-                }
-
                 } else {
                     header("Location: ./users");
                 }
@@ -192,14 +191,62 @@
             }
 
             function FetchCourseMembers() {
-                if (!empty($_GET["id"])) {
+                if (!empty($_GET["id"]) && is_numeric($_GET["id"])) {
                     $id = $_GET["id"];
                     
-                    echo $id;
+                    $sql_course_info_query = "SELECT `kurzus`.`KurzusNev`, `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `felhasznalo`.`Email`
+                    FROM `kurzus` INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`
+                    WHERE `kurzus`.`KurzusID` = {$id};";
+                    $course_info = AdatLekerdezes($sql_course_info_query)[0];
 
-                    /*
-                    TODO
-                    */
+                    echo "<div style='margin: 10px;'>{$course_info["VezetekNev"]} {$course_info["KeresztNev"]} ({$course_info["Email"]})
+                    felhasználó '{$course_info["KurzusNev"]}' nevű kurzusának tagjai:</div>";
+
+                    $sql_course_members_query = "SELECT `felhasznalo`.`FelhasznaloID`, `felhasznalo`.`Email`, 
+                    `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `kurzustag`.`Tanar` FROM `kurzustag`
+                    INNER JOIN `felhasznalo` ON `kurzustag`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`
+                    WHERE `kurzustag`.`KurzusID` = {$id};";
+                    $course_members = AdatLekerdezes($sql_course_members_query);
+
+                    if (is_array($course_members)) {
+                        echo "<table><thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Vezetéknév</th>
+                                <th>Keresztnév</th>
+                                <th>Tanár</th>
+                                <th>Kurzusok</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+
+                        foreach ($course_members as $member) {
+                            $sql_user_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `FelhasznaloID` = {$member["FelhasznaloID"]};";
+                            $user_course_count = AdatLekerdezes($sql_user_course_count_query)[0]["count"];
+
+                            if ($member["Tanar"] == 1) {
+                                $teacher = "Igen";
+                            } else {
+                                $teacher = "Nem";
+                            }
+
+                            echo "<tr>
+                                <td>{$member["FelhasznaloID"]}</td>
+                                <td>{$member["Email"]}</td>
+                                <td>{$member["VezetekNev"]}</td>
+                                <td>{$member["KeresztNev"]}</td>
+                                <td>{$teacher}</td>
+                                <td>{$user_course_count} <a href='usercourses?id={$member["FelhasznaloID"]}'>[Több infó]</a></td></td>
+                            </tr>";
+                        }
+
+                        echo "</tbody></table>";
+                    } else {
+                        echo "<div style='margin: 10px;'>A kurzusnak nincsenek tagjai!<br>
+                        <b>Ez normális esetben nem történhet meg!<br>
+                        Ajánlott az adatbázis felülvizsgálata!</b></div>";
+                    }
 
                 } else {
                     header("Location: ./users");
@@ -253,6 +300,7 @@
             TODO
             Statisztikák
             Kurzus tagok kilistázása
+                - Tulajdonos kiemelése
             */
 
         ?>

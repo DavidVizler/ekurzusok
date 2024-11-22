@@ -68,7 +68,7 @@ table {
 }
 
 tr:nth-child(even) {
-    background-color: rgb(218, 229, 255);
+    background-color: #dae5ff;
 }
 
 th {
@@ -87,6 +87,7 @@ td {
 
 .blurred {
     filter: blur(5px);
+    font-family: monospace;
 }
 
 .blurred:focus {
@@ -117,5 +118,9 @@ td {
 }
 
 .owner {
-    background-color: yellow;
+    background-color: yellow !important;
+}
+
+.owner:nth-child(even) {
+    background-color: #ffe000 !important;
 }
