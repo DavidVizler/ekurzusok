@@ -22,12 +22,33 @@ function listCourses() {
 
 // Felhasználó törlése
 async function deleteUser(id, lastname, firstname, email, password) {
-    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nesvű, ${email} e-mail című felhasználót?`)) {
+    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nevű, ${email} e-mail című felhasználót?`)) {
         let deleteData = {
             "id" : id,
             "password" : password
         };
         let deleteRequest = await fetch("../php/user_manager.php/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(deleteData)
+        });
+        let result = await deleteRequest.json();
+        console.log(result);
+        location.reload();
+    }
+}
+
+// Kurzus törlése
+async function deleteCourse(id, coursename, userid, lastname, firstname, password) {
+    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} felhasználó "${coursename}" nevű kurzusát?`)) {
+        let deleteData = {
+            "id" : id,
+            "userid" : userid,
+            "password" : password
+        };
+        let deleteRequest = await fetch("../php/course_manager.php/delete", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

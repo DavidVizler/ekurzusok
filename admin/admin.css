@@ -78,3 +78,8 @@ td {
 .torles input:hover {
     background-color: red;
 }
+
+#stats {
+    margin: 10px;
+    font-size: 20px;
+}

@@ -60,8 +60,8 @@
             }
 
             function FetchCourses() {
-                $sql_courses_query = "SELECT `kurzus`.`KurzusID`, `kurzus`.`KurzusNev`, `kurzus`.`Kod`, `kurzus`.`Leiras`, 
-                `kurzus`.`Design`, `kurzus`.`Archivalt`, `felhasznalo`.`Email`, `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`
+                $sql_courses_query = "SELECT `kurzus`.`KurzusID`, `kurzus`.`KurzusNev`, `kurzus`.`Kod`, `kurzus`.`Leiras`, `kurzus`.`Design`,  `kurzus`.`Archivalt`, 
+                `felhasznalo`.`FelhasznaloID`, `felhasznalo`.`Email`, `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `felhasznalo`.`Jelszo`
                 FROM `kurzus` INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`";
                 $courses = AdatLekerdezes($sql_courses_query);
 
@@ -71,21 +71,37 @@
                             <th>ID</th>
                             <th>Név</th>
                             <th>Leirás</th>
+                            <th>Tagok száma</th>
+                            <th>Tanárok száma</th>
                             <th>Kód</th>
                             <th>Design</th>
                             <th>Tulajdonos</th>
+                            <th>Műveletek</th>
                         </tr>
                     </thead>
                     <tbody>";
 
                     foreach ($courses as $course) {
+                        $sql_course_member_count_query = "SELECT COUNT(`ID`) AS member_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']};";
+                        $course_member_count = AdatLekerdezes($sql_course_member_count_query)[0]["member_count"];
+
+                        $sql_course_teachers_count_query = "SELECT COUNT(`ID`) AS teachers_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']} AND `Tanar` = '1';";
+                        $course_teachers_count = AdatLekerdezes($sql_course_teachers_count_query)[0]["teachers_count"];
+
                         echo "<tr>
                             <td>{$course["KurzusID"]}</td>
                             <td>{$course["KurzusNev"]}</td>
                             <td>{$course["Leiras"]}</td>
+                            <td>{$course_member_count}</td>    
+                            <td>{$course_teachers_count}</td>   
                             <td>{$course["Kod"]}</td>
-                            <td>{$course["Design"]}</td>            
+                            <td>{$course["Design"]}</td>     
                             <td>{$course["VezetekNev"]} {$course["KeresztNev"]} ({$course["Email"]})</td>
+                            <td class='torles'>
+                                <form method='POST' action='javascript:;' onsubmit=\"deleteCourse('{$course["KurzusID"]}', '{$course["KurzusNev"]}', '{$course["FelhasznaloID"]}', '{$course["VezetekNev"]}', '{$course["KeresztNev"]}', '{$course["Jelszo"]}')\">
+                                    <input type='submit' value='Eltávolítás' name='delete_button'>
+                                </form>
+                            </td>
                         </tr>";
                     }
 
@@ -96,7 +112,16 @@
             }
 
             function ListStatistics() {
-                echo "Statisztikák...";
+                $sql_user_count_query = "SELECT COUNT(`FelhasznaloID`) AS user_count FROM `felhasznalo`";
+                $user_count = AdatLekerdezes($sql_user_count_query)[0]["user_count"];
+
+                $sql_course_count_query = "SELECT COUNT(`KurzusID`) AS course_count FROM `kurzus`";
+                $course_count = AdatLekerdezes($sql_course_count_query)[0]["course_count"];
+
+                echo "<div id='stats'>
+                Felhasználók száma: <b>{$user_count}</b><br>
+                Kurzusok száma: <b>{$course_count}</b><br>
+                </div>";
             }
 
 
