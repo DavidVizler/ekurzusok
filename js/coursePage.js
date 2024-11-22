@@ -81,11 +81,11 @@ function GenerateCards(){
       let cardBody = document.createElement("div")
       cardBody.classList.add("card-body")
 
-      let cardTitle = document.createElement("h5")
+      let cardTitle = document.createElement("h2")
       cardTitle.classList.add("card-title")
       cardTitle.textContent = cardData[i]["KurzusNev"]
 
-      let cardOktatok = document.createElement("h6")
+      let cardOktatok = document.createElement("h4")
       cardOktatok.classList.add("card-teachers")
       cardOktatok.textContent = cardData[i]["Oktatok"]
 
