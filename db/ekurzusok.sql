@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1deb3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Nov 11, 2024 at 06:49 PM
--- Server version: 10.11.8-MariaDB-0ubuntu0.24.04.1
--- PHP Version: 8.3.6
+-- Gép: 127.0.0.1
+-- Létrehozás ideje: 2024. Nov 22. 10:08
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ekurzusok`
+-- Adatbázis: `ekurzusok`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `feladatleadas`
+-- Tábla szerkezet ehhez a táblához `feladatleadas`
 --
 
 CREATE TABLE `feladatleadas` (
@@ -34,12 +34,12 @@ CREATE TABLE `feladatleadas` (
   `Ertekeles` smallint(4) DEFAULT NULL,
   `SzovegesErtekeles` varchar(128) DEFAULT NULL,
   `Leadva` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `felhasznalo`
+-- Tábla szerkezet ehhez a táblához `felhasznalo`
 --
 
 CREATE TABLE `felhasznalo` (
@@ -48,10 +48,10 @@ CREATE TABLE `felhasznalo` (
   `VezetekNev` varchar(64) NOT NULL,
   `KeresztNev` varchar(64) NOT NULL,
   `Jelszo` char(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Dumping data for table `felhasznalo`
+-- A tábla adatainak kiíratása `felhasznalo`
 --
 
 INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) VALUES
@@ -62,7 +62,7 @@ INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `file`
+-- Tábla szerkezet ehhez a táblához `file`
 --
 
 CREATE TABLE `file` (
@@ -71,28 +71,36 @@ CREATE TABLE `file` (
   `LeadasID` int(11) DEFAULT NULL,
   `FileNev` varchar(128) NOT NULL,
   `Meret` smallint(6) NOT NULL COMMENT 'KB'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kurzus`
+-- Tábla szerkezet ehhez a táblához `kurzus`
 --
 
 CREATE TABLE `kurzus` (
   `KurzusID` int(11) NOT NULL,
   `FelhasznaloID` int(11) NOT NULL,
   `KurzusNev` varchar(128) NOT NULL,
+  `Oktatok` varchar(50) NOT NULL,
   `Kod` char(10) NOT NULL,
   `Leiras` varchar(512) NOT NULL,
   `Design` int(11) NOT NULL,
   `Archivalt` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `kurzus`
+--
+
+INSERT INTO `kurzus` (`KurzusID`, `FelhasznaloID`, `KurzusNev`, `Oktatok`, `Kod`, `Leiras`, `Design`, `Archivalt`) VALUES
+(4, 13, 'Földrajz - 11/c', 'Nagy Pista', 'sP8M1qe73m', 'Terem: 17-es', 1, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kurzustag`
+-- Tábla szerkezet ehhez a táblához `kurzustag`
 --
 
 CREATE TABLE `kurzustag` (
@@ -100,12 +108,12 @@ CREATE TABLE `kurzustag` (
   `FelhasznaloID` int(11) NOT NULL,
   `KurzusID` int(11) NOT NULL,
   `Tanar` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tartalom`
+-- Tábla szerkezet ehhez a táblához `tartalom`
 --
 
 CREATE TABLE `tartalom` (
@@ -119,14 +127,14 @@ CREATE TABLE `tartalom` (
   `Hatarido` datetime DEFAULT NULL,
   `Modositva` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `Kiadva` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Indexes for dumped tables
+-- Indexek a kiírt táblákhoz
 --
 
 --
--- Indexes for table `feladatleadas`
+-- A tábla indexei `feladatleadas`
 --
 ALTER TABLE `feladatleadas`
   ADD PRIMARY KEY (`LeadasID`),
@@ -134,13 +142,13 @@ ALTER TABLE `feladatleadas`
   ADD KEY `LeadoID` (`FelhasznaloID`);
 
 --
--- Indexes for table `felhasznalo`
+-- A tábla indexei `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
   ADD PRIMARY KEY (`FelhasznaloID`);
 
 --
--- Indexes for table `file`
+-- A tábla indexei `file`
 --
 ALTER TABLE `file`
   ADD PRIMARY KEY (`FileID`),
@@ -148,14 +156,14 @@ ALTER TABLE `file`
   ADD KEY `FeladatleadasID` (`LeadasID`);
 
 --
--- Indexes for table `kurzus`
+-- A tábla indexei `kurzus`
 --
 ALTER TABLE `kurzus`
   ADD PRIMARY KEY (`KurzusID`),
   ADD KEY `TulajdonosID` (`FelhasznaloID`);
 
 --
--- Indexes for table `kurzustag`
+-- A tábla indexei `kurzustag`
 --
 ALTER TABLE `kurzustag`
   ADD PRIMARY KEY (`ID`),
@@ -163,7 +171,7 @@ ALTER TABLE `kurzustag`
   ADD KEY `KurzusID` (`KurzusID`);
 
 --
--- Indexes for table `tartalom`
+-- A tábla indexei `tartalom`
 --
 ALTER TABLE `tartalom`
   ADD PRIMARY KEY (`TartalomID`),
@@ -171,78 +179,78 @@ ALTER TABLE `tartalom`
   ADD KEY `KurzusID` (`KurzusID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- A kiírt táblák AUTO_INCREMENT értéke
 --
 
 --
--- AUTO_INCREMENT for table `feladatleadas`
+-- AUTO_INCREMENT a táblához `feladatleadas`
 --
 ALTER TABLE `feladatleadas`
   MODIFY `LeadasID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `felhasznalo`
+-- AUTO_INCREMENT a táblához `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
   MODIFY `FelhasznaloID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
--- AUTO_INCREMENT for table `file`
+-- AUTO_INCREMENT a táblához `file`
 --
 ALTER TABLE `file`
   MODIFY `FileID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `kurzus`
+-- AUTO_INCREMENT a táblához `kurzus`
 --
 ALTER TABLE `kurzus`
-  MODIFY `KurzusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `KurzusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `kurzustag`
+-- AUTO_INCREMENT a táblához `kurzustag`
 --
 ALTER TABLE `kurzustag`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tartalom`
+-- AUTO_INCREMENT a táblához `tartalom`
 --
 ALTER TABLE `tartalom`
   MODIFY `TartalomID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
+-- Megkötések a kiírt táblákhoz
 --
 
 --
--- Constraints for table `feladatleadas`
+-- Megkötések a táblához `feladatleadas`
 --
 ALTER TABLE `feladatleadas`
   ADD CONSTRAINT `feladatleadas_ibfk_2` FOREIGN KEY (`FelhasznaloID`) REFERENCES `felhasznalo` (`FelhasznaloID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `feladatleadas_ibfk_3` FOREIGN KEY (`TartalomID`) REFERENCES `tartalom` (`TartalomID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `file`
+-- Megkötések a táblához `file`
 --
 ALTER TABLE `file`
   ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`LeadasID`) REFERENCES `feladatleadas` (`LeadasID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `file_ibfk_2` FOREIGN KEY (`TartalomID`) REFERENCES `tartalom` (`TartalomID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `kurzus`
+-- Megkötések a táblához `kurzus`
 --
 ALTER TABLE `kurzus`
   ADD CONSTRAINT `kurzus_ibfk_1` FOREIGN KEY (`FelhasznaloID`) REFERENCES `felhasznalo` (`FelhasznaloID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `kurzustag`
+-- Megkötések a táblához `kurzustag`
 --
 ALTER TABLE `kurzustag`
   ADD CONSTRAINT `kurzustag_ibfk_1` FOREIGN KEY (`FelhasznaloID`) REFERENCES `felhasznalo` (`FelhasznaloID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `kurzustag_ibfk_2` FOREIGN KEY (`KurzusID`) REFERENCES `kurzus` (`KurzusID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `tartalom`
+-- Megkötések a táblához `tartalom`
 --
 ALTER TABLE `tartalom`
   ADD CONSTRAINT `tartalom_ibfk_1` FOREIGN KEY (`FelhasznaloID`) REFERENCES `felhasznalo` (`FelhasznaloID`) ON DELETE CASCADE ON UPDATE CASCADE,
