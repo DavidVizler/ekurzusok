@@ -19,14 +19,15 @@ async function login() {
         body: JSON.stringify(loginData)
     });
 
-    let result = await response.json();
-    // if (result.siker) {
-    //     alert("Sikeres bejelentkezés!");
-    //     window.location.href = '/kurzusok.html';
-    // }
-    // else {
-    //     alert("A bejelentkezés sikertelen!");
-    // }
+    if (response.ok) {
+        let result = await response.json();
+        if (result.bejelentkezes == "sikeres") {
+            window.location.href = './kurzusok.html';
+        }
+        else {
+            alert(result.bejelentkezes);
+        }
+    }
 }
 
 window.addEventListener('load', () => {

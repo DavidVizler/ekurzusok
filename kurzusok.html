@@ -27,10 +27,8 @@
                 <div id="line2" class="line">&nbsp;</div>
                 <div id="line3" class="line">&nbsp;</div>
             </div>
-            <ul id="menuContent">
-                <a href="#">
-                    <li>Felvett kurzusok</li>
-                </a>
+            <div id="menuContent">
+                <h3>Felvett kurzusok</h3>
                 <ul id="addedCourses">
                     <a href="#">
                         <li>kurzus neve</li>
@@ -45,9 +43,7 @@
                         <li>kurzus neve</li>
                     </a>
                 </ul>
-                <a href="#">
-                    <li>Létrehozott kurzusok</li>
-                </a>
+                <h3>Létrehozott kurzusok</h3>
                 <ul id="createdCourses">
                     <a href="#">
                         <li>kurzus neve</li>
@@ -59,11 +55,11 @@
                         <li>kurzus neve</li>
                     </a>
                 </ul>
-            </ul>
+            </div>
         </div>
         <!-- Plus icon -->
         <div class="plusIcon">
-            <a onclick="openPopUp()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            <a id="plusIcon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke-width="1.5" stroke="currentColor" class="size-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg></a>
@@ -71,7 +67,7 @@
 
         <!-- Calendar icon -->
         <div class="calendarIcon">
-            <a onclick="openCalendarPopUp()">
+            <a id="calendarIcon">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -84,7 +80,7 @@
     <!-- Popup - kód hozzáadása-->
     <div id="popup" class="popup-overlay" style="display:none">
         <div class="popup-content">
-            <a class="close-btn" onclick="closePopup()">
+            <a class="close-btn" id="close-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -95,8 +91,8 @@
             <div class="addCourseMode">
                 <form method="post">
                     <select name="selectAddCourse" id="selectAddCourse">
-                        <option value="">Kérem válasszon!</option>
-                        <option value="addCourseCode">Kód megadása</option>
+                        <option value=""></option>
+                        <option value="addCourseCode">Feliratkozás kóddal</option>
                         <option value="createCourse">Létrehozás</option>
                     </select>
                 </form>
@@ -116,7 +112,7 @@
     <div id="popupCalendar" class="calendar-popup-overlay" style="display: none;">
         <div class="popup-content">
             <label for="calendarCloseButton">Határidős feladatok</label>
-            <a class="close-btn" onclick="closePopup()" id="calendarCloseButton" name="calendarCloseButton">
+            <a class="close-btn" id="calendarCloseButton" name="calendarCloseButton">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -131,46 +127,12 @@
     <!-- Body - Content -->
     <div class="content">
         <!-- Cards -->
-        <div class="cards-container">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <img class="card-img-top" src="./img/courseThemes/Math_background.png" alt="cardImage">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Matematika kártya</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <img class="card-img-top" src="./img/courseThemes/Literature_background.png"
-                                alt="cardImage">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Irodalom kártya</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <img class="card-img-top" src="./img/courseThemes/Geography_background.png" alt="cardImage">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Földrajz kártya</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="cards-container" id="cards-container">
+            <!-- Dinamikus adatgenerálás -->
         </div>
     </div>
 
-    <script src="./js/coursePage.js"></script>
+    <script type="module" src="./js/coursePage.js"></script>
 </body>
 
 </html>

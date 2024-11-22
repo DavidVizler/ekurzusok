@@ -24,10 +24,12 @@ function Signup() {
 
         $eredmeny = AdatModositas($sql_felhasznalo_feltoltes);
 
-        echo "Felhasználó feltöltése: " . $eredmeny;
+        $valasz = ["regisztracio" => $eredmeny];
     } else {
-        echo "Már regisztráltak ezen az e-mail címen!";
+        $valasz = ["regisztracio" => "email mar regisztralt"];
     }
+
+    echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
 }
 
 function Login() {
@@ -43,13 +45,47 @@ function Login() {
     if (is_array($hashed_password)) {
         // Jelszó ellenőrzése
         if (password_verify($password, $hashed_password[0]["Jelszo"])) {
-            echo "Sikeres bejelentkezés!";
+            $valasz = ["bejelentkezes" => "sikeres"];
         } else {
-            echo "Helytelen e-mail cím vagy jelszó!";
+            $valasz = ["bejelentkezes" => "sikertelen"];
         }
     } else {
-        echo "Helytelen e-mail cím!";
+        $valasz = ["bejelentkezes" => "sikertelen"];
     }
+    
+    echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
+}
+
+function Delete() {
+    $adatok = json_decode(file_get_contents("php://input"), true);
+
+    // Érkezett adatok ellenőrzése
+    if (!empty($adatok["id"]) && !empty($adatok["password"])) {
+        $id = $adatok["id"];
+        $password = $adatok["password"];
+
+        // Titkosított jelszó lekérdezése
+        $sql_felhasznalo_jelszo_ellenorzes = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
+        $jelszo = AdatLekerdezes($sql_felhasznalo_jelszo_ellenorzes);
+
+        // Ha van az ID-hez felhasználó, akkor jelszó összehasonlítása
+        if (is_array($jelszo)) {
+            if ($password == $jelszo[0]["Jelszo"]) {
+                $sql_felhasznalo_torles = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
+                $eredmeny = AdatModositas($sql_felhasznalo_torles);
+                $valasz = ["torles" => $eredmeny];
+            } else {
+                $valasz = ["torles" => "sikertelen"];
+            }
+        } else {
+            $valasz = ["torles" => "sikertelen"];
+        }
+    } else {
+        $valasz = ["torles" => "hianyos adatok"];
+        header("bad request", true, 400);
+    }
+
+    echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
 }
 
 switch ($url_vege) {
@@ -59,8 +95,17 @@ switch ($url_vege) {
     case "login":
         Login();
         break;
+    case "delete":
+        Delete();
+        break;
     default:
         break;
 }
+
+/*
+TODO
+Érkezett adatok ellenőrzése
+Metódus ellenőrzése
+*/
 
 ?>
