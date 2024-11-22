@@ -23,6 +23,7 @@ body{
 .contentBody{
     display: flex;
     flex-grow: 1;
+    flex-direction: column;
     width: 100%;
 }
 
@@ -175,7 +176,44 @@ body{
 
 .functionIcons{
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     margin-left: 15px;
     margin-top: 5px;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    margin:15px;
+}
+
+.tananyagDiv{
+    display: flex;
+    border: 1px solid grey;
+    border-radius: 15px;
+    margin: 5px;
+    width: 100%;
+    height: 150px;
+    align-items: center;
+}
+
+.Icon a{
+    display: flex;
+    height: 60px;
+    width: 60px;
+    margin: 15px;
+}
+
+.Icon svg{
+    color: black;
+}
+
+.feladatDiv{
+    display: flex;
+    border: 1px solid grey;
+    border-radius: 15px;
+    margin: 5px;
+    width: 100%;
+    height: 150px;
+    align-items: center;
 }
