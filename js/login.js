@@ -22,11 +22,11 @@ async function login() {
 
         if (response.ok) {
             let result = await response.json();
-            if (result.bejelentkezes == "sikeres") {
+            if (result.sikeres) {
                 window.location.href = './kurzusok.html';
             }
             else {
-                alert(result.bejelentkezes);
+                alert(result.uzenet);
             }
         }
     }
