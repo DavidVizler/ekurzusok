@@ -1,0 +1,53 @@
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: "Varela Round";
+    font-weight: lighter;
+}
+
+.backToMainPageIcon svg{
+    height: 30px;
+    width: 30px;
+    color: black;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.backToMainPageIcon{
+    display: flex;
+    margin: 15px;
+}
+
+.impresszumDiv{
+    margin-left: 15px;
+    font-weight: lighter;
+}
+
+.uzemeltetoi{
+    margin-left: 15px;
+    width: fit-content;
+}
+
+table {
+    width: 50%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f4f4f4;
+}
