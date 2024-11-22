@@ -13,16 +13,17 @@
             <form id="login_form">
                 <h1>Bejelentkezés</h1>
                 <label for="email">Email cím</label><br>
-                <input type="email" name="email" id="email" placeholder="pelda@email.com"><br>
+                <input type="email" name="email" id="email" placeholder="pelda@email.com" required autocomplete="email"><br>
 
                 <label for="password">Jelszó</label><br>
-                <input type="password" name="password" id="password" placeholder="Jelszó"><br>
+                <input type="password" name="password" id="password" placeholder="Jelszó" required autocomplete="current-password"><br>
                 
                 <a href="./signup.html">Nincs még fiókja? Regisztráljon!</a><br>
                 <input type="submit" name="login" id="button_login" value="Bejelentkezés">
             </form>
         </div>
     </div>
+    <script src="./js/loginCheck.js"></script>
     <script src="./js/login.js"></script>
 </body>
 </html>

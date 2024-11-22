@@ -27,12 +27,12 @@ async function signup() {
 
         if (response.ok) {
             let result = await response.json();
-            if (result.regisztracio == "Sikeres művelet!") {
+            if (result.sikeres) {
                 alert("Sikeres regisztráció!");
                 window.location.href = './kurzusok.html';
             }
             else {
-                alert(result.regisztracio);
+                alert(result.uzenet);
             }
         }
     }
