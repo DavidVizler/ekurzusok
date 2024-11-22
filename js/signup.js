@@ -25,14 +25,16 @@ async function signup() {
             body: JSON.stringify(signupData)
         });
 
-        let result = await response.json();
-        // if (result.success) {
-        //     alert("Sikeres regisztráció!");
-        //     window.location.href = '/kurzusok.html';
-        // }
-        // else {
-        //     alert("A regisztráció sikertelen!");
-        // }
+        if (response.ok) {
+            let result = await response.json();
+            if (result.regisztracio == "Sikeres művelet!") {
+                alert("Sikeres regisztráció!");
+                window.location.href = './kurzusok.html';
+            }
+            else {
+                alert(result.regisztracio);
+            }
+        }
     }
 }
 
