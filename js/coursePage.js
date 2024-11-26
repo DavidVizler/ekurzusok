@@ -55,6 +55,25 @@ async function getCardsData() {
    }
 }
 
+let cards = document.querySelectorAll(".card")
+function click(){
+   let endofID;
+   let kurzusids = new Set()
+   cards.forEach(card => {
+      let id = card.id
+      endofID = id.split("-")
+      kurzusids.add(endofID[1])
+   });
+   cardData.forEach(data => {
+      kurzusids.forEach(id => {
+         if(data.KurzusID == id){
+            document.querySelector("title").textContent = data.KurzusNev
+         }
+      });
+   });
+   window.open("kurzusAdatok.html","_self")
+}
+
 function GenerateCards(){
    let cardsContainer = document.getElementById("cards-container")
    let rowDiv = document.createElement("div")
@@ -65,6 +84,7 @@ function GenerateCards(){
 
       let card = document.createElement("div")
       card.classList.add("card")
+      card.addEventListener("click", click)
       card.id = "card-" + cardData[i]["KurzusID"]
 
       let cardHeader = document.createElement("div")
