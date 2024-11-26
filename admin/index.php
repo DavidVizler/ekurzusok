@@ -43,13 +43,18 @@
                         $sql_user_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `FelhasznaloID` = {$user["FelhasznaloID"]};";
                         $user_course_count = AdatLekerdezes($sql_user_course_count_query)[0]["count"];
 
+                        $sql_user_own_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` 
+                        INNER JOIN `kurzus` ON `kurzustag`.`KurzusID` = `kurzus`.`KurzusID`
+                        WHERE `kurzustag`.`FelhasznaloID` = {$user["FelhasznaloID"]} AND `kurzus`.`FelhasznaloID` = {$user["FelhasznaloID"]};";
+                        $user_own_course_count = AdatLekerdezes($sql_user_own_course_count_query)[0]["count"];
+
                         echo "<tr>
                             <td>{$user["FelhasznaloID"]}</td>
                             <td>{$user["Email"]}</td>
                             <td>{$user["VezetekNev"]}</td>
                             <td>{$user["KeresztNev"]}</td>
                             <td><span class='blurred'>{$user["Jelszo"]}</span></td>
-                            <td>{$user_course_count} <a href='usercourses?id={$user["FelhasznaloID"]}'>[Több infó]</a></td>
+                            <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$user["FelhasznaloID"]}'>[Több infó]</a></td>
                             <td class='torles'>
                                 <form method='POST' action='javascript:;' onsubmit=\"deleteUser({$user["FelhasznaloID"]}, '{$user["VezetekNev"]}', '{$user["KeresztNev"]}', '{$user["Email"]}', '{$user["Jelszo"]}')\">
                                     <input type='submit' value='Eltávolítás' name='delete_button'>
@@ -71,8 +76,9 @@
                     $sql_user_info_query = "SELECT `VezetekNev`, `KeresztNev`, `Email` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id}";
                     $user_info = AdatLekerdezes($sql_user_info_query)[0];
 
-                    echo "<div style='margin: 10px'>{$user_info["VezetekNev"]} {$user_info["KeresztNev"]} ({$user_info["Email"]})
-                    felhasználó az alábbi kurzusoknak tagja:</div>";
+                    echo "<div style='margin: 10px'><b>{$user_info["VezetekNev"]} {$user_info["KeresztNev"]} ({$user_info["Email"]})
+                    felhasználó az alábbi kurzusoknak tagja:</b>
+                    <br><i>A felhasználó által létrehozott kurzusok sárgával kiemelve jelennek meg.</i></div>";
                     
                     $sql_user_courses_query = "SELECT `kurzus`.`KurzusID`, `kurzus`.`FelhasznaloID`, 
                     `kurzus`.`KurzusNev`, `kurzus`.`Kod`, `kurzus`.`Leiras`, `kurzus`.`Archivalt` 
@@ -125,7 +131,7 @@
                                 <td>{$course["KurzusNev"]}</td>
                                 <td>{$course["Leiras"]}</td>
                                 <td>{$teacher}</td>
-                                <td>{$course_member_count} ({$course_teachers_count} tanár)</td>     
+                                <td>{$course_member_count} ({$course_teachers_count} tanár) <a href='coursemembers?id={$course["KurzusID"]}'>[Több infó]</a></td>     
                                 <td>{$course["Kod"]}</td>   
                                 <td><a href='usercourses?id={$course["FelhasznaloID"]}'>{$owner["VezetekNev"]} {$owner["KeresztNev"]} ({$owner["Email"]})<a></td>
                             </tr>";
@@ -199,8 +205,9 @@
                     WHERE `kurzus`.`KurzusID` = {$id};";
                     $course_info = AdatLekerdezes($sql_course_info_query)[0];
 
-                    echo "<div style='margin: 10px;'>{$course_info["VezetekNev"]} {$course_info["KeresztNev"]} ({$course_info["Email"]})
-                    felhasználó '{$course_info["KurzusNev"]}' nevű kurzusának tagjai:</div>";
+                    echo "<div style='margin: 10px;'><b>{$course_info["VezetekNev"]} {$course_info["KeresztNev"]} ({$course_info["Email"]})
+                    felhasználó '{$course_info["KurzusNev"]}' nevű kurzusának tagjai:</b>
+                    <br><i>A kurzus tulajdonosa sárágval kiemelve jelenik meg.</i></div>";
 
                     $sql_course_members_query = "SELECT `felhasznalo`.`FelhasznaloID`, `felhasznalo`.`Email`, 
                     `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `kurzustag`.`Tanar` FROM `kurzustag`
@@ -225,19 +232,30 @@
                             $sql_user_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `FelhasznaloID` = {$member["FelhasznaloID"]};";
                             $user_course_count = AdatLekerdezes($sql_user_course_count_query)[0]["count"];
 
+                            $sql_user_own_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` 
+                            INNER JOIN `kurzus` ON `kurzustag`.`KurzusID` = `kurzus`.`KurzusID`
+                            WHERE `kurzustag`.`FelhasznaloID` = {$member["FelhasznaloID"]} AND `kurzus`.`FelhasznaloID` = {$member["FelhasznaloID"]};";
+                            $user_own_course_count = AdatLekerdezes($sql_user_own_course_count_query)[0]["count"];
+
                             if ($member["Tanar"] == 1) {
                                 $teacher = "Igen";
                             } else {
                                 $teacher = "Nem";
                             }
 
-                            echo "<tr>
+                            if ($member["Email"] == $course_info["Email"]) {
+                                $owner_class = " class='owner'";
+                            } else {
+                                $owner_class = "";
+                            }
+
+                            echo "<tr{$owner_class}>
                                 <td>{$member["FelhasznaloID"]}</td>
                                 <td>{$member["Email"]}</td>
                                 <td>{$member["VezetekNev"]}</td>
                                 <td>{$member["KeresztNev"]}</td>
                                 <td>{$teacher}</td>
-                                <td>{$user_course_count} <a href='usercourses?id={$member["FelhasznaloID"]}'>[Több infó]</a></td></td>
+                                <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$member["FelhasznaloID"]}'>[Több infó]</a></td></td>
                             </tr>";
                         }
 
