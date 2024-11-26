@@ -67,7 +67,7 @@ function click(){
    cardData.forEach(data => {
       kurzusids.forEach(id => {
          if(data.KurzusID == id){
-            document.querySelector("title").textContent = data.KurzusNev
+            document.querySelector("title").title = data.KurzusNev
          }
       });
    });
