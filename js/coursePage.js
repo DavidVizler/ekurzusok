@@ -55,22 +55,16 @@ async function getCardsData() {
    }
 }
 
-let cards = document.querySelectorAll(".card")
+let cards = document.getElementsByClassName("card")
 function click(){
+   let id;
    let endofID;
-   let kurzusids = new Set()
-   cards.forEach(card => {
-      let id = card.id
-      endofID = id.split("-")
-      kurzusids.add(endofID[1])
-   });
-   cardData.forEach(data => {
-      kurzusids.forEach(id => {
-         if(data.KurzusID == id){
-            document.querySelector("title").title = data.KurzusNev
-         }
-      });
-   });
+   let ids = []
+   for (let card of cards) {
+      id = card.id
+      endofID = id.split('-')[1]
+      ids.push(endofID)
+   }
    window.open("kurzusAdatok.html","_self")
 }
 
