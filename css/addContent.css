@@ -1,0 +1,35 @@
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: "Varela Round";
+    font-weight: lighter;
+}
+
+.backToMainPageIcon svg{
+    height: 30px;
+    width: 30px;
+    color: black;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.backToMainPageIcon{
+    display: flex;
+    margin: 15px;
+}
+
+.addContentDiv{
+    border: 1px solid grey;
+    border-radius: 15px;
+    margin: 15px;
+    padding: 15px;
+}

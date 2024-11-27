@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Varela+Round&display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="./img/eKurzusok.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/addContent.css">
+    <title>Tartalom hozzáadása</title>
+</head>
+<body>
+    <div class="header">
+        <div class="backToMainPageIcon">
+            <a href="./kurzusAdatok.html">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                  </svg>              
+            </a>
+        </div>
+        <div class="title">
+            <h1>Tartalom hozzáadása</h1>
+        </div>
+    </div>
+    <div class="addContentDiv">
+        <div class="typeofContent">
+            <label for="typeContent">Tartalom típusa</label>
+            <select name="typeContent" id="typeContent">
+                <option value="feladat">Feladat</option>
+                <option value="tananyag">Tananyag</option>
+            </select>
+        </div>
+        <div class="feladatDiv" id="feladatDiv" style="display: none;">
+            <hr>
+            <label for="cim">Feladat címe</label>
+            <input type="text" name="cim" id="cim"><br>
+            <label for="leiras">Feladat leírása</label>
+            <input type="text" name="leiras" id="leiras"><br>
+            <label for="hatarido">Feladat határideje</label>
+            <input type="date" name="hatarido" id="hatarido"><br>
+            <label for="pont">Pontszám</label>
+            <input type="number" name="pont" id="pont"><br>
+            <label for="file">Fájl kiválasztása</label>
+            <input type="file" name="file" id="file">
+        </div>
+    </div>
+</body>
+</html>
