@@ -5,6 +5,7 @@ function clickHandler(){
 }
 menu.addEventListener("click", clickHandler)
 
+let url = window.location.pathname.split("/").pop()
 let cardData;
 async function getCardsData() {
    try {
@@ -20,6 +21,6 @@ async function getCardsData() {
    }
 }
 
-let url = window.location.pathname.split("/").pop()
+let kurzusNev = document.getElementById("kurzusNev")
 
 window.addEventListener("load",getCardsData)

@@ -65,7 +65,6 @@ function GenerateCards(){
 
       let card = document.createElement("div")
       card.classList.add("card")
-      card.addEventListener("click", click)
       
       let link = document.createElement("a")
       link.href = "kurzus/" + cardData[i]["KurzusID"]
