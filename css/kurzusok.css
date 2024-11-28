@@ -262,3 +262,11 @@ body{
     border-radius: 5px;
     width: 130px;
 }
+
+.card-title,.card-teachers{
+    color: black;
+}
+
+a{
+    text-decoration: none;
+}

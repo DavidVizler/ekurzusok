@@ -55,19 +55,6 @@ async function getCardsData() {
    }
 }
 
-let cards = document.getElementsByClassName("card")
-function click(){
-   let id;
-   let endofID;
-   let ids = []
-   for (let card of cards) {
-      id = card.id
-      endofID = id.split('-')[1]
-      ids.push(endofID)
-   }
-   window.open("kurzusAdatok.html","_self")
-}
-
 function GenerateCards(){
    let cardsContainer = document.getElementById("cards-container")
    let rowDiv = document.createElement("div")
@@ -79,7 +66,10 @@ function GenerateCards(){
       let card = document.createElement("div")
       card.classList.add("card")
       card.addEventListener("click", click)
-      card.id = "card-" + cardData[i]["KurzusID"]
+      
+      let link = document.createElement("a")
+      link.href = "kurzus/" + cardData[i]["KurzusID"]
+      
 
       let cardHeader = document.createElement("div")
       cardHeader.classList.add("card-header")
@@ -108,7 +98,8 @@ function GenerateCards(){
       cardHeader.appendChild(img)
       card.appendChild(cardHeader)
       card.appendChild(cardBody)
-      colDiv.appendChild(card)
+      link.appendChild(card)
+      colDiv.appendChild(link)
       rowDiv.appendChild(colDiv)
    }
    cardsContainer.appendChild(rowDiv)

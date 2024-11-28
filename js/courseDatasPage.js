@@ -4,3 +4,22 @@ function clickHandler(){
     menu.classList.toggle("active")
 }
 menu.addEventListener("click", clickHandler)
+
+let cardData;
+async function getCardsData() {
+   try {
+      let eredmeny = await fetch("../php/courseCard_manager.php");
+        if(eredmeny.ok){
+            cardData = await eredmeny.json()
+        }
+        else{
+            throw eredmeny.status
+        }
+   } catch (error) {
+      console.log(error)
+   }
+}
+
+let url = window.location.pathname.split("/").pop()
+
+window.addEventListener("load",getCardsData)
