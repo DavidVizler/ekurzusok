@@ -1,6 +1,6 @@
 <?php
 
-include "./sql_fuggvenyek.php";
+include "./sql_functions.php";
 
 // Metódus ellenőrzése
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Ellenőrzés, hogy nincs-e már felhasználó regisztrálva azonos e-mail címmel
             $sql_regisztracio_email_lekerdezes = "SELECT `Email` FROM `felhasznalo` WHERE `Email` = '{$email}'";
-            $email_ellenorzes = AdatLekerdezes($sql_regisztracio_email_lekerdezes);
+            $email_ellenorzes = DataQuery($sql_regisztracio_email_lekerdezes);
             if (!is_array($email_ellenorzes)) {
                 // Jelszó titkosítása
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql_felhasznalo_feltoltes = "INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) 
                 VALUES (NULL, '{$email}', '{$lastname}', '{$firstname}', '{$hashed_password}');";
 
-                $eredmeny = AdatModositas($sql_felhasznalo_feltoltes);
+                $eredmeny = ModifyData($sql_felhasznalo_feltoltes);
 
                 if ($eredmeny == "Sikeres művelet!") { 
                     $valasz = [
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $sql_jelszo_lekerdezes = "SELECT `Jelszo` FROM `felhasznalo` WHERE `Email` = '{$email}';";
 
-            $hashed_password = AdatLekerdezes($sql_jelszo_lekerdezes);
+            $hashed_password = DataQuery($sql_jelszo_lekerdezes);
 
             // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
             if (is_array($hashed_password)) {
@@ -112,13 +112,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Titkosított jelszó lekérdezése
             $sql_felhasznalo_jelszo_ellenorzes = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
-            $jelszo = AdatLekerdezes($sql_felhasznalo_jelszo_ellenorzes);
+            $jelszo = DataQuery($sql_felhasznalo_jelszo_ellenorzes);
 
             // Ha van az ID-hez felhasználó, akkor jelszó összehasonlítása
             if (is_array($jelszo)) {
                 if ($password == $jelszo[0]["Jelszo"]) {
                     $sql_felhasznalo_torles = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
-                    $eredmeny = AdatModositas($sql_felhasznalo_torles);
+                    $eredmeny = ModifyData($sql_felhasznalo_torles);
                     
                     if ($eredmeny == "Sikeres művelet!") { 
                         $valasz = [

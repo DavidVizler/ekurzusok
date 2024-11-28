@@ -1,5 +1,6 @@
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteRule ^(.*)$ /ekurzusok/admin/index.php?path=$1 [NC,L,QSA]
-RewriteRule ^(.*)$ /13c-ivanyi/ekurzusok/kurzus/index.html?path=$1 [NC,L,QSA]
+#RewriteRule ^(.*)$ /13c-ivanyi/ekurzusok/kurzus/index.html?path=$1 [NC,L,QSA]
+#RewriteRule ^(.*)$ /13c-ferenczy/ekurzusok/kurzus/index.html?path=$1 [NC,L,QSA]
+RewriteRule ^(.*)$ /ekurzusok/kurzus/index.html?path=$1 [NC,L,QSA]

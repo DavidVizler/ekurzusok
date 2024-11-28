@@ -19,11 +19,11 @@
 
     <div id="content">
         <?php
-            include "../php/sql_fuggvenyek.php";
+            include "../php/sql_functions.php";
 
             function FetchUsers() {
                 $sql_users_query = "SELECT * FROM `felhasznalo`";
-                $users = AdatLekerdezes($sql_users_query);
+                $users = DataQuery($sql_users_query);
 
                 if (is_array($users)) {   
                     echo "<table><thead>
@@ -41,12 +41,12 @@
 
                     foreach ($users as $user) {
                         $sql_user_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `FelhasznaloID` = {$user["FelhasznaloID"]};";
-                        $user_course_count = AdatLekerdezes($sql_user_course_count_query)[0]["count"];
+                        $user_course_count = DataQuery($sql_user_course_count_query)[0]["count"];
 
                         $sql_user_own_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` 
                         INNER JOIN `kurzus` ON `kurzustag`.`KurzusID` = `kurzus`.`KurzusID`
                         WHERE `kurzustag`.`FelhasznaloID` = {$user["FelhasznaloID"]} AND `kurzus`.`FelhasznaloID` = {$user["FelhasznaloID"]};";
-                        $user_own_course_count = AdatLekerdezes($sql_user_own_course_count_query)[0]["count"];
+                        $user_own_course_count = DataQuery($sql_user_own_course_count_query)[0]["count"];
 
                         echo "<tr>
                             <td>{$user["FelhasznaloID"]}</td>
@@ -74,7 +74,7 @@
                     $id = $_GET["id"];
 
                     $sql_user_info_query = "SELECT `VezetekNev`, `KeresztNev`, `Email` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id}";
-                    $user_info = AdatLekerdezes($sql_user_info_query)[0];
+                    $user_info = DataQuery($sql_user_info_query)[0];
 
                     echo "<div style='margin: 10px'><b>{$user_info["VezetekNev"]} {$user_info["KeresztNev"]} ({$user_info["Email"]})
                     felhasználó az alábbi kurzusoknak tagja:</b>
@@ -84,7 +84,7 @@
                     `kurzus`.`KurzusNev`, `kurzus`.`Kod`, `kurzus`.`Leiras`, `kurzus`.`Archivalt` 
                     FROM `kurzus` INNER JOIN `kurzustag` ON `kurzus`.`KurzusID` = `kurzustag`.`KurzusID`
                     WHERE `kurzustag`.`FelhasznaloID` = {$id};";
-                    $user_courses = AdatLekerdezes($sql_user_courses_query);
+                    $user_courses = DataQuery($sql_user_courses_query);
 
                     if (is_array($user_courses)) {   
                         echo "<table><thead>
@@ -103,11 +103,11 @@
                         foreach ($user_courses as $course) {
                             $sql_user_course_owner_query = "SELECT `VezetekNev`, `KeresztNev`, `Email` FROM `felhasznalo`
                             WHERE `FelhasznaloID` = {$course["FelhasznaloID"]};";
-                            $owner = AdatLekerdezes($sql_user_course_owner_query)[0];
+                            $owner = DataQuery($sql_user_course_owner_query)[0];
 
                             $sql_user_course_teacher_query = "SELECT `Tanar` FROM `kurzustag`
                             WHERE `FelhasznaloID` = {$id} AND `KurzusID` = {$course["KurzusID"]}";
-                            $user_course_teacher = AdatLekerdezes($sql_user_course_teacher_query)[0]["Tanar"];
+                            $user_course_teacher = DataQuery($sql_user_course_teacher_query)[0]["Tanar"];
                             if ($user_course_teacher == 1) {
                                 $teacher = "Igen";
                             } else {
@@ -121,10 +121,10 @@
                             }
 
                             $sql_course_member_count_query = "SELECT COUNT(`ID`) AS member_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']};";
-                            $course_member_count = AdatLekerdezes($sql_course_member_count_query)[0]["member_count"];
+                            $course_member_count = DataQuery($sql_course_member_count_query)[0]["member_count"];
 
                             $sql_course_teachers_count_query = "SELECT COUNT(`ID`) AS teachers_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']} AND `Tanar` = '1';";
-                            $course_teachers_count = AdatLekerdezes($sql_course_teachers_count_query)[0]["teachers_count"];
+                            $course_teachers_count = DataQuery($sql_course_teachers_count_query)[0]["teachers_count"];
 
                             echo "<tr{$owner_class}>
                                 <td>{$course["KurzusID"]}</td>
@@ -150,7 +150,7 @@
                 $sql_courses_query = "SELECT `kurzus`.`KurzusID`, `kurzus`.`KurzusNev`, `kurzus`.`Kod`, `kurzus`.`Leiras`, `kurzus`.`Design`,  `kurzus`.`Archivalt`, 
                 `felhasznalo`.`FelhasznaloID`, `felhasznalo`.`Email`, `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `felhasznalo`.`Jelszo`
                 FROM `kurzus` INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`";
-                $courses = AdatLekerdezes($sql_courses_query);
+                $courses = DataQuery($sql_courses_query);
 
                 if (is_array($courses)) {   
                     echo "<table><thead>
@@ -169,10 +169,10 @@
 
                     foreach ($courses as $course) {
                         $sql_course_member_count_query = "SELECT COUNT(`ID`) AS member_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']};";
-                        $course_member_count = AdatLekerdezes($sql_course_member_count_query)[0]["member_count"];
+                        $course_member_count = DataQuery($sql_course_member_count_query)[0]["member_count"];
 
                         $sql_course_teachers_count_query = "SELECT COUNT(`ID`) AS teachers_count FROM `kurzustag` WHERE `KurzusID` = {$course['KurzusID']} AND `Tanar` = '1';";
-                        $course_teachers_count = AdatLekerdezes($sql_course_teachers_count_query)[0]["teachers_count"];
+                        $course_teachers_count = DataQuery($sql_course_teachers_count_query)[0]["teachers_count"];
 
                         echo "<tr>
                             <td>{$course["KurzusID"]}</td>
@@ -203,7 +203,7 @@
                     $sql_course_info_query = "SELECT `kurzus`.`KurzusNev`, `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `felhasznalo`.`Email`
                     FROM `kurzus` INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`
                     WHERE `kurzus`.`KurzusID` = {$id};";
-                    $course_info = AdatLekerdezes($sql_course_info_query)[0];
+                    $course_info = DataQuery($sql_course_info_query)[0];
 
                     echo "<div style='margin: 10px;'><b>{$course_info["VezetekNev"]} {$course_info["KeresztNev"]} ({$course_info["Email"]})
                     felhasználó '{$course_info["KurzusNev"]}' nevű kurzusának tagjai:</b>
@@ -213,7 +213,7 @@
                     `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `kurzustag`.`Tanar` FROM `kurzustag`
                     INNER JOIN `felhasznalo` ON `kurzustag`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`
                     WHERE `kurzustag`.`KurzusID` = {$id};";
-                    $course_members = AdatLekerdezes($sql_course_members_query);
+                    $course_members = DataQuery($sql_course_members_query);
 
                     if (is_array($course_members)) {
                         echo "<table><thead>
@@ -230,12 +230,12 @@
 
                         foreach ($course_members as $member) {
                             $sql_user_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `FelhasznaloID` = {$member["FelhasznaloID"]};";
-                            $user_course_count = AdatLekerdezes($sql_user_course_count_query)[0]["count"];
+                            $user_course_count = DataQuery($sql_user_course_count_query)[0]["count"];
 
                             $sql_user_own_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` 
                             INNER JOIN `kurzus` ON `kurzustag`.`KurzusID` = `kurzus`.`KurzusID`
                             WHERE `kurzustag`.`FelhasznaloID` = {$member["FelhasznaloID"]} AND `kurzus`.`FelhasznaloID` = {$member["FelhasznaloID"]};";
-                            $user_own_course_count = AdatLekerdezes($sql_user_own_course_count_query)[0]["count"];
+                            $user_own_course_count = DataQuery($sql_user_own_course_count_query)[0]["count"];
 
                             if ($member["Tanar"] == 1) {
                                 $teacher = "Igen";
@@ -273,10 +273,10 @@
 
             function ListStatistics() {
                 $sql_user_count_query = "SELECT COUNT(`FelhasznaloID`) AS user_count FROM `felhasznalo`";
-                $user_count = AdatLekerdezes($sql_user_count_query)[0]["user_count"];
+                $user_count = DataQuery($sql_user_count_query)[0]["user_count"];
 
                 $sql_course_count_query = "SELECT COUNT(`KurzusID`) AS course_count FROM `kurzus`";
-                $course_count = AdatLekerdezes($sql_course_count_query)[0]["course_count"];
+                $course_count = DataQuery($sql_course_count_query)[0]["course_count"];
 
                 echo "<div id='stats'>
                 Felhasználók száma: <b>{$user_count}</b><br>
