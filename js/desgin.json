@@ -2,26 +2,31 @@
     {
         "designId" : 1,
         "designName" : "Földrajz",
-        "image" : "./img/courseThemes/Geography_background.png"
+        "image" : "./img/courseThemes/Geography_background.png",
+        "courseImage" : "../img/courseDataPageThemes/Geography_background_course.png"
     },
     {
         "designId" : 2,
         "designName" : "Irodalom",
-        "image" : "./img/courseThemes/Literature_background.png"
+        "image" : "./img/courseThemes/Literature_background.png",
+        "courseImage" : "../img/courseDataPageThemes/Literature_background_course.png"
     },
     {
         "designId" : 3,
         "designName" : "Matematika",
-        "image" : "./img/courseThemes/Math_background.png"
+        "image" : "./img/courseThemes/Math_background.png",
+        "courseImage" : "../img/courseDataPageThemes/Math_background_course.png"
     },
     {
         "designId" : 4,
         "designName" : "Gyümölcsös",
-        "image" : "./img/courseThemes/Fruit_background.png"
+        "image" : "./img/courseThemes/Fruit_background.png",
+        "courseImage" : "../img/courseDataPageThemes/Fruit_background_course.png"
     },
     {
         "designId" : 5,
         "designName" : "Informatika",
-        "image" : "./img/courseThemes/IT_background.png"
+        "image" : "./img/courseThemes/IT_background.png",
+        "courseImage" : "../img/courseDataPageThemes/IT_background_course.png"
     }
 ]
