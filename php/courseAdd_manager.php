@@ -11,8 +11,8 @@
 
                 if (!empty($kurzusNev) && !empty($oktatok) && !empty($leiras) && !empty($design)) {
                     $kurzusKod = GenerateCourseCode();
-                    $courseAdd_sql = "INSERT INTO kurzus(FelhasznaloID, KurzusNev, Oktatok, Kod, Leiras, Design) VALUES(13,'{$kurzusNev}','{$oktatok}', '{$kurzusKod}', '{$leiras}', {$design})";
-                    $courseAdd = ModifyData($courseAdd_sql);
+                    $courseAdd_sql = "INSERT INTO kurzus(FelhasznaloID, KurzusNev, Oktatok, Kod, Leiras, Design) VALUES(13,?,?,?,?,?)";
+                    $courseAdd = ModifyData($courseAdd_sql, "ssssi", [$kurzusNev, $oktatok, $kurzusKod, $leiras,$design]);
                     header('Location: ../kurzusok.html');
                     exit;
                 }
