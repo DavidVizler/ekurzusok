@@ -15,7 +15,6 @@ body{
     width: 100%;
     z-index: 10;
     padding-inline: 0;
-    background-image: url("../img/courseThemes/IT_background.png");
     height: 350px;
     background-size: cover;
 }
