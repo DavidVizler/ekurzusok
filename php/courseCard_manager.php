@@ -1,10 +1,10 @@
 <?php
-    include './sql_fuggvenyek.php';
+    include './sql_functions.php';
 
     function selectCardData(){
         if($_SERVER["REQUEST_METHOD"] == "GET"){
             $cardDatas_sql = "SELECT KurzusID, KurzusNev, Oktatok, Kod, Leiras, Design FROM kurzus";
-            $cardDatas = AdatLekerdezes($cardDatas_sql);
+            $cardDatas = DataQuery($cardDatas_sql);
             if(is_array($cardDatas)){
                 echo json_encode($cardDatas,JSON_UNESCAPED_UNICODE);
             }else{
