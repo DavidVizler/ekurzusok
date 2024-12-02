@@ -1,5 +1,13 @@
 let menu = document.getElementById("hamburger-menu")
 
+//import designData from './desgin.json' with {type : "json"}
+let designData 
+
+async function getDesignJson() {
+    let response = await fetch("../js/desgin.json")
+    designData = await response.json()
+ }
+
 function clickHandler(){
     menu.classList.toggle("active")
 }
@@ -22,7 +30,6 @@ async function getCardsData() {
     }
 }
 
-import designData from './desgin.json' with {type : "json"}
 function ModifyActualData(){
     let kurzusNev = document.getElementById("kurzusNev")
     let oktatok = document.getElementById("oktatok")
@@ -43,5 +50,5 @@ function ModifyActualData(){
     }
 }
 
-
+window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)

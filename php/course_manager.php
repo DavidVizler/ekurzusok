@@ -19,11 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     function Create() {
         $data = json_decode(file_get_contents("php://input"), true);
-
+        session_start();     
+           
         // Érkezett adatok ellenőrzése
         if (isset($_SESSION["user_id"]) && !empty($data["name"]) && !empty($data["desc"]) && !empty($data["design"])) {
-            session_start();
-
             $new_course_data = [
                 $_SESSION["user_id"],
                 $data["name"],

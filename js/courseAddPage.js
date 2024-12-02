@@ -1,8 +1,13 @@
-import design from './desgin.json' with {type : "json"}
+// import design from './desgin.json' with {type : "json"}
 
-document.getElementById("closeButton").addEventListener('click',()=>{
-    window.open("./kurzusok.html","_self")
-})
+let design
+
+// Fetch importálás, hogy Firefoxban is megjelenjen a design
+async function getDesignJson() {
+    let response = await fetch("./js/desgin.json")
+    design = await response.json()
+    designOptionLoad()
+}
 
 function designOptionLoad(){
     let select = document.getElementById("DesignSelect")
@@ -44,12 +49,7 @@ function previewLoad(){
             cardTitle.textContent = kurzusNev.value
             cardTitle.classList.add("card-title")
 
-            let cardOktatok = document.createElement("h6")
-            cardOktatok.textContent = oktatoNeve.value
-            cardOktatok.classList.add("card-teachers")
-
             cardBody.appendChild(cardTitle)
-            cardBody.appendChild(cardOktatok)
             cardHeader.appendChild(img)
             card.appendChild(cardHeader)
             card.appendChild(cardBody)
@@ -58,5 +58,36 @@ function previewLoad(){
     });
 }
 
+async function sendNewCourseData() {
+    let name = document.getElementById("KurzusNev").value
+    let desc = document.getElementById("Leiras").value
+    let courseDesgin = document.getElementById("DesignSelect").value
+
+    let newCourseData = {
+        "name" : name,
+        "desc" : desc,
+        "design" : courseDesgin
+    }
+
+    let request = fetch("./php/course_manager.php/create", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newCourseData)
+    })
+}
+
+window.addEventListener('load', getDesignJson)
+window.addEventListener('load', () => {
+    document.getElementById('newCourseForm').addEventListener('submit', (e) => {
+        sendNewCourseData()
+        e.preventDefault()
+    });
+})
+
 document.getElementById("DesignSelect").addEventListener('change', previewLoad)
-window.addEventListener('load', designOptionLoad)
+
+document.getElementById("closeButton").addEventListener('click',()=>{
+    window.open("./kurzusok.html","_self")
+})

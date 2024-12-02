@@ -115,5 +115,5 @@ function GenerateCards(){
    cardsContainer.appendChild(rowDiv)
 }
 
-window.addEventListener("load",getCardsData)
 window.addEventListener("load", getDesignJson)
+window.addEventListener("load",getCardsData)

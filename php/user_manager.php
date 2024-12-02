@@ -5,67 +5,67 @@ include "./sql_functions.php";
 // Metódus ellenőrzése
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function Signup() {
-        $adatok = json_decode(file_get_contents("php://input"), true);
-        if (!empty($adatok["email"]) && !empty($adatok["lastname"]) && !empty($adatok["firstname"]) && !empty($adatok["password"])) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!empty($data["email"]) && !empty($data["lastname"]) && !empty($data["firstname"]) && !empty($data["password"])) {
 
-            $email = $adatok["email"];
-            $lastname = $adatok["lastname"];
-            $firstname = $adatok["firstname"];
-            $password = $adatok["password"];
+            $email = $data["email"];
+            $lastname = $data["lastname"];
+            $firstname = $data["firstname"];
+            $password = $data["password"];
             
             // Ellenőrzés, hogy nincs-e már felhasználó regisztrálva azonos e-mail címmel
-            $sql_regisztracio_email_lekerdezes = "SELECT `Email` FROM `felhasznalo` WHERE `Email` = '{$email}'";
-            $email_ellenorzes = DataQuery($sql_regisztracio_email_lekerdezes);
-            if (!is_array($email_ellenorzes)) {
+            $sql_email_check_query = "SELECT `Email` FROM `felhasznalo` WHERE `Email` = ?";
+            $email_check = DataQuery($sql_email_check_query, "s", [$email]);
+            if (!is_array($email_check)) {
                 // Jelszó titkosítása
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 
-                $sql_felhasznalo_feltoltes = "INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) 
-                VALUES (NULL, '{$email}', '{$lastname}', '{$firstname}', '{$hashed_password}');";
+                $sql_user_upload = "INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) 
+                VALUES (NULL, ?, ?, ?, ?);";
 
-                $eredmeny = ModifyData($sql_felhasznalo_feltoltes);
+                $result = ModifyData($sql_user_upload, "ssss", [$email, $lastname, $firstname, $hashed_password]);
 
-                if ($eredmeny == "Sikeres művelet!") { 
-                    $valasz = [
+                if ($result == "Sikeres művelet!") { 
+                    $response = [
                         "sikeres" => true,
                         "uzenet" => "Felhasználó regisztrálva"
                     ];
                     header("created", true, 201);
-                } else if ($eredmeny == "Sikertelen művelet!") { // Nincs módosított sor az adatbázisban ($db->affected_rows = 0)
-                    $valasz = [
+                } else if ($result == "Sikertelen művelet!") { // Nincs módosított sor az adatbázisban ($db->affected_rows = 0)
+                    $response = [
                         "sikeres" => false,
                         "uzenet" => "Nem sikerült feltölteni a felhasználót"
                             ];
                     header("internal server error", true, 500);
                 } else { // SQL hiba (uzenet = $db->error vagy $db->connect_error)
-                    $valasz = [
+                    $response = [
                         "sikeres" => false,
-                        "uzenet" => $eredmeny
+                        "uzenet" => $result
                     ];
                     header("internal server error", true, 500);
                 }  
             } else {
-                $valasz = [
+                $response = [
                     "sikeres" => false,
                     "uzenet" => "E-mail cím már regisztrálva van"
                 ];
             }
         } else {
-            $valasz = [
+            $response = [
                 "sikeres" => false,
                 "uzenet" => "Hiányos adatok!"
             ];
             header("bad request", true, 400);
         }
 
-        echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }
 
     function Login() {
-        $adatok = json_decode(file_get_contents("php://input"), true);
-        if (!empty($adatok["email"]) && !empty($adatok["password"])) {
-            $email = $adatok["email"];
-            $password = $adatok["password"];
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!empty($data["email"]) && !empty($data["password"])) {
+            $email = $data["email"];
+            $password = $data["password"];
 
             $sql_user_data_query = "SELECT `FelhasznaloID`, `Jelszo` FROM `felhasznalo` WHERE `Email` = ?;";
             $user_data = DataQuery($sql_user_data_query, "s", [$email]);
@@ -78,57 +78,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     session_start();
                     $_SESSION["user_id"] = $user_data[0]["FelhasznaloID"];
 
-                    $valasz = [
+                    $response = [
                         "sikeres" => true,
                         "uzenet" => "Sikeres bejelentkezés"
                     ];          
                 } else {
-                    $valasz = [
+                    $response = [
                         "sikeres" => false,
                         "uzenet" => "Email vagy jelszó nem megfelelő"
                     ];
                 }
             } else {
-                $valasz = [
+                $response = [
                     "sikeres" => false,
                     "uzenet" => "Email vagy jelszó nem megfelelő"
                 ];
             }
         } else {
-            $valasz = [
+            $response = [
                 "sikeres" => false,
                 "uzenet" => "Hiányos adatok!"
             ];
             header("bad request", true, 400);
         }
         
-        echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }
 
     function Delete() {
-        $adatok = json_decode(file_get_contents("php://input"), true);
+        $data = json_decode(file_get_contents("php://input"), true);
 
         // Érkezett adatok ellenőrzése
-        if (!empty($adatok["id"]) && !empty($adatok["password"])) {
-            $id = $adatok["id"];
-            $password = $adatok["password"];
+        if (!empty($data["id"]) && !empty($data["password"])) {
+            $id = $data["id"];
+            $password = $data["password"];
 
             // Titkosított jelszó lekérdezése
-            $sql_felhasznalo_jelszo_ellenorzes = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
-            $jelszo = DataQuery($sql_felhasznalo_jelszo_ellenorzes);
+            $sql_password_check_query = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
+            $password_check = DataQuery($sql_password_check_query, "i", [$id]);
 
             // Ha van az ID-hez felhasználó, akkor jelszó összehasonlítása
-            if (is_array($jelszo)) {
-                if ($password == $jelszo[0]["Jelszo"]) {
-                    $sql_felhasznalo_torles = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = {$id};";
-                    $eredmeny = ModifyData($sql_felhasznalo_torles);
+            if (is_array($password_check)) {
+                if ($password == $password_check[0]["Jelszo"]) {
+                    $sql_user_delete = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
+                    $result = ModifyData($sql_user_delete, "i", [$id]);
                     
-                    if ($eredmeny == "Sikeres művelet!") { 
+                    if ($result == "Sikeres művelet!") { 
                         $valasz = [
                             "sikeres" => true,
                             "uzenet" => "Felhasználó törölve"
                         ];
-                    } else if ($eredmeny == "Sikertelen művelet!") { // Nincs módosított sor az adatbázisban ($db->affected_rows = 0)
+                    } else if ($result == "Sikertelen művelet!") { // Nincs módosított sor az adatbázisban ($db->affected_rows = 0)
                         $valasz = [
                             "sikeres" => false,
                             "uzenet" => "Nem sikerült törölni a felhasználót"
@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     } else { // SQL hiba (uzenet = $db->error vagy $db->connect_error)
                         $valasz = [
                             "sikeres" => false,
-                            "uzenet" => $eredmeny
+                            "uzenet" => $result
                         ];
                         header("internal server error", true, 500);
                     }  
