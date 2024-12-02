@@ -59,12 +59,13 @@ body{
     flex-direction: column;
 }
 
-.fileDiv label,svg{
+.fileDiv label{
     margin-right: 10px;
 }
 
 .fileDiv input{
     border: none;
+    padding: 5px;
 }
 
 input{
@@ -75,15 +76,40 @@ input{
 }
 
 #file::file-selector-button{
-    background-color: #5271ff;
-    color: white;
-    border: #5271ff;
-    border-radius: 5px;
+    border: 1px solid grey;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     height: 30px;
 }
 
 #file::file-selector-button:hover{
     cursor: pointer;
-    border: 1px solid #4965e1;
-    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    /* box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px; */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
+}
+
+.typeofContent{
+    display: flex;
+    flex-direction: column;
+}
+
+#typeContent{
+    height: 30px;
+    width: 200px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+#createContentButton:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+#createContentButton{
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    background-color: #5271ff;
+    color: white;
+    border:1px solid #4965e1;
 }

@@ -13,4 +13,11 @@ contentType.addEventListener("click", ()=>{
         document.getElementById("tananyagDiv").style.flexDirection = "column"
         document.getElementById("feladatDiv").style.display = "none"
     }
+    else{
+        document.getElementById("tananyagDiv").style.display = "none"
+    }
+})
+
+let pageLink = document.getElementById("backtoPage").addEventListener("click", ()=>{
+    history.back()
 })
