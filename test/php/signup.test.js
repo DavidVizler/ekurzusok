@@ -11,23 +11,22 @@ async function signup(signupData) {
 
     if (response.ok) {
         let result = await response.json();
-        console.log(`Response from server: ${result}`);
         if (result.sikeres) {
             return true;
         }
         else {
-            console.error(`Test failed: ${result.uzenet}`);
             return false;
         }
     }
     else {
-        console.error(`Test failed: ${response.status} ${response.statusText}`);
         return false;
     }
 }
 
-function generateEmail(n = 0) {
-    return 'teszt' + new Date().toJSON().replaceAll(':', '').toLowerCase() + n + '@teszt.com';
+let i = 0;
+function generateEmail() {
+    i = i + 1;
+    return 'teszt' + i + '@teszt.com';
 }
 
 const lastname = 'Teszt';
@@ -65,7 +64,7 @@ describe('Regisztráció', () => {
             let signupData = {
                 lastname: '',
                 firstname: '',
-                email: generateEmail(2),
+                email: generateEmail(),
                 password
             };
     
@@ -89,7 +88,7 @@ describe('Regisztráció', () => {
             let signupData = {
                 lastname: '',
                 firstname: '',
-                email: generateEmail(3),
+                email: generateEmail(),
                 password: 'jelszó'
             };
     
