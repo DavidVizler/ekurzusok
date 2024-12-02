@@ -37,9 +37,16 @@ function clickHandler(){
 }
 menu.addEventListener("click",clickHandler);
 
+let cardData
+let design
 
-let cardData;
-import design from "./desgin.json" with {type : "json"}
+// import design from "./desgin.json" with {type : "json"}
+// Fetch importálás, hogy Firefoxban is megjelenjen a design
+async function getDesignJson() {
+   let response = await fetch("./js/desgin.json")
+   design = await response.json()
+}
+
 async function getCardsData() {
    try {
       let eredmeny = await fetch("./php/courseCard_manager.php");
@@ -52,6 +59,10 @@ async function getCardsData() {
         }
    } catch (error) {
       console.log(error)
+      // Ha nincs bejelentkezve a felhasználó, akkor átírányítás a login oldalra
+      if (error == 403) {
+         window.location.replace("login.html");
+      }
    }
 }
 
@@ -105,3 +116,4 @@ function GenerateCards(){
 }
 
 window.addEventListener("load",getCardsData)
+window.addEventListener("load", getDesignJson)

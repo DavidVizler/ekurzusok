@@ -67,18 +67,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = $adatok["email"];
             $password = $adatok["password"];
 
-            $sql_jelszo_lekerdezes = "SELECT `Jelszo` FROM `felhasznalo` WHERE `Email` = '{$email}';";
-
-            $hashed_password = DataQuery($sql_jelszo_lekerdezes);
+            $sql_user_data_query = "SELECT `FelhasznaloID`, `Jelszo` FROM `felhasznalo` WHERE `Email` = ?;";
+            $user_data = DataQuery($sql_user_data_query, "s", [$email]);
 
             // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
-            if (is_array($hashed_password)) {
+            if (is_array($user_data)) {
                 // Jelszó ellenőrzése
-                if (password_verify($password, $hashed_password[0]["Jelszo"])) {
+                if (password_verify($password, $user_data[0]["Jelszo"])) {
+                    // Session elindítása
+                    session_start();
+                    $_SESSION["user_id"] = $user_data[0]["FelhasznaloID"];
+
                     $valasz = [
                         "sikeres" => true,
                         "uzenet" => "Sikeres bejelentkezés"
-                    ];
+                    ];          
                 } else {
                     $valasz = [
                         "sikeres" => false,

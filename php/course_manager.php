@@ -21,9 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $data = json_decode(file_get_contents("php://input"), true);
 
         // Érkezett adatok ellenőrzése
-        if (!empty($data["owner_id"]) && !empty($data["name"]) && !empty($data["desc"]) && !empty($data["design"])) {
+        if (isset($_SESSION["user_id"]) && !empty($data["name"]) && !empty($data["desc"]) && !empty($data["design"])) {
+            session_start();
+
             $new_course_data = [
-                $data["owner_id"],
+                $_SESSION["user_id"],
                 $data["name"],
                 null,
                 $data["desc"],
@@ -51,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($result == "Sikeres művelet!") {
                 $sql_add_course_owner = "INSERT INTO `kurzustag` (`ID`, `FelhasznaloID`, `KurzusID`, `Tanar`) VALUES (NULL, ?, ?, '1');";
-                ModifyData($sql_add_course_owner, "ii", [$data["owner_id"], DataQuery("SELECT MAX(`KurzusID`) AS newid FROM `kurzus`")[0]["newid"]]);
+                ModifyData($sql_add_course_owner, "ii", [$_SESSION["user_id"], DataQuery("SELECT MAX(`KurzusID`) AS newid FROM `kurzus`")[0]["newid"]]);
 
                 $response = [
                     "sikeres" => true,
