@@ -270,3 +270,27 @@ body{
 a{
     text-decoration: none;
 }
+
+#logoutButton svg{
+    height: 20px;
+    width: 20px;
+}
+
+#logoutButton{
+    font-family: "Varela Round";
+    font-size: 15px;
+    display: flex;
+    height: 30px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+
+#logoutButton:hover{
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
