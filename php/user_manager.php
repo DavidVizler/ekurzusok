@@ -162,6 +162,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode($valasz, JSON_UNESCAPED_UNICODE);
     }
 
+    function Logout() {
+        session_start();
+        session_unset();
+        session_destroy();
+
+        echo json_encode([
+            "sikeres" => true,
+            "uzenet" => "Felhasználó kijelentkeztetve"
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
     // URL végpont megállapítás
     $url = explode("/", $_SERVER["REQUEST_URI"]);
     $url_vege = end($url);
@@ -172,6 +183,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         case "login":
             Login();
+            break;
+        case "logout":
+            Logout();
             break;
         case "delete":
             Delete();

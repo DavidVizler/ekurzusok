@@ -115,5 +115,15 @@ function GenerateCards(){
    cardsContainer.appendChild(rowDiv)
 }
 
+async function logout() {
+   let request = await fetch("./php/user_manager.php/logout", {
+      method: "POST"
+   })
+   if (request.ok) {
+      window.location.replace("login.html");
+   }
+}
+
 window.addEventListener("load", getDesignJson)
 window.addEventListener("load",getCardsData)
+document.getElementById("logoutButton").addEventListener("click", logout)
