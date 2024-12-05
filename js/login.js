@@ -7,12 +7,14 @@ async function login() {
     let password = $('password').value;
 
     let loginData = {
+        "manage" : "user",
+        "action" : "login",
         email,
         password
     };
 
     if (isValid(loginData)) {
-        let response = await fetch("./php/user_manager.php/login", {
+        let response = await fetch("./php/data_manager.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

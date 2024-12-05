@@ -11,13 +11,15 @@ async function signup() {
 
     if (isValid({ lastname, firstname, email, password, passwordConfirm })) {
         let signupData = {
+            "manage" : "user",
+            "action" : "signup",
             lastname,
             firstname,
             email,
             password
         };
 
-        let response = await fetch("./php/user_manager.php/signup", {
+        let response = await fetch("./php/data_manager.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

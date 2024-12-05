@@ -116,8 +116,15 @@ function GenerateCards(){
 }
 
 async function logout() {
-   let request = await fetch("./php/user_manager.php/logout", {
-      method: "POST"
+   let request = await fetch("./php/data_manager.php", {
+      method: "POST",
+      headers : {
+         "Content-type" : "application/json"
+      },
+      body: JSON.stringify({
+         "manage" : "user",
+         "action" : "logout"
+      })
    })
    if (request.ok) {
       window.location.replace("login.html");

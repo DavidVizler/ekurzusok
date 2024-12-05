@@ -64,12 +64,14 @@ async function sendNewCourseData() {
     let courseDesgin = document.getElementById("DesignSelect").value
 
     let newCourseData = {
+        "manage" : "course",
+        "action" : "create",
         "name" : name,
         "desc" : desc,
         "design" : courseDesgin
     }
 
-    let request = fetch("./php/course_manager.php/create", {
+    let request = fetch("./php/data_manager.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -24,10 +24,12 @@ function listCourses() {
 async function deleteUser(id, lastname, firstname, email, password) {
     if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nevű, ${email} e-mail című felhasználót?`)) {
         let deleteData = {
+            "manage" : "user",
+            "action" : "delete-as-admin",
             "id" : id,
             "password" : password
         };
-        let deleteRequest = await fetch("../php/user_manager.php/delete", {
+        let deleteRequest = await fetch("../php/data_manager.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -44,11 +46,13 @@ async function deleteUser(id, lastname, firstname, email, password) {
 async function deleteCourse(id, coursename, userid, lastname, firstname, password) {
     if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} felhasználó "${coursename}" nevű kurzusát?`)) {
         let deleteData = {
+            "manage" : "course",
+            "action" : "delete-as-admin",
             "id" : id,
-            "userid" : userid,
+            "user_id" : userid,
             "password" : password
         };
-        let deleteRequest = await fetch("../php/course_manager.php/delete", {
+        let deleteRequest = await fetch("../php/data_manager.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
