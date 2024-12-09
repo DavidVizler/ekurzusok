@@ -35,44 +35,48 @@
             </select>
         </div>
         <hr>
+        <form>
         <div class="feladatDiv" id="feladatDiv" style="display: none;">
             <div class="cimDiv">
-                <label for="cim">Feladat címe</label>
-                <input type="text" name="cim" id="cim">
+                <label for="fcim">Feladat címe</label>
+                <input type="text" name="fcim" id="fcim" required>
             </div>
             <div class="leirasDiv">
-                <label for="leiras">Feladat leírása</label>
-                <input type="text" name="leiras" id="leiras">
+                <label for="fleiras">Feladat leírása</label>
+                <input type="text" name="fleiras" id="fleiras">
             </div>
             <div class="hataridoDiv">
-                <label for="hatarido">Feladat határideje</label>
-                <input type="date" name="hatarido" id="hatarido">
+                <label for="fhatarido">Feladat határideje</label>
+                <input type="datetime-local" name="fhatarido" id="fhatarido">
             </div>
             <div class="pontDiv">
-                <label for="pont">Pontszám</label>
-                <input type="number" name="pont" id="pont">
+                <label for="fpont">Pontszám</label>
+                <input type="number" name="fpont" id="fpont">
             </div>
             <div class="fileDiv" style="display: inline;">
-                  <label for="file">Fájl kiválasztása</label>
-                  <input type="file" name="file" id="file">
+                  <label for="ffile">Fájl kiválasztása</label>
+                  <input type="file" name="ffile" id="ffile">
             </div>
-            <input type="button" id="createContentButton" value="Feladat létrehozása">
+            <input type="submit" id="createContentButton" value="Feladat létrehozása">
         </div>
+        </form>
+        <form>
         <div class="tananyagDiv" id="tananyagDiv" style="display: none;">
             <div class="cimDiv">
-                <label for="cim">Tananyag címe</label>
-                <input type="text" name="cim" id="cim">
+                <label for="tcim">Tananyag címe</label>
+                <input type="text" name="tcim" id="tcim">
             </div>
             <div class="leirasDiv">
-                <label for="leiras">Tananyag leírása</label>
-                <input type="text" name="leiras" id="leiras">
+                <label for="tleiras">Tananyag leírása</label>
+                <input type="text" name="tleiras" id="tleiras">
             </div>
             <div class="fileDiv" style="display: inline;">
-                  <label for="file">Fájl kiválasztása</label>
-                  <input type="file" name="file" id="file">
+                  <label for="tfile">Fájl kiválasztása</label>
+                  <input type="file" name="tfile" id="tfile">
             </div>
-            <input type="button" id="createContentButton" value="Tartalom létrehozása">
+            <input type="submit" id="createContentButton2" value="Tartalom létrehozása">
         </div>
+        </form>
     </div>
 
     <script src="../js/addContent.js"></script>

@@ -21,3 +21,86 @@ contentType.addEventListener("click", ()=>{
 let pageLink = document.getElementById("backtoPage").addEventListener("click", ()=>{
     history.back()
 })
+
+async function contentPublish(data) {
+    try {
+        let reqData = {
+            manage: 'content',
+            action: '', // ...
+            ...data
+        };
+
+        let response = await fetch('../php/data_manager.php', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(reqData)
+        });
+
+        // TODO
+        let result = await response.json();
+
+        console.log(result);
+        if (response.ok) {
+            // history.back();
+        }
+    }
+    catch (e) {
+        console.error(e);
+        alert("Hiba történt a kérés feldolgozás közben. Kérjük próbálja meg újra később!");
+    }
+}
+
+// Feladat
+async function onNewTask(e) {
+    e.preventDefault();
+    let title = document.getElementById('fcim').value;
+    let description = document.getElementById('fleiras').value;
+    // Az input mező értéke helyi (UTC+1) időben van. Az időzóna nincs tárolva.
+    let localTime = document.getElementById('fhatarido').value;
+    // Konvertálás UTC 0 időzónás dátumra (Z betű a végén). (ISO 8601 formátum)
+    let due = new Date(localTime).toJSON();
+    let points = parseInt(document.getElementById('fpont').value);
+    let file = document.getElementById('ffile').files[0];
+
+    if (title == '') {
+        alert("A cím megadása kötelező!");
+        return;
+    }
+
+    let data = {
+        title,
+        description,
+        due,
+        points,
+        file
+    };
+
+    await contentPublish(data);
+}
+
+// Tananyag
+async function onNewMaterial(e) {
+    e.preventDefault();
+    let title = document.getElementById('tcim').value;
+    let description = document.getElementById('tleiras').value;
+    let file = document.getElementById('tfile').files[0];
+
+    if (title == '') {
+        alert("A cím megadása kötelező!");
+        return;
+    }
+
+    let data = {
+        title,
+        description,
+        file
+    };
+
+    await contentPublish(data);
+}
+
+// TODO: formra rakni az event listenereket
+document.getElementById('createContentButton').addEventListener('click', async (e) => onNewTask(e));
+document.getElementById('createContentButton2').addEventListener('click', async (e) => onNewMaterial(e));
