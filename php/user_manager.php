@@ -25,7 +25,7 @@ switch ($action) {
 function Login() {
     global $data;
     global $response;
-    if (PostDataCheck(["email", "password"])) {
+    if (PostDataCheck(["email", "password"], false)) {
         $email = $data["email"];
         $password = $data["password"];
 
@@ -62,7 +62,7 @@ function Login() {
 function Signup() {
     global $data;
     global $response;
-    if (PostDataCheck(["email", "lastname", "firstname", "password"])) {
+    if (PostDataCheck(["email", "lastname", "firstname", "password"], false)) {
         $email = $data["email"];
         $lastname = $data["lastname"];
         $firstname = $data["firstname"];
@@ -86,13 +86,13 @@ function Signup() {
                     "uzenet" => "Felhasználó regisztrálva"
                 ];
                 header("created", true, 201);
-            } else if ($result == "Sikertelen művelet!") { // Nincs módosított sor az adatbázisban ($db->affected_rows = 0)
+            } else if ($result == "Sikertelen művelet!") {
                 $response = [
                     "sikeres" => false,
                     "uzenet" => "Nem sikerült feltölteni a felhasználót"
                         ];
                 header("internal server error", true, 500);
-            } else { // SQL hiba (uzenet = $db->error vagy $db->connect_error)
+            } else {
                 $response = [
                     "sikeres" => false,
                     "uzenet" => $result
@@ -111,18 +111,25 @@ function Signup() {
 function Logout() {
     global $response;
     session_start();
-    session_unset();
-    session_destroy();
-    $response = [
-        "sikeres" => true,
-        "uzenet" => "Felhasználó kijelentkeztetve"
-    ];
+    if (isset($_SESSION["user_id"])) {
+        session_unset();
+        session_destroy();
+        $response = [
+            "sikeres" => true,
+            "uzenet" => "Felhasználó kijelentkeztetve"
+        ];
+    } else {
+        $response = [
+            "sikeres" => false,
+            "uzenet" => "Nincs felhasználó bejelentkezve"
+        ];
+    }
 }
 
 function DeleteUserAsAdmin() {
     global $data;
     global $response;
-    if (PostDataCheck(["id", "password"])) {
+    if (PostDataCheck(["id", "password"], false)) {
         $id = $data["id"];
         $password = $data["password"];
 
