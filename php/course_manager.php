@@ -31,7 +31,7 @@ function CreateCourse() {
     global $data;
     global $response;
     session_start();     
-    if (PostDataCheck(["name", "desc", "design"]) && isset($_SESSION["user_id"])) {
+    if (PostDataCheck(["name", "desc", "design"], true)) {
         $new_course_data = [
             $_SESSION["user_id"],
             $data["name"],
@@ -81,19 +81,13 @@ function CreateCourse() {
             ];
             header("internal server error", true, 500);
         }
-    } else {
-        $response = [
-            "sikeres" => false,
-            "uzenet" => "Hiányos adatok!"
-        ];
-        header("bad request", true, 400);
     }
 }
 
 function DeleteCourseAsAdmin() {
     global $data;
     global $response;
-    if (PostDataCheck(["id", "user_id", "password"])) {
+    if (PostDataCheck(["id", "user_id", "password"], false)) {
         $id = $data["id"];
         $userid = $data["user_id"];
         $password = $data["password"];

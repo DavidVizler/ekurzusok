@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $manage = $data["manage"];
         $action = $data["action"];
 
-        if (in_array($manage,  ["user", "course", "content", "assigment"])) {
+        if (in_array($manage,  ["user", "course", "member", "content", "assignment"])) {
             include "./{$manage}_manager.php";
         } else {
             $response = [
@@ -38,9 +38,17 @@ if (isset($response)) {
     echo json_encode($response, JSON_UNESCAPED_UNICODE);
 }
 
-function PostDataCheck($to_check) {
+function PostDataCheck($to_check, $check_session) {
     global $response;
     global $data;
+    if ($check_session && !isset($_SESSION["user_id"])) {
+        $response = [
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nincs bejelentkezve"
+        ];
+        header("unauthorized", true, 401);
+        return false;
+    }
     foreach ($to_check as $tc) {
         if (empty($data[$tc])) {
             $response = [
