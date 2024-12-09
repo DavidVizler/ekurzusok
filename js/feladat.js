@@ -11,3 +11,7 @@ window.addEventListener("load", currentDateLoad)
 document.getElementById("uploadFileButton").addEventListener("click",()=>{
     document.getElementById("fileInput").click()
 })
+
+document.getElementById("backToPreviousPage").addEventListener("click",()=>{
+    window.history.back()
+})

@@ -186,7 +186,7 @@ body{
     margin:15px;
 }
 
-.tananyagDiv{
+#tananyagDiv{
     display: flex;
     border: 1px solid grey;
     border-radius: 15px;
@@ -207,7 +207,7 @@ body{
     color: black;
 }
 
-.feladatDiv{
+#feladatDiv{
     display: flex;
     border: 1px solid grey;
     border-radius: 15px;

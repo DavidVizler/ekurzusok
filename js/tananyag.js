@@ -5,4 +5,8 @@ function currentDate(){
     creatingDate.innerHTML += currentDate
 }
 
+document.getElementById("backToPreviousPage").addEventListener("click",()=>{
+    window.history.go(-1)
+})
+
 window.addEventListener("load", currentDate)
