@@ -54,7 +54,8 @@
                             <td>{$user["VezetekNev"]}</td>
                             <td>{$user["KeresztNev"]}</td>
                             <td><span class='blurred'>{$user["Jelszo"]}</span></td>
-                            <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$user["FelhasznaloID"]}'>[Több infó]</a></td>
+                            <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$user["FelhasznaloID"]}'>Több infó
+                            </a></td>
                             <td class='torles'>
                                 <form method='POST' action='javascript:;' onsubmit=\"deleteUser({$user["FelhasznaloID"]}, '{$user["VezetekNev"]}', '{$user["KeresztNev"]}', '{$user["Email"]}', '{$user["Jelszo"]}')\">
                                     <input type='submit' value='Eltávolítás' name='delete_button'>
@@ -131,7 +132,7 @@
                                 <td>{$course["KurzusNev"]}</td>
                                 <td>{$course["Leiras"]}</td>
                                 <td>{$teacher}</td>
-                                <td>{$course_member_count} ({$course_teachers_count} tanár) <a href='coursemembers?id={$course["KurzusID"]}'>[Több infó]</a></td>     
+                                <td>{$course_member_count} ({$course_teachers_count} tanár) <a href='coursemembers?id={$course["KurzusID"]}'>Több infó</a></td>     
                                 <td>{$course["Kod"]}</td>   
                                 <td><a href='usercourses?id={$course["FelhasznaloID"]}'>{$owner["VezetekNev"]} {$owner["KeresztNev"]} ({$owner["Email"]})<a></td>
                             </tr>";
@@ -178,7 +179,7 @@
                             <td>{$course["KurzusID"]}</td>
                             <td>{$course["KurzusNev"]}</td>
                             <td>{$course["Leiras"]}</td>
-                            <td>{$course_member_count} ({$course_teachers_count} tanár) <a href='coursemembers?id={$course["KurzusID"]}'>[Több infó]</a></td>    
+                            <td>{$course_member_count} ({$course_teachers_count} tanár) <a href='coursemembers?id={$course["KurzusID"]}'>Több infó</a></td>    
                             <td>{$course["Kod"]}</td>
                             <td>{$course["Design"]}</td>     
                             <td><a href='usercourses?id={$course["FelhasznaloID"]}'>{$course["VezetekNev"]} {$course["KeresztNev"]} ({$course["Email"]})</a></td>
@@ -255,7 +256,7 @@
                                 <td>{$member["VezetekNev"]}</td>
                                 <td>{$member["KeresztNev"]}</td>
                                 <td>{$teacher}</td>
-                                <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$member["FelhasznaloID"]}'>[Több infó]</a></td></td>
+                                <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$member["FelhasznaloID"]}'>Több infó</a></td></td>
                             </tr>";
                         }
 
