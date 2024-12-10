@@ -65,6 +65,7 @@ body {
 
 table {
     margin-top: 10px;
+    width: 100%;
 }
 
 tr:nth-child(even) {
@@ -101,15 +102,18 @@ td {
 
 .torles input {
     width: 100%;
-    border-radius: 0px;
-    border: 5px outset red;
+    border-radius: 5px;
+    border: 1px solid red;
     background-color: white;
+    height: 30px;
     font-size: 18px;
     font-family: sans-serif;
 }
 
 .torles input:hover {
     background-color: red;
+    color: white;
+    cursor: pointer;
 }
 
 #stats {
