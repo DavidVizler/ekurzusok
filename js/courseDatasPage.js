@@ -17,7 +17,11 @@ let url = window.location.pathname.split("/").pop()
 let cardData;
 async function getCardsData() {
     try {
-      let eredmeny = await fetch("../php/courseCard_manager.php");
+      let eredmeny = await fetch("../php/courseCard_manager.php", {
+        headers: {
+           "X-Requested-With": "XMLHttpRequest"
+        }
+    });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
             ModifyActualData()

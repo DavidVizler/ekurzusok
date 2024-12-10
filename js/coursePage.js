@@ -49,7 +49,11 @@ async function getDesignJson() {
 
 async function getCardsData() {
    try {
-      let eredmeny = await fetch("./php/courseCard_manager.php");
+      let eredmeny = await fetch("./php/courseCard_manager.php", {
+         headers: {
+            "X-Requested-With": "XMLHttpRequest"
+         }
+      });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
             GenerateCards()
@@ -119,7 +123,8 @@ async function logout() {
    let request = await fetch("./php/data_manager.php", {
       method: "POST",
       headers : {
-         "Content-type" : "application/json"
+         "Content-type" : "application/json",
+         "X-Requested-With": "XMLHttpRequest"
       },
       body: JSON.stringify({
          "manage" : "user",

@@ -32,7 +32,8 @@ async function deleteUser(id, lastname, firstname, email, password) {
         let deleteRequest = await fetch("../php/data_manager.php", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
             },
             body: JSON.stringify(deleteData)
         });
@@ -55,7 +56,8 @@ async function deleteCourse(id, coursename, userid, lastname, firstname, passwor
         let deleteRequest = await fetch("../php/data_manager.php", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
             },
             body: JSON.stringify(deleteData)
         });

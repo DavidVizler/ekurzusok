@@ -17,6 +17,7 @@ async function login() {
         let response = await fetch("./php/data_manager.php", {
             method: "POST",
             headers: {
+                'X-Requested-With': 'XMLHttpRequest',
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(loginData)

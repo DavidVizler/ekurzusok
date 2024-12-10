@@ -33,7 +33,8 @@ async function contentPublish(data) {
         let response = await fetch('../php/data_manager.php', {
             method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
             },
             body: JSON.stringify(reqData)
         });
