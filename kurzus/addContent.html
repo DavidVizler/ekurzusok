@@ -35,7 +35,7 @@
             </select>
         </div>
         <hr>
-        <form>
+        <form id="ujFeladatForm">
         <div class="feladatDiv" id="feladatDiv" style="display: none;">
             <div class="cimDiv">
                 <label for="fcim">Feladat címe</label>
@@ -60,11 +60,11 @@
             <input type="submit" id="createContentButton" value="Feladat létrehozása">
         </div>
         </form>
-        <form>
+        <form id="ujTananyagForm">
         <div class="tananyagDiv" id="tananyagDiv" style="display: none;">
             <div class="cimDiv">
                 <label for="tcim">Tananyag címe</label>
-                <input type="text" name="tcim" id="tcim">
+                <input type="text" name="tcim" id="tcim" required>
             </div>
             <div class="leirasDiv">
                 <label for="tleiras">Tananyag leírása</label>

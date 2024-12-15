@@ -78,3 +78,14 @@ function ModifyActualData(){
 
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
+window.addEventListener('load', () => {
+    let urlParts = location.href.split('/');
+    let courseId = parseInt(urlParts[urlParts.length - 1]);
+    if (isNaN(courseId)) {
+        location.href = '../kurzusok.html';
+    }
+    else {
+        let addContentButton = document.getElementById('addContentButton');
+        addContentButton.href += `?id=${courseId}`;
+    }
+});

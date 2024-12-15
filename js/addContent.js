@@ -24,9 +24,18 @@ let pageLink = document.getElementById("backtoPage").addEventListener("click", (
 
 async function contentPublish(data) {
     try {
+        let urlParams = new URL(location.href).searchParams;
+        if (!urlParams.has('id')) {
+            alert('Hiba!');
+            return;
+        }
+
+        let courseId = parseInt(urlParams.get('id'));
+
         let reqData = {
             manage: 'content',
-            action: '', // ...
+            action: 'create',
+            course_id: courseId,
             ...data
         };
 
@@ -44,7 +53,8 @@ async function contentPublish(data) {
 
         console.log(result);
         if (response.ok) {
-            // history.back();
+            alert("Sikeres művelet!");
+            history.back();
         }
     }
     catch (e) {
@@ -57,7 +67,7 @@ async function contentPublish(data) {
 async function onNewTask(e) {
     e.preventDefault();
     let title = document.getElementById('fcim').value;
-    let description = document.getElementById('fleiras').value;
+    let desc = document.getElementById('fleiras').value;
     // Az input mező értéke helyi (UTC+1) időben van. Az időzóna nincs tárolva.
     let localTime = document.getElementById('fhatarido').value;
     // Konvertálás UTC 0 időzónás dátumra (Z betű a végén). (ISO 8601 formátum)
@@ -72,9 +82,10 @@ async function onNewTask(e) {
 
     let data = {
         title,
-        description,
-        due,
-        points,
+        desc,
+        task: 1,
+        deadline: due,
+        max_point: points,
         file
     };
 
@@ -85,7 +96,7 @@ async function onNewTask(e) {
 async function onNewMaterial(e) {
     e.preventDefault();
     let title = document.getElementById('tcim').value;
-    let description = document.getElementById('tleiras').value;
+    let desc = document.getElementById('tleiras').value;
     let file = document.getElementById('tfile').files[0];
 
     if (title == '') {
@@ -95,7 +106,8 @@ async function onNewMaterial(e) {
 
     let data = {
         title,
-        description,
+        desc,
+        task: 0,
         file
     };
 
@@ -103,5 +115,5 @@ async function onNewMaterial(e) {
 }
 
 // TODO: formra rakni az event listenereket
-document.getElementById('createContentButton').addEventListener('click', async (e) => onNewTask(e));
-document.getElementById('createContentButton2').addEventListener('click', async (e) => onNewMaterial(e));
+document.getElementById('ujFeladatForm').addEventListener('submit', async (e) => onNewTask(e));
+document.getElementById('ujTananyagForm').addEventListener('submit', async (e) => onNewMaterial(e));
