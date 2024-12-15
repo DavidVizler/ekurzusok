@@ -1,5 +1,27 @@
 let menu = document.getElementById("hamburger-menu")
 
+const deadlineModal = document.getElementById("deadlineModal");
+const openModalLink = document.getElementById("openModal");
+const closeButton = document.querySelector(".close-button");
+
+openModalLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  deadlineModal.style.display = "flex";
+  document.body.classList.add("modal-open");
+});
+
+closeButton.addEventListener("click", () => {
+  deadlineModal.style.display = "none";
+  document.body.classList.remove("modal-open");
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    deadlineModal.style.display = "none";
+    document.body.classList.remove("modal-open");
+  }
+});
+
 //import designData from './desgin.json' with {type : "json"}
 let designData 
 
