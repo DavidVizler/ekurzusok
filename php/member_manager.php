@@ -16,6 +16,7 @@ switch ($action) {
 function AddMember() {
     global $data;
     global $response;
+    session_start();
     if (PostDataCheck(["code"], true)) {
         $code = $data["code"];
         $user_id = $_SESSION["user_id"];
