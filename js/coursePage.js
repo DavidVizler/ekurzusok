@@ -136,6 +136,41 @@ async function logout() {
    }
 }
 
-window.addEventListener("load", getDesignJson)
-window.addEventListener("load",getCardsData)
-document.getElementById("logoutButton").addEventListener("click", logout)
+async function joinCourse(e) {
+   e.preventDefault();
+   let code = document.getElementById('codeInput').value;
+
+   try {
+      let reqData = {
+         manage: 'member',
+         action: 'add',
+         code
+      };
+
+      let response = await fetch('./php/data_manager.php', {
+         method: 'POST',
+         headers: {
+            "Content-Type": 'application/json',
+            "X-Requested-With": "XMLHttpRequest"
+         },
+         body: JSON.stringify(reqData)
+      });
+
+      let result = await response.json();
+
+      if (response.status == 201) {
+         await new Promise(() => location.reload());
+      }
+      else /*if (response.status == 200)*/ {
+         alert(result.uzenet)
+      }
+      
+   } catch (error) {
+      console.error(error);
+   }
+}
+
+window.addEventListener("load", getDesignJson);
+window.addEventListener("load",getCardsData);
+document.getElementById("logoutButton").addEventListener("click", logout);
+document.getElementById('courseJoinForm').addEventListener('submit', async (e) => await joinCourse(e));

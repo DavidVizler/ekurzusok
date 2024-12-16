@@ -105,10 +105,10 @@
             </div>
             <div class="codeForm" id="codeForm" style="display:none">
                 <hr>
-                <form method="post">
+                <form id="courseJoinForm">
                     <label for="codeInput">Jelentkezés kurzusra</label>
-                    <input type="text" name="codeInput" id="codeInput">
-                    <input type="button" class="codeAddButton" value="Jelentkezés">
+                    <input type="text" name="codeInput" id="codeInput" minlength="10" maxlength="10" required>
+                    <input type="submit" class="codeAddButton" value="Jelentkezés">
                 </form>
             </div>
         </div>

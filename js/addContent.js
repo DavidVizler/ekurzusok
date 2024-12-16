@@ -114,6 +114,5 @@ async function onNewMaterial(e) {
     await contentPublish(data);
 }
 
-// TODO: formra rakni az event listenereket
 document.getElementById('ujFeladatForm').addEventListener('submit', async (e) => onNewTask(e));
 document.getElementById('ujTananyagForm').addEventListener('submit', async (e) => onNewMaterial(e));
