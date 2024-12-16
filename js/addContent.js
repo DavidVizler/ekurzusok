@@ -116,3 +116,9 @@ async function onNewMaterial(e) {
 
 document.getElementById('ujFeladatForm').addEventListener('submit', async (e) => onNewTask(e));
 document.getElementById('ujTananyagForm').addEventListener('submit', async (e) => onNewMaterial(e));
+window.addEventListener('load', () => {
+    let urlParams = new URL(location.href).searchParams;
+    if (!urlParams.has('id')) {
+        location.href = '../kurzusok.html';
+    }
+})

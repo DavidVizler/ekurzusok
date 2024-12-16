@@ -39,14 +39,17 @@ let url = window.location.pathname.split("/").pop()
 let cardData;
 async function getCardsData() {
     try {
-      let eredmeny = await fetch("../php/courseCard_manager.php", {
-        headers: {
-           "X-Requested-With": "XMLHttpRequest"
-        }
-    });
+        let eredmeny = await fetch("../php/courseCard_manager.php", {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
             ModifyActualData()
+        }
+        else if (eredmeny.status == 403) {
+            location.href = '../login.html';
         }
         else{
             throw eredmeny.status
