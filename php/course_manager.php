@@ -4,6 +4,9 @@ switch ($action) {
     case "create":
         CreateCourse();
         break;
+    case "modify":
+        ModifyCourse();
+        break;
     case "delete-as-admin":
         DeleteCourseAsAdmin();
         break;
@@ -72,6 +75,43 @@ function CreateCourse() {
             $response = [
                 "sikeres" => false,
                 "uzenet" => "Nem sikerült létrehozni a kurzust!"
+            ];
+            header("internal server error", true, 500);
+        } else {
+            $response = [
+                "sikeres" => false,
+                "uzenet" => $result
+            ];
+            header("internal server error", true, 500);
+        }
+    }
+}
+
+function ModifyCourse() {
+    global $data;
+    global $response;
+    session_start();     
+    if (PostDataCheck(["name", "desc", "design", "course_id"], true)) {
+        $modified_course_data = [
+            $data["name"],
+            $data["desc"],
+            $data["design"],
+            $data["course_id"]
+        ];
+
+        $sql_course_modify = "UPDATE `kurzus` SET `KurzusNev` = ?, `Leiras` = ?, `Design` = ? WHERE `kurzus`.`KurzusID` = ?;";
+        $result = ModifyData($sql_course_modify, "ssii", $modified_course_data);
+
+        if ($result == "Sikeres művelet!") {
+            $response = [
+                "sikeres" => true,
+                "uzenet" => "Kurzus módosítva!"
+            ];
+            header("created", true, 201);
+        } else if ($result == "Sikertelen művelet!") {
+            $response = [
+                "sikeres" => false,
+                "uzenet" => "Nem sikerült módosítani a kurzust!"
             ];
             header("internal server error", true, 500);
         } else {
