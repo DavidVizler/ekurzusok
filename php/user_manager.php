@@ -10,6 +10,9 @@ switch ($action) {
     case "logout":
         Logout();
         break;
+    case "delete":
+        DeleteUser();
+        break;
     case "delete-as-admin":
         DeleteUserAsAdmin();
         break;
@@ -126,6 +129,57 @@ function Logout() {
     }
 }
 
+function DeleteUser() {
+    global $data;
+    global $response;
+    session_start();
+    if (PostDataCheck(["password"], true)) {
+        $password = $data["password"];
+        $id = $_SESSION["user_id"];
+
+        // Jelszó ellenőrzése
+        $sql_password_check_query = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
+        $password_check = DataQuery($sql_password_check_query, "i", [$id]);
+
+        if (is_array($password_check)) {
+            if (password_verify($password, $password_check[0]["Jelszo"])) {
+                $sql_user_delete = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
+                $result = ModifyData($sql_user_delete, "i", [$id]);
+                
+                if ($result == "Sikeres művelet!") { 
+                    $response = [
+                        "sikeres" => true,
+                        "uzenet" => "Felhasználó törölve"
+                    ];
+                } else if ($result == "Sikertelen művelet!") {
+                    $response = [
+                        "sikeres" => false,
+                        "uzenet" => "Nem sikerült törölni a felhasználót"
+                            ];
+                    header("internal server error", true, 500);
+                } else { 
+                    $response = [
+                        "sikeres" => false,
+                        "uzenet" => $result
+                    ];
+                    header("internal server error", true, 500);
+                }  
+
+            } else {
+                $response = [
+                    "sikeres" => false,
+                    "uzenet" => "Nem megfelelő jelszó"
+                ];
+            }
+        } else {
+            $response = [
+                "sikeres" => false,
+                "uzenet" => "Nincs felhasználó ilyen ID-val"
+            ];
+        }
+    } 
+}
+
 function DeleteUserAsAdmin() {
     global $data;
     global $response;
@@ -148,13 +202,13 @@ function DeleteUserAsAdmin() {
                         "sikeres" => true,
                         "uzenet" => "Felhasználó törölve"
                     ];
-                } else if ($result == "Sikertelen művelet!") { // Nincs módosított sor az adatbázisban ($db->affected_rows = 0)
+                } else if ($result == "Sikertelen művelet!") {
                     $response = [
                         "sikeres" => false,
                         "uzenet" => "Nem sikerült törölni a felhasználót"
                             ];
                     header("internal server error", true, 500);
-                } else { // SQL hiba (uzenet = $db->error vagy $db->connect_error)
+                } else {
                     $response = [
                         "sikeres" => false,
                         "uzenet" => $result
