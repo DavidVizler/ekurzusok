@@ -79,6 +79,79 @@ function ModifyActualData(){
     }
 }
 
+async function getCourseContent(courseId) {
+    try {
+        let response = await fetch('../php/data_query.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ course_id: courseId })
+        });
+
+        let contentList = await response.json();
+
+        if (response.ok) {
+            showCourseContent(contentList);
+        }
+    }
+    catch (e) {
+        console.error(e);
+        alert("Nem sikerült az adatokat lekérni a szerverről.");
+    }
+}
+
+function showCourseContent(content) {
+    let contentList = document.getElementById('contentList');
+    contentList.innerHTML = '';
+
+    content.forEach(c => {
+        
+        let div = document.createElement('div');
+        div.classList.add('ContentTypeDiv');
+        div.classList.add(c.task ? 'feladatDiv' : 'tananyagDiv');
+        
+        let iconDiv = document.createElement('div');
+        iconDiv.classList.add('Icon');
+        
+        let a = document.createElement('a');
+        a.href =  c.task ? '../feladat.html' :'../tananyag.html';
+        
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('stroke-width', '1');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.classList.add('size-6');
+        
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        if (c.task) {
+            path.setAttribute('d', 'M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z');
+        }
+        else {
+            path.setAttribute('d', 'M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z');
+        }
+
+        let divContent = document.createElement('div');
+        divContent.classList.add(c.task ? 'feladatDivContent' : 'tananyagDivContent');
+
+        let h1 = document.createElement('h1');
+        h1.innerText = c.title;
+        
+        svg.appendChild(path);
+        a.appendChild(svg);
+        iconDiv.appendChild(a);
+        div.appendChild(iconDiv);
+        divContent.appendChild(h1);
+        div.appendChild(divContent);
+        contentList.appendChild(div);
+    });
+}
+
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
 window.addEventListener('load', () => {
@@ -90,5 +163,7 @@ window.addEventListener('load', () => {
     else {
         let addContentButton = document.getElementById('addContentButton');
         addContentButton.href += `?id=${courseId}`;
+
+        getCourseContent(courseId);
     }
 });
