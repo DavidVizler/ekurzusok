@@ -37,4 +37,5 @@ body{
     flex-direction: column;
     gap: 15px;
     padding: 15px;
+    border-bottom: 1px solid grey;
 }

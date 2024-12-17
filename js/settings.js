@@ -1,3 +1,4 @@
-let pageLink = document.getElementById("backtoPage").addEventListener("click", ()=>{
+let pageLink = document.getElementById("backtoPage")
+pageLink.addEventListener("click", ()=>{
     history.back()
 })
