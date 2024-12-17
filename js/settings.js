@@ -25,10 +25,10 @@ async function loadPreview() {
     let designData = await getDesign()
     let selectedDesign = document.getElementById("designSelect").value
     let previewDiv = document.getElementById("previewDiv")
-
+    
     for(let data of designData){
         if(data.designId == selectedDesign){
-            previewDiv.style.backgroundImage = `url('${data.image}')`
+            previewDiv.style.backgroundImage = `url(${data.courseImage})`
         }
     }
 }
