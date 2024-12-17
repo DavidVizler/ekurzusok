@@ -137,7 +137,7 @@ function DeleteUser() {
         $password = $data["password"];
         $id = $_SESSION["user_id"];
 
-        // Jelstó ellenőrzése
+        // Jelszó ellenőrzése
         $sql_password_check_query = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
         $password_check = DataQuery($sql_password_check_query, "i", [$id]);
 
