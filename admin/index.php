@@ -140,7 +140,7 @@
 
                         echo "</tbody></table>";
                     } else {
-                        echo "<div style='margin: 10px;'>A felhasználó nem tagja egy kurzushoz sem!</div>";
+                        echo "<div style='margin: 10px;'>A felhasználó nem tagja egy kurzusnak sem!</div>";
                     }
                 } else {
                     header("Location: ./users");
@@ -279,10 +279,22 @@
                 $sql_course_count_query = "SELECT COUNT(`KurzusID`) AS course_count FROM `kurzus`";
                 $course_count = DataQuery($sql_course_count_query)[0]["course_count"];
 
+                $sql_avarage_user_course_count_query = "SELECT AVG(tagsagok.szam) AS atlag FROM (SELECT COUNT(`kurzustag`.`ID`) AS szam 
+                FROM `felhasznalo` LEFT JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID` 
+                GROUP BY `felhasznalo`.`FelhasznaloID`) AS tagsagok;";
+                $avarage_user_course_count = round(DataQuery($sql_avarage_user_course_count_query)[0]["atlag"], 2);
+
+                $sql_avarage_course_member_count_query = "SELECT AVG(tagok.szam) AS atlag FROM (SELECT COUNT(`kurzustag`.`ID`) AS szam 
+                FROM `kurzus` LEFT JOIN `kurzustag` ON `kurzus`.`KurzusID` = `kurzustag`.`KurzusID` GROUP BY `kurzus`.`KurzusID`) AS tagok;";
+                $avarage_course_member_count = round(DataQuery($sql_avarage_course_member_count_query)[0]["atlag"], 2);
+
                 echo "<div id='stats'>
                 Felhasználók száma: <b>{$user_count}</b><br>
-                Kurzusok száma: <b>{$course_count}</b><br>
+                Kurzusok száma: <b>{$course_count}</b><br><br>
+                Egy felhasználó átlagosan <b>{$avarage_user_course_count}</b> kurzusnak tagja.<br>
+                Egy kurzusban átlagosan <b>{$avarage_course_member_count}</b> tag van.
                 </div>";
+
             }
 
             $url = explode("/", $_SERVER["REQUEST_URI"]);
@@ -314,13 +326,6 @@
                     header("not found", true, 404);
                     break;
             }
-
-            /*
-            TODO
-            Statisztikák
-            Kurzus tagok kilistázása
-                - Tulajdonos kiemelése
-            */
 
         ?>
     </div>
