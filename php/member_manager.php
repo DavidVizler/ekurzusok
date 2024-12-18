@@ -23,16 +23,18 @@ function AddMember() {
 
         // Ellenőrzés, hogy van-e kurzus az adott kóddal
         $sql_course_id_query = "SELECT `KurzusID` FROM `kurzus` WHERE `Kod` = ?;";
-        $course_id = DataQuery($sql_course_id_query, "s", [$code]);
+        $course_id_result = DataQuery($sql_course_id_query, "s", [$code]);
 
-        if (is_array($course_id)) {
+        if (is_array($course_id_result)) {
+            $course_id = $course_id_result[0]["KurzusID"];
+
             // Ellenőrzés, hogy a felhasználó nincs-e benne a kurzusban
             $sql_user_in_course_query = "SELECT `ID` FROM `kurzustag` WHERE `FelhasznaloID` = ? AND `KurzusID` = ?;";
             $user_in_course = DataQuery($sql_user_in_course_query, "ii", [$user_id, $course_id]);
             
             if (!is_array($user_in_course)) {
                 $sql_member_add = "INSERT INTO `kurzustag` (`ID`, `FelhasznaloID`, `KurzusID`, `Tanar`) VALUES (NULL, ?, ?, '0');";
-                $result = ModifyData($sql_member_add, "ii", [$user_id, $course_id[0]["KurzusID"]]);
+                $result = ModifyData($sql_member_add, "ii", [$user_id, $course_id]);
                 
                 if ($result == "Sikeres művelet!") { 
                     $response = [
