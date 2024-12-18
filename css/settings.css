@@ -39,3 +39,10 @@ body{
     padding: 15px;
     border-bottom: 1px solid grey;
 }
+
+#previewDiv{
+    height: 600px;
+    border-radius: 10px;
+    width: 100%;
+    background-size: cover;
+}
