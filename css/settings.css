@@ -40,9 +40,71 @@ body{
     border-bottom: 1px solid grey;
 }
 
+.contentDiv div input{
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid grey;
+}
+
 #previewDiv{
     height: 600px;
     border-radius: 10px;
     width: 100%;
     background-size: cover;
+}
+
+.archivaltDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#activeCode{
+    border: 1px solid grey;
+    margin-bottom: 15px;
+}
+
+#generateNewCode{
+    height: 30px;
+    border: 1px solid #5271ff;
+    border-radius: 10px;
+    background-color: white;
+    color: #5271ff;
+    font-family: "Varela Round";
+}
+
+#generateNewCode:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+#modifyCourseData{
+    height: 30px;
+    border: 1px solid #5271ff;
+    border-radius: 10px;
+    background-color: #5271ff;
+    color: white;
+    text-transform: uppercase;
+    font-family: "Varela Round";
+}
+
+#modifyCourseData:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.openPreviewDiv{
+    display: inline-block;
+    cursor: pointer;
+    transition: trasform 0.3s ease;
+}
+
+.arrow{
+    transition: transform 0.3 ease;
+    height: 40px;
+    width: 40px;
+}
+
+.arrow.flipped {
+    transform: rotate(180deg);
 }
