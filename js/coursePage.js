@@ -49,10 +49,15 @@ async function getDesignJson() {
 
 async function getCardsData() {
    try {
-      let eredmeny = await fetch("./php/courseCard_manager.php", {
+      let eredmeny = await fetch("./php/data_query.php", {
          headers: {
-            "X-Requested-With": "XMLHttpRequest"
-         }
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-type": "application/json"
+         },
+         method: "POST",
+         body: JSON.stringify({
+            "getdata": "user_courses"
+         })
       });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
@@ -82,7 +87,7 @@ function GenerateCards(){
       card.classList.add("card")
       
       let link = document.createElement("a")
-      link.href = "kurzus/" + cardData[i]["KurzusID"]
+      link.href = "kurzus/" + cardData[i]["course_id"]
       
 
       let cardHeader = document.createElement("div")
@@ -91,7 +96,7 @@ function GenerateCards(){
       let img = document.createElement("img")
       img.classList.add("card-img-top")
       design.forEach(elem => {
-         if(elem.designId == cardData[i]["Design"]){
+         if(elem.designId == cardData[i]["design"]){
             img.src = elem.image
          }
       });
@@ -101,7 +106,7 @@ function GenerateCards(){
 
       let cardTitle = document.createElement("h2")
       cardTitle.classList.add("card-title")
-      cardTitle.textContent = cardData[i]["KurzusNev"]
+      cardTitle.textContent = cardData[i]["name"]
 
       let cardOktatok = document.createElement("h4")
       cardOktatok.classList.add("card-teachers")
