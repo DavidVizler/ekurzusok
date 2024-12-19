@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Nov 22. 10:08
+-- Létrehozás ideje: 2024. Dec 18. 16:34
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `ekurzusok`
 --
-
+CREATE DATABASE IF NOT EXISTS `ekurzusok` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
+USE `ekurzusok`;
 -- --------------------------------------------------------
 
 --
@@ -57,7 +58,8 @@ CREATE TABLE `felhasznalo` (
 INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) VALUES
 (13, 'kispista@gmail.com', 'Kis', 'Pista', '$2y$10$mPo.I8wSPUi.W5QaydbKIeGuR1SyKMPrIXm71XFoJZ7sHQbh/bGjO'),
 (18, 'nagyjanos@gmail.com', 'Nagy', 'Janos', '$2y$10$NC4f6M6WZoVCa3elo9Y7U.98UYdmBQRZUerMNVNcMkQkgIwLyHtNC'),
-(24, 'kovacs.joska@gmail.com', 'Kovács', 'Jóska', '$2y$10$PBeTd4ju1mnCPUGRJbE9Wu6nP8hw4ZmgwrTg7rO2FCoLj7pZ5k7jC');
+(24, 'kovacs.joska@gmail.com', 'Kovács', 'Jóska', '$2y$10$PBeTd4ju1mnCPUGRJbE9Wu6nP8hw4ZmgwrTg7rO2FCoLj7pZ5k7jC'),
+(26, 'ivanyianna05@gmail.com', 'Iványi', 'Anna', '$2y$10$NjMyLTEU6xXp0zfVbm.iqe9XfwvptQkQ65fs96usU.n0y41CLRAnS');
 
 -- --------------------------------------------------------
 
@@ -83,7 +85,7 @@ CREATE TABLE `kurzus` (
   `KurzusID` int(11) NOT NULL,
   `FelhasznaloID` int(11) NOT NULL,
   `KurzusNev` varchar(128) NOT NULL,
-  `Oktatok` varchar(50) NOT NULL,
+  `Oktatok` varchar(128) NOT NULL,
   `Kod` char(10) NOT NULL,
   `Leiras` varchar(512) NOT NULL,
   `Design` int(11) NOT NULL,
@@ -95,7 +97,13 @@ CREATE TABLE `kurzus` (
 --
 
 INSERT INTO `kurzus` (`KurzusID`, `FelhasznaloID`, `KurzusNev`, `Oktatok`, `Kod`, `Leiras`, `Design`, `Archivalt`) VALUES
-(4, 13, 'Földrajz - 11/c', 'Nagy Pista', 'sP8M1qe73m', 'Terem: 17-es', 1, 0);
+(20, 13, 'Irodalom', 'Nagy Gábor', 'Kx0h3YLv2e', 'Irodalom kurzus a sikeres érettségihez.', 2, 0),
+(22, 13, 'Földrajz - 11/C', 'Kovács Jóska', 'G9v525Ldkq', 'Terem: 13-as', 1, 0),
+(26, 13, 'Matematika - 9/A', 'Szabó Elemér', 'PMbpFrcy7J', 'Terem: 20-as', 3, 0),
+(35, 13, 'Kertészkedés', 'Végh Matild', 'Bo6hY3UveO', 'Kertészkedés kurzus kezdőknek', 4, 0),
+(36, 13, 'Kertészkedés', 'Nagy Magda', 'a76XmCFDyk', 'Kertészkedés kurzus', 4, 0),
+(37, 26, 'Kertészkedés', '', 'ewVPscC06l', 'Kertészkedés kurzus kezdőknek', 4, 0),
+(41, 26, 'Matematika', '', 'JN5aV5fplK', 'Matematika kurzus', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -109,6 +117,14 @@ CREATE TABLE `kurzustag` (
   `KurzusID` int(11) NOT NULL,
   `Tanar` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `kurzustag`
+--
+
+INSERT INTO `kurzustag` (`ID`, `FelhasznaloID`, `KurzusID`, `Tanar`) VALUES
+(1, 26, 37, 1),
+(5, 26, 41, 1);
 
 -- --------------------------------------------------------
 
@@ -192,7 +208,7 @@ ALTER TABLE `feladatleadas`
 -- AUTO_INCREMENT a táblához `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
-  MODIFY `FelhasznaloID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `FelhasznaloID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT a táblához `file`
@@ -204,13 +220,13 @@ ALTER TABLE `file`
 -- AUTO_INCREMENT a táblához `kurzus`
 --
 ALTER TABLE `kurzus`
-  MODIFY `KurzusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `KurzusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT a táblához `kurzustag`
 --
 ALTER TABLE `kurzustag`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT a táblához `tartalom`
