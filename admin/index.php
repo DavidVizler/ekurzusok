@@ -9,17 +9,66 @@
     <script src="./admin.js"></script>
 </head>
 <body>
+    <?php
+
+        include "../php/sql_functions.php";
+        
+        session_start();
+
+        if (!isset($_SESSION["admin_user_id"])) {
+            header("unauthorized", true, 401);
+
+            echo <<<HTML
+                <form method='post'>
+                    <label for="username">Felhasználónév: </label>
+                    <input type="text" name="username"><br>
+                    <label for="password">Jelszó: </label>
+                    <input type="password" name="password"><br>
+                    <input type="submit" value="Bejelentkezés" name="admin_login">
+                </form>
+            HTML;
+
+            if (isset($_POST["admin_login"])) {
+                if (empty($_POST["username"]) || empty($_POST["password"])) {
+                    echo "Hiányos adatok!";
+                } else {
+                    $sql_admin_password_check_query = "SELECT `AdminPasswd`, `AdminID` FROM `admin` WHERE `AdminUsername` = ?;";
+                    $admin_data = DataQuery($sql_admin_password_check_query, "s", [$_POST["username"]]);
+
+                    if (is_array($admin_data)) {
+                        if (password_verify($_POST["password"], $admin_data[0]["AdminPasswd"])) {
+                            $_SESSION["admin_user_id"] = $admin_data[0]["AdminID"];
+                            header("Refresh:0");
+                        } else {
+                            echo "Sikertelen bejelentkezés!";
+                        }
+                    } else {
+                        echo "Sikertelen bejelentkezés!";
+                    }
+                }
+            }
+
+            exit;
+        }
+
+    ?>
     <ul id="navbar">
         <li id="navitem-logo"><span id="nav-logo">eKurzusok Admin Felület</span></li>
         <li id="navitem-logo-side"></li>
         <li class="navitem active" id="nav-home"><a onclick="listStatistics()" href="./">Főoldal</a></li>
         <li class="navitem" id="nav-users"><a onclick="listUsers()" href="users">Felhasználók</a></li>
         <li class="navitem" id="nav-courses"><a onclick="listCourses()" href="courses">Kurzusok</a></li>
+        <li class="navitem"><form method="post"><input id="logout-button" type="submit" value="Kijelentkezés" name="logout"></form></li>
     </ul>
 
     <div id="content">
         <?php
-            include "../php/sql_functions.php";
+
+            if (isset($_POST["logout"])) {
+                session_unset();
+                session_destroy();
+                header("Refresh:0");
+            }
 
             function FetchUsers() {
                 $sql_users_query = "SELECT * FROM `felhasznalo`";
