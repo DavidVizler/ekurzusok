@@ -99,27 +99,46 @@ function ModifyCourse() {
             $data["course_id"]
         ];
 
-        $sql_course_modify = "UPDATE `kurzus` SET `KurzusNev` = ?, `Leiras` = ?, `Design` = ? WHERE `kurzus`.`KurzusID` = ?;";
-        $result = ModifyData($sql_course_modify, "ssii", $modified_course_data);
+        // Ellenőrzés, hogy a felhasználó tulajdonosa-e a kurzusnak
+        $sql_is_user_owner_check_query = "SELECT `KurzusID` FROM `kurzus` WHERE `KurzusID` = ? AND `FelhasznaloID` = ?;";
+        $check_result = DataQuery($sql_is_user_owner_check_query, "ii", [$data["course_id"], $_SESSION["user_id"]]);
 
-        if ($result == "Sikeres művelet!") {
-            $response = [
-                "sikeres" => true,
-                "uzenet" => "Kurzus módosítva!"
-            ];
-            header("created", true, 201);
-        } else if ($result == "Sikertelen művelet!") {
+        if (is_array($check_result)) {
+            if ($data["design"] >= 1 && $data["design"] <= 5) {
+                $sql_course_modify = "UPDATE `kurzus` SET `KurzusNev` = ?, `Leiras` = ?, `Design` = ? WHERE `kurzus`.`KurzusID` = ?;";
+                $result = ModifyData($sql_course_modify, "ssii", $modified_course_data);
+                
+                if ($result == "Sikeres művelet!") {
+                    $response = [
+                        "sikeres" => true,
+                        "uzenet" => "Kurzus módosítva!"
+                    ];
+                } else if ($result == "Sikertelen művelet!") {
+                    $response = [
+                        "sikeres" => false,
+                        "uzenet" => "Nem sikerült módosítani a kurzust!"
+                    ];
+                    header("internal server error", true, 500);
+                } else {
+                    $response = [
+                        "sikeres" => false,
+                        "uzenet" => $result
+                    ];
+                    header("internal server error", true, 500);
+                }
+            } else {
+                $response = [
+                    "sikeres" => false,
+                    "uzenet" => "Érvénytelen design ID"
+                ];
+                header("bad request", true, 400);
+            }
+        } else if ($check_result == "Nincs találat!") {
             $response = [
                 "sikeres" => false,
-                "uzenet" => "Nem sikerült módosítani a kurzust!"
+                "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
             ];
-            header("internal server error", true, 500);
-        } else {
-            $response = [
-                "sikeres" => false,
-                "uzenet" => $result
-            ];
-            header("internal server error", true, 500);
+            header("forbidden", true, 403);
         }
     }
 }
