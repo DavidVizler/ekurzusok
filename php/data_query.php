@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 GetCourseData();
                 break;
             case "course_members":
-                //GetCourseMembers();
+                GetCourseMembers();
                 break;
             case "course_content":
                 //GetCourseContent();
@@ -57,7 +57,6 @@ function GetUserData() {
                 "uzenet" => "Nincs felhasználó ilyen ID-val"
             ];
         } else {
-            $response = $user_data;
             header("internal server error", true, 500);
         }
     }
@@ -82,7 +81,6 @@ function GetUserCourses() {
                 "uzenez" => "A felhasználó nem tagja egy kurzusnak sem"
             ];
         } else {
-            $response = $user_courses;
             header("internal server error", true, 500);
         }
     }
@@ -102,7 +100,7 @@ function GetCourseData() {
         if (is_array($check_user_in_course)) {
             $sql_course_data_query = "SELECT `kurzus`.`KurzusNev` AS name, `kurzus`.`Leiras` AS 'desc', `kurzus`.`Design` AS design, 
             CONCAT(`felhasznalo`.`VezetekNev`, ' ', `felhasznalo`.`KeresztNev`) AS owner FROM `kurzus` 
-            INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID` WHERE `kurzus`.`KurzusID` = 8;";
+            INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID` WHERE `kurzus`.`KurzusID` = ?;";
             $course_data = DataQuery($sql_course_data_query, "i", [$course_id]);
     
             if (is_array($course_data)) {
@@ -112,7 +110,41 @@ function GetCourseData() {
                     "uzenez" => "Nincs kurzus ilyen ID-val"
                 ];
             } else {
-                $response = $course_data;
+                header("internal server error", true, 500);
+            }
+        } else {
+            $response = [
+                "uzenet" => "A felhasználó nem tagja a kurzusnak"
+            ];
+            header("forbidden", true, 403);
+        }
+    }
+}
+
+function GetCourseMembers() {
+    global $response;
+    global $data;
+    session_start();
+    if (PostDataCheck(["course_id"], true)) {
+        $user_id = $_SESSION["user_id"];
+        $course_id = $data["course_id"];
+
+        // Ellenőrzés, hogy a felhasználó benne van-e a kurzusban
+        $sql_check_user_in_course_query = "SELECT `ID` FROM `kurzustag` WHERE `KurzusID` = ? AND `FelhasznaloID` = ?;";
+        $check_user_in_course = DataQuery($sql_check_user_in_course_query, "ii", [$course_id, $user_id]);
+        if (is_array($check_user_in_course)) {
+            $sql_course_members_query = "SELECT `felhasznalo`.`VezetekNev` AS lastname, `felhasznalo`.`KeresztNev` AS firstname 
+            FROM `felhasznalo` INNER JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID`
+            WHERE `kurzustag`.`KurzusID` = ?;";
+            $course_members = DataQuery($sql_course_members_query, "i", [$course_id]);
+
+            if (is_array($course_members)) {
+                $response = $course_members;
+            } else if ($course_members == "Nincs találat!") {
+                $response = [
+                    "uzenet" => "Nincs kurzus ilyen ID-val"
+                ];
+            } else {
                 header("internal server error", true, 500);
             }
         } else {
