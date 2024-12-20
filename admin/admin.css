@@ -70,6 +70,11 @@ body {
     text-shadow: 1px 1px 2px black;
 }
 
+table a {
+    color: blue;
+    text-decoration: none;
+} 
+
 #logout-button {
     width: 100%;
     height: 100%;
@@ -102,23 +107,35 @@ td {
     padding-inline: 10px;
 }
 
+tr th:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tr th:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+tr td:first-child {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
 .blurred {
     filter: blur(5px);
     font-family: monospace;
 }
 
-.blurred:focus {
-    filter: blur(0px);
-}
-
 .torles {
     text-align: center;
     padding: 0px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .torles input {
     width: 100%;
-    border-radius: 5px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
     border: 1px solid red;
     background-color: white;
     height: 30px;

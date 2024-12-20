@@ -71,46 +71,50 @@
             }
 
             function FetchUsers() {
-                $sql_users_query = "SELECT * FROM `felhasznalo`";
+                $sql_users_query = "SELECT `felhasznalo`.`FelhasznaloID`, `felhasznalo`.`Email`, `felhasznalo`.`VezetekNev`, 
+                `felhasznalo`.`KeresztNev`, `felhasznalo`.`Jelszo`, COUNT(`kurzustag`.`ID`) AS courses FROM `felhasznalo` 
+                LEFT JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID` GROUP BY `felhasznalo`.`FelhasznaloID`;";
                 $users = DataQuery($sql_users_query);
 
+                $sql_user_own_course_count_query = "SELECT `felhasznalo`.`FelhasznaloID`, COUNT(`kurzus`.`KurzusID`) AS courses FROM `felhasznalo`
+                LEFT JOIN `kurzus` ON `felhasznalo`.`FelhasznaloID` = `kurzus`.`FelhasznaloID` GROUP BY `felhasznalo`.`FelhasznaloID`;";
+                $user_own_course_count = DataQuery($sql_user_own_course_count_query);
+
+
                 if (is_array($users)) {   
-                    echo "<table><thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Vezetéknév</th>
-                            <th>Keresztnév</th>
-                            <th>Titkosított jelszó</th>
-                            <th>Kurzusok</th>
-                            <th>Eltávolítás</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
+                    echo <<<HTML
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>Vezetéknév</th>
+                                    <th>Keresztnév</th>
+                                    <th>Titkosított jelszó</th>
+                                    <th>Kurzusok</th>
+                                    <th>Eltávolítás</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    HTML;
 
-                    foreach ($users as $user) {
-                        $sql_user_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `FelhasznaloID` = {$user["FelhasznaloID"]};";
-                        $user_course_count = DataQuery($sql_user_course_count_query)[0]["count"];
-
-                        $sql_user_own_course_count_query = "SELECT COUNT(`ID`) AS count FROM `kurzustag` 
-                        INNER JOIN `kurzus` ON `kurzustag`.`KurzusID` = `kurzus`.`KurzusID`
-                        WHERE `kurzustag`.`FelhasznaloID` = {$user["FelhasznaloID"]} AND `kurzus`.`FelhasznaloID` = {$user["FelhasznaloID"]};";
-                        $user_own_course_count = DataQuery($sql_user_own_course_count_query)[0]["count"];
-
-                        echo "<tr>
-                            <td>{$user["FelhasznaloID"]}</td>
-                            <td>{$user["Email"]}</td>
-                            <td>{$user["VezetekNev"]}</td>
-                            <td>{$user["KeresztNev"]}</td>
-                            <td><span class='blurred'>{$user["Jelszo"]}</span></td>
-                            <td>{$user_course_count} ({$user_own_course_count} saját) <a href='usercourses?id={$user["FelhasznaloID"]}'>Több infó
-                            </a></td>
-                            <td class='torles'>
-                                <form method='POST' action='javascript:;' onsubmit=\"deleteUser({$user["FelhasznaloID"]}, '{$user["VezetekNev"]}', '{$user["KeresztNev"]}', '{$user["Email"]}', '{$user["Jelszo"]}')\">
-                                    <input type='submit' value='Eltávolítás' name='delete_button'>
-                                </form>
-                            </td>
-                        </tr>";
+                    for ($i = 0; $i < count($users); $i++) {
+                        echo <<<HTML
+                            <tr>
+                                <td>{$users[$i]["FelhasznaloID"]}</td>
+                                <td>{$users[$i]["Email"]}</td>
+                                <td>{$users[$i]["VezetekNev"]}</td>
+                                <td>{$users[$i]["KeresztNev"]}</td>
+                                <td><span class='blurred'>{$users[$i]["Jelszo"]}</span></td>
+                                <td>{$users[$i]["courses"]} ({$user_own_course_count[$i]["courses"]} saját) <a href='usercourses?id={$users[$i]["FelhasznaloID"]}'>Több infó
+                                </a></td>
+                                <td class='torles'>
+                                    <form method='POST' action='javascript:;' onsubmit="deleteUser({$users[$i]['FelhasznaloID']}, '{$users[$i]['VezetekNev']}', '{$users[$i]['KeresztNev']}', '{$users[$i]['Email']}', '{$users[$i]['Jelszo']}')">
+                                        <input type='submit' value='Eltávolítás' name='delete_button'>
+                                    </form>
+                                </td>
+                            </tr>
+                        HTML;
                     }
 
                     echo "</tbody></table>";
@@ -199,7 +203,7 @@
             function FetchCourses() {
                 $sql_courses_query = "SELECT `kurzus`.`KurzusID`, `kurzus`.`KurzusNev`, `kurzus`.`Kod`, `kurzus`.`Leiras`, `kurzus`.`Design`,  `kurzus`.`Archivalt`, 
                 `felhasznalo`.`FelhasznaloID`, `felhasznalo`.`Email`, `felhasznalo`.`VezetekNev`, `felhasznalo`.`KeresztNev`, `felhasznalo`.`Jelszo`
-                FROM `kurzus` INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`";
+                FROM `kurzus` INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID` ORDER BY `kurzus`.`KurzusID`";
                 $courses = DataQuery($sql_courses_query);
 
                 if (is_array($courses)) {   
