@@ -37,6 +37,8 @@ body {
     line-height: 50px;
     text-decoration: none;
     color: white;
+    font-family: sans-serif;
+    font-weight: 400;
 }
 
 #navitem-logo {
@@ -89,7 +91,7 @@ table {
     width: 100%;
 }
 
-tr:nth-child(even) {
+tr:nth-child(even) td {
     background-color: #dae5ff;
 }
 
@@ -154,10 +156,10 @@ tr td:first-child {
     font-size: 20px;
 }
 
-.owner {
+.owner td {
     background-color: yellow !important;
 }
 
-.owner:nth-child(even) {
+.owner:nth-child(even) td {
     background-color: #ffe000 !important;
 }
