@@ -101,7 +101,7 @@ async function getCourseContent(courseId) {
             action: 'content',
             course_id: courseId
         }
-        let response = await fetch('../php/data_query.php', {
+        let response = await fetch('..php/data_query.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ async function getCourseContent(courseId) {
 
 async function getCourseUsers(courseid){
     try {
-        let reqData = {
+        let data = {
             course_id: courseid
         }
         let response = await fetch('..php/data_query.php',{
@@ -133,13 +133,15 @@ async function getCourseUsers(courseid){
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify(reqData)
+            body: JSON.stringify(data)
         })
         let userslist = await response.json();
-        console.log(userslist);
-    } catch (error) {
-        console.log(error);
-        alert("Nem sikerült lekérni az adatokat");
+        if(response.ok){
+            console.log(userslist);
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Sikertelen adatlekérés!");
     }
 }
 
@@ -204,12 +206,10 @@ window.addEventListener('load', () => {
     else {
         let addContentButton = document.getElementById('addContentButton');
         let settingsButton = document.getElementById('settingsButton');
-        let usersButton = document.getElementById("openModalUsers");
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
-        usersButton.href += `?id=${courseId}`;
 
         getCourseContent(courseId);
-        getCourseUsers(courseId)
+        getCourseUsers(courseId);
     }
 });
