@@ -99,7 +99,7 @@ function GetCourseData() {
         $check_user_in_course = DataQuery($sql_check_user_in_course_query, "ii", [$course_id, $user_id]);
         if (is_array($check_user_in_course)) {
             $sql_course_data_query = "SELECT `kurzus`.`KurzusNev` AS name, `kurzus`.`Leiras` AS 'desc', `kurzus`.`Design` AS design, 
-            CONCAT(`felhasznalo`.`VezetekNev`, ' ', `felhasznalo`.`KeresztNev`) AS owner FROM `kurzus` 
+            CONCAT(`felhasznalo`.`VezetekNev`, ' ', `felhasznalo`.`KeresztNev`) AS owner, `kurzus`.`Kod` as code, `kurzus`.`Archivalt` as archived FROM `kurzus` 
             INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID` WHERE `kurzus`.`KurzusID` = ?;";
             $course_data = DataQuery($sql_course_data_query, "i", [$course_id]);
     
