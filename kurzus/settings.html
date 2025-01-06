@@ -25,33 +25,35 @@
             <h1>Kurzus beállításai</h1>
         </div>
     </div>
-    <div class="contentDiv">
-        <div class="changeCourseName">
-            <label for="courseName">Név: </label>
-            <input type="text" name="courseName" id="courseName">
+    <form id="settingsForm">
+        <div class="contentDiv">
+            <div class="changeCourseName">
+                <label for="courseName">Név: </label>
+                <input type="text" name="courseName" id="courseName" required>
+            </div>
+            <div class="courseDescriptionDiv">
+                <label for="courseDescription">Leírás: </label>
+                <input type="text" name="courseDescription" id="courseDescription" required>
+            </div>
+            <div class="designDiv">
+                <label for="designSelect">Design: </label>
+                <select name="designSelect" id="designSelect">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="courseCodeDiv">
+                <label for="activeCode">Jelenlegi kód: </label>
+                <input type="text" name="activeCode" id="activeCode" readonly/><br>
+                <label for="generateNewCode">Új kód generálása: </label>
+                <button type="button" id="generateNewCode">Új kód generálása</button>
+            </div>
+            <div class="archivaltDiv">
+                <label for="archivalt">Archivált: </label>
+                <input type="checkbox" name="archivalt" id="archivalt">
+            </div>
+            <button type="submit" id="modifyCourseData">Kurzus adatainak módosítása</button>
         </div>
-        <div class="courseDescriptionDiv">
-            <label for="courseDescription">Leírás: </label>
-            <input type="text" name="courseDescription" id="courseDescription">
-        </div>
-        <div class="designDiv">
-            <label for="designSelect">Design: </label>
-            <select name="designSelect" id="designSelect">
-                <option value=""></option>
-            </select>
-        </div>
-        <div class="courseCodeDiv">
-            <label for="activeCode">Jelenlegi kód: </label>
-            <input type="text" name="activeCode" id="activeCode" readonly/><br>
-            <label for="generateNewCode">Új kód generálása: </label>
-            <button type="button" id="generateNewCode">Új kód generálása</button>
-        </div>
-        <div class="archivaltDiv">
-            <label for="archivalt">Archivált: </label>
-            <input type="checkbox" name="archivalt" id="archivalt">
-        </div>
-        <button type="button" id="modifyCourseData">Kurzus adatainak módosítása</button>
-    </div>
+    </form>
     <div style="display: flex; align-items: center; gap: 15px">
         <h1>Téma előnézet</h1>
         <div class="openPreviewDiv">

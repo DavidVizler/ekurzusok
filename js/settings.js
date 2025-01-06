@@ -47,6 +47,100 @@ async function toggleArrow(){
     }
 }
 
+async function modifySettings(e) {
+    e.preventDefault();
+    try {
+        let urlParams = new URL(location.href).searchParams;
+        if (!urlParams.has('id')) {
+            throw new Error("Nincs 'id' paraméter megadva az URL-ben.");
+        }
+
+        let courseId = parseInt(urlParams.get('id'));
+        
+        let name = document.getElementById('courseName').value;
+        let desc = document.getElementById('courseDescription').value;
+        let design = document.getElementById('designSelect').value;
+
+        let reqData = {
+            manage: 'course',
+            action: 'modify',
+            course_id: courseId,
+            name,
+            desc,
+            design
+        };
+
+        let response = await fetch('../php/data_manager.php', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: JSON.stringify(reqData)
+        });
+
+        let result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result);
+            // TODO
+        }
+    }
+    catch (e) {
+        console.error(e);
+        alert("A módosítások elmentése nem sikerült! Kérjük próbálja meg később.");
+    }
+}
+
+async function onLoad() {
+    try {
+
+        let urlParams = new URL(location.href).searchParams;
+        if (!urlParams.has('id') || isNaN(urlParams.get('id'))) {
+            location.href = '../kurzusok.html';
+        }
+
+        let courseId = parseInt(urlParams.get('id'));
+
+        await loadCurrentValues(courseId);
+    }
+    catch (e) {
+        location.href = '../kurzusok.html';
+    }
+}
+
+async function loadCurrentValues(courseId) {
+    try {
+        let reqData = {
+            getdata: 'course_data',
+            course_id: courseId
+        }
+
+        let response = await fetch('../php/data_query.php', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: JSON.stringify(reqData)
+        });
+
+        let courseData = await response.json();
+        courseData = courseData[0];
+        
+        document.getElementById('courseName').value = courseData['name'];
+        document.getElementById('courseDescription').value = courseData['desc'];
+        document.getElementById('designSelect').value = courseData['design'];
+        document.getElementById('activeCode').value = courseData['code'];
+        document.getElementById('archivalt').checked = courseData['archived'] == 1;
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
 window.addEventListener('load', loadDesign)
 document.getElementById("designSelect").addEventListener("change", loadPreview)
 document.querySelector(".openPreviewDiv").addEventListener('click', toggleArrow)
+window.addEventListener('load', async () => await onLoad());
+document.getElementById('settingsForm').addEventListener('submit', async (e) => await modifySettings(e));

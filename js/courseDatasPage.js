@@ -81,13 +81,18 @@ function ModifyActualData(){
 
 async function getCourseContent(courseId) {
     try {
+        let reqData = {
+            manage: 'course',
+            action: 'content',
+            course_id: courseId
+        }
         let response = await fetch('../php/data_query.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify({ course_id: courseId })
+            body: JSON.stringify(reqData)
         });
 
         let contentList = await response.json();
@@ -162,7 +167,9 @@ window.addEventListener('load', () => {
     }
     else {
         let addContentButton = document.getElementById('addContentButton');
+        let settingsButton = document.getElementById('settingsButton');
         addContentButton.href += `?id=${courseId}`;
+        settingsButton.href += `?id=${courseId}`;
 
         getCourseContent(courseId);
     }
