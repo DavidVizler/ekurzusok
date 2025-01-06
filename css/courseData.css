@@ -243,30 +243,30 @@ body.modal-open {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
   
-.close-button svg{
+.close-button svg, .close-buttonUsers svg{
     color: black;
     float: right;
     height: 20px;
     width: 20px;
 }
 
-.close-button:hover {
+.close-button:hover, .close-buttonUsers:hover {
     cursor: pointer;
     color: #000;
 }
   
-a#openModal {
+a#openModal, a#openModalUsers {
     color: #007BFF;
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
 }
   
-a#openModal:hover {
+a#openModal:hover, a#openModalUsers:hover {
     text-decoration: underline;
 }
 
-.deadlineExercises{
+.deadlineExercises, .courseUsers{
     border: 1px solid grey;
     border-radius: 15px;
     padding: 5px;

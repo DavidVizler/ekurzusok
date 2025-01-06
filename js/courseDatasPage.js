@@ -2,7 +2,10 @@ let menu = document.getElementById("hamburger-menu")
 
 const deadlineModal = document.getElementById("deadlineModal");
 const openModalLink = document.getElementById("openModal");
+const openModalUsersLink = document.getElementById("openModalUsers");
 const closeButton = document.querySelector(".close-button");
+const closeButtonUsers = document.querySelector(".close-buttonUsers");
+const usersModal = document.getElementById("usersModal");
 
 openModalLink.addEventListener("click", (event) => {
   event.preventDefault();
@@ -10,14 +13,26 @@ openModalLink.addEventListener("click", (event) => {
   document.body.classList.add("modal-open");
 });
 
+openModalUsersLink.addEventListener("click", (event) =>{
+    event.preventDefault();
+    usersModal.style.display = "flex";
+    document.body.classList.add("modal-open");
+});
+
 closeButton.addEventListener("click", () => {
   deadlineModal.style.display = "none";
   document.body.classList.remove("modal-open");
 });
 
+closeButtonUsers.addEventListener("click", ()=>{
+    usersModal.style.display = "none";
+    
+})
+
 window.addEventListener("click", (event) => {
   if (event.target === modal) {
     deadlineModal.style.display = "none";
+    usersModal.style.display = "none";
     document.body.classList.remove("modal-open");
   }
 });
@@ -107,6 +122,27 @@ async function getCourseContent(courseId) {
     }
 }
 
+async function getCourseUsers(courseid){
+    try {
+        let reqData = {
+            course_id: courseid
+        }
+        let response = await fetch('..php/data_query.php',{
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(reqData)
+        })
+        let userslist = await response.json();
+        console.log(userslist);
+    } catch (error) {
+        console.log(error);
+        alert("Nem sikerült lekérni az adatokat");
+    }
+}
+
 function showCourseContent(content) {
     let contentList = document.getElementById('contentList');
     contentList.innerHTML = '';
@@ -168,9 +204,12 @@ window.addEventListener('load', () => {
     else {
         let addContentButton = document.getElementById('addContentButton');
         let settingsButton = document.getElementById('settingsButton');
+        let usersButton = document.getElementById("openModalUsers");
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
+        usersButton.href += `?id=${courseId}`;
 
         getCourseContent(courseId);
+        getCourseUsers(courseId)
     }
 });
