@@ -107,7 +107,7 @@ function GetCourseData() {
                 $response = $course_data;
             } else if ($course_data == "Nincs találat!") {
                 $response = [
-                    "uzenez" => "Nincs kurzus ilyen ID-val"
+                    "uzenet" => "Nincs kurzus ilyen ID-val"
                 ];
             } else {
                 header("internal server error", true, 500);
@@ -137,7 +137,6 @@ function GetCourseMembers() {
             FROM `felhasznalo` INNER JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID`
             WHERE `kurzustag`.`KurzusID` = ?;";
             $course_members = DataQuery($sql_course_members_query, "i", [$course_id]);
-
             if (is_array($course_members)) {
                 $response = $course_members;
             } else if ($course_members == "Nincs találat!") {
@@ -159,6 +158,7 @@ function GetCourseMembers() {
 if (isset($response)) {
     echo json_encode($response, JSON_UNESCAPED_UNICODE);
 }
+
 
 function PostDataCheck($to_check, $check_session = false) {
     global $response;
@@ -184,4 +184,3 @@ function PostDataCheck($to_check, $check_session = false) {
     return true;
 }
 
-?>

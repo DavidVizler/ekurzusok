@@ -1,6 +1,0 @@
-<FilesMatch "\.php$">
-    SetEnvIf X-Requested-With "^XMLHttpRequest$" ajax_request
-    Order Deny,Allow
-    Deny from all
-    Allow from env=ajax_request
-</FilesMatch>

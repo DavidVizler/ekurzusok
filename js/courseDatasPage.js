@@ -29,14 +29,6 @@ closeButtonUsers.addEventListener("click", ()=>{
     
 })
 
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    deadlineModal.style.display = "none";
-    usersModal.style.display = "none";
-    document.body.classList.remove("modal-open");
-  }
-});
-
 //import designData from './desgin.json' with {type : "json"}
 let designData 
 
@@ -101,11 +93,11 @@ async function getCourseContent(courseId) {
             action: 'content',
             course_id: courseId
         }
-        let response = await fetch('..php/data_query.php', {
+        let response = await fetch('../php/data_query.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+                //'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(reqData)
         });
@@ -122,27 +114,45 @@ async function getCourseContent(courseId) {
     }
 }
 
+let userslist
 async function getCourseUsers(courseid){
     try {
         let data = {
+            getdata: 'course_members',
             course_id: courseid
         }
-        let response = await fetch('..php/data_query.php',{
+        let valasz = await fetch('../php/data_query.php',{
             method : "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+                //'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(data)
         })
-        let userslist = await response.json();
-        if(response.ok){
+        userslist = await valasz.json();
+        if(valasz.ok){
             console.log(userslist);
+            showCourseUsers(userslist);
         }
     } catch (e) {
         console.error(e);
         alert("Sikertelen adatlekérés!");
     }
+}
+
+async function showCourseUsers() {
+    let usersDiv = document.querySelector('.courseUsers')
+    console.log(usersDiv)
+    userslist.forEach(user => {
+        let checkbox = document.createElement("input")
+        checkbox.type = "checkbox"
+        let name = document.createElement("label")
+        name.textContent = user.lastname + " " + user.firstname
+        let br = document.createElement('br')
+        usersDiv.appendChild(checkbox)
+        usersDiv.appendChild(name)
+        usersDiv.appendChild(br)
+    });
 }
 
 function showCourseContent(content) {
@@ -209,7 +219,7 @@ window.addEventListener('load', () => {
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
 
-        getCourseContent(courseId);
+        //getCourseContent(courseId);
         getCourseUsers(courseId);
     }
 });
