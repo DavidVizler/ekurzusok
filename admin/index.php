@@ -335,11 +335,11 @@
                 $sql_avarage_user_course_count_query = "SELECT AVG(tagsagok.szam) AS atlag FROM (SELECT COUNT(`kurzustag`.`ID`) AS szam 
                 FROM `felhasznalo` LEFT JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID` 
                 GROUP BY `felhasznalo`.`FelhasznaloID`) AS tagsagok;";
-                $avarage_user_course_count = round(DataQuery($sql_avarage_user_course_count_query)[0]["atlag"], 2);
+                $avarage_user_course_count = round(DataQuery($sql_avarage_user_course_count_query)[0]["atlag"]);
 
                 $sql_avarage_course_member_count_query = "SELECT AVG(tagok.szam) AS atlag FROM (SELECT COUNT(`kurzustag`.`ID`) AS szam 
                 FROM `kurzus` LEFT JOIN `kurzustag` ON `kurzus`.`KurzusID` = `kurzustag`.`KurzusID` GROUP BY `kurzus`.`KurzusID`) AS tagok;";
-                $avarage_course_member_count = round(DataQuery($sql_avarage_course_member_count_query)[0]["atlag"], 2);
+                $avarage_course_member_count = round(DataQuery($sql_avarage_course_member_count_query)[0]["atlag"]);
 
                 echo "<div id='stats'>
                 Felhasználók száma: <b>{$user_count}</b><br>
