@@ -28,7 +28,7 @@ user_courses = []
 lastnames = ["Kovács", "Kis", "Nagy", "Tóth", "Szabó", "Horváth", "Varga", "Kiss", "Molnár", "Németh", 
              "Balogh", "Farkas", "Lakatos", "Papp", "Takács", "Juhász", "Oláh", "Mészáros", "Simon",
              "Rácz", "Fekete", "Szilágyi", "Török", "Fehér", "Balázs", "Gál", "Szűcs", "Orsós", "Kocsis",
-             "Fodor", "Pintér", "Szalai", "Sipos", "Magyar"]
+             "Fodor", "Pintér", "Szalai", "Sipos", "Magyar", "Blank"]
 
 # Keresztnevek
 firstnames = ["Pista", "Jóska", "István", "Gábor", "Gyula", "László", "Zoltán", "Péter", "Tamás",
@@ -36,7 +36,7 @@ firstnames = ["Pista", "Jóska", "István", "Gábor", "Gyula", "László", "Zolt
               "Lajos", "György", "Dávid", "Dániel", "Ádám", "Róbert", "Bence", "Gyula", "Mária",
               "Erzsébet", "Katalin", "Éva", "Ilona", "Anna", "Zsuzsanna", "Andrea", "Judit", "Ágnes",
               "Ildikó", "Margit", "Erika", "Krisztina", "Julianna", "Mónika", "Eszter", "Szilvia",
-              "Gabriella", "Irén", "Edit", "Viktória", "Anita", "Magdolna", "Anikó"]
+              "Gabriella", "Irén", "Edit", "Viktória", "Anita", "Magdolna", "Anikó", "Máté"]
 
 # E-mail szolgáltatók
 email_providers = ["gmail.com", "protonmail.com", "tuta.io", "outlook.com", "citromail.hu"]
