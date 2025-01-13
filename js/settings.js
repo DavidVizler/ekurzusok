@@ -5,7 +5,7 @@ pageLink.addEventListener("click", ()=>{
 
 
 async function getDesign() {
-    let response = await fetch("../js/desgin.json")
+    let response = await fetch("../js/design.json")
     let design = await response.json()
     return design
 }
@@ -81,9 +81,12 @@ async function modifySettings(e) {
 
         let result = await response.json();
 
-        if (!response.ok) {
+        if (result.sikeres) {
+            alert("Módosítások elmentve.");
+            location.href = './' + courseId;
+        }
+        else {
             throw new Error(result);
-            // TODO
         }
     }
     catch (e) {
