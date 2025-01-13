@@ -1,10 +1,34 @@
 <?php
 
+// PHP hibakijelzés konfiguráció
+//error_reporting(0);
+
+// Adatbázis konfiguráció
+$db_config = [
+    "db_host" => "localhost",
+    "db_name" => "ekurzusok",
+    "db_query_username" => "root",
+    "db_query_password" => "",
+    "db_modifier_username" => "root",
+    "db_modifier_password" => ""
+];
+
 // SQL lekérdezés
 function DataQuery($operation, $var_types = null, $parameters = null) {
-    $db = new mysqli("localhost", "root", "", "ekurzusok");
+    global $db_config;
+
+    $db = new mysqli(
+        $db_config["db_host"], 
+        $db_config["db_query_username"], 
+        $db_config["db_query_password"], 
+        $db_config["db_name"]
+    );
+
     if ($db -> connect_errno != 0) {
-        return $db -> connect_error;
+        SendResponse([
+            "hiba" => "Nem sikerült kapcsolódni az adatbázishoz"
+        ], 500);
+        exit;
     }
 
     if (!is_null($var_types) && !is_null($parameters)) {
@@ -17,7 +41,10 @@ function DataQuery($operation, $var_types = null, $parameters = null) {
     }
 
     if ($db -> errno != 0) {
-        return $db -> error;
+        SendResponse([
+            "hiba" => "Hiba adótott az adatbázis művelet végrehajtásakor"
+        ], 500);
+        exit;
     }
 
     if ($results -> num_rows == 0) {
@@ -29,10 +56,20 @@ function DataQuery($operation, $var_types = null, $parameters = null) {
 
 // SQL adatmódosítás
 function ModifyData($operation, $var_types = null, $parameters = null) {
-    $db = new mysqli("localhost", "root", "", "ekurzusok");
+    global $db_config;
+    
+    $db = new mysqli(
+        $db_config["db_host"], 
+        $db_config["db_modifier_username"], 
+        $db_config["db_modifier_password"], 
+        $db_config["db_name"]
+    );
 
     if ($db -> connect_errno != 0) {
-        return $db -> connect_error;
+        SendResponse([
+            "hiba" => "Nem sikerült kapcsolódni az adatbázishoz"
+        ], 500);
+        exit;
     }
 
     if (!is_null($var_types) && !is_null($parameters)) {
@@ -44,14 +81,17 @@ function ModifyData($operation, $var_types = null, $parameters = null) {
     }
 
     if ($db -> errno != 0) {
-        return $db -> error;
+        SendResponse([
+            "hiba" => "Hiba adótott az adatbázis művelet végrehajtásakor"
+        ], 500);
+        exit;
     }
 
     return $db -> affected_rows > 0 ? "Sikeres művelet!" : "Sikertelen művelet!";
 }
 
 // Válasz elküldő
-function SetResponse($response, $status = 200) {
+function SendResponse($response, $status = 200) {
     echo json_encode($response, JSON_UNESCAPED_UNICODE);
     http_response_code($status);
 }
@@ -59,7 +99,7 @@ function SetResponse($response, $status = 200) {
 // HTTP kérés metódus vizsgálata
 function CheckMethod($method) {
     if ($_SERVER["REQUEST_METHOD"] != $method) {
-        SetResponse([
+        SendResponse([
             "sikeres" => false,
             "uzenet" => "Hibás metódus"
         ], 400);
@@ -69,12 +109,12 @@ function CheckMethod($method) {
     }
 }
 
-// POST-tal érkezett adatok és bejelentkezés ellenőrzése
+// POST-tal érkezett adatok ellenőrzése
 function PostDataCheck($to_check) {
     global $data;
     foreach ($to_check as $tc) {
         if (empty($data[$tc])) {
-            SetResponse([
+            SendResponse([
                 "sikeres" => false,
                 "uzenet" => "Hiányos adatok"
             ], 400);
@@ -86,12 +126,20 @@ function PostDataCheck($to_check) {
 
 // Bejelentkezés ellenőrzése
 function LoginCheck() {
-    global $response;
+    session_start();
     if (!isset($_SESSION["user_id"])) {
-        SetResponse([
+        SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nincs bejelentkezve"
         ], 401);
+        return false;
+    }
+    return true;
+}
+
+// Admin bejelentkezés ellenőrzése
+function AdminLoginCheck() {
+    if (!isset($_SESSION["admin_user_id"])) {
         return false;
     }
     return true;

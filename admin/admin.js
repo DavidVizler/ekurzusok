@@ -66,3 +66,16 @@ async function deleteCourse(id, coursename, userid, lastname, firstname, passwor
         location.reload();
     }
 }
+
+function prevPage() {
+    $("page-num").value -= 1;
+}
+
+function nextPage() {
+    let next = parseInt($("page-num").value) + 1;
+    $("page-num").value = next;
+}
+
+function setRowNumber(rows) {
+    $("row-num").value = rows;
+}

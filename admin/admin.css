@@ -1,6 +1,26 @@
-body {
+body, html {
     font-size: 18px;
     font-family: sans-serif;
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+#site {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+#navbar-container {
+    max-width: 100%;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
 }
 
 #navbar {
@@ -10,7 +30,7 @@ body {
     list-style-type: none;
     padding: 0px;
     margin: 0px;
-    min-width: 800px;
+    min-width: 920px;
     border-radius: 10px;
 }
 
@@ -75,6 +95,7 @@ body {
 table a {
     color: blue;
     text-decoration: none;
+    margin: 0;
 } 
 
 #logout-button {
@@ -86,9 +107,34 @@ table a {
     padding: 0px;
 }
 
+#page-control {
+    padding: 0;
+    margin: 5px;
+}
+
+#page-num, #row-num, #row-num option {
+    width: 100px;
+    font-size: 18px;
+    font-family: sans-serif;
+}
+
+#page-control button {
+    width: 30px;
+    font-size: 18px;
+    font-family: sans-serif;
+}
+
+
+
+#content {
+    overflow: scroll;
+    margin: 0 5px;
+    padding: 0;
+}
+
 table {
-    margin-top: 10px;
     width: 100%;
+    min-width: 1600px;
 }
 
 tr:nth-child(even) td {
@@ -96,10 +142,16 @@ tr:nth-child(even) td {
 }
 
 th {
-    padding: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    background-color: white;
+    position: sticky;
+    top: 0;
+}
+
+th div {
     background-color: #5271ff;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     color: white;
 }
 
@@ -109,17 +161,9 @@ td {
     padding-inline: 10px;
 }
 
-tr th:first-child {
-    border-bottom-left-radius: 10px;
-}
-
-tr th:last-child {
-    border-bottom-right-radius: 10px;
-}
-
 tr td:first-child {
-    border-bottom-left-radius: 10px;
-    border-top-left-radius: 10px;
+    font-family: monospace;
+    text-align: right;
 }
 
 .blurred {
@@ -130,14 +174,10 @@ tr td:first-child {
 .torles {
     text-align: center;
     padding: 0px;
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
 }
 
 .torles input {
     width: 100%;
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
     border: 1px solid red;
     background-color: white;
     height: 30px;
@@ -162,4 +202,32 @@ tr td:first-child {
 
 .owner:nth-child(even) td {
     background-color: #ffe000 !important;
+}
+
+.admin-login-container {
+    width: fit-content;
+    margin: 100px auto;
+}
+
+.admin-login-container input, label {
+    width: 300px;
+    margin: 5px;
+    padding: 5px;
+    font-size: 18px;
+    font-family: sans-serif;
+}
+
+.admin-login-container input[type=submit] {
+    width: 200px;
+}
+
+#admin-login-result {
+    padding: 10px;
+    border-radius: 5px;
+    width: fit-content;
+    margin: 0 auto;
+    font-size: 20px;
+    font-family: sans-serif;
+    background-color: rgb(164, 12, 12);
+    color: white;
 }
