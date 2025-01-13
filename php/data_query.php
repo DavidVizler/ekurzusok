@@ -133,7 +133,7 @@ function GetCourseMembers() {
         $sql_check_user_in_course_query = "SELECT `ID` FROM `kurzustag` WHERE `KurzusID` = ? AND `FelhasznaloID` = ?;";
         $check_user_in_course = DataQuery($sql_check_user_in_course_query, "ii", [$course_id, $user_id]);
         if (is_array($check_user_in_course)) {
-            $sql_course_members_query = "SELECT `felhasznalo`.`VezetekNev` AS lastname, `felhasznalo`.`KeresztNev` AS firstname 
+            $sql_course_members_query = "SELECT `felhasznalo`.`FelhasznaloID` as felhasznaloId, `felhasznalo`.`VezetekNev` AS lastname, `felhasznalo`.`KeresztNev` AS firstname 
             FROM `felhasznalo` INNER JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID`
             WHERE `kurzustag`.`KurzusID` = ?;";
             $course_members = DataQuery($sql_course_members_query, "i", [$course_id]);

@@ -143,10 +143,11 @@ async function getCourseUsers(courseid){
 
 async function showCourseUsers() {
     let usersDiv = document.querySelector('.courseUsers')
-    console.log(usersDiv)
+    console.log(userslist)
     userslist.forEach(user => {
         let checkbox = document.createElement("input")
         checkbox.type = "checkbox"
+        checkbox.id = user.felhasznaloId
         let name = document.createElement("label")
         name.textContent = user.lastname + " " + user.firstname
         let br = document.createElement('br')
@@ -205,6 +206,34 @@ function showCourseContent(content) {
         contentList.appendChild(div);
     });
 }
+
+async function deleteUserFromCourse(){
+    let urlParts = location.href.split('/')
+    let course_id = parseInt(urlParts[urlParts.length-1])
+    let user_id = document.querySelector('input:checked').id
+    try {
+        let data = {
+            "user_id" : parseInt(user_id),
+            "course_id" : course_id
+        }
+        let keres = await fetch('../api/member/remove',{
+            method : "POST",
+            headers : {
+                'Content-Type' : 'application/json'
+            }, body : JSON.stringify(data)
+        })
+        let response = await keres.json()
+        if(response.ok){
+            alert("Sikeres felhasználó törlés a kurzusból!")
+        }else{
+            alert("Sikertelen felhasználó törlés a kurzusból!")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+document.getElementById('deleteButton').addEventListener('click', deleteUserFromCourse)
 
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
