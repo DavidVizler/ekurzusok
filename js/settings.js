@@ -81,9 +81,12 @@ async function modifySettings(e) {
 
         let result = await response.json();
 
-        if (!response.ok) {
+        if (result.sikeres) {
+            alert("Módosítások elmentve.");
+            location.href = './' + courseId;
+        }
+        else {
             throw new Error(result);
-            // TODO
         }
     }
     catch (e) {
