@@ -29,11 +29,11 @@ closeButtonUsers.addEventListener("click", ()=>{
     
 })
 
-//import designData from './desgin.json' with {type : "json"}
+//import designData from './design.json' with {type : "json"}
 let designData 
 
 async function getDesignJson() {
-    let response = await fetch("../js/desgin.json")
+    let response = await fetch("../js/design.json")
     designData = await response.json()
  }
 

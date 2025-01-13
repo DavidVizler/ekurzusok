@@ -5,7 +5,7 @@ pageLink.addEventListener("click", ()=>{
 
 
 async function getDesign() {
-    let response = await fetch("../js/desgin.json")
+    let response = await fetch("../js/design.json")
     let design = await response.json()
     return design
 }

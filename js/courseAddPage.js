@@ -1,10 +1,10 @@
-// import design from './desgin.json' with {type : "json"}
+// import design from './design.json' with {type : "json"}
 
 let design
 
 // Fetch importálás, hogy Firefoxban is megjelenjen a design
 async function getDesignJson() {
-    let response = await fetch("./js/desgin.json")
+    let response = await fetch("./js/design.json")
     design = await response.json()
     designOptionLoad()
 }
