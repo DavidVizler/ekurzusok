@@ -71,11 +71,13 @@ function ModifyActualData(){
     let oktatok = document.getElementById("oktatok")
     let title = document.querySelector("title")
     let header = document.getElementById("header")
+    let kurzusLeiras = document.getElementById('kurzusLeiras');
     for (const data of cardData) {
         if(data.KurzusID == url){
             kurzusNev.innerHTML = data.KurzusNev
             oktatok.innerHTML = data.Oktatok
             title.innerHTML = data.KurzusNev
+            kurzusLeiras.innerHTML = data.Leiras;
             for (const design of designData) {
                 if(design.designId == data.Design){
                     header.style.backgroundImage = `url('${design.courseImage}')`
@@ -89,15 +91,14 @@ function ModifyActualData(){
 async function getCourseContent(courseId) {
     try {
         let reqData = {
-            manage: 'course',
-            action: 'content',
+            getdata: 'course_content',
             course_id: courseId
         }
         let response = await fetch('../php/data_query.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                //'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(reqData)
         });
@@ -219,7 +220,7 @@ window.addEventListener('load', () => {
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
 
-        //getCourseContent(courseId);
+        getCourseContent(courseId);
         getCourseUsers(courseId);
     }
 });
