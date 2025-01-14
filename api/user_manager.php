@@ -182,9 +182,6 @@ function Manage($action) {
         case "delete":
             DeleteUser();
             break;
-        case "delete-as-admin":
-            //DeleteUserAsAdmin();
-            break;
         default:
             SendResponse([
                 "sikeres" => false,
