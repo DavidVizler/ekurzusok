@@ -226,6 +226,7 @@ async function deleteUserFromCourse(){
         let response = await keres.json()
         if(response.ok){
             alert("Sikeres felhasználó törlés a kurzusból!")
+            usersModal.style.display = "none"
         }else{
             alert(response.uzenet)
         }
