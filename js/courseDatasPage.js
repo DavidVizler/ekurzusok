@@ -147,7 +147,8 @@ async function showCourseUsers() {
     userslist.forEach(user => {
         let checkbox = document.createElement("input")
         checkbox.type = "checkbox"
-        checkbox.id = user.felhasznaloId
+        //checkbox.id = user.felhasznaloId
+        checkbox.value = user.felhasznaloId
         let name = document.createElement("label")
         name.textContent = user.lastname + " " + user.firstname
         let br = document.createElement('br')
@@ -210,7 +211,7 @@ function showCourseContent(content) {
 async function deleteUserFromCourse(){
     let urlParts = location.href.split('/')
     let course_id = parseInt(urlParts[urlParts.length-1])
-    let user_id = document.querySelector('input:checked').id
+    let user_id = document.querySelector('input:checked').value
     try {
         let data = {
             "user_id" : parseInt(user_id),
@@ -226,7 +227,7 @@ async function deleteUserFromCourse(){
         if(response.ok){
             alert("Sikeres felhasználó törlés a kurzusból!")
         }else{
-            alert("Sikertelen felhasználó törlés a kurzusból!")
+            alert(response.uzenet)
         }
     } catch (error) {
         console.log(error)
