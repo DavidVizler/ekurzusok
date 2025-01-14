@@ -146,7 +146,8 @@ async function showCourseUsers() {
     console.log(userslist)
     userslist.forEach(user => {
         let checkbox = document.createElement("input")
-        checkbox.type = "checkbox"
+        checkbox.type = "radio"
+        checkbox.name = "radioButtons"
         //checkbox.id = user.felhasznaloId
         checkbox.value = user.felhasznaloId
         let name = document.createElement("label")
