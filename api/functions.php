@@ -110,14 +110,16 @@ function CheckMethod($method) {
 }
 
 // POST-tal érkezett adatok ellenőrzése
-function PostDataCheck($to_check) {
+function PostDataCheck($to_check, $send_response = true) {
     global $data;
     foreach ($to_check as $tc) {
         if (empty($data[$tc])) {
-            SendResponse([
-                "sikeres" => false,
-                "uzenet" => "Hiányos adatok"
-            ], 400);
+            if ($send_response) {
+                SendResponse([
+                    "sikeres" => false,
+                    "uzenet" => "Hiányos adatok"
+                ], 400);
+            }
             return false;
         }
     }

@@ -1,25 +1,21 @@
-body, html {
+html, body {
     font-size: 18px;
     font-family: sans-serif;
-    height: 100%;
-    max-height: 100%;
-    max-width: 100%;
     margin: 0;
+    height: 100%;
 }
 
-#site {
+#site-container {
     height: 100%;
-    margin: 0;
-    padding: 0;
-    width: 100%;
+    max-height: 100%;
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
 }
 
 #navbar-container {
     max-width: 100%;
     width: 100%;
-    padding: 5px;
+    padding: 10px;
     box-sizing: border-box;
 }
 
@@ -86,12 +82,6 @@ body, html {
     background: linear-gradient(90deg, #00008b, #5271ff);
 }
 
-.active a {
-    font-weight: bold;
-    color: yellow;
-    text-shadow: 1px 1px 2px black;
-}
-
 table a {
     color: blue;
     text-decoration: none;
@@ -107,34 +97,59 @@ table a {
     padding: 0px;
 }
 
+/* Oldal kezelő */
+
 #page-control {
     padding: 0;
-    margin: 5px;
+    margin: 5px 20px;
 }
 
-#page-num, #row-num, #row-num option {
-    width: 100px;
+#rows, #rows option, #page, #page-control input[type=button] {
     font-size: 18px;
     font-family: sans-serif;
+    border-radius: 5px;
+    border: 1px solid;
+    text-align: center;
 }
 
-#page-control button {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.row-count-span {
+    margin-left: 20px;
+}
+
+#page {
+    width: 50px;
+}
+
+#page-control input[type=button] {
     width: 30px;
-    font-size: 18px;
-    font-family: sans-serif;
 }
 
+#page-control label {
+    margin: 0;
+    padding: 0;
+}
 
+/* Görgethető táblázat */
 
 #content {
+    flex: 1;
     overflow: scroll;
-    margin: 0 5px;
+    margin: 10px;
     padding: 0;
 }
 
 table {
     width: 100%;
-    min-width: 1600px;
 }
 
 tr:nth-child(even) td {
@@ -204,9 +219,19 @@ tr td:first-child {
     background-color: #ffe000 !important;
 }
 
+/* Bejelentkező oldal */
+
 .admin-login-container {
     width: fit-content;
     margin: 100px auto;
+}
+
+.admin-login-container h1 {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: sans-serif;
+    text-align: center;
+    margin-bottom: 50px;
 }
 
 .admin-login-container input, label {

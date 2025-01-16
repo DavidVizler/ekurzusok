@@ -2,24 +2,6 @@ function $(id) {
     return document.getElementById(id);
 }
 
-// Ezek a függvények kijelölik az aktív linket a navbaron
-function changeActiveTab(id) {
-    document.getElementsByClassName("active")[0].classList.remove("active");
-    $(id).classList.add("active");
-}
-
-function listStatistics() {
-    changeActiveTab("nav-home");
-}
-
-function listUsers() {
-    changeActiveTab("nav-users");
-}
-
-function listCourses() {
-    changeActiveTab("nav-courses");
-}
-
 // Felhasználó törlése
 async function deleteUser(id, lastname, firstname, email, password) {
     if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nevű, ${email} e-mail című felhasználót?`)) {
@@ -67,15 +49,75 @@ async function deleteCourse(id, coursename, userid, lastname, firstname, passwor
     }
 }
 
+async function getPageCount(field, rows) {
+    let countRequest = await fetch(`./api/get-${field}-count`);
+    let count = await countRequest.json();
+    let pageCount = Math.ceil(count[0]["count"] / rows);
+    $("count").innerHTML = count + " találat";
+}
+
+async function listUsers(page, rows) {
+    try {
+        let request = await fetch("./api/get-users", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                page,
+                rows
+            })
+        });
+
+        if (request.ok) {
+            let userList = await request.json();
+            if (userList.length == 2) {
+                let users = userList[0];
+                let own_course_count = userList[1];
+                let content = "";
+                
+                for (let i = 0; i < users.length; i++) {
+                    content += `<tr>
+                    <td>${users[i]["id"]}</td>
+                        <td>${users[i]["email"]}</td>
+                        <td>${users[i]["lastname"]}</td>
+                        <td>${users[i]["firstname"]}</td>
+                        <td>
+                            ${users[i]["courses"]} (${own_course_count[i]["courses"]} saját) <a href="user-info?id=${users[i]["id"]}">Több infó</a>
+                        </td>
+                    </tr>`
+                }
+                
+                $("table-content").innerHTML = content;
+            } 
+
+            $("rows").value = rows; 
+        } else {
+            throw request.status;
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+
 function prevPage() {
-    $("page-num").value -= 1;
+    $("page").value -= 1;
+    $("page-form").submit();
 }
 
 function nextPage() {
-    let next = parseInt($("page-num").value) + 1;
-    $("page-num").value = next;
+    let next = parseInt($("page").value) + 1;
+    $("page").value = next;
+    $("page-form").submit();
 }
 
 function setRowNumber(rows) {
-    $("row-num").value = rows;
+    $("rows").value = rows;
+}
+
+function manualPageTurn(event) {
+    if (event.key == "Enter") {
+        $("page-form").submit();
+    }
 }
