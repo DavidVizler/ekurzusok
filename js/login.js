@@ -41,3 +41,12 @@ window.addEventListener('load', () => {
         e.preventDefault();
     });
 });
+
+$('showPassword').addEventListener('click', ()=>{
+    let password = $('password')
+    if(password.type == "password"){
+        password.type = "text"
+    }else{
+        password.type = "password"
+    }
+})
