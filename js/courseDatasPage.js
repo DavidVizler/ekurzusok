@@ -122,7 +122,7 @@ async function getCourseUsers(courseid){
             getdata: 'course_members',
             course_id: courseid
         }
-        let valasz = await fetch('../php/data_query.php',{
+        let valasz = await fetch('../api/query/course-members',{
             method : "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ async function getCourseUsers(courseid){
         userslist = await valasz.json();
         if(valasz.ok){
             console.log(userslist);
-            showCourseUsers(userslist);
+            showCourseUsers();
         }
     } catch (e) {
         console.error(e);
@@ -143,20 +143,38 @@ async function getCourseUsers(courseid){
 
 async function showCourseUsers() {
     let usersDiv = document.querySelector('.courseUsers')
+    let ownerp = document.createElement('p')
+    let deleteButton = document.getElementById('deleteButton')
+    ownerp.textContent = "Oktató: " + userslist[0].lastname + " " + userslist[0].firstname
     console.log(userslist)
-    userslist.forEach(user => {
-        let checkbox = document.createElement("input")
-        checkbox.type = "radio"
-        checkbox.name = "radioButtons"
-        //checkbox.id = user.felhasznaloId
-        checkbox.value = user.felhasznaloId
-        let name = document.createElement("label")
-        name.textContent = user.lastname + " " + user.firstname
-        let br = document.createElement('br')
-        usersDiv.appendChild(checkbox)
-        usersDiv.appendChild(name)
-        usersDiv.appendChild(br)
-    });
+    let tags = document.createElement('p')
+    tags.textContent = "Tagok:"
+    usersDiv.appendChild(ownerp)
+    usersDiv.appendChild(tags)
+    let ul = document.createElement("ul")
+    for(let i = 1; i < userslist.length; i++){
+        if(userslist[i].user_id != null){
+            let userRadio = document.createElement('input')
+            userRadio.type = "radio"
+            userRadio.name = "radioButtons"
+            userRadio.value = userslist[i].user_id
+            let name = document.createElement("label")
+            name.textContent = userslist[i].lastname + " " + userslist[i].firstname
+            let br = document.createElement('br')
+            usersDiv.appendChild(userRadio)
+            usersDiv.appendChild(name)
+            usersDiv.appendChild(br)
+            let hr = document.createElement('hr')
+            usersDiv.appendChild(hr)
+            deleteButton.style.display = "flex"
+        }else{
+            let li = document.createElement('li')
+            li.value = userslist[i].felhasznaloId
+            li.textContent = userslist[i].lastname + " " + userslist[i].firstname
+            ul.appendChild(li)
+            usersDiv.appendChild(ul)
+        }
+    }
 }
 
 function showCourseContent(content) {
