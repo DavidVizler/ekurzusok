@@ -78,12 +78,60 @@ async function listUsers(page, rows) {
                 
                 for (let i = 0; i < users.length; i++) {
                     content += `<tr>
-                    <td>${users[i]["id"]}</td>
+                        <td>${users[i]["id"]}</td>
                         <td>${users[i]["email"]}</td>
                         <td>${users[i]["lastname"]}</td>
                         <td>${users[i]["firstname"]}</td>
                         <td>
                             ${users[i]["courses"]} (${own_course_count[i]["courses"]} saját) <a href="user-info?id=${users[i]["id"]}">Több infó</a>
+                        </td>
+                    </tr>`
+                }
+                
+                $("table-content").innerHTML = content;
+            } 
+
+            $("rows").value = rows; 
+        } else {
+            throw request.status;
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+async function listCourses(page, rows) {
+    try {
+        let request = await fetch("./api/get-courses", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                page,
+                rows
+            })
+        });
+
+        if (request.ok) {
+            let courseList = await request.json();
+            if (courseList.length == 2) {
+                let courses = courseList[0];
+                let teacher_count = courseList[1];
+                let content = "";
+                
+                for (let i = 0; i < courses.length; i++) {
+                    content += `<tr>
+                        <td>${courses[i]["id"]}</td>
+                        <td>${courses[i]["name"]}</td>
+                        <td>${courses[i]["desc"]}</td>
+                        <td>${courses[i]["code"]}</td>
+                        <td>${courses[i]["archived"] == 1 ? "Nem" : "Igen"}</td>
+                        <td>
+                            <a href="user-info?id=${courses[i]["owner_id"]}">${courses[i]["owner_lastname"]} ${courses[i]["owner_firstname"]} (${courses[i]["owner_email"]})</a>
+                        </td>
+                        <td>
+                            ${courses[i]["members_count"]} (${teacher_count[i]["teachers_count"]} tanár) <a href="course-info?id=${courses[i]["id"]}">Több infó</a>
                         </td>
                     </tr>`
                 }
@@ -121,3 +169,43 @@ function manualPageTurn(event) {
         $("page-form").submit();
     }
 }
+
+async function loginAdmin() {
+    let username = $("username").value;
+    let password = $("password").value;
+    try {
+        let response = await fetch("./api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        if (response.ok) {
+            let result = await response.json();
+            if (result.sikeres) {
+                window.location.href = './';
+            }
+            else {
+                alert(response.uzenet);
+            }
+        } else {
+            throw(response.status);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+window.addEventListener("load", () => {
+    if ($("admin-login-form") != null) {
+        $("admin-login-form").addEventListener("submit", (e) => {
+            loginAdmin();
+            e.preventDefault();
+        });
+    }
+})

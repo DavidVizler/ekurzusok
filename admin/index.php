@@ -7,7 +7,7 @@
     $url = explode("/", $_SERVER["REQUEST_URI"]);
     $endpoint = explode("?", end($url))[0];
 
-    if (!in_array($endpoint, ["", "users", "courses", "user-info", "course-info"])) {
+    if (!in_array($endpoint, ["", "users", "courses", "user-info", "course-info", "login"])) {
         echo <<<HTML
             <!DOCTYPE html>
             <html lang="hu">
@@ -25,6 +25,11 @@
             </html>
         HTML;
         exit;
+    }
+
+    session_start();
+    if ($endpoint != "login" && !isset($_SESSION["admin_id"])) {
+        header("Location: login");
     }
 
     if ($endpoint == "users" || $endpoint == "courses") {
@@ -47,6 +52,8 @@
         case "users":
             $onload_js_function = "listUsers({$page}, {$rows})";
             break;
+        case "courses":
+            $onload_js_function = "listCourses({$page}, {$rows})";
     }
     
 ?>
@@ -57,28 +64,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eKurzusok Admin</title>
     <link rel="stylesheet" href="./admin.css">
+    <link rel="shortcut icon" href="../img/eKurzusok.png" type="image/x-icon">
     <script src='./admin.js'></script>
 </head>
 <body>
     <div id="site-container">
         <?php
         
-            NavBar();
             switch ($endpoint) {
                 case "":
+                    NavBar($rows);
                     MainPage();
                     break;
                 case "users":
-                    PageManager($page, $rows);
+                    NavBar($rows);
+                    PageManager($page, $rows, "users");
                     UsersTable();
                     break;
                 case "courses":
-                    PageManager($page, $rows);
+                    NavBar($rows);
+                    PageManager($page, $rows, "courses");
                     CoursesTable();
                     break;
                 case "user-info":
+                    NavBar($rows);
                     break;
                 case "course-info":
+                    NavBar($rows);
                     break;
                 case "login":
                     LoginForm();

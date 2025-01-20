@@ -141,7 +141,12 @@ function LoginCheck() {
 
 // Admin bejelentkezés ellenőrzése
 function AdminLoginCheck() {
-    if (!isset($_SESSION["admin_user_id"])) {
+    session_start();
+    if (!isset($_SESSION["admin_id"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs admin bejelentkezve"
+        ], 401);
         return false;
     }
     return true;

@@ -7,8 +7,6 @@ async function login() {
     let password = $('password').value;
 
     let loginData = {
-        "manage" : "user",
-        "action" : "login",
         email,
         password
     };
