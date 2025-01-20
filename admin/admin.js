@@ -49,13 +49,6 @@ async function deleteCourse(id, coursename, userid, lastname, firstname, passwor
     }
 }
 
-async function getPageCount(field, rows) {
-    let countRequest = await fetch(`./api/get-${field}-count`);
-    let count = await countRequest.json();
-    let pageCount = Math.ceil(count[0]["count"] / rows);
-    $("count").innerHTML = count + " találat";
-}
-
 async function listUsers(page, rows) {
     try {
         let request = await fetch("./api/get-users", {
@@ -126,7 +119,7 @@ async function listCourses(page, rows) {
                         <td>${courses[i]["name"]}</td>
                         <td>${courses[i]["desc"]}</td>
                         <td>${courses[i]["code"]}</td>
-                        <td>${courses[i]["archived"] == 1 ? "Nem" : "Igen"}</td>
+                        <td>${courses[i]["archived"] == 1 ? "Igen" : "Nem"}</td>
                         <td>
                             <a href="user-info?id=${courses[i]["owner_id"]}">${courses[i]["owner_lastname"]} ${courses[i]["owner_firstname"]} (${courses[i]["owner_email"]})</a>
                         </td>
@@ -148,6 +141,83 @@ async function listCourses(page, rows) {
     }
 }
 
+async function listCourseInfo(page, rows, id) {
+    try {
+        let request = await fetch("./api/get-course-info", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                page,
+                rows,
+                id
+            })
+        });
+
+        if (request.ok) {
+            let courseInfo = await request.json();
+            if (courseInfo.course_members.length > 0) {
+                let data = courseInfo.course_data;
+                let members = courseInfo.course_members;
+                let content = "";
+                
+                for (let i = 0; i < members.length; i++) {
+                    content += `<tr>
+                        <td>${members[i]["user_id"]}</td>
+                        <td>${members[i]["membership_id"]}</td>
+                        <td>${members[i]["lastname"]}</td>
+                        <td>${members[i]["firstname"]}</td>
+                        <td>${members[i]["email"]}</td>
+                        <td>${members[i]["teacher"] == 1 ? "Igen" : "Nem"}</td>
+                        <td>
+                            <a href="user-info?id=${members[i]["id"]}">Több infó</a>
+                        </td>
+                        <td class='torles'>
+                            <form method='POST' action='javascript:;' onsubmit='deleteMember(${members[i]['membership_id']})'>
+                                <input type='submit' value='Eltávolítás' name='delete_button'>
+                            </form>
+                        </td>
+                    </tr>`
+                }
+                
+                $("table-content").innerHTML = content;
+            } 
+
+            $("rows").value = rows; 
+        } else {
+            throw request.status;
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+async function deleteMember(id) {
+    try {
+        let request = await fetch("./api/remove-member", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "membership_id": id
+            })
+        });
+
+        if (request.ok) {
+            let result = await request.json();
+            alert(result.uzenet);
+            if (result.sikeres) {
+                location.reload();
+            }
+        } else {
+            throw(request.status);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 function prevPage() {
     $("page").value -= 1;
@@ -158,10 +228,6 @@ function nextPage() {
     let next = parseInt($("page").value) + 1;
     $("page").value = next;
     $("page-form").submit();
-}
-
-function setRowNumber(rows) {
-    $("rows").value = rows;
 }
 
 function manualPageTurn(event) {

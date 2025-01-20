@@ -32,7 +32,7 @@
         header("Location: login");
     }
 
-    if ($endpoint == "users" || $endpoint == "courses") {
+    if ($endpoint == "users" || $endpoint == "courses" || $endpoint == "course-info" || $endpoint == "user-info") {
         // Oldal
         if (isset($_GET["page"])) {
             $page = $_GET["page"];
@@ -48,12 +48,24 @@
         }
     }
 
+    if ($endpoint == "course-info" || $endpoint == "user-info") {
+        if (!isset($_GET["id"])) {
+            header("Location: ./");
+        } else {
+            $id = $_GET["id"];
+        }
+    }
+
     switch($endpoint) {
         case "users":
             $onload_js_function = "listUsers({$page}, {$rows})";
             break;
         case "courses":
             $onload_js_function = "listCourses({$page}, {$rows})";
+            break;
+        case "course-info":
+            $onload_js_function = "listCourseInfo({$page}, {$rows}, {$id})";
+            break;
     }
     
 ?>
@@ -78,12 +90,12 @@
                     break;
                 case "users":
                     NavBar($rows);
-                    PageManager($page, $rows, "users");
+                    PageManager($page, $rows, $endpoint);
                     UsersTable();
                     break;
                 case "courses":
                     NavBar($rows);
-                    PageManager($page, $rows, "courses");
+                    PageManager($page, $rows, $endpoint);
                     CoursesTable();
                     break;
                 case "user-info":
@@ -91,6 +103,8 @@
                     break;
                 case "course-info":
                     NavBar($rows);
+                    PageManager($page, $rows, $endpoint, $id);
+                    CourseInfoTable();
                     break;
                 case "login":
                     LoginForm();

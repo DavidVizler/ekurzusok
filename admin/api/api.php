@@ -19,7 +19,7 @@ function AdminGetUsers() {
     $limit = $data["rows"];
     $offset = $limit*($data["page"]-1);
 
-    // ID, e-mail, vezetéknév, keresztnév, titkosított jelszó, kurzusok
+    // ID, e-mail, vezetéknév, keresztnév, kurzusok
     $sql_statement = "SELECT `felhasznalo`.`FelhasznaloID` AS id, `felhasznalo`.`Email` AS email, `felhasznalo`.`VezetekNev` AS lastname, 
     `felhasznalo`.`KeresztNev` AS firstname, COUNT(`kurzustag`.`ID`) AS courses 
     FROM `felhasznalo` 
@@ -94,6 +94,51 @@ function AdminGetCourses() {
 
 }
 
+function AdminGetCourseInfo() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["rows", "page", "id"])) {
+        return;
+    }
+
+    global $data;
+    $limit = $data["rows"];
+    $offset = $limit*($data["page"]-1);
+    $id = $data["id"];
+
+    // Kurzus adatainak lekérdezése
+    $sql_statement = "SELECT * FROM `kurzus` WHERE `KurzusID` = ?";
+    $course_data = DataQuery($sql_statement, "i", [$id])[0];
+
+    // Tagok adatai: ID, e-mail, vezetéknév, keresztnév, kurzusok
+    $sql_statement = "SELECT `kurzustag`.`ID` AS 'membership_id', `felhasznalo`.`FelhasznaloID` AS 'user_id', `felhasznalo`.`VezetekNev` AS 'firstname', 
+    `felhasznalo`.`KeresztNev` AS 'lastname', `felhasznalo`.`Email` AS 'email', `kurzustag`.`Tanar` AS 'teacher'
+    FROM `felhasznalo`
+    INNER JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID`
+    WHERE `kurzustag`.`KurzusID` = ?
+    ORDER BY teacher DESC, user_id ASC
+    LIMIT ? OFFSET ?;";
+    $course_members = DataQuery($sql_statement, "iii", [$id, $limit, $offset]);
+
+    if (!is_array($course_members)) {
+        SendResponse([
+            "uzenet" => "Nincsenek tagjai a kurzusnak"
+        ]);
+        return;
+    }
+
+    SendResponse([
+        "course_data" => $course_data,
+        "course_members" => $course_members
+    ]);
+}
+
 function AdminLogin() {
     if (!PostDataCheck(["username", "password"])) {
         return;
@@ -127,8 +172,36 @@ function AdminLogin() {
     ]);
 }
 
-function AdminRegister() {
-    
+function AdminRemoveMember() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["membership_id"])) {
+        return;
+    }
+
+    global $data;
+    $membership_id = $data["membership_id"];
+
+    $sql_statement = "DELETE FROM `kurzustag` WHERE `ID` = ?";
+    $result = ModifyData($sql_statement, "i", [$membership_id]);
+
+    if ($result == "Sikeres művelet!") {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Felhasználó eltávolítva a kurzusból"
+        ]);
+    } else if ($result == "Sikertelen művelet!") {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem sikerült eltávolítani a felhasználót a kurzusból"
+        ]);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -142,6 +215,12 @@ switch($action) {
         break;
     case "get-courses":
         AdminGetCourses();
+        break;
+    case "get-course-info":
+        AdminGetCourseInfo();
+        break;
+    case "remove-member":
+        AdminRemoveMember();
         break;
     case "login":
         AdminLogin();

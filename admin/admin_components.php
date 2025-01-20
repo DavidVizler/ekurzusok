@@ -35,7 +35,7 @@ function NavBar($rows) {
     HTML;
 }
 
-function PageManager($page, $rows, $data_type) {
+function PageManager($page, $rows, $data_type, $id = null) {
     switch ($data_type) {
         case "users":
             $sql_statement = "SELECT COUNT(`FelhasznaloID`) AS count FROM `felhasznalo`";
@@ -45,11 +45,19 @@ function PageManager($page, $rows, $data_type) {
             $sql_statement = "SELECT COUNT(`KurzusID`) AS count FROM `kurzus`";
             $row_word = "kurzus van az adatbázisban";
             break;
+        case "course-info":
+            $sql_statement = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `KurzusID` = ?";
+            $row_word = "tagja van a kurzusnak";
+            break;
         default:
             break;
     }
     
-    $count = DataQuery($sql_statement)[0]["count"];
+    if (is_null($id)) {
+        $count = DataQuery($sql_statement)[0]["count"];
+    } else {
+        $count = DataQuery($sql_statement, "i", [$id])[0]["count"];
+    }
 
     $no_prev = $page == 1 ? " disabled" : "";
     $page_count = ceil($count/$rows);
@@ -104,6 +112,27 @@ function CoursesTable() {
                     <th><div>Archivált</div></th>
                     <th><div>Tulajdonos</div></th>
                     <th><div>Tagok</div></th>
+                </tr>
+            </thead>
+            <tbody id='table-content'>
+            </tbody>
+        </table>
+    </div>";
+}
+
+function CourseInfoTable() {
+    echo "<div id='content'>
+        <table>
+            <thead>
+                <tr>
+                    <th><div>ID</div></th>
+                    <th><div>Tagság ID</div></th>
+                    <th><div>Vezetéknév</div></th>
+                    <th><div>Keresztnév</div></th>
+                    <th><div>Email</div></th>
+                    <th><div>Tanár</div></th>
+                    <th><div>Kurzusok</div></th>
+                    <th><div>Műveletek</div></th>
                 </tr>
             </thead>
             <tbody id='table-content'>
