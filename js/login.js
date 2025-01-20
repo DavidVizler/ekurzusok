@@ -14,10 +14,9 @@ async function login() {
     };
 
     if (isValid(loginData)) {
-        let response = await fetch("./php/data_manager.php", {
+        let response = await fetch("./api/user/login", {
             method: "POST",
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(loginData)

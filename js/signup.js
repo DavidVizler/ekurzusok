@@ -19,11 +19,10 @@ async function signup() {
             password
         };
 
-        let response = await fetch("./php/data_manager.php", {
+        let response = await fetch("./api/user/signup", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(signupData)
         });
