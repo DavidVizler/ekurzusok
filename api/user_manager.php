@@ -78,9 +78,13 @@ function Signup() {
 
     // Eredmény vizsgálata
     if ($result == "Sikeres művelet!") { 
+        $sql_statement = "SELECT `FelhasznaloID` FROM `felhasznalo` WHERE `Email` = ?;";
+        $user_id = DataQuery($sql_statement, "s", [$email]);
+        session_start();
+        $_SESSION["user_id"] = $user_id[0]["FelhasznaloID"];
         SendResponse([
             "sikeres" => true,
-            "uzenet" => "Felhasználó regisztrálva"
+            "uzenet" => "Felhasználó regisztrálva és bejelentkezve"
         ], 201);
     } else if ($result == "Sikertelen művelet!") {
         SendResponse([
