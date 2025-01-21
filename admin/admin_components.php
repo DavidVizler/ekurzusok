@@ -17,8 +17,8 @@ function LoginForm() {
     HTML;
 }
 
-function NavBar($rows) {
-    if (empty($rows)) {
+function NavBar($rows = null) {
+    if (is_null($rows)) {
         $rows = 25;
     }
     echo <<<HTML
