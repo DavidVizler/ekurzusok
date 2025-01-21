@@ -66,6 +66,9 @@
         case "course-info":
             $onload_js_function = "listCourseInfo({$page}, {$rows}, {$id})";
             break;
+        default:
+            $onload_js_function = "";
+            break;
     }
     
 ?>
@@ -85,7 +88,7 @@
         
             switch ($endpoint) {
                 case "":
-                    NavBar($rows);
+                    NavBar();
                     MainPage();
                     break;
                 case "users":

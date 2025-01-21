@@ -158,14 +158,13 @@ async function showCourseUsers() {
             userRadio.type = "radio"
             userRadio.name = "radioButtons"
             userRadio.value = userslist[i].user_id
+            userRadio.style.marginBottom = "10px"
             let name = document.createElement("label")
             name.textContent = userslist[i].lastname + " " + userslist[i].firstname
             let br = document.createElement('br')
             usersDiv.appendChild(userRadio)
             usersDiv.appendChild(name)
             usersDiv.appendChild(br)
-            let hr = document.createElement('hr')
-            usersDiv.appendChild(hr)
             deleteButton.style.display = "flex"
         }else{
             let li = document.createElement('li')
@@ -174,6 +173,35 @@ async function showCourseUsers() {
             ul.appendChild(li)
             usersDiv.appendChild(ul)
         }
+    }
+}
+
+async function deleteUserFromCourse(){
+    let urlParts = location.href.split('/')
+    let course_id = parseInt(urlParts[urlParts.length-1])
+    let user_id = document.querySelector('input:checked').value
+    try {
+        let data = {
+            "user_id" : parseInt(user_id),
+            "course_id" : course_id
+        }
+        let keres = await fetch('../api/member/remove',{
+            method : "POST",
+            headers : {
+                'Content-Type' : 'application/json'
+            }, body : JSON.stringify(data)
+        })
+        if(keres.ok){
+            let response = await keres.json()
+            alert("Sikeres felhasználó törlés a kurzusból!")
+            if(response.sikeres == true){
+                location.reload()
+            }
+        }else{
+            alert(response.uzenet)
+        }
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -227,32 +255,6 @@ function showCourseContent(content) {
     });
 }
 
-async function deleteUserFromCourse(){
-    let urlParts = location.href.split('/')
-    let course_id = parseInt(urlParts[urlParts.length-1])
-    let user_id = document.querySelector('input:checked').value
-    try {
-        let data = {
-            "user_id" : parseInt(user_id),
-            "course_id" : course_id
-        }
-        let keres = await fetch('../api/member/remove',{
-            method : "POST",
-            headers : {
-                'Content-Type' : 'application/json'
-            }, body : JSON.stringify(data)
-        })
-        let response = await keres.json()
-        if(response.ok){
-            alert("Sikeres felhasználó törlés a kurzusból!")
-            usersModal.style.display = "none"
-        }else{
-            alert(response.uzenet)
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 document.getElementById('deleteButton').addEventListener('click', deleteUserFromCourse)
 

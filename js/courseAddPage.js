@@ -24,7 +24,6 @@ function previewLoad(){
     let designName = selectDesign.options[selectDesign.selectedIndex].text;
     let preview = document.getElementById("preView")
     let kurzusNev = document.getElementById("KurzusNev")
-    let oktatoNeve = document.getElementById("OktatoNeve")
     preview.innerHTML = ""
     design.forEach(elem => {
         if(elem.designName == designName){
@@ -80,6 +79,9 @@ async function sendNewCourseData() {
         },
         body: JSON.stringify(newCourseData)
     })
+
+    window.open("./kurzusok.html","_self")
+
 }
 
 window.addEventListener('load', getDesignJson)
