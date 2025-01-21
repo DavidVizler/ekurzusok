@@ -8,6 +8,9 @@ Minden adatbázisshoz köthető, adatváltoztató és lekérdező művelet az ap
 **Fetch útmutató:**\
 A műveletek és lekérdezések megadások és a hozzájuk tartozó várt/visszatérő adatok megtalálhatóak [ebben a segédletben](https://docs.google.com/spreadsheets/d/1QqVU3NuwNTp1Xk_SZ8jrgYIF6DXR1OvF8vQTprfVUaY/edit?usp=sharing), ahol a végpontok állapota is nyilván van tartva.
 
+## Új adatbázis
+![Adatbázis relációs modell](./db/db.png)
+
 ## Tesztek
 A tesztek futtatása előtt a [test](test/) mappába kell belépni és futtatni kell az alábbi parancsot: `npm install` \
 A tesztek futtatásához az alábbi parancsot kell futtatni: `npm test`
