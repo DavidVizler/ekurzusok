@@ -208,7 +208,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
 }
 
-$action = end(explode("/", $_SERVER["REQUEST_URI"]));
+$url = explode("/", $_SERVER["REQUEST_URI"]);
+$action = end($url);
 switch($action) {
     case "get-users":
         AdminGetUsers();
