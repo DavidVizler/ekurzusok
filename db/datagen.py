@@ -46,7 +46,7 @@ password = "$2y$10$mPo.I8wSPUi.W5QaydbKIeGuR1SyKMPrIXm71XFoJZ7sHQbh/bGjO"
 
 users = int(input("Uj felhasznalok szama : "))
 
-new_users = "INSERT INTO `felhasznalo` (`Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) VALUES "
+new_users = "INSERT INTO users (email, firstname, lastname, password) VALUES "
 
 # Felhasználók generálása
 for user_id in range(1, users+1):
@@ -54,7 +54,7 @@ for user_id in range(1, users+1):
     firstname = random.choice(firstnames)
     email = str.lower(RemoveAccents(lastname + firstname) + str(random.randint(1970, 2010)) + "@" + random.choice(email_providers))
 
-    new_users += f"\n('{email}', '{lastname}', '{firstname}', '{password}')"
+    new_users += f"\n('{email}', '{firstname}', '{lastname}', '{password}')"
 
     if user_id != users:
         new_users += ", "
@@ -81,8 +81,8 @@ course_designs = [3, 1, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5]
 # Generáláshoz szükséges adatok
 course_id = 1
 course_codes = []
-new_courses = "INSERT INTO `kurzus` (`FelhasznaloID`, `KurzusNev`, `Kod`, `Leiras`, `Design`, `Archivalt`) VALUES "
-new_owners = "INSERT INTO `kurzustag` (`FelhasznaloID`, `KurzusID`, `Tanar`) VALUES "
+new_courses = "INSERT INTO courses (name, description, code, design_id, archived) VALUES "
+new_owners = "INSERT INTO memberships (user_id, course_id, role) VALUES "
 
 # Felhasználók kurzusainak generálása
 for user_id in range(1, users+1):
@@ -108,14 +108,14 @@ for user_id in range(1, users+1):
                 code = CodeGen()
             course_codes.append(code)
 
-            new_courses += f"\n({user_id}, '{course_name}', '{code}', '{desc}', {design}, 0)"
-            new_owners += f"({user_id}, {course_id}, 1)"
+            new_courses += f"\n('{course_name}', '{desc}', '{code}', {design}, 0)"
+            new_owners += f"({user_id}, {course_id}, 3)"
 
             user_courses.append([user_id, course_id])                
             
             course_id += 1
 
-new_members = "INSERT INTO `kurzustag` (`FelhasznaloID`, `KurzusID`, `Tanar`) VALUES "
+new_members = "INSERT INTO memberships (user_id, course_id, role) VALUES "
 
 memberships = 0
 
@@ -138,14 +138,14 @@ for user_id in range(1, users+1):
                 memberships += 1
                 # Tanár lesz-e
                 if random.randint(1, round(100/teacher_chance)) == 1:
-                    teacher = 1
+                    teacher = 2
                 else:
-                    teacher = 0
+                    teacher = 1
 
                 user_courses.append([user_id, course])
                 new_members += f"({user_id}, {course}, {teacher})"
 
-db_reset = "DELETE FROM `felhasznalo` WHERE 1; ALTER TABLE kurzus AUTO_INCREMENT = 1; ALTER TABLE felhasznalo AUTO_INCREMENT = 1;\n"
+db_reset = "DELETE FROM users WHERE 1; DELETE FROM courses WHERE 1; ALTER TABLE users AUTO_INCREMENT = 1; ALTER TABLE courses AUTO_INCREMENT = 1;\n"
 
 f = open("./sql_command.txt", "w", encoding="utf-8")
 f.write(db_reset + new_users + ";\n" + new_courses + ";\n" + new_owners + ";\n" + new_members + ";")

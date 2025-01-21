@@ -49,16 +49,7 @@ async function getDesignJson() {
 
 async function getCardsData() {
    try {
-      let eredmeny = await fetch("./php/data_query.php", {
-         headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-type": "application/json"
-         },
-         method: "POST",
-         body: JSON.stringify({
-            "getdata": "user_courses"
-         })
-      });
+      let eredmeny = await fetch("./api/query/user-courses");
         if(eredmeny.ok){
             cardData = await eredmeny.json()
             GenerateCards()
@@ -69,7 +60,7 @@ async function getCardsData() {
    } catch (error) {
       console.log(error)
       // Ha nincs bejelentkezve a felhasználó, akkor átírányítás a login oldalra
-      if (error == 403) {
+      if (error == 401) {
          window.location.replace("login.html");
       }
    }
@@ -96,7 +87,7 @@ function GenerateCards(){
       let img = document.createElement("img")
       img.classList.add("card-img-top")
       design.forEach(elem => {
-         if(elem.designId == cardData[i]["design"]){
+         if(elem.designId == cardData[i]["design_id"]){
             img.src = elem.image
          }
       });

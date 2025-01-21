@@ -14,7 +14,7 @@ function Login() {
     $password = $data["password"];
 
     // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
-    $sql_statement = "SELECT `FelhasznaloID`, `Jelszo` FROM `felhasznalo` WHERE `Email` = ?;";
+    $sql_statement = "SELECT user_id, password FROM users WHERE email = ?;";
     $user_data = DataQuery($sql_statement, "s", [$email]);
     if (!is_array($user_data)) {
         SendResponse([
@@ -25,7 +25,7 @@ function Login() {
     }
 
     // Jelszó ellenőrzése
-    if (!password_verify($password, $user_data[0]["Jelszo"])) {
+    if (!password_verify($password, $user_data[0]["password"])) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail vagy jelszó nem megfelelő"
@@ -35,7 +35,7 @@ function Login() {
 
     // Session elindítása
     session_start();
-    $_SESSION["user_id"] = $user_data[0]["FelhasznaloID"];
+    $_SESSION["user_id"] = $user_data[0]["user_id"];
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
@@ -58,7 +58,7 @@ function Signup() {
     $password = $data["password"];
     
     // Ellenőrzés, hogy nincs-e már felhasználó regisztrálva azonos e-mail címmel
-    $sql_statement = "SELECT `Email` FROM `felhasznalo` WHERE `Email` = ?";
+    $sql_statement = "SELECT email FROM users WHERE email = ?";
     $email_check = DataQuery($sql_statement, "s", [$email]);
     if (is_array($email_check)) {
         SendResponse([
@@ -72,16 +72,16 @@ function Signup() {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
     // Felhasználó feltöltése
-    $sql_statement= "INSERT INTO `felhasznalo` (`FelhasznaloID`, `Email`, `VezetekNev`, `KeresztNev`, `Jelszo`) 
+    $sql_statement= "INSERT INTO users (user_id, email, firstname, lastname, password) 
     VALUES (NULL, ?, ?, ?, ?);";
-    $result = ModifyData($sql_statement, "ssss", [$email, $lastname, $firstname, $hashed_password]);
+    $result = ModifyData($sql_statement, "ssss", [$email, $firstname, $lastname, $hashed_password]);
 
     // Eredmény vizsgálata
     if ($result == "Sikeres művelet!") { 
-        $sql_statement = "SELECT `FelhasznaloID` FROM `felhasznalo` WHERE `Email` = ?;";
+        $sql_statement = "SELECT user_id FROM users WHERE email = ?;";
         $user_id = DataQuery($sql_statement, "s", [$email]);
         session_start();
-        $_SESSION["user_id"] = $user_id[0]["FelhasznaloID"];
+        $_SESSION["user_id"] = $user_id[0]["user_id"];
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Felhasználó regisztrálva és bejelentkezve"
@@ -130,7 +130,7 @@ function DeleteUser() {
     $id = $_SESSION["user_id"];
 
     // Van-e ilyen felhasználó
-    $sql_statement = "SELECT `Jelszo` FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
+    $sql_statement = "SELECT password FROM users WHERE user_id = ?;";
     $hashed_password = DataQuery($sql_statement, "i", [$id]);
     if (!is_array($hashed_password)) {
         SendResponse([
@@ -141,7 +141,7 @@ function DeleteUser() {
     }
 
     // Jelszó ellenőrzése
-    if (!password_verify($password, $hashed_password[0]["Jelszo"])) {
+    if (!password_verify($password, $hashed_password[0]["password"])) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen jelszó"
@@ -150,7 +150,7 @@ function DeleteUser() {
     }
 
     // Felhasználó törlése
-    $sql_statement = "DELETE FROM `felhasznalo` WHERE `FelhasznaloID` = ?;";
+    $sql_statement = "DELETE FROM users WHERE user_id = ?;";
     $result = ModifyData($sql_statement, "i", [$id]);
     
     // Eredmény vizsgálata
