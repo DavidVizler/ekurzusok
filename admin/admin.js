@@ -63,20 +63,17 @@ async function listUsers(page, rows) {
         });
 
         if (request.ok) {
-            let userList = await request.json();
-            if (userList.length == 2) {
-                let users = userList[0];
-                let own_course_count = userList[1];
-                let content = "";
-                
+            let users = await request.json();
+            if (users.length > 0) {
+                let content = "";        
                 for (let i = 0; i < users.length; i++) {
                     content += `<tr>
-                        <td>${users[i]["id"]}</td>
+                        <td>${users[i]["user_id"]}</td>
                         <td>${users[i]["email"]}</td>
                         <td>${users[i]["lastname"]}</td>
                         <td>${users[i]["firstname"]}</td>
                         <td>
-                            ${users[i]["courses"]} (${own_course_count[i]["courses"]} saját) <a href="user-info?id=${users[i]["id"]}">Több infó</a>
+                            ${users[i]["courses"]} (${users[i]["own_courses"]} saját) <a href="user-info?id=${users[i]["user_id"]}">Több infó</a>
                         </td>
                     </tr>`
                 }
@@ -107,24 +104,20 @@ async function listCourses(page, rows) {
         });
 
         if (request.ok) {
-            let courseList = await request.json();
-            if (courseList.length == 2) {
-                let courses = courseList[0];
-                let teacher_count = courseList[1];
+            let courses = await request.json();
+            if (courses.length > 0) {             
                 let content = "";
-                
                 for (let i = 0; i < courses.length; i++) {
                     content += `<tr>
-                        <td>${courses[i]["id"]}</td>
+                        <td>${courses[i]["course_id"]}</td>
                         <td>${courses[i]["name"]}</td>
-                        <td>${courses[i]["desc"]}</td>
                         <td>${courses[i]["code"]}</td>
                         <td>${courses[i]["archived"] == 1 ? "Igen" : "Nem"}</td>
                         <td>
-                            <a href="user-info?id=${courses[i]["owner_id"]}">${courses[i]["owner_lastname"]} ${courses[i]["owner_firstname"]} (${courses[i]["owner_email"]})</a>
+                            <a href="user-info?id=${courses[i]["user_id"]}">${courses[i]["lastname"]} ${courses[i]["firstname"]} (#${courses[i]["user_id"]})</a>
                         </td>
                         <td>
-                            ${courses[i]["members_count"]} (${teacher_count[i]["teachers_count"]} tanár) <a href="course-info?id=${courses[i]["id"]}">Több infó</a>
+                            ${courses[i]["members"]} (${courses[i]["teachers"]} tanár) <a href="course-info?id=${courses[i]["course_id"]}">Több infó</a>
                         </td>
                     </tr>`
                 }

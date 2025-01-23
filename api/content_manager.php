@@ -30,8 +30,21 @@ function CreateCourseContent() {
         $maxpoint = null;
     }
 
-    $sql_statement = "INSERT INTO `tartalom` (`TartalomID`, `FelhasznaloID`, `KurzusID`, `Cim`, `Leiras`, `Feladat`, `MaxPont`, `Hatarido`, `Modositva`, `Kiadva`) 
-    VALUES (NULL, '6', '5', 'Valami', 'Valami', '0', NULL, NULL, current_timestamp(), NULL)";
+    $sql_statement = "INSERT INTO content (user_id, course_id, title, description, task, max_points, deadline, published, last_modified) 
+    VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, NULL, current_timestamp())";
+    $result = ModifyData($sql_statement, "iissiis", [$user_id, $course_id, $title, $desc, $task, $maxpoint, $deadline]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Tartalom sikeresen létrehozva"
+        ], 201);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A tartalom létrehozása sikertelen"
+        ]);
+    }
 
 }
 

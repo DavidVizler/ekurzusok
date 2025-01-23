@@ -5,11 +5,11 @@ function Login() {
         return;
     }
 
-    global $data;
     if (!PostDataCheck(["email", "password"])) {
         return;
     }
 
+    global $data;
     $email = $data["email"];
     $password = $data["password"];
 
@@ -77,7 +77,7 @@ function Signup() {
     $result = ModifyData($sql_statement, "ssss", [$email, $firstname, $lastname, $hashed_password]);
 
     // Eredmény vizsgálata
-    if ($result == "Sikeres művelet!") { 
+    if ($result) { 
         $sql_statement = "SELECT user_id FROM users WHERE email = ?;";
         $user_id = DataQuery($sql_statement, "s", [$email]);
         session_start();
@@ -86,11 +86,11 @@ function Signup() {
             "sikeres" => true,
             "uzenet" => "Felhasználó regisztrálva és bejelentkezve"
         ], 201);
-    } else if ($result == "Sikertelen művelet!") {
+    } else {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült regisztrálni a felhasználót"
-        ], 500);
+        ]);
     }
 }
 
@@ -154,18 +154,18 @@ function DeleteUser() {
     $result = ModifyData($sql_statement, "i", [$id]);
     
     // Eredmény vizsgálata
-    if ($result == "Sikeres művelet!") { 
+    if ($result) { 
         session_unset();
         session_destroy();
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Felhasználó törölve"
         ]);
-    } else if ($result == "Sikertelen művelet!") {
+    } else {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült törölni a felhasználót"
-        ], 500);
+        ]);
     }
 }
 

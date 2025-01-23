@@ -87,7 +87,7 @@ function ModifyData($operation, $var_types = null, $parameters = null) {
         exit;
     }
 
-    return $db -> affected_rows > 0 ? "Sikeres művelet!" : "Sikertelen művelet!";
+    return $db -> affected_rows > 0 ? true : false;
 }
 
 // Válasz elküldő
@@ -102,7 +102,7 @@ function CheckMethod($method) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Hibás metódus"
-        ], 400);
+        ], 405);
         return false;
     } else {
         return true;
@@ -112,6 +112,14 @@ function CheckMethod($method) {
 // POST-tal érkezett adatok ellenőrzése
 function PostDataCheck($to_check, $send_response = true) {
     global $data;
+    if (is_null($data)) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Hiányos adatok"
+        ], 400);
+        return false;
+    }
+
     foreach ($to_check as $tc) {
         if (empty($data[$tc]) && $data[$tc] != 0 && $data[$tc] != false) {
             if ($send_response) {

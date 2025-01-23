@@ -12,9 +12,9 @@ function UserCoursesQuery() {
 
     $user_id = $_SESSION["user_id"];
 
-    $sql_statement = "SELECT courses.course_id, courses.name, courses.design_id, courses.archived FROM courses
-    INNER JOIN memberships ON courses.course_id = memberships.course_id
-    WHERE memberships.user_id = ?";
+    $sql_statement = "SELECT c.course_id, c.name, c.design_id, c.archived FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE m.user_id = ? ORDER BY c.name";
     $user_courses = DataQuery($sql_statement, "i", [$user_id]);
 
     if (!is_array($user_courses)) {
@@ -56,13 +56,13 @@ function CourseMembersQuery() {
 
     // Ha tulajdonos, akkor a tagok ID-ja is lekérdezésre kerül, hogy el tudja őket távolítani a kurzusból
     if ($membership_data[0]["role"] == 3) {
-        $sql_statement = "SELECT users.user_id, users.lastname, users.firstname 
-        FROM users INNER JOIN memberships ON users.user_id = memberships.user_id
-        WHERE memberships.course_id = ?;";
+        $sql_statement = "SELECT u.user_id, u.lastname, u.firstname 
+        FROM users u INNER JOIN memberships m ON u.user_id = m.user_id
+        WHERE m.course_id = ? ORDER BY u.lastname, u.firstname;";
     } else {
-        $sql_statement = "SELECT users.lastname, users.firstname 
-        FROM users INNER JOIN memberships ON users.user_id = memberships.user_id
-        WHERE memberships.course_id = ?;";
+        $sql_statement = "SELECT u.lastname, u.firstname 
+        FROM users u INNER JOIN memberships m ON u.user_id = m.user_id
+        WHERE m.course_id = ? ORDER BY u.lastname, u.firstnam;";
     }
 
     // Kurzus tagok lekérdezése

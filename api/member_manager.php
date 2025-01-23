@@ -1,5 +1,65 @@
 <?php
 
+function AddCourseMember() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["code"])) {
+        return;
+    }
+
+    global $data;
+    $code = $data["code"];
+    $user_id = $_SESSION["user_id"];
+
+    // Kurzus lekérdezése kód alapján
+    $sql_statement = "SELECT course_id FROM courses WHERE code = ?;";
+    $course_check = DataQuery($sql_statement, "s", [$code]);
+
+    if (!is_array($course_check)) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs kurzus a megadott kóddal"
+        ]);
+        return;
+    }
+
+    $course_id = $course_check[0]["course_id"];
+
+    // Nincs-e már benne a felhasználó a kurzusban
+    $sql_statement = "SELECT membership_id FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $joined_check = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+
+    if (is_array($joined_check)) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó már tagja a kurzusnak"
+        ]);
+        return;
+    }
+
+    // Felhasználó hozzáadása a kurzushoz
+    $sql_statement = "INSERT INTO memberships (membership_id, user_id, course_id, role) VALUES (NULL, ?, ?, 1)";
+    $result = ModifyData($sql_statement, "ii", [$user_id, $course_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "A felhasználó felvéve a kurzusba"
+        ], 201);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem sikerült felvenni a felhasználót a kurzusba"
+        ]);
+    }
+}
+
 function RemoveCourseMember() {
     if (!LoginCheck()) {
         return;
@@ -19,9 +79,17 @@ function RemoveCourseMember() {
     $course_id = $data["course_id"];
 
     // Tulajdonosa-e a felhasználó a kurzusnak
-    $sql_statement = "SELECT  `FelhasznaloID` FROM `kurzus` WHERE `KurzusID` = ?;";
-    $course_owner_check = DataQuery($sql_statement, "i", [$course_id]);
-    if ($course_owner_check[0]["FelhasznaloID"] != $owner_user_id) {
+    $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $course_owner_check = DataQuery($sql_statement, "ii", [$course_id, $owner_user_id]);
+    if (!is_array($course_owner_check)) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if (!$course_owner_check[0]["role"] == 3) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
@@ -39,25 +107,30 @@ function RemoveCourseMember() {
     }
 
     // Kurzus tag eltávolítása
-    $sql_statement = "DELETE FROM `kurzustag` WHERE `FelhasznaloID` = ? AND `KurzusID` = ?;";
+    $sql_statement = "DELETE FROM memberships WHERE user_id = ? AND course_id = ?;";
     $result = ModifyData($sql_statement, "ii", [$delete_user_id, $course_id]);
     
     // Eredmény vizsgálata
-    if ($result == "Sikeres művelet!") { 
+    if ($result) { 
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Felhasználó eltávolítva a kurzusból"
         ]);
-    } else if ($result == "Sikertelen művelet!") {
+    } else {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült eltávolítani a felhasználót a kurzusból (előfordulhat, hogy nem tagja a kurzusnak)"
-        ], 500);
+        ]);
     }
 }
 
+
+
 function Manage($action) {
     switch ($action) {
+        case "add":
+            AddCourseMember();
+            break;
         case "remove":
             RemoveCourseMember();
             break;

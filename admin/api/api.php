@@ -19,13 +19,10 @@ function AdminGetUsers() {
     $limit = $data["rows"];
     $offset = $limit*($data["page"]-1);
 
-    // ID, e-mail, vezetéknév, keresztnév, kurzusok
-    $sql_statement = "SELECT `felhasznalo`.`FelhasznaloID` AS id, `felhasznalo`.`Email` AS email, `felhasznalo`.`VezetekNev` AS lastname, 
-    `felhasznalo`.`KeresztNev` AS firstname, COUNT(`kurzustag`.`ID`) AS courses 
-    FROM `felhasznalo` 
-    LEFT JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID` 
-    GROUP BY `felhasznalo`.`FelhasznaloID`
-    LIMIT ? OFFSET ?;";
+    $sql_statement = "SELECT u.user_id, u.email, u.firstname, u.lastname, COUNT(m.membership_id) AS courses, 
+    COUNT(CASE WHEN m.role = 3 THEN 1 END) AS own_courses
+    FROM users u LEFT JOIN memberships m ON u.user_id = m.user_id
+    GROUP BY u.user_id LIMIT ? OFFSET ?;";
     $users = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
     if (!is_array($users)) {
@@ -35,15 +32,7 @@ function AdminGetUsers() {
         return;
     }
 
-    // Saját kurzusok száma
-    $sql_statement = "SELECT `felhasznalo`.`FelhasznaloID`, COUNT(`kurzus`.`KurzusID`) AS courses 
-    FROM `felhasznalo`
-    LEFT JOIN `kurzus` ON `felhasznalo`.`FelhasznaloID` = `kurzus`.`FelhasznaloID` 
-    GROUP BY `felhasznalo`.`FelhasznaloID`
-    LIMIT ? OFFSET ?;";
-    $user_own_course_count = DataQuery($sql_statement, "ii", [$limit, $offset]);
-
-    SendResponse([$users, $user_own_course_count]);
+    SendResponse($users);
 }
 
 function AdminGetCourses() {
@@ -63,15 +52,10 @@ function AdminGetCourses() {
     $limit = $data["rows"];
     $offset = $limit*($data["page"]-1);
 
-    // ID, név, kód, leirás, archivált, tulajdonos adatok, tagok száma
-    $sql_statement = "SELECT `kurzus`.`KurzusID` AS 'id', `kurzus`.`KurzusNev` AS 'name', `kurzus`.`Kod` AS 'code', `kurzus`.`Leiras` AS 'desc', `kurzus`.`Archivalt` AS 'archived', 
-    `felhasznalo`.`FelhasznaloID` AS 'owner_id', `felhasznalo`.`VezetekNev` AS 'owner_lastname', `felhasznalo`.`KeresztNev` AS 'owner_firstname', `felhasznalo`.`Email` AS 'owner_email', 
-    COUNT(`kurzustag`.`ID`) AS 'members_count'
-    FROM `kurzus`
-    INNER JOIN `felhasznalo` ON `kurzus`.`FelhasznaloID` = `felhasznalo`.`FelhasznaloID`
-    INNER JOIN `kurzustag` ON `kurzus`.`KurzusID` = `kurzustag`.`KurzusID` 
-    GROUP BY `kurzus`.`KurzusID` 
-    LIMIT ? OFFSET ?;";
+    $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
+    COUNT(m.membership_id) AS members, COUNT(CASE WHEN m.role = 2 OR m.role = 3 THEN 1 END) AS teachers
+    FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id INNER JOIN users u ON m.user_id = u.user_id
+    GROUP BY c.course_id LIMIT ? OFFSET ?;";
     $courses = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
     if (!is_array($courses)) {
@@ -81,16 +65,7 @@ function AdminGetCourses() {
         return;
     }
 
-    // Tanárok száma
-    $sql_statement = "SELECT COUNT(`kurzustag`.`ID`) AS 'teachers_count'
-    FROM `kurzus`
-    INNER JOIN `kurzustag` ON `kurzus`.`KurzusID` = `kurzustag`.`KurzusID`
-    WHERE `kurzustag`.`Tanar` = 1
-    GROUP BY `kurzus`.`KurzusID`
-    LIMIT ? OFFSET ?;";
-    $teachers_count = DataQuery($sql_statement, "ii", [$limit, $offset]);
-
-    SendResponse([$courses, $teachers_count]);
+    SendResponse($courses,);
 
 }
 
@@ -145,7 +120,7 @@ function AdminLogin() {
     }
     global $data;
 
-    $sql_statement = "SELECT `AdminJelszo`, `AdminID` FROM `admin` WHERE `FelhasznaloNev` = ?;";
+    $sql_statement = "SELECT password, admin_id FROM admins WHERE username = ?;";
     $admin_data = DataQuery($sql_statement, "s", [$data["username"]]);
 
     if (!is_array($admin_data)) {
@@ -156,7 +131,7 @@ function AdminLogin() {
         return;
     }
 
-    if (!password_verify($data["password"], $admin_data[0]["AdminJelszo"])) {
+    if (!password_verify($data["password"], $admin_data[0]["password"])) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen felhasználónév vagy jelszó"
@@ -165,7 +140,7 @@ function AdminLogin() {
     }  
 
     session_start();
-    $_SESSION["admin_id"] = $admin_data[0]["AdminID"];
+    $_SESSION["admin_id"] = $admin_data[0]["admin_id"];
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Admin bejelentkezve"

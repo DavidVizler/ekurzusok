@@ -138,16 +138,13 @@ async function joinCourse(e) {
 
    try {
       let reqData = {
-         manage: 'member',
-         action: 'add',
          code
       };
 
-      let response = await fetch('./php/data_manager.php', {
+      let response = await fetch('./api/member/add', {
          method: 'POST',
          headers: {
-            "Content-Type": 'application/json',
-            "X-Requested-With": "XMLHttpRequest"
+            "Content-Type": 'application/json'
          },
          body: JSON.stringify(reqData)
       });

@@ -38,15 +38,15 @@ function NavBar($rows = null) {
 function PageManager($page, $rows, $data_type, $id = null) {
     switch ($data_type) {
         case "users":
-            $sql_statement = "SELECT COUNT(`FelhasznaloID`) AS count FROM `felhasznalo`";
+            $sql_statement = "SELECT COUNT(user_id) AS count FROM users";
             $row_word = "felhasználó van az adatbázisban";
             break;
         case "courses":
-            $sql_statement = "SELECT COUNT(`KurzusID`) AS count FROM `kurzus`";
+            $sql_statement = "SELECT COUNT(course_id) AS count FROM courses";
             $row_word = "kurzus van az adatbázisban";
             break;
         case "course-info":
-            $sql_statement = "SELECT COUNT(`ID`) AS count FROM `kurzustag` WHERE `KurzusID` = ?";
+            $sql_statement = "SELECT COUNT(membership_id) AS count FROM memberships WHERE course_id = ?";
             $row_word = "tagja van a kurzusnak";
             break;
         default:
@@ -107,7 +107,6 @@ function CoursesTable() {
                 <tr>
                     <th><div>ID</div></th>
                     <th><div>Név</div></th>
-                    <th><div>Leírás</div></th>
                     <th><div>Kód</div></th>
                     <th><div>Archivált</div></th>
                     <th><div>Tulajdonos</div></th>
