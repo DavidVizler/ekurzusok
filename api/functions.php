@@ -121,7 +121,7 @@ function PostDataCheck($to_check, $send_response = true) {
     }
 
     foreach ($to_check as $tc) {
-        if (empty($data[$tc]) && $data[$tc] != 0 && $data[$tc] != false) {
+        if (empty($data[$tc]) && $data[$tc] !== 0 && $data[$tc] !== false) {
             if ($send_response) {
                 SendResponse([
                     "sikeres" => false,

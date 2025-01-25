@@ -1,5 +1,6 @@
 <?php
 
+use Random\Engine\Secure;
 
 function UserCoursesQuery() {
     if (!LoginCheck()) {
@@ -25,6 +26,43 @@ function UserCoursesQuery() {
     }
 
     SendResponse($user_courses);
+}
+
+function CourseDataQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["course_id"])) {
+        return;
+    }
+    
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $course_id = $data["course_id"];
+
+    // Benne van-e a felhasználó a kurzusban
+    $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+    if (!is_array($membership_data)) {
+        SendResponse([
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT c.name, c.description, c.design_id, u.firstname, u.lastname,
+    IF(u.user_id = ?, true, false) AS owned FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    INNER JOIN users u ON m.user_id = u.user_id
+    WHERE c.course_id = ? AND m.role = 3;";
+    $course_data = DataQuery($sql_statement, "ii", [$user_id, $course_id]);
+
+    SendResponse($course_data);
 }
 
 function CourseMembersQuery() {
@@ -62,7 +100,7 @@ function CourseMembersQuery() {
     } else {
         $sql_statement = "SELECT u.lastname, u.firstname 
         FROM users u INNER JOIN memberships m ON u.user_id = m.user_id
-        WHERE m.course_id = ? ORDER BY u.lastname, u.firstnam;";
+        WHERE m.course_id = ? ORDER BY u.lastname, u.firstname;";
     }
 
     // Kurzus tagok lekérdezése
@@ -76,13 +114,59 @@ function CourseMembersQuery() {
     }
 }
 
+function CourseContentQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["course_id"])) {
+        return;
+    }
+    
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $course_id = $data["course_id"];
+
+    // Benne van-e a felhasználó a kurzusban
+    $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+    if (!is_array($membership_data)) {
+        SendResponse([
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT c.content_id, c.title, c.task, c.published, u.firstname, u.lastname FROM content c
+    INNER JOIN users u ON c.user_id = u.user_id WHERE c.course_id = ? AND c.published IS NOT NULL;";
+    $content = DataQuery($sql_statement, "i", [$course_id]);
+
+    if (is_array($content)) {
+        SendResponse($content);
+    } else {
+        SendResponse([
+            "uzenet" => "Nincs tartalom a kurzusban"
+        ]);
+    }
+}
+
 function Manage($action) {
     switch ($action) {
         case "user-courses":
             UserCoursesQuery();
             break;
+        case "course-data":
+            CourseDataQuery();
+            break;
         case "course-members":
             CourseMembersQuery();
+            break;
+        case "course-content":
+            CourseContentQuery();
             break;
         default:
             SendResponse([

@@ -119,14 +119,12 @@ let userslist
 async function getCourseUsers(courseid){
     try {
         let data = {
-            getdata: 'course_members',
             course_id: courseid
         }
         let valasz = await fetch('../api/query/course-members',{
             method : "POST",
             headers: {
-                'Content-Type': 'application/json',
-                //'X-Requested-With': 'XMLHttpRequest'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
