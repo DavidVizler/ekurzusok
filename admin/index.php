@@ -3,6 +3,12 @@
     include "../api/functions.php";
     include "./admin_components.php";
 
+    if (isset($_POST["logout"])) {
+        session_start();
+        session_unset();
+        session_destroy();
+    }
+
     // Végpont
     $url = explode("/", $_SERVER["REQUEST_URI"]);
     $endpoint = explode("?", end($url))[0];
@@ -46,6 +52,13 @@
         } else {
             $rows = 25;
         }
+
+        // Rendezési szempont
+        if (isset($_GET["orderby"])) {
+            $orderby = $_GET["orderby"];
+        } else {
+            $orderby = "default";
+        }
     }
 
     if ($endpoint == "course-info" || $endpoint == "user-info") {
@@ -58,13 +71,13 @@
 
     switch($endpoint) {
         case "users":
-            $onload_js_function = "listUsers({$page}, {$rows})";
+            $onload_js_function = "listUsers({$page}, {$rows}, '{$orderby}')";
             break;
         case "courses":
-            $onload_js_function = "listCourses({$page}, {$rows})";
+            $onload_js_function = "listCourses({$page}, {$rows}, '{$orderby}')";
             break;
         case "course-info":
-            $onload_js_function = "listCourseInfo({$page}, {$rows}, {$id})";
+            $onload_js_function = "listCourseInfo({$page}, {$rows}, {$id}, '{$orderby}')";
             break;
         default:
             $onload_js_function = "";

@@ -19,10 +19,35 @@ function AdminGetUsers() {
     $limit = $data["rows"];
     $offset = $limit*($data["page"]-1);
 
+    if (isset($data["orderby"])) {
+        switch ($data["orderby"]) {
+            case "lastname":
+                $order = "ORDER BY u.lastname, u.firstname, u.user_id";
+                break;
+            case "firstname":
+                $order = "ORDER BY u.firstname, u.lastname, u.user_id";
+                break;
+            case "email":
+                $order = "ORDER BY u.email";
+                break;
+            case "courses":
+                $order = "ORDER BY courses DESC, own_courses DESC, u.lastname, u.firstname, u.user_id";
+                break;
+            case "own_courses":
+                $order = "ORDER BY own_courses DESC, courses DESC, u.lastname, u.firstname, u.user_id";
+                break;
+            default:
+                $order = "ORDER BY u.user_id";
+                break;
+        }
+    } else {
+        $order = "ORDER BY u.user_id";
+    }
+
     $sql_statement = "SELECT u.user_id, u.email, u.firstname, u.lastname, COUNT(m.membership_id) AS courses, 
     COUNT(CASE WHEN m.role = 3 THEN 1 END) AS own_courses
     FROM users u LEFT JOIN memberships m ON u.user_id = m.user_id
-    GROUP BY u.user_id LIMIT ? OFFSET ?;";
+    GROUP BY u.user_id {$order} LIMIT ? OFFSET ?;";
     $users = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
     if (!is_array($users)) {
@@ -88,16 +113,13 @@ function AdminGetCourseInfo() {
     $id = $data["id"];
 
     // Kurzus adatainak lekérdezése
-    $sql_statement = "SELECT * FROM `kurzus` WHERE `KurzusID` = ?";
+    $sql_statement = "SELECT * FROM courses WHERE course_id = ?";
     $course_data = DataQuery($sql_statement, "i", [$id])[0];
 
-    // Tagok adatai: ID, e-mail, vezetéknév, keresztnév, kurzusok
-    $sql_statement = "SELECT `kurzustag`.`ID` AS 'membership_id', `felhasznalo`.`FelhasznaloID` AS 'user_id', `felhasznalo`.`VezetekNev` AS 'firstname', 
-    `felhasznalo`.`KeresztNev` AS 'lastname', `felhasznalo`.`Email` AS 'email', `kurzustag`.`Tanar` AS 'teacher'
-    FROM `felhasznalo`
-    INNER JOIN `kurzustag` ON `felhasznalo`.`FelhasznaloID` = `kurzustag`.`FelhasznaloID`
-    WHERE `kurzustag`.`KurzusID` = ?
-    ORDER BY teacher DESC, user_id ASC
+    // Kurzus adatainak lekérdezése 
+    $sql_statement = "SELECT u.user_id, u.email, u.firstname, u.lastname, m.role, m.membership_id FROM users u
+    INNER JOIN memberships m ON u.user_id = m.user_id
+    WHERE m.course_id = ? ORDER BY m.role DESC, u.lastname, u.firstname
     LIMIT ? OFFSET ?;";
     $course_members = DataQuery($sql_statement, "iii", [$id, $limit, $offset]);
 
