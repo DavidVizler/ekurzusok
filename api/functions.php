@@ -2,6 +2,7 @@
 
 // PHP hibakijelzés konfiguráció
 //error_reporting(0);
+//ini_set('display_errors', '1');
 
 // Adatbázis konfiguráció
 $db_config = [
@@ -93,7 +94,9 @@ function ModifyData($operation, $var_types = null, $parameters = null) {
 // Válasz elküldő
 function SendResponse($response, $status = 200) {
     echo json_encode($response, JSON_UNESCAPED_UNICODE);
-    http_response_code($status);
+    if ($status != 200) {
+        http_response_code($status);
+    }
 }
 
 // HTTP kérés metódus vizsgálata

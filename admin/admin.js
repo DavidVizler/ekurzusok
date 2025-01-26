@@ -49,7 +49,7 @@ async function deleteCourse(id, coursename, userid, lastname, firstname, passwor
     }
 }
 
-async function listUsers(page, rows) {
+async function listUsers(page, rows, orderby) {
     try {
         let request = await fetch("./api/get-users", {
             method: "POST",
@@ -58,7 +58,8 @@ async function listUsers(page, rows) {
             },
             body: JSON.stringify({
                 page,
-                rows
+                rows,
+                orderby
             })
         });
 
@@ -81,7 +82,12 @@ async function listUsers(page, rows) {
                 $("table-content").innerHTML = content;
             } 
 
-            $("rows").value = rows; 
+            $("rows").value = rows;
+            if (orderby == "default") {
+                $("orderby").value = "user_id";
+            } else {
+                $("orderby").value = orderby;
+            }
         } else {
             throw request.status;
         }
@@ -90,7 +96,7 @@ async function listUsers(page, rows) {
     }
 }
 
-async function listCourses(page, rows) {
+async function listCourses(page, rows, orderby) {
     try {
         let request = await fetch("./api/get-courses", {
             method: "POST",
@@ -126,6 +132,11 @@ async function listCourses(page, rows) {
             } 
 
             $("rows").value = rows; 
+            if (orderby == "default") {
+                $("orderby").value = "course_id";
+            } else {
+                $("orderby").value = orderby;
+            }
         } else {
             throw request.status;
         }
@@ -134,7 +145,7 @@ async function listCourses(page, rows) {
     }
 }
 
-async function listCourseInfo(page, rows, id) {
+async function listCourseInfo(page, rows, id, orderby) {
     try {
         let request = await fetch("./api/get-course-info", {
             method: "POST",
@@ -153,31 +164,60 @@ async function listCourseInfo(page, rows, id) {
             if (courseInfo.course_members.length > 0) {
                 let data = courseInfo.course_data;
                 let members = courseInfo.course_members;
-                let content = "";
+                let table_content = "";
+                let info_content = `<div class="info-modal-container">
+                    <div class="info-modal">Kurzus adatai</div>
+                    <div class="info-modal">ID: ${data["course_id"]}</div>
+                    <div class="info-modal">Név: ${data["name"]}</div>
+                    <div class="info-modal">Kód: ${data["code"]}</div>
+                    <div class="info-modal">Design ID: ${data["design_id"]}</div>
+                    <div class="info-modal">Archivált: ${data["archived"] == 1 ? "Igen" : "Nem"}</div>
+                    <div class="info-modal">Leírás: ${data["description"]}</div>
+                </div>`;
+
+                $("info").innerHTML = info_content;
                 
-                for (let i = 0; i < members.length; i++) {
-                    content += `<tr>
-                        <td>${members[i]["user_id"]}</td>
-                        <td>${members[i]["membership_id"]}</td>
-                        <td>${members[i]["lastname"]}</td>
-                        <td>${members[i]["firstname"]}</td>
-                        <td>${members[i]["email"]}</td>
-                        <td>${members[i]["teacher"] == 1 ? "Igen" : "Nem"}</td>
+                members.forEach(member => {     
+                    let role;               
+                    switch (member["role"]) {
+                        case 1:
+                            role = "Tanuló";
+                            break;
+                        case 2:
+                            role = "Tanár";
+                            break;
+                        case 3:
+                            role = "Tulajdonos";
+                            break;
+                    }
+
+                    table_content += `<tr>
+                        <td>${member["user_id"]}</td>
+                        <td class="monospace">${member["membership_id"]}</td>
+                        <td>${member["lastname"]}</td>
+                        <td>${member["firstname"]}</td>
+                        <td>${member["email"]}</td>
+                        <td>${role}</td>
                         <td>
-                            <a href="user-info?id=${members[i]["id"]}">Több infó</a>
+                            <a href="user-info?id=${member["user_id"]}">Több infó</a>
                         </td>
                         <td class='torles'>
-                            <form method='POST' action='javascript:;' onsubmit='deleteMember(${members[i]['membership_id']})'>
+                            <form method='POST' action='javascript:;' onsubmit='deleteMember(${member["membership_id"]})'>
                                 <input type='submit' value='Eltávolítás' name='delete_button'>
                             </form>
                         </td>
                     </tr>`
-                }
+                });
                 
-                $("table-content").innerHTML = content;
+                $("table-content").innerHTML = table_content;
             } 
 
             $("rows").value = rows; 
+            if (orderby == "default") {
+                $("orderby").value = "lastname";
+            } else {
+                $("orderby").value = orderby;
+            }
         } else {
             throw request.status;
         }
@@ -250,7 +290,7 @@ async function loginAdmin() {
                 window.location.href = './';
             }
             else {
-                alert(response.uzenet);
+                alert(result.uzenet);
             }
         } else {
             throw(response.status);
