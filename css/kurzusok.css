@@ -304,7 +304,6 @@ a{
 
 .userIcon{
     height: 50px;
-    color: white;
     width: 50px;
     margin-right: 10px;
     z-index: 10;
@@ -313,4 +312,8 @@ a{
 
 .user:hover{
     cursor: pointer;
+}
+
+.userIcon a{
+    color: white;
 }
