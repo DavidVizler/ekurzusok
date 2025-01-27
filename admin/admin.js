@@ -105,7 +105,8 @@ async function listCourses(page, rows, orderby) {
             },
             body: JSON.stringify({
                 page,
-                rows
+                rows,
+                orderby
             })
         });
 
@@ -155,14 +156,15 @@ async function listCourseInfo(page, rows, id, orderby) {
             body: JSON.stringify({
                 page,
                 rows,
-                id
+                id,
+                orderby
             })
         });
 
         if (request.ok) {
             let courseInfo = await request.json();
+            let data = courseInfo.course_data;
             if (courseInfo.course_members.length > 0) {
-                let data = courseInfo.course_data;
                 let members = courseInfo.course_members;
                 let table_content = "";
                 let info_content = `<div class="info-modal-container">
@@ -215,6 +217,86 @@ async function listCourseInfo(page, rows, id, orderby) {
             $("rows").value = rows; 
             if (orderby == "default") {
                 $("orderby").value = "lastname";
+            } else {
+                $("orderby").value = orderby;
+            }
+        } else {
+            throw request.status;
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+async function listUserInfo(page, rows, id, orderby) {
+    try {
+        let request = await fetch("./api/get-user-info", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                page,
+                rows,
+                id,
+                orderby
+            })
+        });
+
+        if (request.ok) {
+            let userInfo = await request.json();
+            let data = userInfo.user_data;
+            if (userInfo.user_courses.length > 0) {
+                let courses = userInfo.user_courses;
+                let table_content = "";
+                let info_content = `<div class="info-modal-container">
+                    <div class="info-modal">Felhasználó adatai</div>
+                    <div class="info-modal">ID: ${data["user_id"]}</div>
+                    <div class="info-modal">Email: ${data["email"]}</div>
+                    <div class="info-modal">Vezetéknév: ${data["lastname"]}</div>
+                    <div class="info-modal">Keresztnév: ${data["firstname"]}</div>
+                </div>`;
+
+                $("info").innerHTML = info_content;
+                
+                courses.forEach(course => {     
+                    let role;               
+                    switch (course["role"]) {
+                        case 1:
+                            role = "Tanuló";
+                            break;
+                        case 2:
+                            role = "Tanár";
+                            break;
+                        case 3:
+                            role = "Tulajdonos";
+                            break;
+                    }
+
+                    table_content += `<tr>
+                        <td>${course["course_id"]}</td>
+                        <td class="monospace">${course["membership_id"]}</td>
+                        <td>${course["name"]}</td>
+                        <td>${course["code"]}</td>
+                        <td>${course["archived"] ? "Igen" : "Nem"}</td>
+                        <td>${role}</td>
+                        <td>
+                            <a href="user-info?id=${course["course_id"]}">Több infó</a>
+                        </td>
+                        <td class='torles'>
+                            <form method='POST' action='javascript:;' onsubmit='deleteMember(${course["membership_id"]})'>
+                                <input type='submit' value='Eltávolítás' name='delete_button'>
+                            </form>
+                        </td>
+                    </tr>`
+                });
+                
+                $("table-content").innerHTML = table_content;
+            } 
+
+            $("rows").value = rows; 
+            if (orderby == "default") {
+                $("orderby").value = "name";
             } else {
                 $("orderby").value = orderby;
             }

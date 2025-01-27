@@ -70,6 +70,15 @@ function PageManager($page, $rows, $data_type, $id = null) {
                 <option value="email">Email</option>
             HTML;
             break;
+        case "user-info":
+            $sql_statement = "SELECT COUNT(membership_id) AS count FROM memberships WHERE user_id = ?";
+            $row_word = "kurzusnak tagja a felhasználó";
+            $order_by_options = <<<HTML
+                <option value="course_id">Kurzus ID</option>
+                <option value="membership_id">Tagság ID</option>
+                <option value="name">Kurzus név</option>
+            HTML;
+            break;
         default:
             break;
     }
@@ -162,6 +171,29 @@ function CourseInfoTable() {
                     <th><div>Keresztnév</div></th>
                     <th><div>Email</div></th>
                     <th><div>Rang</div></th>
+                    <th><div>Több infó</div></th>
+                    <th><div>Műveletek</div></th>
+                </tr>
+            </thead>
+            <tbody id="table-content">
+            </tbody>
+        </table>
+    </div>
+    HTML;
+}
+
+function UserInfoTable() {
+    echo <<<HTML
+    <div id="content">
+        <table>
+            <thead>
+                <tr>
+                    <th><div>ID</div></th>
+                    <th><div>Tagság ID</div></th>
+                    <th><div>Név</div></th>
+                    <th><div>Kód</div></th>
+                    <th><div>Archivált</div></th>              
+                    <th><div>Rang</div></th>              
                     <th><div>Több infó</div></th>
                     <th><div>Műveletek</div></th>
                 </tr>

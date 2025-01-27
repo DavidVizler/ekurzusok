@@ -77,10 +77,32 @@ function AdminGetCourses() {
     $limit = $data["rows"];
     $offset = $limit*($data["page"]-1);
 
+    if (isset($data["orderby"])) {
+        switch ($data["orderby"]) {
+            case "course_id":
+                $order = "ORDER BY c.course_id";
+                break;
+            case "name":
+                $order = "ORDER BY c.name, c.course_id";
+                break;
+            case "members":
+                $order = "ORDER BY members DESC, teachers DESC, c.course_id";
+                break;
+            case "owner":
+                $order = "ORDER BY u.lastname, u.firstname, u.user_id";
+                break;
+            default:
+                $order = "ORDER BY u.user_id";
+                break;
+        }
+    } else {
+        $order = "ORDER BY u.user_id";
+    }
+
     $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
     COUNT(m.membership_id) AS members, COUNT(CASE WHEN m.role = 2 OR m.role = 3 THEN 1 END) AS teachers
     FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id LEFT JOIN users u ON m.user_id = u.user_id
-    GROUP BY c.course_id LIMIT ? OFFSET ?;";
+    GROUP BY c.course_id {$order} LIMIT ? OFFSET ?;";
     $courses = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
     if (!is_array($courses)) {
@@ -112,15 +134,39 @@ function AdminGetCourseInfo() {
     $offset = $limit*($data["page"]-1);
     $id = $data["id"];
 
+    if (isset($data["orderby"])) {
+        switch ($data["orderby"]) {
+            case "lastname":
+                $order = "ORDER BY m.role DESC, u.lastname, u.firstname, u.user_id";
+                break;
+            case "firstname":
+                $order = "ORDER BY m.role DESC, u.firstname, u.lastname, u.user_id";
+                break;
+            case "membership_id":
+                $order = "ORDER BY m.role DESC, m.membership_id";
+                break;
+            case "email":
+                $order = "ORDER BY m.role DESC, u.email";
+                break;
+            case "user_id":
+                $order = "ORDER BY m.role DESC, u.user_id";
+                break;
+            default:
+                $order = "ORDER BY m.role DESC, u.lastname, u.firstname, u.user_id";
+                break;
+        }
+    } else {
+        $order = "ORDER BY m.role DESC, u.lastname, u.firstname, u.user_id";
+    }
+
     // Kurzus adatainak lekérdezése
     $sql_statement = "SELECT * FROM courses WHERE course_id = ?";
     $course_data = DataQuery($sql_statement, "i", [$id])[0];
 
-    // Kurzus adatainak lekérdezése 
+    // Kurzus tagjainak lekérdezése 
     $sql_statement = "SELECT u.user_id, u.email, u.firstname, u.lastname, m.role, m.membership_id FROM users u
     INNER JOIN memberships m ON u.user_id = m.user_id
-    WHERE m.course_id = ? ORDER BY m.role DESC, u.lastname, u.firstname
-    LIMIT ? OFFSET ?;";
+    WHERE m.course_id = ? {$order} LIMIT ? OFFSET ?;";
     $course_members = DataQuery($sql_statement, "iii", [$id, $limit, $offset]);
 
     if (!is_array($course_members)) {
@@ -133,6 +179,59 @@ function AdminGetCourseInfo() {
     SendResponse([
         "course_data" => $course_data,
         "course_members" => $course_members
+    ]);
+}
+
+function AdminGetUserInfo() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["rows", "page", "id"])) {
+        return;
+    }
+
+    global $data;
+    $limit = $data["rows"];
+    $offset = $limit*($data["page"]-1);
+    $id = $data["id"];
+
+    if (isset($data["orderby"])) {
+        switch ($data["orderby"]) {
+            case "course_id":
+                $order = "ORDER BY m.role DESC, c.course_id";
+                break;
+            case "name":
+                $order = "ORDER BY m.role DESC, c.name, c.course_id";
+                break;
+            case "membership_id":
+                $order = "ORDER BY m.role DESC, m.membership_id";
+                break;
+            default:
+                $order = "ORDER BY m.role DESC, c.name, c.course_id";
+                break;
+        }
+    } else {
+        $order = "ORDER BY m.role DESC, c.name, c.course_id";
+    }
+
+    // Felhasználó adatainak lekérdezése
+    $sql_statement = "SELECT * FROM users WHERE user_id = ?";
+    $user_data = DataQuery($sql_statement, "i", [$id])[0];
+
+    // Felhasználó kurzusainak lekérdezése
+    $sql_statement = "SELECT c.course_id, m.membership_id, c.name, c.code, c.archived, m.role FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE m.user_id = ? {$order} LIMIT ? OFFSET ?;";
+    $user_courses = DataQuery($sql_statement, "iii", [$id, $limit, $offset]);
+
+    SendResponse([
+        "user_data" => $user_data,
+        "user_courses" => $user_courses
     ]);
 }
 
@@ -216,6 +315,9 @@ switch($action) {
         break;
     case "get-course-info":
         AdminGetCourseInfo();
+        break;
+    case "get-user-info":
+        AdminGetUserInfo();
         break;
     case "remove-member":
         AdminRemoveMember();

@@ -79,6 +79,9 @@
         case "course-info":
             $onload_js_function = "listCourseInfo({$page}, {$rows}, {$id}, '{$orderby}')";
             break;
+        case "user-info":
+            $onload_js_function = "listUserInfo({$page}, {$rows}, {$id}, '{$orderby}')";
+            break;
         default:
             $onload_js_function = "";
             break;
@@ -116,6 +119,8 @@
                     break;
                 case "user-info":
                     NavBar($rows);
+                    PageManager($page, $rows, $endpoint, $id);
+                    UserInfoTable();
                     break;
                 case "course-info":
                     NavBar($rows);
