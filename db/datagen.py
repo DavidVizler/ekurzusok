@@ -145,7 +145,7 @@ for user_id in range(1, users+1):
                 user_courses.append([user_id, course])
                 new_members += f"({user_id}, {course}, {teacher})"
 
-db_reset = "DELETE FROM users WHERE 1; DELETE FROM courses WHERE 1; ALTER TABLE users AUTO_INCREMENT = 1; ALTER TABLE courses AUTO_INCREMENT = 1;\n"
+db_reset = "DELETE FROM users WHERE 1; DELETE FROM courses WHERE 1; ALTER TABLE users AUTO_INCREMENT = 1; ALTER TABLE courses AUTO_INCREMENT = 1; ALTER TABLE memberships AUTO_INCREMENT = 1;\n"
 
 f = open("./sql_command.txt", "w", encoding="utf-8")
 f.write(db_reset + new_users + ";\n" + new_courses + ";\n" + new_owners + ";\n" + new_members + ";")

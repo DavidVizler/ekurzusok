@@ -88,7 +88,7 @@ function ModifyData($operation, $var_types = null, $parameters = null) {
         exit;
     }
 
-    return $db -> affected_rows > 0 ? true : false;
+    return $db -> affected_rows;
 }
 
 // Válasz elküldő

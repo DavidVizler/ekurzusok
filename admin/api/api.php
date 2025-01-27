@@ -92,11 +92,11 @@ function AdminGetCourses() {
                 $order = "ORDER BY u.lastname, u.firstname, u.user_id";
                 break;
             default:
-                $order = "ORDER BY u.user_id";
+                $order = "ORDER BY c.course_id";
                 break;
         }
     } else {
-        $order = "ORDER BY u.user_id";
+        $order = "ORDER BY c.course_id";
     }
 
     $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
@@ -268,6 +268,78 @@ function AdminLogin() {
     ]);
 }
 
+function AdminDeleteUser() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["user_id"])) {
+        return;
+    }
+
+    global $data;
+    $user_id = $data["user_id"];
+
+    // Saját kurzusok törlése
+    $sql_statement = "DELETE courses, memberships FROM courses
+    INNER JOIN memberships ON courses.course_id = memberships.course_id
+    WHERE memberships.user_id = ? AND memberships.role = 3;";
+    $deleted_courses = ModifyData($sql_statement, "i", [$user_id])/2;
+
+    // Felhasználó törlése
+    $sql_statement = "DELETE FROM users WHERE user_id = ?";
+    $result = ModifyData($sql_statement, "i", [$user_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Felhasználó és {$deleted_courses} kurzusa törölve"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem sikerült törölni a felhasználót, {$deleted_courses} kurzusa lett törölve"
+        ]);
+    }
+}
+
+function AdminDeleteCourse() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["course_id"])) {
+        return;
+    }
+
+    global $data;
+    $course_id = $data["course_id"];
+
+    // Kurzus törlése
+    $sql_statement = "DELETE FROM courses WHERE course_id = ?;";
+    $result = ModifyData($sql_statement, "i", [$course_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Kurzus törölve"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem sikerült törölni a kurzust"
+        ]);
+    }
+}
+
 function AdminRemoveMember() {
     if (!AdminLoginCheck()) {
         return;
@@ -284,15 +356,34 @@ function AdminRemoveMember() {
     global $data;
     $membership_id = $data["membership_id"];
 
-    $sql_statement = "DELETE FROM `kurzustag` WHERE `ID` = ?";
+    // Nem-e tulajdonos
+    $sql_statement = "SELECT role FROM memberships WHERE membership_id = ?";
+    $role = DataQuery($sql_statement, "i", [$membership_id]);
+    if (!is_array($membership_id)) {
+        if ($role[0]["role"] == 3) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "A tulajdonos nem távolítható el a kurzusból"
+            ]);
+            return;
+        }
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs tagság ilyen ID-val"
+        ]);
+        return;
+    }
+
+    $sql_statement = "DELETE FROM memberships WHERE membership_id = ?";
     $result = ModifyData($sql_statement, "i", [$membership_id]);
 
-    if ($result == "Sikeres művelet!") {
+    if ($result) {
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Felhasználó eltávolítva a kurzusból"
         ]);
-    } else if ($result == "Sikertelen művelet!") {
+    } else {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült eltávolítani a felhasználót a kurzusból"
@@ -318,6 +409,12 @@ switch($action) {
         break;
     case "get-user-info":
         AdminGetUserInfo();
+        break;
+    case "delete-user":
+        AdminDeleteUser();
+        break;
+    case "delete-course":
+        AdminDeleteCourse();
         break;
     case "remove-member":
         AdminRemoveMember();

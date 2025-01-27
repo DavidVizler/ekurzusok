@@ -2,53 +2,6 @@ function $(id) {
     return document.getElementById(id);
 }
 
-// Felhasználó törlése
-async function deleteUser(id, lastname, firstname, email, password) {
-    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} nevű, ${email} e-mail című felhasználót?`)) {
-        let deleteData = {
-            "manage" : "user",
-            "action" : "delete-as-admin",
-            "id" : id,
-            "password" : password
-        };
-        let deleteRequest = await fetch("../php/data_manager.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: JSON.stringify(deleteData)
-        });
-        let result = await deleteRequest.json();
-        console.log(result);
-        location.reload();
-    }
-}
-
-// Kurzus törlése
-async function deleteCourse(id, coursename, userid, lastname, firstname, password) {
-    if(confirm(`Biztos benne, hogy ki szeretné törölni ${lastname} ${firstname} felhasználó "${coursename}" nevű kurzusát?`)) {
-        let deleteData = {
-            "manage" : "course",
-            "action" : "delete-as-admin",
-            "id" : id,
-            "user_id" : userid,
-            "password" : password
-        };
-        let deleteRequest = await fetch("../php/data_manager.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: JSON.stringify(deleteData)
-        });
-        let result = await deleteRequest.json();
-        console.log(result);
-        location.reload();
-    }
-}
-
 async function listUsers(page, rows, orderby) {
     try {
         let request = await fetch("./api/get-users", {
@@ -67,17 +20,22 @@ async function listUsers(page, rows, orderby) {
             let users = await request.json();
             if (users.length > 0) {
                 let content = "";        
-                for (let i = 0; i < users.length; i++) {
+                users.forEach(user => {
                     content += `<tr>
-                        <td>${users[i]["user_id"]}</td>
-                        <td>${users[i]["email"]}</td>
-                        <td>${users[i]["lastname"]}</td>
-                        <td>${users[i]["firstname"]}</td>
+                        <td>${user["user_id"]}</td>
+                        <td>${user["email"]}</td>
+                        <td>${user["lastname"]}</td>
+                        <td>${user["firstname"]}</td>
                         <td>
-                            ${users[i]["courses"]} (${users[i]["own_courses"]} saját) <a href="user-info?id=${users[i]["user_id"]}">Több infó</a>
+                            ${user["courses"]} (${user["own_courses"]} saját) <a href="user-info?id=${user["user_id"]}&rows=${rows}">Több infó</a>
+                        </td>
+                        <td class='torles'>
+                            <form method='POST' action='javascript:;' onsubmit='deleteUser(${user["user_id"]})'>
+                                <input type='submit' value='Eltávolítás' name='delete_button'>
+                            </form>
                         </td>
                     </tr>`
-                }
+                });
                 
                 $("table-content").innerHTML = content;
             } 
@@ -114,20 +72,25 @@ async function listCourses(page, rows, orderby) {
             let courses = await request.json();
             if (courses.length > 0) {             
                 let content = "";
-                for (let i = 0; i < courses.length; i++) {
+                courses.forEach(course => {
                     content += `<tr>
-                        <td>${courses[i]["course_id"]}</td>
-                        <td>${courses[i]["name"]}</td>
-                        <td>${courses[i]["code"]}</td>
-                        <td>${courses[i]["archived"] == 1 ? "Igen" : "Nem"}</td>
+                        <td>${course["course_id"]}</td>
+                        <td>${course["name"]}</td>
+                        <td>${course["code"]}</td>
+                        <td>${course["archived"] == 1 ? "Igen" : "Nem"}</td>
                         <td>
-                            <a href="user-info?id=${courses[i]["user_id"]}">${courses[i]["lastname"]} ${courses[i]["firstname"]} (#${courses[i]["user_id"]})</a>
+                            <a href="user-info?id=${course["user_id"]}&rows=${rows}">${course["lastname"]} ${course["firstname"]} (#${course["user_id"]})</a>
                         </td>
                         <td>
-                            ${courses[i]["members"]} (${courses[i]["teachers"]} tanár) <a href="course-info?id=${courses[i]["course_id"]}">Több infó</a>
+                            ${course["members"]} (${course["teachers"]} tanár) <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
+                        </td>
+                        <td class='torles'>
+                            <form method='POST' action='javascript:;' onsubmit='deleteCourse(${course["course_id"]})'>
+                                <input type='submit' value='Eltávolítás' name='delete_button'>
+                            </form>
                         </td>
                     </tr>`
-                }
+                });
                 
                 $("table-content").innerHTML = content;
             } 
@@ -201,11 +164,11 @@ async function listCourseInfo(page, rows, id, orderby) {
                         <td>${member["email"]}</td>
                         <td>${role}</td>
                         <td>
-                            <a href="user-info?id=${member["user_id"]}">Több infó</a>
+                            <a href="user-info?id=${member["user_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='torles'>
                             <form method='POST' action='javascript:;' onsubmit='deleteMember(${member["membership_id"]})'>
-                                <input type='submit' value='Eltávolítás' name='delete_button'>
+                                <input type='submit' value='Eltávolítás' name='delete_button' ${role == "Tulajdonos" ? "hidden" : ""}>
                             </form>
                         </td>
                     </tr>`
@@ -281,11 +244,11 @@ async function listUserInfo(page, rows, id, orderby) {
                         <td>${course["archived"] ? "Igen" : "Nem"}</td>
                         <td>${role}</td>
                         <td>
-                            <a href="user-info?id=${course["course_id"]}">Több infó</a>
+                            <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='torles'>
                             <form method='POST' action='javascript:;' onsubmit='deleteMember(${course["membership_id"]})'>
-                                <input type='submit' value='Eltávolítás' name='delete_button'>
+                                <input type='submit' value='Eltávolítás' name='delete_button' ${role == "Tulajdonos" ? "hidden" : ""}>
                             </form>
                         </td>
                     </tr>`
@@ -308,29 +271,87 @@ async function listUserInfo(page, rows, id, orderby) {
     }
 }
 
-async function deleteMember(id) {
-    try {
-        let request = await fetch("./api/remove-member", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "membership_id": id
-            })
-        });
-
-        if (request.ok) {
-            let result = await request.json();
-            alert(result.uzenet);
-            if (result.sikeres) {
-                location.reload();
+async function deleteUser(id) {
+    if (confirm("Biztosan evltávolítja a felhasználót és az összes általa létrehozott kurzust, tartalmat és leadott feladatot?")) {
+        try {
+            let request = await fetch("./api/delete-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user_id": id
+                })
+            });
+            
+            if (request.ok) {
+                let result = await request.json();
+                alert(result.uzenet);
+                if (result.sikeres) {
+                    location.reload();
+                }
+            } else {
+                throw(request.status);
             }
-        } else {
-            throw(request.status);
+        } catch (error) {
+            console.log(error);
         }
-    } catch (error) {
-        console.log(error);
+    }
+}
+
+async function deleteCourse(id) {
+    if (confirm("Biztosan evltávolítja a kurzust és az összes ide feltöltött tartalmat és leadott feladatot?")) {
+        try {
+            let request = await fetch("./api/delete-course", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "course_id": id
+                })
+            });
+            
+            if (request.ok) {
+                let result = await request.json();
+                alert(result.uzenet);
+                if (result.sikeres) {
+                    location.reload();
+                }
+            } else {
+                throw(request.status);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+async function deleteMember(id) {
+    if (confirm("Biztosan evltávolítja a felhasználót a kurzusból?")) {
+        try {
+            let request = await fetch("./api/remove-member", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "membership_id": id
+                })
+            });
+    
+            if (request.ok) {
+                let result = await request.json();
+                alert(result.uzenet);
+                if (result.sikeres) {
+                    location.reload();
+                }
+            } else {
+                throw(request.status);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 

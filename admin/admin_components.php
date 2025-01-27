@@ -132,6 +132,7 @@ function UsersTable() {
                     <th><div>Vezetéknév</div></th>
                     <th><div>Keresztnév</div></th>
                     <th><div>Kurzusok</div></th>
+                    <th><div>Műveletek</div></th>
                 </tr>
             </thead>
             <tbody id='table-content'>
@@ -151,6 +152,7 @@ function CoursesTable() {
                     <th><div>Archivált</div></th>
                     <th><div>Tulajdonos</div></th>
                     <th><div>Tagok</div></th>
+                    <th><div>Műveletek</div></th>
                 </tr>
             </thead>
             <tbody id='table-content'>
