@@ -79,7 +79,7 @@ function AdminGetCourses() {
 
     $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
     COUNT(m.membership_id) AS members, COUNT(CASE WHEN m.role = 2 OR m.role = 3 THEN 1 END) AS teachers
-    FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id INNER JOIN users u ON m.user_id = u.user_id
+    FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id LEFT JOIN users u ON m.user_id = u.user_id
     GROUP BY c.course_id LIMIT ? OFFSET ?;";
     $courses = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
