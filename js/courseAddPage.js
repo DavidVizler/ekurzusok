@@ -63,25 +63,23 @@ async function sendNewCourseData() {
     let courseDesgin = document.getElementById("DesignSelect").value
 
     let newCourseData = {
-        "manage" : "course",
-        "action" : "create",
         "name" : name,
         "desc" : desc,
         "design" : courseDesgin
     }
 
-    let request = fetch("./php/data_manager.php", {
+    let request = fetch("./api/course/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest"
 
         },
         body: JSON.stringify(newCourseData)
     })
 
-    window.open("./kurzusok.html","_self")
-
+    if(request.ok){
+        window.open("./kurzusok.html","_self")
+    }
 }
 
 window.addEventListener('load', getDesignJson)

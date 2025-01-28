@@ -46,10 +46,11 @@ let url = window.location.pathname.split("/").pop()
 let cardData;
 async function getCardsData() {
     try {
-        let eredmeny = await fetch("../php/courseCard_manager.php", {
+        let eredmeny = await fetch("../api/query/course-data",{
+            method : 'POST',
             headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            }
+                'Content-Type': 'application/json',
+            },body:JSON.stringify({course_id:url})
         });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
@@ -66,24 +67,21 @@ async function getCardsData() {
     }
 }
 
+
 function ModifyActualData(){
     let kurzusNev = document.getElementById("kurzusNev")
     let oktatok = document.getElementById("oktatok")
     let title = document.querySelector("title")
     let header = document.getElementById("header")
     let kurzusLeiras = document.getElementById('kurzusLeiras');
-    for (const data of cardData) {
-        if(data.KurzusID == url){
-            kurzusNev.innerHTML = data.KurzusNev
-            oktatok.innerHTML = data.Oktatok
-            title.innerHTML = data.KurzusNev
-            kurzusLeiras.innerHTML = data.Leiras;
-            for (const design of designData) {
-                if(design.designId == data.Design){
-                    header.style.backgroundImage = `url('${design.courseImage}')`
-                    header.style.filter = "brightness(50%);"
-                }
-            }
+    kurzusNev.innerHTML = cardData[0].name
+    oktatok.innerHTML = cardData[0].lastname +" " +  cardData[0].firstname
+    title.innerHTML = cardData[0].name
+    kurzusLeiras.innerHTML = cardData[0].description;
+    for (const design of designData) {
+        if(design.designId == cardData[0].design_id){
+            header.style.backgroundImage = `url('${design.courseImage}')`
+            header.style.filter = "brightness(50%);"
         }
     }
 }
@@ -91,14 +89,12 @@ function ModifyActualData(){
 async function getCourseContent(courseId) {
     try {
         let reqData = {
-            getdata: 'course_content',
             course_id: courseId
         }
-        let response = await fetch('../php/data_query.php', {
+        let response = await fetch('../api/query/course-content', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(reqData)
         });
@@ -205,7 +201,7 @@ async function deleteUserFromCourse(){
 
 function showCourseContent(content) {
     let contentList = document.getElementById('contentList');
-    contentList.innerHTML = '';
+    // contentList.innerHTML = '';
 
     content.forEach(c => {
         
