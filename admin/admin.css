@@ -89,6 +89,7 @@ html, body {
     background-color: transparent;
     font-size: 18px;
     padding: 0px;
+    cursor: pointer;
 }
 
 /* Oldal kezelő */
@@ -144,6 +145,14 @@ input[type=number] {
     overflow: scroll;
     margin-left: 10px;
     padding: 0;
+}
+
+#content a {
+    color: blue;
+}
+
+#content a:visited {
+    color: blue;
 }
 
 table {
