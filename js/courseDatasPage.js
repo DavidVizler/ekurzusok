@@ -145,6 +145,8 @@ async function showCourseUsers() {
     tags.textContent = "Tagok:"
     usersDiv.appendChild(ownerp)
     usersDiv.appendChild(tags)
+    let scrollDiv = document.createElement("div");
+    scrollDiv.id = "scrollDiv";
     let ul = document.createElement("ul")
     for(let i = 1; i < userslist.length; i++){
         if(userslist[i].user_id != null){
@@ -156,18 +158,19 @@ async function showCourseUsers() {
             let name = document.createElement("label")
             name.textContent = userslist[i].lastname + " " + userslist[i].firstname
             let br = document.createElement('br')
-            usersDiv.appendChild(userRadio)
-            usersDiv.appendChild(name)
-            usersDiv.appendChild(br)
+            scrollDiv.appendChild(userRadio)
+            scrollDiv.appendChild(name)
+            scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
         }else{
             let li = document.createElement('li')
             li.value = userslist[i].felhasznaloId
             li.textContent = userslist[i].lastname + " " + userslist[i].firstname
             ul.appendChild(li)
-            usersDiv.appendChild(ul)
+            scrollDiv.appendChild(ul)
         }
     }
+    usersDiv.appendChild(scrollDiv)
 }
 
 async function deleteUserFromCourse(){

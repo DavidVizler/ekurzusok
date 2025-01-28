@@ -239,6 +239,7 @@ body.modal-open {
     border-radius: 8px;
     width: 300px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 90%;
 }
   
 .close-button svg, .close-buttonUsers svg{
@@ -289,4 +290,8 @@ a#openModal:hover, a#openModalUsers:hover {
 #deleteButton:hover{
     cursor: pointer;
     box-shadow: 0px 4px 4px rgba(215, 154, 154, 0.5);
+}
+
+#scrollDiv{
+    overflow-y: scroll;
 }
