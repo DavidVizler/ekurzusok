@@ -16,7 +16,7 @@ function Login() {
     // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
     $sql_statement = "SELECT user_id, password FROM users WHERE email = ?;";
     $user_data = DataQuery($sql_statement, "s", [$email]);
-    if (!is_array($user_data)) {
+    if (count($user_data) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail vagy jelszó nem megfelelő"
@@ -47,11 +47,12 @@ function Signup() {
         return;
     }
 
-    global $data;
     if (!PostDataCheck(["email", "lastname", "firstname", "password"])) {
         return;
     }
 
+    global $data;
+    
     $email = $data["email"];
     $lastname = $data["lastname"];
     $firstname = $data["firstname"];
@@ -60,7 +61,7 @@ function Signup() {
     // Ellenőrzés, hogy nincs-e már felhasználó regisztrálva azonos e-mail címmel
     $sql_statement = "SELECT email FROM users WHERE email = ?";
     $email_check = DataQuery($sql_statement, "s", [$email]);
-    if (is_array($email_check)) {
+    if (count($email_check) > 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail cím már regisztrálva van"
@@ -111,6 +112,111 @@ function Logout() {
     ]);
 }
 
+function ModifyUserData() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["password"])) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $password = $data["password"];
+
+    // Jelszó ellenőrzése
+    $sql_statement = "SELECT password FROM users WHERE user_id = ?";
+    $password_check = DataQuery($sql_statement, "i", [$user_id]);
+
+    if (count($password_check) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A bejelentkezett felhasználói fiók már nem létezik"
+        ], 410);
+        return;
+    }
+
+    if (!password_verify($password, $password_check[0]["password"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Helytelen jelszó"
+        ]);
+        return;
+    }
+
+    // Érkezett adatok ellenőrzése
+    $email = $data["email"] ?? NULL;
+    $lastname = $data["lastname"] ?? NULL;
+    $firstname = $data["firstname"] ?? NULL;
+    $new_password = $data["new_password"] ?? NULL;
+
+    // Lekérdezés összerakása
+    $sql_statement = "UPDATE users SET ";
+    $new_data = [];
+
+    if (isset($email)) {
+        $sql_statement .= "email = ?";
+        array_push($new_data, $email);
+    }
+
+    if (isset($firstname)) {
+        if (count($new_data) > 0) {
+            $sql_statement .= ", ";
+        }
+        $sql_statement .= "firstname = ?";
+        array_push($new_data, $firstname);
+    }
+
+    if (isset($lastname)) {
+        if (count($new_data) > 0) {
+            $sql_statement .= ", ";
+        }
+        $sql_statement .= "lastname = ?";
+        array_push($new_data, $lastname);
+    }
+
+    if (isset($new_password)) {
+        if (count($new_data) > 0) {
+            $sql_statement .= ", ";
+        }
+        $sql_statement .= "password = ?";
+        array_push($new_data, password_hash($new_password, PASSWORD_DEFAULT));
+    }
+
+    // Ha semmi sem változik, akkor nincs adatbázis művelet
+    if (count($new_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem érkezett változtatandó adat"
+        ]);
+        return;
+    }
+
+    // Where záradék hozzáadása
+    $sql_statement .= " WHERE user_id = ?;";
+    $new_data_types = str_repeat("s", count($new_data)) . "i";
+    array_push($new_data, $user_id);
+
+    $result = ModifyData($sql_statement, $new_data_types, $new_data);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres adatmódosítás"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen adatmódosítás"
+        ]);
+    }
+}
+
 function DeleteUser() {
     session_start();
     if (!LoginCheck()) {
@@ -132,7 +238,7 @@ function DeleteUser() {
     // Van-e ilyen felhasználó
     $sql_statement = "SELECT password FROM users WHERE user_id = ?;";
     $hashed_password = DataQuery($sql_statement, "i", [$id]);
-    if (!is_array($hashed_password)) {
+    if (count($hashed_password) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó már törölve van"
@@ -180,8 +286,8 @@ function Manage($action) {
         case "logout":
             Logout();
             break;
-        case "modify":
-            //ModifyUserData();
+        case "modify-data":
+            ModifyUserData();
             break;
         case "delete":
             DeleteUser();

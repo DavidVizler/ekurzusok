@@ -116,17 +116,7 @@ function GenerateCards(){
 }
 
 async function logout() {
-   let request = await fetch("./php/data_manager.php", {
-      method: "POST",
-      headers : {
-         "Content-type" : "application/json",
-         "X-Requested-With": "XMLHttpRequest"
-      },
-      body: JSON.stringify({
-         "manage" : "user",
-         "action" : "logout"
-      })
-   })
+   let request = await fetch("./api/user/logout")
    if (request.ok) {
       window.location.replace("login.html");
    }

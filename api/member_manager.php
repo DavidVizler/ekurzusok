@@ -35,7 +35,7 @@ function AddCourseMember() {
     $sql_statement = "SELECT membership_id FROM memberships WHERE course_id = ? AND user_id = ?;";
     $joined_check = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
 
-    if (is_array($joined_check)) {
+    if (count($joined_check) > 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó már tagja a kurzusnak"
@@ -81,7 +81,7 @@ function RemoveCourseMember() {
     // Tulajdonosa-e a felhasználó a kurzusnak
     $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
     $course_owner_check = DataQuery($sql_statement, "ii", [$course_id, $owner_user_id]);
-    if (!is_array($course_owner_check)) {
+    if (count($course_owner_check) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
@@ -123,8 +123,6 @@ function RemoveCourseMember() {
         ]);
     }
 }
-
-
 
 function Manage($action) {
     switch ($action) {

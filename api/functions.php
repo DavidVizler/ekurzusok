@@ -48,10 +48,6 @@ function DataQuery($operation, $var_types = null, $parameters = null) {
         exit;
     }
 
-    if ($results -> num_rows == 0) {
-        return "Nincs találat!";
-    }
-
     return $results -> fetch_all(MYSQLI_ASSOC);
 }
 

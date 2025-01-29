@@ -235,6 +235,14 @@ function AdminGetUserInfo() {
     ]);
 }
 
+function AdminGetStatistics() {
+    // Átlag kurzus/felhasználó
+    // SELECT AVG(user_memberships.course_count) AS average_courses FROM (SELECT COUNT(membership_id) AS course_count FROM memberships GROUP BY user_id) AS user_memberships;
+    
+    // Átlag felhasználó/kurzus
+    // SELECT AVG(user_memberships.member_count) AS average_members FROM (SELECT COUNT(membership_id) AS member_count FROM memberships GROUP BY course_id) AS user_memberships;
+}
+
 function AdminLogin() {
     if (!PostDataCheck(["username", "password"])) {
         return;

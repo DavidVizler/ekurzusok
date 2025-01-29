@@ -27,7 +27,7 @@ function CreateCourseContent() {
     $sql_statement = "SELECT role FROM memberships WHERE user_id = ? AND course_id = ?";
     $teacher_check = DataQuery($sql_statement, "ii", [$user_id, $course_id]);
     
-    if (!is_array($teacher_check)) {
+    if (count($teacher_check) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tagja a kurzusnak"
@@ -82,11 +82,11 @@ function PublishCourseContent() {
     $sql_statement = "SELECT user_id FROM content WHERE content_id = ?";
     $content_owner_check = DataQuery($sql_statement, "i", [$content_id]);
 
-    if (!is_array($content_owner_check)) {
+    if (count($content_owner_check) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nincs tartalom ilyen ID-val"
-        ]);
+        ], 404);
         return;
     }
 
