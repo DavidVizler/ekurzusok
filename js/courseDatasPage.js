@@ -54,7 +54,7 @@ async function getCardsData() {
         });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
-            ModifyActualData()
+            ModifyActualData(cardData)
         }
         else if (eredmeny.status == 403) {
             location.href = '../login.html';
@@ -67,19 +67,18 @@ async function getCardsData() {
     }
 }
 
-
-function ModifyActualData(){
+function ModifyActualData(cardData){
     let kurzusNev = document.getElementById("kurzusNev")
     let oktatok = document.getElementById("oktatok")
     let title = document.querySelector("title")
     let header = document.getElementById("header")
     let kurzusLeiras = document.getElementById('kurzusLeiras');
-    kurzusNev.innerHTML = cardData[0].name
-    oktatok.innerHTML = cardData[0].lastname +" " +  cardData[0].firstname
-    title.innerHTML = cardData[0].name
-    kurzusLeiras.innerHTML = cardData[0].description;
+    kurzusNev.innerHTML = cardData.name
+    oktatok.innerHTML = cardData.lastname +" " +  cardData.firstname
+    title.innerHTML = cardData.name
+    kurzusLeiras.innerHTML = cardData.description;
     for (const design of designData) {
-        if(design.designId == cardData[0].design_id){
+        if(design.designId == cardData.design_id){
             header.style.backgroundImage = `url('${design.courseImage}')`
             header.style.filter = "brightness(50%);"
         }
