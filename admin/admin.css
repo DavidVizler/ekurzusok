@@ -12,6 +12,20 @@ html, body {
     flex-direction: column;
 }
 
+#admin-stats {
+    margin-left: 15px;
+    line-height: 150%;
+}
+
+#admin-stats h1 {
+    font-size: 32px;
+    margin-block: 10px;
+    color: #00008b;
+    font-weight: 200;
+}
+
+/* Navbar */
+
 #navbar-container {
     max-width: 100%;
     width: 100%;
