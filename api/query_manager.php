@@ -12,7 +12,7 @@ function UserDataQuery() {
     $user_id = $_SESSION["user_id"];
 
     $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
-    $user_data = DataQuery($sql_statement, "i", $user_id);
+    $user_data = DataQuery($sql_statement, "i", [$user_id]);
 
     if (count($user_data) > 0) {
         SendResponse($user_data[0]);
