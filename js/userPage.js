@@ -47,9 +47,17 @@ async function modifyUserData(){
                 'Content-Type' : 'application/json'
             }, body : JSON.stringify(reqData)
         })
-        if(response.status == 400 ){
+        let valasz = await response.json()
+        if(valasz.sikeres == false){
             alertDiv.style.display = "flex"
-            alertDiv.textContent = "Sikertelen módosítás!"
+            alertDiv.textContent = valasz.uzenet
+        }
+        else{
+            alertDiv.style.display = "flex"
+            alertDiv.style.border = "2px solid green"
+            alertDiv.style.color = "green"
+            alertDiv.style.backgroundColor = "lightgreen"
+            alertDiv.textContent = valasz.uzenet
         }
     } catch (error) {
         console.log(error)
