@@ -23,38 +23,39 @@ function loadUserDataIn(userData) {
     emailInput.value = userData.email;
     lastnameInput.value = userData.lastname
     firstnameInput.value = userData.firstname
-    baseInputStatus()
 }
 
-function baseInputStatus(){
-    let inputs = document.querySelectorAll('input')
-    for (const input of inputs) {
-        input.disabled = true
+async function modifyUserData(){
+    let email = document.getElementById('emailInput').value
+    let lastname = document.getElementById('lastname').value
+    let firstname = document.getElementById('firstname').value
+    let password = document.getElementById('password').value
+    let newPassword = document.getElementById('new-password').value
+
+    let alertDiv = document.getElementById('alertDiv')
+    let reqData = {
+        "email" : email,
+        "lastname" : lastname,
+        "firstname" : firstname,
+        "password" : password,
+        "new_password" : newPassword
+    }
+    try {
+        let response = await fetch('./api/user/modify-data',{
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            }, body : JSON.stringify(reqData)
+        })
+        if(response.status == 400 ){
+            alertDiv.style.display = "flex"
+            alertDiv.textContent = "Sikertelen módosítás!"
+        }
+    } catch (error) {
+        console.log(error)
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Keresd meg az összes szerkesztési ikont
-    const editIcons = document.querySelectorAll(".edit-icon");
-
-    editIcons.forEach(icon => {
-        icon.addEventListener("click", function () {
-            // Az ikonhoz tartozó input mező keresése
-            let inputField = this.parentElement.querySelector("input");
-
-            if (inputField) {
-                if (inputField.disabled) {
-                    inputField.disabled = false;
-                    inputField.focus();
-                } else {
-                    inputField.disabled = true; // Letiltás
-                }
-            }
-        });
-    });
-});
-
-
+document.getElementById('modifyUserDataButton').addEventListener('click',modifyUserData)
 
 window.addEventListener('load', getUserData)
-// window.addEventListener('load', getIconIds)
