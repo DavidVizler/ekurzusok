@@ -7,10 +7,44 @@ const closeButton = document.querySelector(".close-button");
 const closeButtonUsers = document.querySelector(".close-buttonUsers");
 const usersModal = document.getElementById("usersModal");
 
+let courseId = window.location.pathname.split("/").pop();
+
+async function fillDeadlineList() {
+    try {
+        let response = await fetch("../api/query/course-content", {
+            method : 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ course_id: courseId })
+        });
+
+        let div = document.querySelector('.deadlineExercises');
+        
+        let result = await response.json();
+        if (result.length > 0) {
+            div.innerHTML = '';
+            /// Nincs még határidő tulajdonság a megérkezett adatoknál
+            // result.filter(x => x.deadline != null);
+            // result.sort((a, b) => b.deadline - a.deadline);
+            // result.forEach(feladat => {
+            //     div.innerHTML += `<p>${feladat.deadline} - ${feladat.title}</p>`;
+            // })
+        }
+        else {
+            div.innerHTML += '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
+        }
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
 openModalLink.addEventListener("click", (event) => {
   event.preventDefault();
   deadlineModal.style.display = "flex";
   document.body.classList.add("modal-open");
+  fillDeadlineList();
 });
 
 openModalUsersLink.addEventListener("click", (event) =>{
@@ -42,7 +76,6 @@ function clickHandler(){
 }
 menu.addEventListener("click", clickHandler)
 
-let url = window.location.pathname.split("/").pop()
 let cardData;
 async function getCardsData() {
     try {
@@ -50,7 +83,7 @@ async function getCardsData() {
             method : 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            },body:JSON.stringify({course_id:url})
+            },body:JSON.stringify({course_id:courseId})
         });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
