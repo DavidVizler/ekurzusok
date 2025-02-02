@@ -181,7 +181,7 @@ function ModifyUserData() {
     }
 
     if (isset($new_password)) {
-        if ($password == $new_password) {
+        if ($password == $new_password && count($new_data) == 0) {
             SendResponse([
                 "sikeres" => false,
                 "uzenet" => "Az új jelszó megegyezik a régi jelszóval"
