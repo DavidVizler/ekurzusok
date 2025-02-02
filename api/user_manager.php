@@ -121,19 +121,23 @@ function ModifyUserData() {
         return;
     }
 
-    if (!PostDataCheck(["password"])) {
+    if (!PostDataCheck(["email", "firstname", "lastname", "password"])) {
         return;
     }
 
     global $data;
     $user_id = $_SESSION["user_id"];
+    $email = $data["email"];
+    $lastname = $data["lastname"];
+    $firstname = $data["firstname"] ;
     $password = $data["password"];
+    if (!empty($data["new_password"])) $new_password = $data["new_password"];
 
     // Jelszó ellenőrzése
-    $sql_statement = "SELECT password FROM users WHERE user_id = ?";
-    $password_check = DataQuery($sql_statement, "i", [$user_id]);
+    $sql_statement = "SELECT * FROM users WHERE user_id = ?";
+    $user_data = DataQuery($sql_statement, "i", [$user_id]);
 
-    if (count($password_check) == 0) {
+    if (count($user_data) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A bejelentkezett felhasználói fiók már nem létezik"
@@ -141,7 +145,7 @@ function ModifyUserData() {
         return;
     }
 
-    if (!password_verify($password, $password_check[0]["password"])) {
+    if (!password_verify($password, $user_data[0]["password"])) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen jelszó"
@@ -149,33 +153,22 @@ function ModifyUserData() {
         return;
     }
 
-    // Érkezett adatok ellenőrzése
-    $email = $data["email"] ?? NULL;
-    $lastname = $data["lastname"] ?? NULL;
-    $firstname = $data["firstname"] ?? NULL;
-    $new_password = $data["new_password"] ?? NULL;
-
-    // Lekérdezés összerakása
     $sql_statement = "UPDATE users SET ";
     $new_data = [];
 
-    if (isset($email)) {
+    if ($user_data[0]["email"] != $email) {
         $sql_statement .= "email = ?";
         array_push($new_data, $email);
     }
 
-    if (isset($firstname)) {
-        if (count($new_data) > 0) {
-            $sql_statement .= ", ";
-        }
+    if ($user_data[0]["firstname"] != $firstname) {
+        if (count($new_data) > 0) $sql_statement .= ", ";
         $sql_statement .= "firstname = ?";
         array_push($new_data, $firstname);
     }
 
-    if (isset($lastname)) {
-        if (count($new_data) > 0) {
-            $sql_statement .= ", ";
-        }
+    if ($user_data[0]["lastname"] != $lastname) {
+        if (count($new_data) > 0) $sql_statement .= ", ";
         $sql_statement .= "lastname = ?";
         array_push($new_data, $lastname);
     }
@@ -189,13 +182,11 @@ function ModifyUserData() {
             return;
         }
 
-        if (count($new_data) > 0) {
-            $sql_statement .= ", ";
-        }
+        if (count($new_data) > 0) $sql_statement .= ", ";
         $sql_statement .= "password = ?";
         array_push($new_data, password_hash($new_password, PASSWORD_DEFAULT));
     }
-
+   
     // Ha semmi sem változik, akkor nincs adatbázis művelet
     if (count($new_data) == 0) {
         SendResponse([
