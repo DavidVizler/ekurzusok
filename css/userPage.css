@@ -56,9 +56,30 @@ body{
     margin-right: 10px;
 }
 
-.input-container .edit-icon {
-    height: 25px;
-    width: 25px;
+#modifyUserDataButton{
+    font-family: 'Varela Round';
+    height: 30px;
+    width: 100%;
+    border: 1px solid #5271ff;
+    border-radius: 10px;
+    background-color: #5271ff;
+    color:white;
+}
+
+#modifyUserDataButton:hover{
     cursor: pointer;
-    color: grey;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+#alertDiv{
+    display: flex;
+    height: 50px;
+    border: 2px solid rgb(227, 2, 2);
+    color: white;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgb(215, 86, 86);
 }
