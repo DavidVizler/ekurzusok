@@ -391,6 +391,41 @@ function AdminRemoveMember() {
     }
 }
 
+function AdminModifyUserData() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["user_id", "email", "firstname", "lastname"])) {
+        return;
+    }
+
+    global $data;
+    $email = $data["email"];
+    $firstname = $data["firstname"];
+    $lastname = $data["lastname"];
+    $user_id = $data["user_id"];
+
+    $sql_statement = "UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE user_id = ?";
+    $result = ModifyData($sql_statement, "sssi", [$email, $firstname, $lastname, $user_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Felhasználó adatai módosítva"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Felhasználó adatainak módosítása sikertelen"
+        ]);
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
 }

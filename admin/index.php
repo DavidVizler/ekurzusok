@@ -13,7 +13,7 @@
     $url = explode("/", $_SERVER["REQUEST_URI"]);
     $endpoint = explode("?", end($url))[0];
 
-    if (!in_array($endpoint, ["", "users", "courses", "user-info", "course-info", "login"])) {
+    if (!in_array($endpoint, ["", "users", "courses", "user-info", "course-info", "login", "modify-user-data"])) {
         echo <<<HTML
             <!DOCTYPE html>
             <html lang="hu">
@@ -61,7 +61,7 @@
         }
     }
 
-    if ($endpoint == "course-info" || $endpoint == "user-info") {
+    if ($endpoint == "course-info" || $endpoint == "user-info" || $endpoint == "modify-user-data") {
         if (!isset($_GET["id"])) {
             header("Location: ./");
         } else {
@@ -81,6 +81,9 @@
             break;
         case "user-info":
             $onload_js_function = "listUserInfo({$page}, {$rows}, {$id}, '{$orderby}')";
+            break;
+        case "modify-user-data":
+            $onload_js_function = "getUserData({$id})";
             break;
         default:
             $onload_js_function = "";
@@ -126,6 +129,10 @@
                     NavBar($rows);
                     PageManager($page, $rows, $endpoint, $id);
                     CourseInfoTable();
+                    break;
+                case "modify-user-data":
+                    NavBar();
+                    UserDataForm($id);
                     break;
                 case "login":
                     LoginForm();

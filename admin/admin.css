@@ -202,22 +202,48 @@ tr td:first-child {
     text-align: right;
 }
 
-.torles {
+tr td:last-child {
+    padding: 2px;
+}
+
+.action {
     text-align: center;
     padding: 0px;
 }
 
-.torles input {
+.actions {
     width: 100%;
-    border: 1px solid red;
+    text-align: center;
+    padding: 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+}
+
+.actions button, .action button {
+    width: 100%;
     background-color: white;
-    height: 30px;
+    height: 100%;
     font-size: 18px;
     font-family: sans-serif;
 }
 
-.torles input:hover {
+.delete {
+    border: 2px solid red;
+}
+
+.modify {
+    border: 2px solid #5271ff;
+}
+
+.delete:hover {
     background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+.modify:hover {
+    background-color: #5271ff;
     color: white;
     cursor: pointer;
 }
@@ -240,17 +266,34 @@ tr td:first-child {
     padding-block: 3px;
 }
 
-.info-modal {
+.info-modal, #modify-modal {
     padding-inline: 10px;
     padding-block: 5px;
-    background-color: #dae5ff;
     border-radius: 5px;
     width: fit-content;
     display: inline-block;
     margin-right: 3px;
+    background-color: #dae5ff;
 }
 
-.info-modal:first-child {
+#modify-modal {
+    border: 0;
+    font-size: 18px;
+    font-family: sans-serif;
+    background-color: #00008b;
+    color: white;
+}
+
+#modify-modal:hover {
+    background-color: #5271ff;
+    cursor: pointer;
+}
+
+#modify-modal:active {
+    background-color: #8fa3ff;
+}
+
+.info-modal:first-of-type {
     font-weight: 600;
     background-color: #5271ff;
     color: white;

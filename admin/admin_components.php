@@ -96,8 +96,7 @@ function PageManager($page, $rows, $data_type, $id = null) {
     $no_next = $page_count == $page ? " disabled" : "";
 
     echo " 
-        <div id='info'>
-        </div>
+        <div id='info'></div>
         <div id='page-control'>
             <span id='count'></span>
             <form method='GET' id='page-form'>
@@ -204,6 +203,19 @@ function UserInfoTable() {
             </tbody>
         </table>
     </div>
+    HTML;
+}
+
+function UserDataForm($id) {
+    $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
+    $user_data = DataQuery($sql_statement, "i" [$id]);
+
+    if (count($user_data) == 0) {
+        echo "<div id='info'>Nincs felhasználó ilyen ID-val az adatbázisban!</div>";
+    }
+
+    echo <<<HTML
+        
     HTML;
 }
 

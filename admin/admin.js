@@ -29,10 +29,11 @@ async function listUsers(page, rows, orderby) {
                         <td>
                             ${user["courses"]} (${user["own_courses"]} saját) <a href="user-info?id=${user["user_id"]}&rows=${rows}">Több infó</a>
                         </td>
-                        <td class='torles'>
-                            <form method='POST' action='javascript:;' onsubmit='deleteUser(${user["user_id"]})'>
-                                <input type='submit' value='Eltávolítás' name='delete_button'>
-                            </form>
+                        <td>
+                            <div class='actions'>
+                                <a href='modify-user-data?id=${user["user_id"]}'><button class='modify'>Adatmódosítás</button></a>
+                                <button class='delete' onclick='deleteUser(${user["user_id"]})'>Eltávolítás</button>
+                            </div>
                         </td>
                     </tr>`
                 });
@@ -84,10 +85,8 @@ async function listCourses(page, rows, orderby) {
                         <td>
                             ${course["members"]} (${course["teachers"]} tanár) <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
-                        <td class='torles'>
-                            <form method='POST' action='javascript:;' onsubmit='deleteCourse(${course["course_id"]})'>
-                                <input type='submit' value='Eltávolítás' name='delete_button'>
-                            </form>
+                        <td class='action'>
+                            <button class='delete' onclick='deleteCourse(${course["course_id"]})'>Eltávolítás</button>
                         </td>
                     </tr>`
                 });
@@ -131,7 +130,7 @@ async function listCourseInfo(page, rows, id, orderby) {
                 let members = courseInfo.course_members;
                 let table_content = "";
                 let info_content = `<div class="info-modal-container">
-                    <div class="info-modal">Kurzus adatai</div>
+                    <div class="info-modal">Kurzus adatai</div> 
                     <div class="info-modal">ID: ${data["course_id"]}</div>
                     <div class="info-modal">Név: ${data["name"]}</div>
                     <div class="info-modal">Kód: ${data["code"]}</div>
@@ -166,10 +165,8 @@ async function listCourseInfo(page, rows, id, orderby) {
                         <td>
                             <a href="user-info?id=${member["user_id"]}&rows=${rows}">Több infó</a>
                         </td>
-                        <td class='torles'>
-                            <form method='POST' action='javascript:;' onsubmit='deleteMember(${member["membership_id"]})'>
-                                <input type='submit' value='Eltávolítás' name='delete_button' ${role == "Tulajdonos" ? "hidden" : ""}>
-                            </form>
+                        <td class='action'>
+                            <button class='delete' onclick='deleteMember(${member["membership_id"]})' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
                         </td>
                     </tr>`
                 });
@@ -218,6 +215,7 @@ async function listUserInfo(page, rows, id, orderby) {
                     <div class="info-modal">Email: ${data["email"]}</div>
                     <div class="info-modal">Vezetéknév: ${data["lastname"]}</div>
                     <div class="info-modal">Keresztnév: ${data["firstname"]}</div>
+                    <button id='modify-modal' onclick='modifyUserData(${data["user_id"]})'>Adatmódosítás</button>
                 </div>`;
 
                 $("info").innerHTML = info_content;
@@ -246,10 +244,8 @@ async function listUserInfo(page, rows, id, orderby) {
                         <td>
                             <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
-                        <td class='torles'>
-                            <form method='POST' action='javascript:;' onsubmit='deleteMember(${course["membership_id"]})'>
-                                <input type='submit' value='Eltávolítás' name='delete_button' ${role == "Tulajdonos" ? "hidden" : ""}>
-                            </form>
+                        <td class='action'>
+                            <button class='delete' onclick='deleteMember(${course["membership_id"]})' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
                         </td>
                     </tr>`
                 });
