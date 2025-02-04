@@ -50,7 +50,7 @@ function AdminGetUsers() {
     GROUP BY u.user_id {$order} LIMIT ? OFFSET ?;";
     $users = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
-    if (!is_array($users)) {
+    if (count($users) == 0) {
         SendResponse([
             "uzenet" => "Nincsenek felhasználók az adatbázisban"
         ]);
@@ -105,7 +105,7 @@ function AdminGetCourses() {
     GROUP BY c.course_id {$order} LIMIT ? OFFSET ?;";
     $courses = DataQuery($sql_statement, "ii", [$limit, $offset]);
 
-    if (!is_array($courses)) {
+    if (count($courses) == 0) {
         SendResponse([
             "uzenet" => "Nincsenek kurzusok az adatbázisban"
         ]);
@@ -169,7 +169,7 @@ function AdminGetCourseInfo() {
     WHERE m.course_id = ? {$order} LIMIT ? OFFSET ?;";
     $course_members = DataQuery($sql_statement, "iii", [$id, $limit, $offset]);
 
-    if (!is_array($course_members)) {
+    if (count($course_members) == 0) {
         SendResponse([
             "uzenet" => "Nincsenek tagjai a kurzusnak"
         ]);
@@ -244,7 +244,7 @@ function AdminLogin() {
     $sql_statement = "SELECT password, admin_id FROM admins WHERE username = ?;";
     $admin_data = DataQuery($sql_statement, "s", [$data["username"]]);
 
-    if (!is_array($admin_data)) {
+    if (count($admin_data) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen felhasználónév vagy jelszó"
@@ -359,7 +359,7 @@ function AdminRemoveMember() {
     // Nem-e tulajdonos
     $sql_statement = "SELECT role FROM memberships WHERE membership_id = ?";
     $role = DataQuery($sql_statement, "i", [$membership_id]);
-    if (!is_array($membership_id)) {
+    if (count($membership_id) > 0) {
         if ($role[0]["role"] == 3) {
             SendResponse([
                 "sikeres" => false,
@@ -456,6 +456,9 @@ switch($action) {
         break;
     case "login":
         AdminLogin();
+        break;
+    case "modify-user-data":
+        AdminModifyUserData();
         break;
     default:
         SendResponse([

@@ -208,14 +208,38 @@ function UserInfoTable() {
 
 function UserDataForm($id) {
     $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
-    $user_data = DataQuery($sql_statement, "i" [$id]);
+    $user_data = DataQuery($sql_statement, "i", [$id]);
 
     if (count($user_data) == 0) {
-        echo "<div id='info'>Nincs felhasználó ilyen ID-val az adatbázisban!</div>";
+        echo "<div id='modify-form'><h1>Felhasználó adatmódosítás</h1>Nincs felhasználó ilyen ID-val az adatbázisban!</div>";
     }
 
     echo <<<HTML
-        
+        <div id="modify-form">
+            <h1>Felhasználó adatmódosítás</h1>
+            <form method="POST">
+                <input hidden type="number" id="user_id" value={$id}>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><label for="email">Email cím:</label></td>
+                            <td><input class="modify-input" type="text" id="email" value="{$user_data[0]['email']}"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="lastname">Vezetéknév:</label></td>
+                            <td><input class="modify-input" type="text" id="lastname" value="{$user_data[0]['lastname']}"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="firstname">Keresztnév:</label></td>
+                            <td><input class="modify-input" type="text" id="firstname" value="{$user_data[0]['firstname']}"></td>
+                        </tr>    
+                    </tbody>
+                </table>
+                <div id="modify-submit">
+                    <input type="submit" value="Módosítás">
+                </div>
+            </form>
+        </div>
     HTML;
 }
 
