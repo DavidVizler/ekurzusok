@@ -54,10 +54,13 @@ async function modifyUserData(){
         }
         else{
             alertDiv.style.display = "flex"
-            alertDiv.style.border = "2px solid green"
-            alertDiv.style.color = "green"
-            alertDiv.style.backgroundColor = "lightgreen"
+            alertDiv.style.border = "2px solid #c3e6cb"
+            alertDiv.style.color = "#155724"
+            alertDiv.style.backgroundColor = "#d4edda"
             alertDiv.textContent = valasz.uzenet
+            setTimeout(function(){
+                location.reload()
+            },1500)
         }
     } catch (error) {
         console.log(error)
