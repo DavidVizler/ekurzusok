@@ -347,3 +347,61 @@ tr td:last-child {
     background-color: rgb(164, 12, 12);
     color: white;
 }
+
+/* Adatmódosítás */
+
+#modify-form {
+    margin-left: 15px;
+    max-width: fit-content;
+}
+
+#modify-form h1 {
+    font-size: 26px;
+    margin-block: 10px;
+    color: #00008b;
+    font-weight: 200;
+}
+
+#modify-form table {
+    width: fit-content;
+}
+
+#modify-form table tr td {
+    background: none;
+    border: 0;
+}
+
+.modify-input {
+    padding: 5px;
+    font-size: 18px;
+    font-family: sans-serif;
+    width: 400px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+#modify-submit {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#modify-submit input {
+    padding: 5px;
+    font-size: 18px;
+    font-family: sans-serif;
+    width: 150px;
+    background-color: #00008b;
+    color: white;
+    border-radius: 5px;
+    border: 0;
+}
+
+#modify-submit input:hover {
+    cursor: pointer;
+    background-color: #5271ff;
+}
+
+#modify-submit input:active {
+    background-color: #8fa3ff;
+}

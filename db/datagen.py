@@ -28,10 +28,10 @@ user_courses = []
 lastnames = ["Kovács", "Kis", "Nagy", "Tóth", "Szabó", "Horváth", "Varga", "Kiss", "Molnár", "Németh", 
              "Balogh", "Farkas", "Lakatos", "Papp", "Takács", "Juhász", "Oláh", "Mészáros", "Simon",
              "Rácz", "Fekete", "Szilágyi", "Török", "Fehér", "Balázs", "Gál", "Szűcs", "Orsós", "Kocsis",
-             "Fodor", "Pintér", "Szalai", "Sipos", "Magyar", "Blank"]
+             "Fodor", "Pintér", "Szalai", "Sipos", "Magyar", "Blank", "Sas", "Tekes", "Dudás"]
 
 # Keresztnevek
-firstnames = ["Pista", "Jóska", "István", "Gábor", "Gyula", "László", "Zoltán", "Péter", "Tamás",
+firstnames = ["István", "Gábor", "Gyula", "László", "Zoltán", "Péter", "Tamás",
               "Ferenc", "Zsolt", "Attila", "Sándor", "Tibor", "András", "Csaba", "Imre", "Balázs",
               "Lajos", "György", "Dávid", "Dániel", "Ádám", "Róbert", "Bence", "Gyula", "Mária",
               "Erzsébet", "Katalin", "Éva", "Ilona", "Anna", "Zsuzsanna", "Andrea", "Judit", "Ágnes",

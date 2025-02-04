@@ -215,7 +215,7 @@ async function listUserInfo(page, rows, id, orderby) {
                     <div class="info-modal">Email: ${data["email"]}</div>
                     <div class="info-modal">Vezetéknév: ${data["lastname"]}</div>
                     <div class="info-modal">Keresztnév: ${data["firstname"]}</div>
-                    <button id='modify-modal' onclick='modifyUserData(${data["user_id"]})'>Adatmódosítás</button>
+                    <button id='modify-modal' onclick='window.location.href = "./modify-user-data?id=${id}"'>Adatmódosítás</button>
                 </div>`;
 
                 $("info").innerHTML = info_content;
@@ -399,11 +399,48 @@ async function loginAdmin() {
     }
 }
 
+async function modifyUserData() {
+    let user_id = $("user_id").value;
+    let email = $("email").value;
+    let lastname = $("lastname").value;
+    let firstname = $("firstname").value;
+
+    try {
+        let request = await fetch("./api/modify-user-data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user_id,
+                email,
+                lastname,
+                firstname
+            })
+        });
+        if (request.ok) {
+            let response = await request.json();
+            window.location.href = "./user-info?id=" + user_id;
+        } else {
+            throw request.status;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 window.addEventListener("load", () => {
     if ($("admin-login-form") != null) {
         $("admin-login-form").addEventListener("submit", (e) => {
             loginAdmin();
             e.preventDefault();
         });
+    }
+
+    if ($("modify-form") != null) {
+        $("modify-form").addEventListener("submit", (e) => {
+            modifyUserData();
+            e.preventDefault();
+        })
     }
 })

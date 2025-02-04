@@ -82,9 +82,6 @@
         case "user-info":
             $onload_js_function = "listUserInfo({$page}, {$rows}, {$id}, '{$orderby}')";
             break;
-        case "modify-user-data":
-            $onload_js_function = "getUserData({$id})";
-            break;
         default:
             $onload_js_function = "";
             break;
