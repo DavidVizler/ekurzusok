@@ -39,7 +39,7 @@ async function contentPublish(data) {
             ...data
         };
 
-        let response = await fetch('../php/data_manager.php', {
+        let response = await fetch('../api/content/create', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -53,8 +53,7 @@ async function contentPublish(data) {
 
         console.log(result);
         if (response.ok) {
-            alert("Sikeres művelet!");
-            history.back();
+            window.location.href = "./" + courseId
         }
     }
     catch (e) {
