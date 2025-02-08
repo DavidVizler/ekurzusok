@@ -32,7 +32,7 @@ async function listUsers(page, rows, orderby) {
                         <td>
                             <div class='actions'>
                                 <a href='modify-user-data?id=${user["user_id"]}'><button class='modify'>Adatmódosítás</button></a>
-                                <button class='delete' onclick='deleteUser(${user["user_id"]})'>Eltávolítás</button>
+                                <button class='delete' onclick='deleteModal("user", ${user["user_id"]}, ["${user["lastname"]}", "${user["firstname"]}", "${user["own_courses"]}"])'>Eltávolítás</button>
                             </div>
                         </td>
                     </tr>`
@@ -86,7 +86,7 @@ async function listCourses(page, rows, orderby) {
                             ${course["members"]} (${course["teachers"]} tanár) <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteCourse(${course["course_id"]})'>Eltávolítás</button>
+                            <button class='delete' onclick='deleteModal("course", ${course["course_id"]}, ["${course["name"]}", "${course["members"]}"])'>Eltávolítás</button>
                         </td>
                     </tr>`
                 });
@@ -166,7 +166,7 @@ async function listCourseInfo(page, rows, id, orderby) {
                             <a href="user-info?id=${member["user_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteMember(${member["membership_id"]})' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
+                            <button class='delete' onclick='deleteModal("member", ${member["membership_id"]}, ["${member["lastname"]}", "${member["firstname"]}", "${data["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
                         </td>
                     </tr>`
                 });
@@ -245,7 +245,7 @@ async function listUserInfo(page, rows, id, orderby) {
                             <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteMember(${course["membership_id"]})' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
+                            <button class='delete' onclick='deleteModal("member", ${course["membership_id"]}, ["${data["lastname"]}", "${data["firstname"]}", "${course["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
                         </td>
                     </tr>`
                 });
@@ -267,87 +267,150 @@ async function listUserInfo(page, rows, id, orderby) {
     }
 }
 
-async function deleteUser(id) {
-    if (confirm("Biztosan evltávolítja a felhasználót és az összes általa létrehozott kurzust, tartalmat és leadott feladatot?")) {
-        try {
-            let request = await fetch("./api/delete-user", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "user_id": id
-                })
+function resultModal(result) {
+    let modal = document.createElement("div");
+    modal.classList.add("modal");
+    $("modal-container").appendChild(modal);
+
+    let modal_content = document.createElement("div");
+    modal_content.classList.add("modal-content");
+    modal.appendChild(modal_content);
+
+    let message = document.createElement("p");
+    modal_content.appendChild(message);
+    message.innerHTML = result;
+
+    let ok_button = document.createElement("button");
+    modal_content.appendChild(ok_button);
+    ok_button.innerHTML = "OK";
+
+    ok_button.addEventListener("click", () => {
+        $("modal-container").innerHTML = "";
+        location.reload();
+    });
+}
+
+function deleteModal(target, id, info) {
+    let modal = document.createElement("div");
+    modal.classList.add("modal");
+    $("modal-container").appendChild(modal);
+
+    let modal_content = document.createElement("div");
+    modal_content.classList.add("modal-content");
+    modal.appendChild(modal_content);
+
+    let message = document.createElement("p");
+    modal_content.appendChild(message);
+
+    let yes_button = document.createElement("button");
+    modal_content.appendChild(yes_button);
+    yes_button.innerHTML = "Igen";
+
+    let no_button = document.createElement("button");
+    modal_content.appendChild(no_button);
+    no_button.innerHTML = "Nem";
+    
+    switch (target) {
+        case "user":
+            message.innerHTML = `Biztosan törli ${info[0]} ${info[1]} nevű felhasználót és ${info[2]} db saját kurzusát?`;
+            yes_button.addEventListener("click", () => {
+                deleteUser(id);
             });
-            
-            if (request.ok) {
-                let result = await request.json();
-                alert(result.uzenet);
-                if (result.sikeres) {
-                    location.reload();
-                }
-            } else {
-                throw(request.status);
-            }
-        } catch (error) {
-            console.log(error);
+            break;
+        case "course":
+            message.innerHTML = `Biztosan törli a(z) ${info[0]} nevű kurzust, melynek ${info[1]} felhasználó tagja?`;
+            yes_button.addEventListener("click", () => {
+                deleteCourse(id);
+            });
+            break;
+        case "member":
+            message.innerHTML = `Biztosan kirúgja ${info[0]} ${info[1]} nevű felhasználót a(z) ${info[2]} nevű kurzusból?`;
+            yes_button.addEventListener("click", () => {
+                deleteMember(id);
+            });
+            break;
+    }
+
+    no_button.addEventListener("click", () => {
+        $("modal-container").innerHTML = "";
+    });
+}
+
+async function deleteUser(id) {
+    try {
+        let request = await fetch("./api/delete-user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "user_id": id
+            })
+        });
+        
+        $("modal-container").innerHTML = "";
+
+        if (request.ok) {
+            let result = await request.json();
+            resultModal(result.uzenet);
+        } else {
+            resultModal("Művelet sikertelen! Hiba történt!");
+            throw(request.status);
         }
+    } catch (error) {
+        console.log(error);
     }
 }
 
 async function deleteCourse(id) {
-    if (confirm("Biztosan evltávolítja a kurzust és az összes ide feltöltött tartalmat és leadott feladatot?")) {
-        try {
-            let request = await fetch("./api/delete-course", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "course_id": id
-                })
-            });
-            
-            if (request.ok) {
-                let result = await request.json();
-                alert(result.uzenet);
-                if (result.sikeres) {
-                    location.reload();
-                }
-            } else {
-                throw(request.status);
-            }
-        } catch (error) {
-            console.log(error);
+    try {
+        let request = await fetch("./api/delete-course", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "course_id": id
+            })
+        });
+        
+        $("modal-container").innerHTML = "";
+
+        if (request.ok) {
+            let result = await request.json();
+            resultModal(result.uzenet);
+        } else {
+            resultModal("Művelet sikertelen! Hiba történt!");
+            throw(request.status);
         }
+    } catch (error) {
+        console.log(error);
     }
 }
 
 async function deleteMember(id) {
-    if (confirm("Biztosan evltávolítja a felhasználót a kurzusból?")) {
-        try {
-            let request = await fetch("./api/remove-member", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "membership_id": id
-                })
-            });
-    
-            if (request.ok) {
-                let result = await request.json();
-                alert(result.uzenet);
-                if (result.sikeres) {
-                    location.reload();
-                }
-            } else {
-                throw(request.status);
-            }
-        } catch (error) {
-            console.log(error);
+    try {
+        let request = await fetch("./api/remove-member", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "membership_id": id
+            })
+        });
+
+        $("modal-container").innerHTML = "";
+
+        if (request.ok) {
+            let result = await request.json();
+            resultModal(result.uzenet);
+        } else {
+            resultModal("Művelet sikertelen! Hiba történt!");
+            throw(request.status);
         }
+    } catch (error) {
+        console.log(error);
     }
 }
 

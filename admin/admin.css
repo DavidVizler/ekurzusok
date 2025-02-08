@@ -352,18 +352,20 @@ tr td:last-child {
 
 #modify-form {
     margin-left: 15px;
-    max-width: fit-content;
+    width: 100%;
 }
 
 #modify-form h1 {
     font-size: 26px;
     margin-block: 10px;
     color: #00008b;
-    font-weight: 200;
+    font-weight: 400;
+    text-align: center;
 }
 
 #modify-form table {
     width: fit-content;
+    margin-inline: auto;
 }
 
 #modify-form table tr td {
@@ -403,5 +405,47 @@ tr td:last-child {
 }
 
 #modify-submit input:active {
+    background-color: #8fa3ff;
+}
+
+/* Törlés megerősítés modal */
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+    margin: 15% auto;
+    padding: 20px;
+    width: 500px;
+}
+
+.modal-content button {
+    background-color: #00008b;
+    border-radius: 5px;
+    border: 0px;
+    font-size: 18px;
+    font-family: sans-serif;
+    padding-block: 5px;
+    width: 150px;
+    margin: 5px;
+    color: white;
+}
+
+.modal-content button:hover {
+    background-color: #5271ff;
+    cursor: pointer;
+}
+
+.modal-content button:active {
     background-color: #8fa3ff;
 }

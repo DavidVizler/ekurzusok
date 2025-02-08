@@ -122,7 +122,8 @@ function PageManager($page, $rows, $data_type, $id = null) {
 }
 
 function UsersTable() {
-    echo "<div id='content'>
+    echo <<<HTML
+    <div id="content">
         <table>
             <thead>
                 <tr>
@@ -134,14 +135,17 @@ function UsersTable() {
                     <th><div>Műveletek</div></th>
                 </tr>
             </thead>
-            <tbody id='table-content'>
+            <tbody id="table-content">
             </tbody>
         </table>
-    </div>";
+        <div id="modal-container"></div>
+    </div>
+    HTML;
 }
 
 function CoursesTable() {
-    echo "<div id='content'>
+    echo <<<HTML
+    <div id="content">
         <table>
             <thead>
                 <tr>
@@ -154,10 +158,12 @@ function CoursesTable() {
                     <th><div>Műveletek</div></th>
                 </tr>
             </thead>
-            <tbody id='table-content'>
+            <tbody id="table-content">
             </tbody>
         </table>
-    </div>";
+        <div id="modal-container"></div>
+    </div>
+    HTML;
 }
 
 function CourseInfoTable() {
@@ -179,6 +185,7 @@ function CourseInfoTable() {
             <tbody id="table-content">
             </tbody>
         </table>
+        <div id="modal-container"></div>
     </div>
     HTML;
 }
@@ -202,6 +209,7 @@ function UserInfoTable() {
             <tbody id="table-content">
             </tbody>
         </table>
+        <div id="modal-container"></div>
     </div>
     HTML;
 }
@@ -211,12 +219,13 @@ function UserDataForm($id) {
     $user_data = DataQuery($sql_statement, "i", [$id]);
 
     if (count($user_data) == 0) {
-        echo "<div id='modify-form'><h1>Felhasználó adatmódosítás</h1>Nincs felhasználó ilyen ID-val az adatbázisban!</div>";
+        echo "<div id='modify-form'><h1>Nem található felhasználó az adatbázisban a köveztkező azonosítóval: <b>{$id}</b></h1></div>";
+        return;
     }
 
     echo <<<HTML
         <div id="modify-form">
-            <h1>Felhasználó adatmódosítás</h1>
+            <h1>Felhasználó adatmódosítás (ID: {$id})</h1>
             <form method="POST">
                 <input hidden type="number" id="user_id" value={$id}>
                 <table>

@@ -359,7 +359,7 @@ function AdminRemoveMember() {
     // Nem-e tulajdonos
     $sql_statement = "SELECT role FROM memberships WHERE membership_id = ?";
     $role = DataQuery($sql_statement, "i", [$membership_id]);
-    if (count($membership_id) > 0) {
+    if (count($role) > 0) {
         if ($role[0]["role"] == 3) {
             SendResponse([
                 "sikeres" => false,
