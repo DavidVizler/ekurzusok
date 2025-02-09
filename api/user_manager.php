@@ -131,7 +131,6 @@ function ModifyUserData() {
     $lastname = $data["lastname"];
     $firstname = $data["firstname"] ;
     $password = $data["password"];
-    if (!empty($data["new_password"])) $new_password = $data["new_password"];
 
     // Jelszó ellenőrzése
     $sql_statement = "SELECT * FROM users WHERE user_id = ?";
@@ -172,20 +171,6 @@ function ModifyUserData() {
         $sql_statement .= "lastname = ?";
         array_push($new_data, $lastname);
     }
-
-    if (isset($new_password)) {
-        if ($password == $new_password && count($new_data) == 0) {
-            SendResponse([
-                "sikeres" => false,
-                "uzenet" => "Az új jelszó megegyezik a régi jelszóval"
-            ]);
-            return;
-        }
-
-        if (count($new_data) > 0) $sql_statement .= ", ";
-        $sql_statement .= "password = ?";
-        array_push($new_data, password_hash($new_password, PASSWORD_DEFAULT));
-    }
    
     // Ha semmi sem változik, akkor nincs adatbázis művelet
     if (count($new_data) == 0) {
@@ -212,6 +197,70 @@ function ModifyUserData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen adatmódosítás"
+        ]);
+    }
+}
+
+function ChangeUserPassword() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["old_password", "new_password"])) {
+        return;
+    }
+
+    global $data;
+    $old_passwd = $data["old_password"];
+    $new_passwd = $data["new_password"];
+    $user_id = $_SESSION["user_id"];
+
+    // Régi jelszó ellenőrzése
+    $sql_statement = "SELECT password FROM users WHERE user_id = ?";
+    $passwd_check = DataQuery($sql_statement, "i", [$user_id]);
+
+    if (count($passwd_check) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A bejelentkezett felhasználói fiók már nem létezik"
+        ], 410);
+        return;
+    }
+
+    if (!password_verify($old_passwd, $passwd_check[0]["password"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Helytelen jelszó"
+        ]);
+        return;
+    }
+
+    if ($old_passwd == $new_passwd) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Az új jelszó megegyezik a régi jelszóval"
+        ]);
+        return;
+    }
+
+    $passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
+
+    $sql_statement = "UPDATE users SET password = ? WHERE user_id = ?";
+    $result = ModifyData($sql_statement, "si", [$passwd, $user_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres jelszómódosítás"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen jelszómódosítás"
         ]);
     }
 }
@@ -287,6 +336,9 @@ function Manage($action) {
             break;
         case "modify-data":
             ModifyUserData();
+            break;
+        case "change-password":
+            ChangeUserPassword();
             break;
         case "delete":
             DeleteUser();
