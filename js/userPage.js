@@ -67,6 +67,57 @@ async function modifyUserData(){
     }
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const adatmodositasLink = document.querySelector(".navbar a:nth-child(1)");
+    const jelszoModositasLink = document.querySelector(".navbar a:nth-child(2)");
+    const passwordField = document.querySelector("#password");
+    const newPasswordField = document.querySelector("#new-password");
+    const emailField = document.querySelector("#emailInput");
+    const lastNameField = document.querySelector("#lastname");
+    const firstNameField = document.querySelector("#firstname");
+
+    function showUserDataFields() {
+        emailField.parentElement.parentElement.style.display = "block";
+        lastNameField.parentElement.parentElement.style.display = "block";
+        firstNameField.parentElement.parentElement.style.display = "block";
+        passwordField.parentElement.parentElement.style.display = "block";
+        newPasswordField.parentElement.parentElement.style.display = "none";
+        adatmodositasLink.classList.add("active");
+        jelszoModositasLink.classList.remove("active");
+    }
+
+    function showPasswordFields() {
+        emailField.parentElement.parentElement.style.display = "none";
+        lastNameField.parentElement.parentElement.style.display = "none";
+        firstNameField.parentElement.parentElement.style.display = "none";
+        passwordField.parentElement.parentElement.style.display = "block";
+        newPasswordField.parentElement.parentElement.style.display = "block";
+        jelszoModositasLink.classList.add("active");
+        adatmodositasLink.classList.remove("active");
+    }
+
+    adatmodositasLink.addEventListener("click", function () {
+        showUserDataFields();
+    });
+
+    jelszoModositasLink.addEventListener("click", function () {
+        showPasswordFields();
+    });
+
+
+    showUserDataFields();
+
+    const style = document.createElement("style");
+    style.innerHTML = `
+        .navbar a.active {
+            font-weight: bold;
+            color: #5271ff;
+        }
+    `;
+    document.head.appendChild(style);
+});
+
+
 document.getElementById('modifyUserDataButton').addEventListener('click',modifyUserData)
 
 window.addEventListener('load', getUserData)

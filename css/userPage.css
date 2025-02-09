@@ -83,3 +83,18 @@ body{
     border-radius: 10px;
     background-color: #f8d7da;
 }
+
+.navbar{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid grey;
+}
+
+.navbar a{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+a:hover{
+    cursor: pointer;
+}
