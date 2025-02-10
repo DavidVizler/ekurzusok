@@ -32,7 +32,7 @@ async function fillDeadlineList() {
             // })
         }
         else {
-            div.innerHTML += '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
+            div.innerHTML = '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
         }
     }
     catch (e) {
