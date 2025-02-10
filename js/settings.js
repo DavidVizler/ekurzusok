@@ -62,15 +62,13 @@ async function modifySettings(e) {
         let design = document.getElementById('designSelect').value;
 
         let reqData = {
-            manage: 'course',
-            action: 'modify',
             course_id: courseId,
             name,
             desc,
             design
         };
 
-        let response = await fetch('../php/data_manager.php', {
+        let response = await fetch('../api/course/modify-data', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -115,11 +113,10 @@ async function onLoad() {
 async function loadCurrentValues(courseId) {
     try {
         let reqData = {
-            getdata: 'course_data',
             course_id: courseId
         }
 
-        let response = await fetch('../php/data_query.php', {
+        let response = await fetch('../api/query/course-data', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -129,11 +126,10 @@ async function loadCurrentValues(courseId) {
         });
 
         let courseData = await response.json();
-        courseData = courseData[0];
         
         document.getElementById('courseName').value = courseData['name'];
-        document.getElementById('courseDescription').value = courseData['desc'];
-        document.getElementById('designSelect').value = courseData['design'];
+        document.getElementById('courseDescription').value = courseData['description'];
+        document.getElementById('designSelect').value = courseData['design_id'];
         document.getElementById('activeCode').value = courseData['code'];
         document.getElementById('archivalt').checked = courseData['archived'] == 1;
     }
