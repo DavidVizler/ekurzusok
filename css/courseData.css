@@ -50,7 +50,7 @@ body{
     transform: translateY(-100%);
 }
 
-.hamburger-icon{
+.hamburger-icon {
     position: relative;
     user-select:none;
     margin: 5px;
@@ -75,22 +75,22 @@ body{
     visibility: visible;
 }
 
-#hamburger-menu.active #line2{
+.hamburger-menu.active #line2{
     transform: scale(0.1,0.1);
     opacity: 0;
 }
 
-#hamburger-menu.active #line1{
+.hamburger-menu.active #line1{
     transform: translateY(15px) rotate(45deg);
     background-color: black;
 }
 
-#hamburger-menu.active #line3{
+.hamburger-menu.active #line3{
     transform: translateY(-15px) rotate(-45deg);
     background-color: black;
 }
 
-#hamburger-menu .hamburger-menu-content{
+.hamburger-menu .hamburger-menu-content{
     position: fixed;
     top: 0;
     width: 300px;
@@ -108,7 +108,7 @@ body{
     z-index: 1;
 }
 
-#hamburger-menu.active .hamburger-menu-content{
+.hamburger-menu.active .hamburger-menu-content{
     background-color: white;
     opacity: 1;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
@@ -294,4 +294,28 @@ a#openModal:hover, a#openModalUsers:hover {
 
 #scrollDiv{
     overflow-y: scroll;
+}
+
+#logoutButton svg{
+    height: 20px;
+    width: 20px;
+}
+
+#logoutButton{
+    font-family: "Varela Round";
+    font-size: 15px;
+    display: flex;
+    height: 30px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+
+#logoutButton:hover{
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }

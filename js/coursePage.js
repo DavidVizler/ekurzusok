@@ -1,4 +1,3 @@
-let menu=document.getElementById("menu")
 function openPopUp() {
    document.getElementById("popup").style.display = "flex";
 }
@@ -31,11 +30,6 @@ document.getElementById("selectAddCourse").addEventListener('change',()=>{
       window.open("./kurzusAdd.html", "_self")
    }
 })
-
-function clickHandler(){
-   menu.classList.toggle("active");
-}
-menu.addEventListener("click",clickHandler);
 
 let cardData
 let design

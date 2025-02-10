@@ -1,4 +1,4 @@
-let menu = document.getElementById("hamburger-menu")
+// let menu = document.getElementById("hamburger-menu")
 
 const deadlineModal = document.getElementById("deadlineModal");
 const openModalLink = document.getElementById("openModal");
@@ -71,10 +71,10 @@ async function getDesignJson() {
     designData = await response.json()
  }
 
-function clickHandler(){
-    menu.classList.toggle("active")
-}
-menu.addEventListener("click", clickHandler)
+// function clickHandler(){
+//     menu.classList.toggle("active")
+// }
+// menu.addEventListener("click", clickHandler)
 
 let cardData;
 async function getCardsData() {
