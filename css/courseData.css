@@ -61,7 +61,7 @@ body{
     z-index: 10;
 }
 
-#hamburger-menu{
+.hamburger-menu{
     position: relative;
     display: flex;
     align-items: center;
@@ -273,6 +273,14 @@ a#openModal:hover, a#openModalUsers:hover {
 
 .courseUsers{
     align-items: center;
+}
+
+#scrollDiv{
+    overflow-y: auto;
+}
+
+#scrollDiv::-webkit-scrollbar{
+    display: none;
 }
 
 #deleteButton{
