@@ -30,7 +30,6 @@ async function signup() {
         if (response.ok) {
             let result = await response.json();
             if (result.sikeres) {
-                alert("Sikeres regisztráció!");
                 window.location.href = './kurzusok.html';
             }
             else {

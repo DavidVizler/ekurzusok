@@ -68,7 +68,7 @@ async function sendNewCourseData() {
         "design" : courseDesgin
     }
 
-    let request = fetch("./api/course/create", {
+    let request = await fetch("./api/course/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
