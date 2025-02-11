@@ -12,6 +12,7 @@ function LoginForm() {
                 <div style="text-align: center; width: max; margin: 20px;">
                     <input type="submit" value="Bejelentkezés">
                 </div>
+                <div id="modal-container"></div>
             </form>
         </div>
     HTML;

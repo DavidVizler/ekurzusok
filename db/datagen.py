@@ -69,7 +69,7 @@ course_subjects = [
     "Környezetismeret",
     "Frontend",
     "Backend",
-    "Adatbázis Kelezés",
+    "Adatbázis Kezelés",
     "Digitális Kultúra",
     "Asztali Alk. Fejl.",
     "Mobil Alk. Fejl."
