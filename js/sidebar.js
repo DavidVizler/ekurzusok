@@ -29,6 +29,7 @@ function fillSideBar(courses) {
 
     courses.forEach(course => {
         let li = document.createElement('li');
+        li.setAttribute('data-initial', course.name.charAt(0).toUpperCase());
         li.innerText = course.name;
 
         let a = document.createElement('a');

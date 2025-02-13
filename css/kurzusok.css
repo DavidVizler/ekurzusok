@@ -135,17 +135,42 @@ body::-webkit-scrollbar {
 }
 
 #menuContent li {
-    padding: 5px 0;
-    color:black;
+    padding: 0;
+    margin: 0;
+    padding-left: 40px; /* Elég helyet hagyunk a köröknek */
+    position: relative;
     font-size: 20px;
+    color: black;
+    list-style-type: none; /* Eltüntetjük az alapértelmezett pöttyöt */
 }
 
-#menuContent a{
+#menuContent li::before {
+    content: attr(data-initial);
+    box-shadow: 0px 4px 10px rgb(82, 113, 255, 0.8);
+    background-color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+#menuContent a {
+    display: block;
     text-decoration: none;
+    padding: 5px 0;
+    color: black;
 }
 
-#menuContent #addedCourses{
-    margin-bottom: 5px;
+#menuContent #addedCourses {
+    margin: 0 0 5px 0;
+    padding: 0;
 }
 
 .plusIcon{
