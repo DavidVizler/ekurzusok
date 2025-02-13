@@ -24,6 +24,31 @@ function loadUserDataIn(userData) {
     firstnameInput.value = userData.firstname
 }
 
+function resultModal(result){
+    let modal = document.createElement("div")
+    modal.classList.add("modal")
+    let alertDiv = document.getElementById('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = document.createElement("div")
+    modal_content.classList.add("modal-content")
+    modal.appendChild(modal_content)
+
+    let message = document.createElement("p")
+    modal_content.appendChild(message)
+    message.innerHTML = result
+
+    let ok_button = document.createElement("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+
+    ok_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+        // location.reload()
+    })
+}
 
 async function modifyUserData(){
     let email = document.getElementById('emailInput').value
@@ -31,7 +56,6 @@ async function modifyUserData(){
     let firstname = document.getElementById('firstname').value
     let password = document.getElementById('password').value
     let newPassword = document.getElementById('new-password').value
-    let alertDiv = document.getElementById('alertDiv')
     let reqData = {
         "email" : email,
         "lastname" : lastname,
@@ -48,15 +72,10 @@ async function modifyUserData(){
         })
         let valasz = await response.json()
         if(valasz.sikeres == false){
-            alertDiv.style.display = "flex"
-            alertDiv.textContent = valasz.uzenet
+            resultModal(valasz.uzenet + "!")
         }
         else{
-            alertDiv.style.display = "flex"
-            alertDiv.style.border = "2px solid #c3e6cb"
-            alertDiv.style.color = "#155724"
-            alertDiv.style.backgroundColor = "#d4edda"
-            alertDiv.textContent = valasz.uzenet
+            resultModal(valasz.uzenet + "!")
             setTimeout(function(){
                 location.reload()
             },1500)
@@ -69,12 +88,17 @@ async function modifyUserData(){
 async function modifyUserPassword() {
     let password = document.getElementById('old_password').value
     let newPassword = document.getElementById('new-password').value
-    let alertDiv = document.getElementById('alertDiv')
-    
-    let reqData = {
-        "old_password" : password,
-        "new_password" : newPassword
+    let checkingNewPassword = document.getElementById("new-password-again").value
+    let reqData;
+    if(newPassword == checkingNewPassword){
+        reqData = {
+            "old_password" : password,
+            "new_password" : newPassword
+        }
+    }else{
+        resultModal("A két jelszó nem egyezik")
     }
+    
     try {
         let response = await fetch('./api/user/change-password',{
             method : 'POST',
@@ -85,15 +109,10 @@ async function modifyUserPassword() {
         let valasz = await response.json()
         console.log(valasz)
         if(valasz.sikeres == false){
-            alertDiv.style.display = "flex"
-            alertDiv.textContent = valasz.uzenet
+            resultModal(valasz.uzenet + "!")
         }
         else{
-            alertDiv.style.display = "flex"
-            alertDiv.style.border = "2px solid #c3e6cb"
-            alertDiv.style.color = "#155724"
-            alertDiv.style.backgroundColor = "#d4edda"
-            alertDiv.textContent = valasz.uzenet
+            resultModal(valasz.uzenet + "!")
             setTimeout(function(){
                 location.reload()
             },1500)
@@ -144,6 +163,5 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.head.appendChild(style);
 });
-
 
 window.addEventListener('load', getUserData)
