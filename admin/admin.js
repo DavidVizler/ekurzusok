@@ -334,6 +334,12 @@ function deleteModal(target, id, info) {
     no_button.addEventListener("click", () => {
         $("modal-container").innerHTML = "";
     });
+
+    modal.addEventListener("click", (e) => {
+        if (e.target.classList[0] == "modal") {
+            $("modal-container").innerHTML = "";
+        }
+    })
 }
 
 async function deleteUser(id) {
@@ -446,13 +452,13 @@ async function loginAdmin() {
             })
         });
 
-        if (response.ok) {
+        if (response.ok || response.status == 400) {
             let result = await response.json();
             if (result.sikeres) {
                 window.location.href = './';
             }
             else {
-                alert(result.uzenet);
+                resultModal(result.uzenet);
             }
         } else {
             throw(response.status);

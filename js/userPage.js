@@ -3,7 +3,6 @@ async function getUserData() {
         let response = await fetch('./api/query/user-data')
         if(response.ok){
             let userData = await response.json()
-            console.log(userData)
             loadUserDataIn(userData)
         }
     } catch (error) {
@@ -16,7 +15,7 @@ function loadUserDataIn(userData) {
     let lastnameInput = document.getElementById('lastname')
     let firstnameInput = document.getElementById('firstname')
     if (!userData) {
-        console.error("userData is null or undefined");
+        console.error("Nincsenek adatok!");
         return;
     }
 
@@ -25,14 +24,38 @@ function loadUserDataIn(userData) {
     firstnameInput.value = userData.firstname
 }
 
+function resultModal(result){
+    let modal = document.createElement("div")
+    modal.classList.add("modal")
+    let alertDiv = document.getElementById('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = document.createElement("div")
+    modal_content.classList.add("modal-content")
+    modal.appendChild(modal_content)
+
+    let message = document.createElement("p")
+    modal_content.appendChild(message)
+    message.innerHTML = result
+
+    let ok_button = document.createElement("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+
+    ok_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+        // location.reload()
+    })
+}
+
 async function modifyUserData(){
     let email = document.getElementById('emailInput').value
     let lastname = document.getElementById('lastname').value
     let firstname = document.getElementById('firstname').value
     let password = document.getElementById('password').value
     let newPassword = document.getElementById('new-password').value
-
-    let alertDiv = document.getElementById('alertDiv')
     let reqData = {
         "email" : email,
         "lastname" : lastname,
@@ -49,15 +72,47 @@ async function modifyUserData(){
         })
         let valasz = await response.json()
         if(valasz.sikeres == false){
-            alertDiv.style.display = "flex"
-            alertDiv.textContent = valasz.uzenet
+            resultModal(valasz.uzenet + "!")
         }
         else{
-            alertDiv.style.display = "flex"
-            alertDiv.style.border = "2px solid #c3e6cb"
-            alertDiv.style.color = "#155724"
-            alertDiv.style.backgroundColor = "#d4edda"
-            alertDiv.textContent = valasz.uzenet
+            resultModal(valasz.uzenet + "!")
+            setTimeout(function(){
+                location.reload()
+            },1500)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function modifyUserPassword() {
+    let password = document.getElementById('old_password').value
+    let newPassword = document.getElementById('new-password').value
+    let checkingNewPassword = document.getElementById("new-password-again").value
+    let reqData;
+    if(newPassword == checkingNewPassword){
+        reqData = {
+            "old_password" : password,
+            "new_password" : newPassword
+        }
+    }else{
+        resultModal("A két jelszó nem egyezik")
+    }
+    
+    try {
+        let response = await fetch('./api/user/change-password',{
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            }, body : JSON.stringify(reqData)
+        })
+        let valasz = await response.json()
+        console.log(valasz)
+        if(valasz.sikeres == false){
+            resultModal(valasz.uzenet + "!")
+        }
+        else{
+            resultModal(valasz.uzenet + "!")
             setTimeout(function(){
                 location.reload()
             },1500)
@@ -70,40 +125,32 @@ async function modifyUserData(){
 document.addEventListener("DOMContentLoaded", function () {
     const adatmodositasLink = document.querySelector(".navbar a:nth-child(1)");
     const jelszoModositasLink = document.querySelector(".navbar a:nth-child(2)");
-    const passwordField = document.querySelector("#password");
-    const newPasswordField = document.querySelector("#new-password");
-    const emailField = document.querySelector("#emailInput");
-    const lastNameField = document.querySelector("#lastname");
-    const firstNameField = document.querySelector("#firstname");
+    const saveButton = document.getElementById("modifyUserDataButton");
 
     function showUserDataFields() {
-        emailField.parentElement.parentElement.style.display = "block";
-        lastNameField.parentElement.parentElement.style.display = "block";
-        firstNameField.parentElement.parentElement.style.display = "block";
-        passwordField.parentElement.parentElement.style.display = "block";
-        newPasswordField.parentElement.parentElement.style.display = "none";
+        document.querySelector(".userDataDiv").style.display = "block";
+        document.querySelector(".passwordDiv").style.display = "none";
         adatmodositasLink.classList.add("active");
         jelszoModositasLink.classList.remove("active");
     }
 
     function showPasswordFields() {
-        emailField.parentElement.parentElement.style.display = "none";
-        lastNameField.parentElement.parentElement.style.display = "none";
-        firstNameField.parentElement.parentElement.style.display = "none";
-        passwordField.parentElement.parentElement.style.display = "block";
-        newPasswordField.parentElement.parentElement.style.display = "block";
+        document.querySelector(".userDataDiv").style.display = "none";
+        document.querySelector(".passwordDiv").style.display = "block";
         jelszoModositasLink.classList.add("active");
         adatmodositasLink.classList.remove("active");
     }
 
-    adatmodositasLink.addEventListener("click", function () {
-        showUserDataFields();
-    });
+    adatmodositasLink.addEventListener("click", showUserDataFields);
+    jelszoModositasLink.addEventListener("click", showPasswordFields);
 
-    jelszoModositasLink.addEventListener("click", function () {
-        showPasswordFields();
+    saveButton.addEventListener("click", function () {
+        if (adatmodositasLink.classList.contains("active")) {
+            modifyUserData();
+        } else if (jelszoModositasLink.classList.contains("active")) {
+            modifyUserPassword();
+        }
     });
-
 
     showUserDataFields();
 
@@ -116,8 +163,5 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.head.appendChild(style);
 });
-
-
-document.getElementById('modifyUserDataButton').addEventListener('click',modifyUserData)
 
 window.addEventListener('load', getUserData)

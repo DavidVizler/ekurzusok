@@ -1,4 +1,3 @@
-let menu=document.getElementById("menu")
 function openPopUp() {
    document.getElementById("popup").style.display = "flex";
 }
@@ -19,6 +18,20 @@ function closePopup() {
 document.getElementById("close-btn").addEventListener("click",closePopup)
 document.getElementById("calendarCloseButton").addEventListener("click",closePopup)
 
+document.getElementById("userIcon").addEventListener("click", function() {
+   const menu = document.getElementById("dropdownMenu");
+   menu.style.display = menu.style.display === "block" ? "none" : "block";
+});
+
+// Menü elrejtése, ha valahol máshol kattintanak
+document.addEventListener("click", function(event) {
+   const menu = document.getElementById("dropdownMenu");
+   const icon = document.getElementById("userIcon");
+   if (!icon.contains(event.target)) {
+       menu.style.display = "none";
+   }
+});
+
 document.getElementById("selectAddCourse").addEventListener('change',()=>{
    let selectedValue = document.querySelector("option:checked").value
    let codeForm = document.getElementById("codeForm")
@@ -31,11 +44,6 @@ document.getElementById("selectAddCourse").addEventListener('change',()=>{
       window.open("./kurzusAdd.html", "_self")
    }
 })
-
-function clickHandler(){
-   menu.classList.toggle("active");
-}
-menu.addEventListener("click",clickHandler);
 
 let cardData
 let design

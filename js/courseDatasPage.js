@@ -1,4 +1,4 @@
-let menu = document.getElementById("hamburger-menu")
+// let menu = document.getElementById("hamburger-menu")
 
 const deadlineModal = document.getElementById("deadlineModal");
 const openModalLink = document.getElementById("openModal");
@@ -32,7 +32,7 @@ async function fillDeadlineList() {
             // })
         }
         else {
-            div.innerHTML += '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
+            div.innerHTML = '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
         }
     }
     catch (e) {
@@ -71,10 +71,10 @@ async function getDesignJson() {
     designData = await response.json()
  }
 
-function clickHandler(){
-    menu.classList.toggle("active")
-}
-menu.addEventListener("click", clickHandler)
+// function clickHandler(){
+//     menu.classList.toggle("active")
+// }
+// menu.addEventListener("click", clickHandler)
 
 let cardData;
 async function getCardsData() {
