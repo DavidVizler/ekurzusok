@@ -72,10 +72,169 @@ function CreateCourse() {
     }
 }
 
+function ModifyCourseData() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["id", "name", "desc", "design"])) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $course_id = $data["id"];
+    $name = $data["name"];
+    $description = $data["desc"] ;
+    $design_id = $data["design"];
+
+    // kurzus adatok lekérdezése
+    $sql_statement = "SELECT c.name, c.description, c.design_id, m.role FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE c.course_id = ? AND m.user_id = ?;";
+    $course_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+
+    if (count($course_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($course_data[0]["role"] != 3) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "UPDATE courses SET ";
+    $new_data = [];
+    $new_data_types = "";
+
+    if ($course_data[0]["name"] != $name) {
+        $sql_statement .= "name = ?";
+        array_push($new_data, $name);
+        $new_data_types .= "s";
+    }
+
+    if ($course_data[0]["description"] != $description) {
+        if (count($new_data) > 0) $sql_statement .= ", ";
+        $sql_statement .= "description = ?";
+        array_push($new_data, $description);
+        $new_data_types .= "s";
+    }
+
+    if ($course_data[0]["design_id"] != $design_id) {
+        if (count($new_data) > 0) $sql_statement .= ", ";
+        $sql_statement .= "design_id = ?";
+        array_push($new_data, $design_id);
+        $new_data_types .= "i";
+    }
+   
+    // Ha semmi sem változik, akkor nincs adatbázis művelet
+    if (count($new_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem érkezett változtatandó adat"
+        ]);
+        return;
+    }
+
+    // Where záradék hozzáadása
+    $sql_statement .= " WHERE course_id = ?;";
+    $new_data_types .= "i";
+    array_push($new_data, $course_id);
+
+    $result = ModifyData($sql_statement, $new_data_types, $new_data);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres adatmódosítás"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen adatmódosítás"
+        ]);
+    }
+}
+
+function ArchiveCourse() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["id"])) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $course_id = $data["id"];
+
+    // kurzus adatok lekérdezése
+    $sql_statement = "SELECT c.archived, m.role FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE c.course_id = ? AND m.user_id = ?;";
+    $course_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+
+    if (count($course_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($course_data[0]["role"] != 3) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $new_status = !$course_data[0]["archived"];
+    $modification = $new_status ? "archiválás" : "visszaállítás";
+
+    $sql_statement = "UPDATE courses SET archived = ? WHERE course_id = ?";
+    $result = ModifyData($sql_statement, "ii", [$new_status, $course_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres {$modification}"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen {$modification}"
+        ]);
+    }
+}
+
 function Manage($action) {
     switch ($action) {
         case "create":
             CreateCourse();
+            break;
+        case "modify-data":
+            ModifyCourseData();
+            break;
+        case "archive":
+            ArchiveCourse();
             break;
         default:
             SendResponse([
