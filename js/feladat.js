@@ -13,5 +13,5 @@ document.getElementById("uploadFileButton").addEventListener("click",()=>{
 })
 
 document.getElementById("backToPreviousPage").addEventListener("click",()=>{
-    window.history.back()
+    location.href = "../kurzus/index.html"
 })

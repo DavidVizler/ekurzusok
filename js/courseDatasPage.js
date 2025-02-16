@@ -1,4 +1,5 @@
 // let menu = document.getElementById("hamburger-menu")
+import { addDivId } from './divManager.js';
 
 const deadlineModal = document.getElementById("deadlineModal");
 const openModalLink = document.getElementById("openModal");
@@ -243,12 +244,15 @@ function showCourseContent(content) {
         let div = document.createElement('div');
         div.classList.add('ContentTypeDiv');
         div.classList.add(c.task ? 'feladatDiv' : 'tananyagDiv');
+        div.id = c.content_id
+
+        addDivId(div.id);
         
         let iconDiv = document.createElement('div');
         iconDiv.classList.add('Icon');
         
         let a = document.createElement('a');
-        a.href =  c.task ? '../feladat.html' :'../tananyag.html';
+        a.href =  c.task ? `../feladat.html` : `../tananyag.html`;
         
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
