@@ -6,7 +6,31 @@ function currentDateLoad(){
     creatingDate.innerHTML += currentDate + ", " + time
 }
 
+function displaySelectedFiles(files) {
+    document.getElementById('selectedFiles').innerHTML = '';
+    if (files.length == 0) {
+        let div = document.createElement('div');
+
+        let em = document.createElement('em');
+        em.innerText = "Nincs kiválasztott fájl";
+
+        div.appendChild(em);
+
+        document.getElementById('selectedFiles').appendChild(div);
+        return
+    }
+    for (const file of files) {
+        let div = document.createElement('div');
+        let title = document.createElement('h5');
+        title.innerText = file.name;
+        div.appendChild(title);
+        document.getElementById('selectedFiles').appendChild(div);
+    }
+}
+
 window.addEventListener("load", currentDateLoad)
+
+document.getElementById('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
 
 document.getElementById("uploadFileButton").addEventListener("click",()=>{
     document.getElementById("fileInput").click()

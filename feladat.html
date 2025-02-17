@@ -53,8 +53,16 @@
                 <h1 class="fileName">Fájl neve</h1>
             </div>
         </div>
+        <div>
+            <h2>Kiválasztott fájlok:</h2>
+            <div id="selectedFiles">
+                <div>
+                    <i>Nincs kiválasztott fájl</i>
+                </div>
+            </div>
+        </div>
         <div class="uploadOwnExercise">
-            <input type="file" name="fileInput" id="fileInput" style="display: none;">
+            <input type="file" multiple name="fileInput" id="fileInput" style="display: none;">
             <button type="button" id="uploadFileButton">Fájl feltöltése</button>
             <button type="button" id="uploadExerciseButton">Feladat leadása</button>
         </div>
