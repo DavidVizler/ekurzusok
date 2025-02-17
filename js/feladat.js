@@ -40,6 +40,10 @@ document.getElementById("backToPreviousPage").addEventListener("click",()=>{
     window.history.go(-1)
 })
 
+document.getElementById('modifyBtn').addEventListener('click', () => {
+    // Feladat szerkesztése
+});
+
 window.addEventListener('load',async()=>{
     let urlParams = new URLSearchParams(window.location.search);
     let tartalomId = urlParams.get('id');

@@ -124,3 +124,18 @@ button:hover{
     border-right: 1px solid grey;
     padding-right: 10px;
 }
+
+#modifyDiv {
+    margin-top: 10px;
+    margin-right: 15px;
+    display: flex;
+    justify-content: end;
+}
+
+#modifyBtn {
+    background-color: #5274ff;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+}
