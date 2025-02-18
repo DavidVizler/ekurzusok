@@ -33,8 +33,6 @@ async function contentPublish(data) {
         let courseId = parseInt(urlParams.get('id'));
 
         let reqData = {
-            manage: 'content',
-            action: 'create',
             course_id: courseId,
             ...data
         };
@@ -43,7 +41,6 @@ async function contentPublish(data) {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
             },
             body: JSON.stringify(reqData)
         });
@@ -84,7 +81,7 @@ async function onNewTask(e) {
         desc,
         task: 1,
         deadline: due,
-        max_point: points,
+        maxpoint: points,
         file
     };
 

@@ -47,6 +47,31 @@ async function toggleArrow(){
     }
 }
 
+function resultModal(result){
+    let modal = document.createElement("div")
+    modal.classList.add("modal")
+    let alertDiv = document.getElementById('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = document.createElement("div")
+    modal_content.classList.add("modal-content")
+    modal.appendChild(modal_content)
+
+    let message = document.createElement("p")
+    modal_content.appendChild(message)
+    message.innerHTML = result
+
+    let ok_button = document.createElement("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+
+    ok_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
 async function modifySettings(e) {
     e.preventDefault();
     try {
@@ -62,7 +87,7 @@ async function modifySettings(e) {
         let design = document.getElementById('designSelect').value;
 
         let reqData = {
-            course_id: courseId,
+            id: courseId,
             name,
             desc,
             design
@@ -72,7 +97,6 @@ async function modifySettings(e) {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
             },
             body: JSON.stringify(reqData)
         });
@@ -80,16 +104,14 @@ async function modifySettings(e) {
         let result = await response.json();
 
         if (result.sikeres) {
-            alert("Módosítások elmentve.");
             location.href = './' + courseId;
-        }
-        else {
-            throw new Error(result);
+        }else{
+            resultModal(result.uzenet)
         }
     }
     catch (e) {
         console.error(e);
-        alert("A módosítások elmentése nem sikerült! Kérjük próbálja meg később.");
+        resultModal("A módosítások elmentése nem sikerült! Kérjük próbálja meg később.");
     }
 }
 
@@ -120,7 +142,6 @@ async function loadCurrentValues(courseId) {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
             },
             body: JSON.stringify(reqData)
         });
@@ -130,8 +151,6 @@ async function loadCurrentValues(courseId) {
         document.getElementById('courseName').value = courseData['name'];
         document.getElementById('courseDescription').value = courseData['description'];
         document.getElementById('designSelect').value = courseData['design_id'];
-        document.getElementById('activeCode').value = courseData['code'];
-        document.getElementById('archivalt').checked = courseData['archived'] == 1;
     }
     catch (e) {
         console.error(e);

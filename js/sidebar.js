@@ -34,7 +34,7 @@ function fillSideBar(courses) {
 
         let a = document.createElement('a');
         if (window.location.href.includes('/kurzus/')) {
-            a.href = `./kurzus/${course.course_id}`;
+            a.href = `./${course.course_id}`;
         }
         else {
             a.href = `./kurzus/${course.course_id}`;
@@ -53,6 +53,5 @@ function toggleSideBar() {
 window.addEventListener('load', async () => {
     let courses = await getCoursesAsync();
     fillSideBar(courses);
-    document.getElementById('logoutButton').addEventListener('click', async () => await logout());
     document.getElementById('icon').addEventListener('click', toggleSideBar);
 });

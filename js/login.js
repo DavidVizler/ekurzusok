@@ -2,6 +2,31 @@ function $(id) {
     return document.getElementById(id);
 }
 
+function resultModal(result){
+    let modal = document.createElement("div")
+    modal.classList.add("modal")
+    let alertDiv = document.getElementById('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = document.createElement("div")
+    modal_content.classList.add("modal-content")
+    modal.appendChild(modal_content)
+
+    let message = document.createElement("p")
+    modal_content.appendChild(message)
+    message.innerHTML = result
+
+    let ok_button = document.createElement("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+
+    ok_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
 async function login() {
     let email = $('email').value;
     let password = $('password').value;
@@ -26,7 +51,7 @@ async function login() {
                 window.location.href = './kurzusok.html';
             }
             else {
-                alert(result.uzenet);
+                resultModal(result.uzenet);
             }
         }
     }

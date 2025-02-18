@@ -78,11 +78,11 @@ function showContentData(adatok){
     title.innerHTML = adatok.title
     createdDate.innerHTML = adatok.published
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname
-    limitDate.innerHTML = "Határidő: " + adatok.deadline
+    limitDate.innerHTML = "<b>Határidő: </b>" + adatok.deadline
     description.innerHTML = adatok.description
     if(adatok.max_points == null){
         max_points.innerHTML = "Nincs ponthatár beállítva!"
     }else{
-        max_points.innerHTML = "Pontszám: " + adatok.max_points
+        max_points.innerHTML = "<b>Ponthatár: </b>" + adatok.max_points + " p"
     }
 }

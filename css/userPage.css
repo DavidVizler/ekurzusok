@@ -111,14 +111,30 @@ a:hover{
     background-color: rgba(0,0,0,0.5);
 }
 
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
 .modal-content {
     background-color: white;
     border-radius: 10px;
     text-align: center;
-    margin: 15% auto;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 20px;
     width: 500px;
     font-size: large;
+    opacity: 0;
+    animation: slideDown 0.3s ease-out forwards;
 }
 
 .modal-content button {
