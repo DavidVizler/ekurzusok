@@ -24,14 +24,15 @@
                 <input type="text" name="Leiras" id="Leiras"/><br>
                 <label for="DesignSelect">Kurzus témája: </label>
                 <select name="DesignSelect" id="DesignSelect"></select><br>
-                <div id="preView" style="display: none;"></div>
                 <div class="formButtons">
                     <button type="submit" id="createButton" name="createButton">Létrehozás</button>
                     <button type="button" id="closeButton">Mégse</button>
                 </div>
             </form>
         </div>
+        <!-- Moved preView outside the formDiv -->
     </div>
+    <div id="preView" style="display: none;"></div>
     <script type="module" src="./js/courseAddPage.js"></script>
 </body>
 </html>

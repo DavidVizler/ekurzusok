@@ -237,7 +237,9 @@ async function deleteUserFromCourse(){
 
 function showCourseContent(content) {
     let contentList = document.getElementById('contentList');
+    let notPublishedDiv = document.getElementById("not_published")
     // contentList.innerHTML = '';
+    console.log(content)
 
     content.forEach(c => {
         
@@ -281,11 +283,41 @@ function showCourseContent(content) {
         iconDiv.appendChild(a);
         div.appendChild(iconDiv);
         divContent.appendChild(h1);
+
+        if (c.published == null) {
+            let radioButton = document.createElement('input');
+            radioButton.type = 'radio';
+            radioButton.classList.add("radioButton")
+            radioButton.name = 'unpublishedContent[]';
+            radioButton.value = c.content_id;
+            divContent.appendChild(radioButton);
+        }
+
         div.appendChild(divContent);
-        contentList.appendChild(div);
+        (c.published == null) ? notPublishedDiv.appendChild(div) : contentList.appendChild(div);
     });
     
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const link1 = document.getElementById('link1');
+    const link2 = document.getElementById('link2');
+    const content1 = document.getElementById('contentList');
+    const content2 = document.getElementById('not_published');
+
+    content1.classList.add("active")
+    link1.addEventListener('click', function(event) {
+        event.preventDefault();
+        content1.classList.add('active');
+        content2.classList.remove('active');
+    });
+
+    link2.addEventListener('click', function(event) {
+        event.preventDefault();
+        content2.classList.add('active');
+        content1.classList.remove('active');
+    });
+});
 
 document.getElementById('deleteButton').addEventListener('click', deleteUserFromCourse)
 

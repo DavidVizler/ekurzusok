@@ -46,7 +46,6 @@ function resultModal(result){
     ok_button.addEventListener("click",()=>{
         alertDiv.style.display = "none"
         alertDiv.innerHTML = ""
-        // location.reload()
     })
 }
 

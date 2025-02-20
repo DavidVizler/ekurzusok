@@ -48,7 +48,6 @@ document.getElementById("selectAddCourse").addEventListener('change',()=>{
 let cardData
 let design
 
-// import design from "./design.json" with {type : "json"}
 // Fetch importálás, hogy Firefoxban is megjelenjen a design
 async function getDesignJson() {
    let response = await fetch("./js/design.json")
