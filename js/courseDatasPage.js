@@ -64,18 +64,12 @@ closeButtonUsers.addEventListener("click", ()=>{
     
 })
 
-//import designData from './design.json' with {type : "json"}
 let designData 
 
 async function getDesignJson() {
     let response = await fetch("../js/design.json")
     designData = await response.json()
  }
-
-// function clickHandler(){
-//     menu.classList.toggle("active")
-// }
-// menu.addEventListener("click", clickHandler)
 
 let cardData;
 async function getCardsData() {
@@ -140,7 +134,6 @@ async function getCourseContent(courseId) {
     }
     catch (e) {
         console.error(e);
-        alert("Nem sikerült az adatokat lekérni a szerverről.");
     }
 }
 
@@ -238,11 +231,11 @@ async function deleteUserFromCourse(){
 function showCourseContent(content) {
     let contentList = document.getElementById('contentList');
     let notPublishedDiv = document.getElementById("not_published")
-    // contentList.innerHTML = '';
-    console.log(content)
+    let button = document.getElementById("publishButton")
+    let links = document.getElementById("links")
+    let notpublishedLink = document.getElementById("link2")
 
     content.forEach(c => {
-        
         let div = document.createElement('div');
         div.classList.add('ContentTypeDiv');
         div.classList.add(c.task ? 'feladatDiv' : 'tananyagDiv');
@@ -294,9 +287,46 @@ function showCourseContent(content) {
         }
 
         div.appendChild(divContent);
-        (c.published == null) ? notPublishedDiv.appendChild(div) : contentList.appendChild(div);
+        if(c.published == null){
+            notPublishedDiv.appendChild(div)
+            button.style.display = "block"
+        }else{
+            contentList.appendChild(div)
+        }
+
+        if(button.style.display == "none"){
+            notpublishedLink.style.display = "none"
+            links.style.setProperty('--items', '1');
+            links.style.justifyContent = 'center';
+        }
+        else{
+            links.style.setProperty('--items', '2');
+        }
     });
-    
+
+    document.getElementById("publishButton").addEventListener("click",function(){PublishContent(document.querySelectorAll(".radioButton"))})
+}
+
+async function PublishContent(radios) {
+    let selectedValue;
+    radios.forEach(radio => {
+        if (radio.checked) {
+            selectedValue = radio.value;
+        }
+    });
+    try {
+        let request = await fetch("../api/content/publish",{
+            method : "POST",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify({"content_id" : selectedValue})
+        })
+        let response = await request.json()
+        if(response.sikeres){
+            location.reload()
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -430,3 +430,18 @@ a#openModal:hover, a#openModalUsers:hover {
 
 .links > a:nth-of-type(1):hover ~ .line { --index: 1; }
 .links > a:nth-of-type(2):hover ~ .line { --index: 2; }
+
+#publishButton{
+    font-family: "Varela Round";
+    border-radius: 10px;
+    border: 1px solid #5272ffce;
+    height: 30px;
+    background-color: white;
+    color: #5271ff;
+    font-size: large;
+}
+
+#publishButton:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 8px #5271ff;
+}

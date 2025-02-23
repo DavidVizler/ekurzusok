@@ -83,14 +83,16 @@
             </div>
         </div>
         <div class="navbar">
-            <nav class="links" style="--items: 2;">
+            <nav class="links" style="--items: 2;" id="links">
                 <a href="#contentList" id="link1">Közétett tartalom</a>
                 <a href="#not_published" id="link2">Nem közétett tartalom</a>
                 <span class="line"></span>
             </nav>
         </div>
         <div class="content" id="contentList"></div>
-        <div class="content" id="not_published"></div>
+        <div class="content" id="not_published">
+            <button type="button" id="publishButton" style="display: none;">Közzététel</button>
+        </div>
 
         <!--Modals-->
         <div id="deadlineModal" class="modal">
