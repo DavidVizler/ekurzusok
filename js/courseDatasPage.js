@@ -22,14 +22,20 @@ async function fillDeadlineList() {
         let div = document.querySelector('.deadlineExercises');
         
         let result = await response.json();
+        result = result.filter(x => x.deadline != null);
+
         if (result.length > 0) {
             div.innerHTML = '';
-            /// Nincs még határidő tulajdonság a megérkezett adatoknál
-            // result.filter(x => x.deadline != null);
-            // result.sort((a, b) => b.deadline - a.deadline);
-            // result.forEach(feladat => {
-            //     div.innerHTML += `<p>${feladat.deadline} - ${feladat.title}</p>`;
-            // })
+            result = result.map(x => {
+                return {
+                    ...x,
+                    deadline: new Date(x.deadline)
+                };
+            });
+            result.sort((a, b) => b.deadline - a.deadline);
+            result.forEach(feladat => {
+                div.innerHTML += `<p>${feladat.deadline.toLocaleString()} - <a href="../feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
+            })
         }
         else {
             div.innerHTML = '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';

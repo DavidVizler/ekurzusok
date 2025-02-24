@@ -156,7 +156,7 @@ function CourseContentQuery() {
     }
 
     // Ha tanár, akkor a saját nem publikus tartalmait is visszaadja
-    $sql_statement = "SELECT c.content_id, c.title, c.task, c.published, u.firstname, u.lastname FROM content c
+    $sql_statement = "SELECT c.content_id, c.title, c.task, c.published, c.deadline, c.max_points, u.firstname, u.lastname FROM content c
     INNER JOIN users u ON c.user_id = u.user_id WHERE c.course_id = ? AND (c.user_id = ? OR c.published IS NOT NULL) ORDER BY c.content_id DESC;";
     $content = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
 

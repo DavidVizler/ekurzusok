@@ -4,11 +4,58 @@ function openPopUp() {
 
 document.getElementById("plusIcon").addEventListener('click',openPopUp)
 
-function openCalendarPopUp(){
+async function openCalendarPopUp(){
    document.getElementById("popupCalendar").style.display = "flex";
+   
+   let div = document.getElementById('toDoExercises');
+
+   try {
+      let tasks = [];
+
+      let responseCourses = await fetch("./api/query/user-courses");
+
+      let userCourses = await responseCourses.json();
+
+      let courses = userCourses.map(x => x.course_id);
+
+      for (const courseId of courses) {
+         let response = await fetch("./api/query/course-content", {
+            method : 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ course_id: courseId })
+         });
+         
+         
+         let result = await response.json();
+         result = result.filter(x => x.deadline != null);
+         tasks.push(...result)
+      }
+
+      if (tasks.length > 0) {
+         div.innerHTML = '';
+         tasks = tasks.map(x => {
+             return {
+                 ...x,
+                 deadline: new Date(x.deadline)
+             };
+         });
+         tasks.sort((a, b) => b.deadline - a.deadline);
+         tasks.forEach(feladat => {
+             div.innerHTML += `<p>${feladat.deadline.toLocaleString()} - <a href="./feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
+         })
+      }
+      else {
+         div.innerHTML = '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
+      }
+   }
+   catch (e) {
+      console.error(e);
+   }
 }
 
-document.getElementById("calendarIcon").addEventListener("click",openCalendarPopUp)
+document.getElementById("calendarIcon").addEventListener("click", openCalendarPopUp);
 
 function closePopup() {
    document.getElementById("popup").style.display = "none";
