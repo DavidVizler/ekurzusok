@@ -11,9 +11,9 @@ async function getUserData() {
 }
 
 function loadUserDataIn(userData) {
-    let emailInput = document.getElementById("emailInput");
-    let lastnameInput = document.getElementById('lastname')
-    let firstnameInput = document.getElementById('firstname')
+    let emailInput = $("emailInput");
+    let lastnameInput = $('lastname')
+    let firstnameInput = $('firstname')
     if (!userData) {
         console.error("Nincsenek adatok!");
         return;
@@ -25,21 +25,19 @@ function loadUserDataIn(userData) {
 }
 
 function resultModal(result){
-    let modal = document.createElement("div")
-    modal.classList.add("modal")
-    let alertDiv = document.getElementById('alertDiv')
+    let modal = create("div", 'modal')
+    let alertDiv = $('alertDiv')
     alertDiv.style.display = "block"
     alertDiv.appendChild(modal)
 
-    let modal_content = document.createElement("div")
-    modal_content.classList.add("modal-content")
+    let modal_content = create("div", 'modal-content')
     modal.appendChild(modal_content)
 
-    let message = document.createElement("p")
+    let message = create("p")
     modal_content.appendChild(message)
     message.innerHTML = result
 
-    let ok_button = document.createElement("button")
+    let ok_button = create("button")
     modal_content.appendChild(ok_button)
     ok_button.innerHTML = "OK"
 
@@ -50,11 +48,11 @@ function resultModal(result){
 }
 
 async function modifyUserData(){
-    let email = document.getElementById('emailInput').value
-    let lastname = document.getElementById('lastname').value
-    let firstname = document.getElementById('firstname').value
-    let password = document.getElementById('password').value
-    let newPassword = document.getElementById('new-password').value
+    let email = $('emailInput').value
+    let lastname = $('lastname').value
+    let firstname = $('firstname').value
+    let password = $('password').value
+    let newPassword = $('new-password').value
     let reqData = {
         "email" : email,
         "lastname" : lastname,
@@ -85,9 +83,9 @@ async function modifyUserData(){
 }
 
 async function modifyUserPassword() {
-    let password = document.getElementById('old_password').value
-    let newPassword = document.getElementById('new-password').value
-    let checkingNewPassword = document.getElementById("new-password-again").value
+    let password = $('old_password').value
+    let newPassword = $('new-password').value
+    let checkingNewPassword = $("new-password-again").value
     let reqData;
     if(newPassword == checkingNewPassword){
         reqData = {
@@ -124,7 +122,7 @@ async function modifyUserPassword() {
 document.addEventListener("DOMContentLoaded", function () {
     const adatmodositasLink = document.querySelector(".navbar a:nth-child(1)");
     const jelszoModositasLink = document.querySelector(".navbar a:nth-child(2)");
-    const saveButton = document.getElementById("modifyUserDataButton");
+    const saveButton = $("modifyUserDataButton");
 
     function showUserDataFields() {
         document.querySelector(".userDataDiv").style.display = "block";
@@ -153,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     showUserDataFields();
 
-    const style = document.createElement("style");
+    const style = create("style");
     style.innerHTML = `
         .navbar a.active {
             font-weight: bold;

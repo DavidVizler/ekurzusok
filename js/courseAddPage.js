@@ -9,9 +9,9 @@ async function getDesignJson() {
 }
 
 function designOptionLoad() {
-    let select = document.getElementById("DesignSelect");
+    let select = $("DesignSelect");
     design.forEach(elem => {
-        let option = document.createElement("option");
+        let option = create("option");
         option.value = elem.designId;
         option.text = elem.designName;
         select.appendChild(option);
@@ -21,29 +21,24 @@ function designOptionLoad() {
 }
 
 function loadDefaultCard() {
-    let preview = document.getElementById("preView");
+    let preview = $("preView");
     preview.innerHTML = "";
 
     let defaultDesign = design.find(elem => elem.designName === "Földrajz");
 
     if (defaultDesign) {
-        let card = document.createElement("div");
-        card.classList.add("card");
+        let card = create("div", "card");
 
-        let cardHeader = document.createElement("div");
-        cardHeader.classList.add("card-header");
+        let cardHeader = create("div", "card-header");
 
-        let img = document.createElement("img");
+        let img = create("img", "card-img-top");
         img.src = defaultDesign.image;
         img.alt = "Kurzus témája";
-        img.classList.add("card-img-top");
 
-        let cardBody = document.createElement("div");
-        cardBody.classList.add("card-body");
+        let cardBody = create("div", "card-body");
 
-        let cardTitle = document.createElement("h5");
+        let cardTitle = create("h5", "card-title");
         cardTitle.textContent = "Kurzus neve";
-        cardTitle.classList.add("card-title");
 
         cardBody.appendChild(cardTitle);
         cardHeader.appendChild(img);
@@ -60,8 +55,8 @@ function loadDefaultCard() {
 function previewLoad() {
     let selectDesign = document.querySelector("#DesignSelect");
     let designName = selectDesign.options[selectDesign.selectedIndex].text;
-    let preview = document.getElementById("preView");
-    let kurzusNev = document.getElementById("KurzusNev");
+    let preview = $("preView");
+    let kurzusNev = $("KurzusNev");
     preview.innerHTML = ""; // Clear default card
 
     design.forEach(elem => {
@@ -70,23 +65,19 @@ function previewLoad() {
             preview.style.justifyContent = "center";
             preview.style.alignItems = "center";
 
-            let card = document.createElement("div");
-            card.classList.add("card");
+            let card = create("div", "card");
 
-            let cardHeader = document.createElement("div");
-            cardHeader.classList.add("card-header");
+            let cardHeader = create("div", "card-header");
 
-            let img = document.createElement("img");
+            let img = create("img", "card-img-top");
             img.src = elem.image;
             img.alt = "Kurzus témája";
-            img.classList.add("card-img-top");
 
-            let cardBody = document.createElement("div");
+            let cardBody = create("div");
             cardBody.classList.add("card-body");
 
-            let cardTitle = document.createElement("h5");
+            let cardTitle = create("h5", "card-title");
             cardTitle.textContent = kurzusNev.value || "Kurzus neve";
-            cardTitle.classList.add("card-title");
 
             cardBody.appendChild(cardTitle);
             cardHeader.appendChild(img);
@@ -98,9 +89,9 @@ function previewLoad() {
 }
 
 async function sendNewCourseData() {
-    let name = document.getElementById("KurzusNev").value;
-    let desc = document.getElementById("Leiras").value;
-    let courseDesgin = document.getElementById("DesignSelect").value;
+    let name = $("KurzusNev").value;
+    let desc = $("Leiras").value;
+    let courseDesgin = $("DesignSelect").value;
 
     let newCourseData = {
         "name": name,
@@ -123,14 +114,14 @@ async function sendNewCourseData() {
 
 window.addEventListener('load', getDesignJson);
 window.addEventListener('load', () => {
-    document.getElementById('newCourseForm').addEventListener('submit', (e) => {
+    $('newCourseForm').addEventListener('submit', (e) => {
         sendNewCourseData();
         e.preventDefault();
     });
 });
 
-document.getElementById("DesignSelect").addEventListener('change', previewLoad);
+$("DesignSelect").addEventListener('change', previewLoad);
 
-document.getElementById("closeButton").addEventListener('click', () => {
+$("closeButton").addEventListener('click', () => {
     window.open("./kurzusok.html", "_self");
 });

@@ -1,4 +1,4 @@
-let pageLink = document.getElementById("backtoPage")
+let pageLink = $("backtoPage")
 pageLink.addEventListener("click", ()=>{
     history.back()
 })
@@ -12,9 +12,9 @@ async function getDesign() {
 
 async function loadDesign() {
     let designData = await getDesign()
-    let designSelect = document.getElementById("designSelect")
+    let designSelect = $("designSelect")
     for (let data of designData) {
-        let option = document.createElement("option")
+        let option = create("option")
         option.value = data.designId
         option.textContent = data.designName
         designSelect.appendChild(option)
@@ -23,8 +23,8 @@ async function loadDesign() {
 
 async function loadPreview() {
     let designData = await getDesign()
-    let selectedDesign = document.getElementById("designSelect").value
-    let previewDiv = document.getElementById("previewDiv")
+    let selectedDesign = $("designSelect").value
+    let previewDiv = $("previewDiv")
 
     for(let data of designData){
         if(data.designId == selectedDesign){
@@ -36,7 +36,7 @@ async function loadPreview() {
 
 async function toggleArrow(){
     let arrow = document.querySelector('.arrow')
-    let previewDiv = document.getElementById("previewDiv")
+    let previewDiv = $("previewDiv")
 
     arrow.classList.toggle('flipped')
 
@@ -48,21 +48,19 @@ async function toggleArrow(){
 }
 
 function resultModal(result){
-    let modal = document.createElement("div")
-    modal.classList.add("modal")
-    let alertDiv = document.getElementById('alertDiv')
+    let modal = create("div", 'modal')
+    let alertDiv = $('alertDiv')
     alertDiv.style.display = "block"
     alertDiv.appendChild(modal)
 
-    let modal_content = document.createElement("div")
-    modal_content.classList.add("modal-content")
+    let modal_content = create("div", 'modal-content')
     modal.appendChild(modal_content)
 
-    let message = document.createElement("p")
+    let message = create("p")
     modal_content.appendChild(message)
     message.innerHTML = result
 
-    let ok_button = document.createElement("button")
+    let ok_button = create("button")
     modal_content.appendChild(ok_button)
     ok_button.innerHTML = "OK"
 
@@ -75,16 +73,16 @@ function resultModal(result){
 async function modifySettings(e) {
     e.preventDefault();
     try {
-        let urlParams = new URL(location.href).searchParams;
+        let urlParams = getUrlParams();
         if (!urlParams.has('id')) {
             throw new Error("Nincs 'id' paraméter megadva az URL-ben.");
         }
 
         let courseId = parseInt(urlParams.get('id'));
         
-        let name = document.getElementById('courseName').value;
-        let desc = document.getElementById('courseDescription').value;
-        let design = document.getElementById('designSelect').value;
+        let name = $('courseName').value;
+        let desc = $('courseDescription').value;
+        let design = $('designSelect').value;
 
         let reqData = {
             id: courseId,
@@ -118,7 +116,7 @@ async function modifySettings(e) {
 async function onLoad() {
     try {
 
-        let urlParams = new URL(location.href).searchParams;
+        let urlParams = getUrlParams();
         if (!urlParams.has('id') || isNaN(urlParams.get('id'))) {
             location.href = '../kurzusok.html';
         }
@@ -148,9 +146,9 @@ async function loadCurrentValues(courseId) {
 
         let courseData = await response.json();
         
-        document.getElementById('courseName').value = courseData['name'];
-        document.getElementById('courseDescription').value = courseData['description'];
-        document.getElementById('designSelect').value = courseData['design_id'];
+        $('courseName').value = courseData['name'];
+        $('courseDescription').value = courseData['description'];
+        $('designSelect').value = courseData['design_id'];
     }
     catch (e) {
         console.error(e);
@@ -158,7 +156,7 @@ async function loadCurrentValues(courseId) {
 }
 
 window.addEventListener('load', loadDesign)
-document.getElementById("designSelect").addEventListener("change", loadPreview)
+$("designSelect").addEventListener("change", loadPreview)
 document.querySelector(".openPreviewDiv").addEventListener('click', toggleArrow)
 window.addEventListener('load', async () => await onLoad());
-document.getElementById('settingsForm').addEventListener('submit', async (e) => await modifySettings(e));
+$('settingsForm').addEventListener('submit', async (e) => await modifySettings(e));

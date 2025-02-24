@@ -96,6 +96,7 @@
     <title>eKurzusok Admin</title>
     <link rel="stylesheet" href="./admin.css">
     <link rel="shortcut icon" href="../img/eKurzusok.png" type="image/x-icon">
+    <script src="../js/utils.js"></script>
     <script src='./admin.js'></script>
 </head>
 <body>

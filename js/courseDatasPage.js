@@ -1,13 +1,13 @@
-// let menu = document.getElementById("hamburger-menu")
+// let menu = $("hamburger-menu")
 
-const deadlineModal = document.getElementById("deadlineModal");
-const openModalLink = document.getElementById("openModal");
-const openModalUsersLink = document.getElementById("openModalUsers");
+const deadlineModal = $("deadlineModal");
+const openModalLink = $("openModal");
+const openModalUsersLink = $("openModalUsers");
 const closeButton = document.querySelector(".close-button");
 const closeButtonUsers = document.querySelector(".close-buttonUsers");
-const usersModal = document.getElementById("usersModal");
+const usersModal = $("usersModal");
 
-let courseId = window.location.pathname.split("/").pop();
+let courseId = getUrlEndpoint();
 
 async function fillDeadlineList() {
     try {
@@ -102,11 +102,11 @@ async function getCardsData() {
 }
 
 function ModifyActualData(cardData){
-    let kurzusNev = document.getElementById("kurzusNev")
-    let oktatok = document.getElementById("oktatok")
+    let kurzusNev = $("kurzusNev")
+    let oktatok = $("oktatok")
     let title = document.querySelector("title")
-    let header = document.getElementById("header")
-    let kurzusLeiras = document.getElementById('kurzusLeiras');
+    let header = $("header")
+    let kurzusLeiras = $('kurzusLeiras');
     kurzusNev.innerHTML = cardData.name
     oktatok.innerHTML = cardData.lastname +" " +  cardData.firstname
     title.innerHTML = cardData.name
@@ -169,33 +169,33 @@ async function getCourseUsers(courseid){
 
 async function showCourseUsers() {
     let usersDiv = document.querySelector('.courseUsers')
-    let ownerp = document.createElement('p')
-    let deleteButton = document.getElementById('deleteButton')
+    let ownerp = create('p')
+    let deleteButton = $('deleteButton')
     ownerp.textContent = "Oktató: " + userslist[0].lastname + " " + userslist[0].firstname
     console.log(userslist)
-    let tags = document.createElement('p')
+    let tags = create('p')
     tags.textContent = "Tagok:"
     usersDiv.appendChild(ownerp)
     usersDiv.appendChild(tags)
-    let scrollDiv = document.createElement("div");
+    let scrollDiv = create("div");
     scrollDiv.id = "scrollDiv";
-    let ul = document.createElement("ul")
+    let ul = create("ul")
     for(let i = 1; i < userslist.length; i++){
         if(userslist[i].user_id != null){
-            let userRadio = document.createElement('input')
+            let userRadio = create('input')
             userRadio.type = "radio"
             userRadio.name = "radioButtons"
             userRadio.value = userslist[i].user_id
             userRadio.style.marginBottom = "10px"
-            let name = document.createElement("label")
+            let name = create("label")
             name.textContent = userslist[i].lastname + " " + userslist[i].firstname
-            let br = document.createElement('br')
+            let br = create('br')
             scrollDiv.appendChild(userRadio)
             scrollDiv.appendChild(name)
             scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
         }else{
-            let li = document.createElement('li')
+            let li = create('li')
             li.value = userslist[i].felhasznaloId
             li.textContent = userslist[i].lastname + " " + userslist[i].firstname
             ul.appendChild(li)
@@ -206,8 +206,7 @@ async function showCourseUsers() {
 }
 
 async function deleteUserFromCourse(){
-    let urlParts = location.href.split('/')
-    let course_id = parseInt(urlParts[urlParts.length-1])
+    let course_id = parseInt(getUrlEndpoint())
     let user_id = document.querySelector('input:checked').value
     try {
         let data = {
@@ -235,22 +234,19 @@ async function deleteUserFromCourse(){
 }
 
 function showCourseContent(content) {
-    let contentList = document.getElementById('contentList');
-    let notPublishedDiv = document.getElementById("not_published")
-    let button = document.getElementById("publishButton")
-    let links = document.getElementById("links")
-    let notpublishedLink = document.getElementById("link2")
+    let contentList = $('contentList');
+    let notPublishedDiv = $("not_published")
+    let button = $("publishButton")
+    let links = $("links")
+    let notpublishedLink = $("link2")
 
     content.forEach(c => {
-        let div = document.createElement('div');
-        div.classList.add('ContentTypeDiv');
-        div.classList.add(c.task ? 'feladatDiv' : 'tananyagDiv');
+        let div = create('div', 'ContentTypeDiv', c.task ? 'feladatDiv' : 'tananyagDiv', );
         div.id = c.content_id
         
-        let iconDiv = document.createElement('div');
-        iconDiv.classList.add('Icon');
+        let iconDiv = create('div', 'Icon');
         
-        let a = document.createElement('a');
+        let a = create('a');
         a.href =  c.task ? `../feladat.html?id=${c.content_id}` : `../tananyag.html?id=${c.content_id}`;
         
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -271,10 +267,9 @@ function showCourseContent(content) {
             path.setAttribute('d', 'M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z');
         }
 
-        let divContent = document.createElement('div');
-        divContent.classList.add(c.task ? 'feladatDivContent' : 'tananyagDivContent');
+        let divContent = create('div', c.task ? 'feladatDivContent' : 'tananyagDivContent');
 
-        let h1 = document.createElement('h1');
+        let h1 = create('h1');
         h1.innerText = c.title;
         
         svg.appendChild(path);
@@ -284,7 +279,7 @@ function showCourseContent(content) {
         divContent.appendChild(h1);
 
         if (c.published == null) {
-            let radioButton = document.createElement('input');
+            let radioButton = create('input');
             radioButton.type = 'radio';
             radioButton.classList.add("radioButton")
             radioButton.name = 'unpublishedContent[]';
@@ -310,7 +305,7 @@ function showCourseContent(content) {
         }
     });
 
-    document.getElementById("publishButton").addEventListener("click",function(){PublishContent(document.querySelectorAll(".radioButton"))})
+    $("publishButton").addEventListener("click",function(){PublishContent(document.querySelectorAll(".radioButton"))})
 }
 
 async function PublishContent(radios) {
@@ -336,10 +331,10 @@ async function PublishContent(radios) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const link1 = document.getElementById('link1');
-    const link2 = document.getElementById('link2');
-    const content1 = document.getElementById('contentList');
-    const content2 = document.getElementById('not_published');
+    const link1 = $('link1');
+    const link2 = $('link2');
+    const content1 = $('contentList');
+    const content2 = $('not_published');
 
     content1.classList.add("active")
     link1.addEventListener('click', function(event) {
@@ -355,19 +350,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.getElementById('deleteButton').addEventListener('click', deleteUserFromCourse)
+$('deleteButton').addEventListener('click', deleteUserFromCourse)
 
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
 window.addEventListener('load', () => {
-    let urlParts = location.href.split('/');
-    let courseId = parseInt(urlParts[urlParts.length - 1]);
+    let courseId = parseInt(getUrlEndpoint());
     if (isNaN(courseId)) {
         location.href = '../kurzusok.html';
     }
     else {
-        let addContentButton = document.getElementById('addContentButton');
-        let settingsButton = document.getElementById('settingsButton');
+        let addContentButton = $('addContentButton');
+        let settingsButton = $('settingsButton');
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
 

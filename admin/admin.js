@@ -1,7 +1,3 @@
-function $(id) {
-    return document.getElementById(id);
-}
-
 async function listUsers(page, rows, orderby) {
     try {
         let request = await fetch("./api/get-users", {
@@ -268,19 +264,17 @@ async function listUserInfo(page, rows, id, orderby) {
 }
 
 function resultModal(result) {
-    let modal = document.createElement("div");
-    modal.classList.add("modal");
+    let modal = create("div", "modal");
     $("modal-container").appendChild(modal);
 
-    let modal_content = document.createElement("div");
-    modal_content.classList.add("modal-content");
+    let modal_content = create("div", "modal-content");
     modal.appendChild(modal_content);
 
-    let message = document.createElement("p");
+    let message = create("p");
     modal_content.appendChild(message);
     message.innerHTML = result;
 
-    let ok_button = document.createElement("button");
+    let ok_button = create("button");
     modal_content.appendChild(ok_button);
     ok_button.innerHTML = "OK";
 
@@ -291,22 +285,20 @@ function resultModal(result) {
 }
 
 function deleteModal(target, id, info) {
-    let modal = document.createElement("div");
-    modal.classList.add("modal");
+    let modal = create("div", "modal");
     $("modal-container").appendChild(modal);
 
-    let modal_content = document.createElement("div");
-    modal_content.classList.add("modal-content");
+    let modal_content = create("div", "modal-content");
     modal.appendChild(modal_content);
 
-    let message = document.createElement("p");
+    let message = create("p");
     modal_content.appendChild(message);
 
-    let yes_button = document.createElement("button");
+    let yes_button = create("button");
     modal_content.appendChild(yes_button);
     yes_button.innerHTML = "Igen";
 
-    let no_button = document.createElement("button");
+    let no_button = create("button");
     modal_content.appendChild(no_button);
     no_button.innerHTML = "Nem";
     

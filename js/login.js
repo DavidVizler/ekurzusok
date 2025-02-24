@@ -1,23 +1,17 @@
-function $(id) {
-    return document.getElementById(id);
-}
-
 function resultModal(result){
-    let modal = document.createElement("div")
-    modal.classList.add("modal")
-    let alertDiv = document.getElementById('alertDiv')
+    let modal = create("div", 'modal')
+    let alertDiv = $('alertDiv')
     alertDiv.style.display = "block"
     alertDiv.appendChild(modal)
 
-    let modal_content = document.createElement("div")
-    modal_content.classList.add("modal-content")
+    let modal_content = create("div", 'modal-content')
     modal.appendChild(modal_content)
 
-    let message = document.createElement("p")
+    let message = create("p")
     modal_content.appendChild(message)
     message.innerHTML = result
 
-    let ok_button = document.createElement("button")
+    let ok_button = create("button")
     modal_content.appendChild(ok_button)
     ok_button.innerHTML = "OK"
 

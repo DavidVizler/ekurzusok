@@ -1,7 +1,3 @@
-function $(id) {
-    return document.getElementById(id);
-}
-
 async function signup() {
     let lastname = $('lastname').value;
     let firstname = $('firstname').value;

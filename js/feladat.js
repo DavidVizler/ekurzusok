@@ -1,5 +1,5 @@
 function currentDateLoad(){
-    let creatingDate = document.getElementById("creatingDate")
+    let creatingDate = $("creatingDate")
     let actualDate = new Date()
     let currentDate = actualDate.toISOString().split("T")[0]
     let time = actualDate.getHours() + ":" + actualDate.getMinutes()
@@ -7,45 +7,45 @@ function currentDateLoad(){
 }
 
 function displaySelectedFiles(files) {
-    document.getElementById('selectedFiles').innerHTML = '';
+    $('selectedFiles').innerHTML = '';
     if (files.length == 0) {
-        let div = document.createElement('div');
+        let div = create('div');
 
-        let em = document.createElement('em');
+        let em = create('em');
         em.innerText = "Nincs kiválasztott fájl";
 
         div.appendChild(em);
 
-        document.getElementById('selectedFiles').appendChild(div);
+        $('selectedFiles').appendChild(div);
         return
     }
     for (const file of files) {
-        let div = document.createElement('div');
-        let title = document.createElement('h5');
+        let div = create('div');
+        let title = create('h5');
         title.innerText = file.name;
         div.appendChild(title);
-        document.getElementById('selectedFiles').appendChild(div);
+        $('selectedFiles').appendChild(div);
     }
 }
 
 window.addEventListener("load", currentDateLoad)
 
-document.getElementById('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
+$('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
 
-document.getElementById("uploadFileButton").addEventListener("click",()=>{
-    document.getElementById("fileInput").click()
+$("uploadFileButton").addEventListener("click",()=>{
+    $("fileInput").click()
 })
 
-document.getElementById("backToPreviousPage").addEventListener("click",()=>{
+$("backToPreviousPage").addEventListener("click",()=>{
     window.history.go(-1)
 })
 
-document.getElementById('modifyBtn').addEventListener('click', () => {
+$('modifyBtn').addEventListener('click', () => {
     // Feladat szerkesztése
 });
 
 window.addEventListener('load',async()=>{
-    let urlParams = new URLSearchParams(window.location.search);
+    let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');
     let reqData = {
         "content_id" : parseInt(tartalomId)
@@ -69,12 +69,12 @@ window.addEventListener('load',async()=>{
 
 function showContentData(adatok){
     console.log(adatok)
-    let title = document.getElementById("title")
-    let createdDate = document.getElementById("creatingDate")
-    let max_points =  document.getElementById("maxPoint")
-    let createUser = document.getElementById("createrUser")
-    let limitDate = document.getElementById("timeLimitDate")
-    let description = document.getElementById("description")
+    let title = $("title")
+    let createdDate = $("creatingDate")
+    let max_points =  $("maxPoint")
+    let createUser = $("createrUser")
+    let limitDate = $("timeLimitDate")
+    let description = $("description")
     title.innerHTML = adatok.title
     createdDate.innerHTML = adatok.published
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname

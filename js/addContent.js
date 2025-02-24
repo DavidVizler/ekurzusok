@@ -1,30 +1,30 @@
-let contentType = document.getElementById("typeContent")
+let contentType = $("typeContent")
 contentType.addEventListener("click", ()=>{
     let selectElement = document.querySelector('select');
     let selectedOption = selectElement.options[selectElement.selectedIndex];
     let type = selectedOption.value;
     if(type == "feladat"){
-        document.getElementById("feladatDiv").style.display = "flex"
-        document.getElementById("feladatDiv").style.flexDirection = "column"
-        document.getElementById("tananyagDiv").style.display = "none"
+        $("feladatDiv").style.display = "flex"
+        $("feladatDiv").style.flexDirection = "column"
+        $("tananyagDiv").style.display = "none"
     }
     if(type == "tananyag"){
-        document.getElementById("tananyagDiv").style.display = "flex"
-        document.getElementById("tananyagDiv").style.flexDirection = "column"
-        document.getElementById("feladatDiv").style.display = "none"
+        $("tananyagDiv").style.display = "flex"
+        $("tananyagDiv").style.flexDirection = "column"
+        $("feladatDiv").style.display = "none"
     }
     else{
-        document.getElementById("tananyagDiv").style.display = "none"
+        $("tananyagDiv").style.display = "none"
     }
 })
 
-let pageLink = document.getElementById("backtoPage").addEventListener("click", ()=>{
+let pageLink = $("backtoPage").addEventListener("click", ()=>{
     history.back()
 })
 
 async function contentPublish(data) {
     try {
-        let urlParams = new URL(location.href).searchParams;
+        let urlParams = getUrlParams();
         if (!urlParams.has('id')) {
             alert('Hiba!');
             return;
@@ -62,14 +62,14 @@ async function contentPublish(data) {
 // Feladat
 async function onNewTask(e) {
     e.preventDefault();
-    let title = document.getElementById('fcim').value;
-    let desc = document.getElementById('fleiras').value;
+    let title = $('fcim').value;
+    let desc = $('fleiras').value;
     // Az input mező értéke helyi (UTC+1) időben van. Az időzóna nincs tárolva.
-    let localTime = document.getElementById('fhatarido').value;
+    let localTime = $('fhatarido').value;
     // Konvertálás UTC 0 időzónás dátumra (Z betű a végén). (ISO 8601 formátum)
     let due = new Date(localTime).toJSON();
-    let points = parseInt(document.getElementById('fpont').value);
-    let file = document.getElementById('ffile').files[0];
+    let points = parseInt($('fpont').value);
+    let file = $('ffile').files[0];
 
     if (title == '') {
         alert("A cím megadása kötelező!");
@@ -91,9 +91,9 @@ async function onNewTask(e) {
 // Tananyag
 async function onNewMaterial(e) {
     e.preventDefault();
-    let title = document.getElementById('tcim').value;
-    let desc = document.getElementById('tleiras').value;
-    let file = document.getElementById('tfile').files[0];
+    let title = $('tcim').value;
+    let desc = $('tleiras').value;
+    let file = $('tfile').files[0];
 
     if (title == '') {
         alert("A cím megadása kötelező!");
@@ -110,10 +110,10 @@ async function onNewMaterial(e) {
     await contentPublish(data);
 }
 
-document.getElementById('ujFeladatForm').addEventListener('submit', async (e) => onNewTask(e));
-document.getElementById('ujTananyagForm').addEventListener('submit', async (e) => onNewMaterial(e));
+$('ujFeladatForm').addEventListener('submit', async (e) => onNewTask(e));
+$('ujTananyagForm').addEventListener('submit', async (e) => onNewMaterial(e));
 window.addEventListener('load', () => {
-    let urlParams = new URL(location.href).searchParams;
+    let urlParams = getUrlParams();
     if (!urlParams.has('id')) {
         location.href = '../kurzusok.html';
     }

@@ -1,13 +1,13 @@
 function openPopUp() {
-   document.getElementById("popup").style.display = "flex";
+   $("popup").style.display = "flex";
 }
 
-document.getElementById("plusIcon").addEventListener('click',openPopUp)
+$("plusIcon").addEventListener('click',openPopUp)
 
 async function openCalendarPopUp(){
-   document.getElementById("popupCalendar").style.display = "flex";
+   $("popupCalendar").style.display = "flex";
    
-   let div = document.getElementById('toDoExercises');
+   let div = $('toDoExercises');
 
    try {
       let tasks = [];
@@ -55,33 +55,33 @@ async function openCalendarPopUp(){
    }
 }
 
-document.getElementById("calendarIcon").addEventListener("click", openCalendarPopUp);
+$("calendarIcon").addEventListener("click", openCalendarPopUp);
 
 function closePopup() {
-   document.getElementById("popup").style.display = "none";
-   document.getElementById("popupCalendar").style.display = "none";
+   $("popup").style.display = "none";
+   $("popupCalendar").style.display = "none";
 }
 
-document.getElementById("close-btn").addEventListener("click",closePopup)
-document.getElementById("calendarCloseButton").addEventListener("click",closePopup)
+$("close-btn").addEventListener("click",closePopup)
+$("calendarCloseButton").addEventListener("click",closePopup)
 
-document.getElementById("userIcon").addEventListener("click", function() {
-   const menu = document.getElementById("dropdownMenu");
+$("userIcon").addEventListener("click", function() {
+   const menu = $("dropdownMenu");
    menu.style.display = menu.style.display === "block" ? "none" : "block";
 });
 
 // Menü elrejtése, ha valahol máshol kattintanak
 document.addEventListener("click", function(event) {
-   const menu = document.getElementById("dropdownMenu");
-   const icon = document.getElementById("userIcon");
+   const menu = $("dropdownMenu");
+   const icon = $("userIcon");
    if (!icon.contains(event.target)) {
        menu.style.display = "none";
    }
 });
 
-document.getElementById("selectAddCourse").addEventListener('change',()=>{
+$("selectAddCourse").addEventListener('change',()=>{
    let selectedValue = document.querySelector("option:checked").value
-   let codeForm = document.getElementById("codeForm")
+   let codeForm = $("codeForm")
    if(selectedValue == "addCourseCode"){
       codeForm.style.display = "block"
    }else{
@@ -121,40 +121,32 @@ async function getCardsData() {
 }
 
 function GenerateCards(){
-   let cardsContainer = document.getElementById("cards-container")
-   let rowDiv = document.createElement("div")
-   rowDiv.classList.add("row")
+   let cardsContainer = $("cards-container")
+   let rowDiv = create("div", "row")
    for(let i = 0; i < cardData.length; i++){
-      let colDiv = document.createElement("div")
-      colDiv.classList.add("col")
+      let colDiv = create("div", "col")
 
-      let card = document.createElement("div")
-      card.classList.add("card")
+      let card = create("div", "card")
       
-      let link = document.createElement("a")
+      let link = create("a")
       link.href = "kurzus/" + cardData[i]["course_id"]
       
 
-      let cardHeader = document.createElement("div")
-      cardHeader.classList.add("card-header")
+      let cardHeader = create("div", "card-header")
 
-      let img = document.createElement("img")
-      img.classList.add("card-img-top")
+      let img = create("img", "card-img-top")
       design.forEach(elem => {
          if(elem.designId == cardData[i]["design_id"]){
             img.src = elem.image
          }
       });
 
-      let cardBody = document.createElement("div")
-      cardBody.classList.add("card-body")
+      let cardBody = create("div", 'card-body')
 
-      let cardTitle = document.createElement("h2")
-      cardTitle.classList.add("card-title")
+      let cardTitle = create("h2", 'card-title')
       cardTitle.textContent = cardData[i]["name"]
 
-      let cardOktatok = document.createElement("h4")
-      cardOktatok.classList.add("card-teachers")
+      let cardOktatok = create("h4", 'card-teachers')
       cardOktatok.textContent = cardData[i]["Oktatok"]
 
       cardBody.appendChild(cardTitle)
@@ -178,7 +170,7 @@ async function logout() {
 
 async function joinCourse(e) {
    e.preventDefault();
-   let code = document.getElementById('codeInput').value;
+   let code = $('codeInput').value;
 
    try {
       let reqData = {
@@ -209,5 +201,5 @@ async function joinCourse(e) {
 
 window.addEventListener("load", getDesignJson);
 window.addEventListener("load",getCardsData);
-document.getElementById("logoutButton").addEventListener("click", logout);
-document.getElementById('courseJoinForm').addEventListener('submit', async (e) => await joinCourse(e));
+$("logoutButton").addEventListener("click", logout);
+$('courseJoinForm').addEventListener('submit', async (e) => await joinCourse(e));
