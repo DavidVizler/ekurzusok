@@ -293,9 +293,9 @@ body.modal-open {
     border-radius: 8px;
     width: 300px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-height: 90%;
+    /* max-height: 90%; */
 }
-  
+
 .close-button svg, .close-buttonUsers svg{
     color: black;
     float: right;
@@ -307,14 +307,14 @@ body.modal-open {
     cursor: pointer;
     color: #000;
 }
-  
+
 a#openModal, a#openModalUsers {
     color: #007BFF;
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
 }
-  
+
 a#openModal:hover, a#openModalUsers:hover {
     text-decoration: underline;
 }
@@ -331,6 +331,8 @@ a#openModal:hover, a#openModalUsers:hover {
 
 #scrollDiv{
     overflow-y: auto;
+    max-height: 500px;
+    scrollbar-width: none;
 }
 
 #scrollDiv::-webkit-scrollbar{
