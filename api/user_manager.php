@@ -5,7 +5,7 @@ function Login() {
         return;
     }
 
-    if (!PostDataCheck(["email", "password"])) {
+    if (!PostDataCheck(["email", "password"], "ss")) {
         return;
     }
 
@@ -47,7 +47,7 @@ function Signup() {
         return;
     }
 
-    if (!PostDataCheck(["email", "lastname", "firstname", "password"])) {
+    if (!PostDataCheck(["email", "lastname", "firstname", "password"], "ssss")) {
         return;
     }
 
@@ -121,7 +121,7 @@ function ModifyUserData() {
         return;
     }
 
-    if (!PostDataCheck(["email", "firstname", "lastname", "password"])) {
+    if (!PostDataCheck(["email", "firstname", "lastname", "password"], "ssss")) {
         return;
     }
 
@@ -221,7 +221,7 @@ function ChangeUserPassword() {
         return;
     }
 
-    if (!PostDataCheck(["old_password", "new_password"])) {
+    if (!PostDataCheck(["old_password", "new_password"], "ss")) {
         return;
     }
 
@@ -286,7 +286,7 @@ function DeleteUser() {
     }
 
     global $data;
-    if (!PostDataCheck(["password"])) {
+    if (!PostDataCheck(["password"], "s")) {
         return;
     }
 

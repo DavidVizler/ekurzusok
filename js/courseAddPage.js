@@ -91,7 +91,7 @@ function previewLoad() {
 async function sendNewCourseData() {
     let name = $("KurzusNev").value;
     let desc = $("Leiras").value;
-    let courseDesgin = $("DesignSelect").value;
+    let courseDesgin = parseInt($("DesignSelect").value);
 
     let newCourseData = {
         "name": name,

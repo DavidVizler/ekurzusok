@@ -2,7 +2,7 @@
 
 // PHP hibakijelzés konfiguráció
 //error_reporting(0);
-//ini_set('display_errors', '1');
+ini_set('display_errors', '1');
 
 // Adatbázis konfiguráció
 $db_config = [
@@ -108,7 +108,7 @@ function CheckMethod($method) {
     }
 }
 
-// POST-tal érkezett adatok ellenőrzése
+/*
 function PostDataCheck($to_check, $send_response = true) {
     global $data;
     if (is_null($data)) {
@@ -131,6 +131,133 @@ function PostDataCheck($to_check, $send_response = true) {
         }
     }
     return true;
+}
+*/
+
+function SendInvalidDataRespone($send_success, $key, $value) {
+    if (is_string($value)) {
+        $print_value = "'{$value}'";
+    } else if (is_null($value)) {
+        $print_value = "NULL";
+    } else if (is_numeric($value)) {
+        $print_value = $value;
+    } else if (is_bool($value)) {
+        $print_value = $value ? "true" : "false";
+    } else {
+        $print_value = "[object]";
+    }
+
+    if ($send_success) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Érvénytelen adat ({$key} : {$print_value})"
+        ], 400);
+    } else {
+        SendResponse([
+            "uzenet" => "Érvénytelen adat ({$key} : {$print_value})"
+        ], 400);
+    }
+}
+
+/* POST-tal érkezett adatok ellenőrzése
+
+    b -> bool (true vagy false)
+    s -> string (nem üres)
+    e -> empty string (lehet üres)
+    i -> integer number (csak egész szám)
+    n -> nullable integer (egész szám vagy NULL)
+    d -> datetime (yyyy-MM-dd hh:mm:ss)
+
+*/
+function PostDataCheck($to_check, $data_types, $send_response = true, $send_success = true) {
+    // POST-tal érkezett adatok
+    global $data;
+
+    // Vannak adatok?
+    if (is_null($data)) {
+        if ($send_response && $send_success) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Hiányos adatok"
+            ], 400);
+        } else if ($send_response) {
+            SendResponse([
+                "uzenet" => "Hiányos adatok"
+            ], 400);
+        }
+        return false;
+    }
+
+    // Adatok és típusok számának ellenőrzése
+    if (count($to_check) != strlen($data_types)) {
+        http_response_code(500);
+        return false;
+    }
+
+    // Adatok ellenőrzése
+    for ($i = 0; $i < count($to_check); $i++) {
+        // Létezik-e
+        if (!array_key_exists($to_check[$i], $data)) {
+            if ($send_response && $send_success) {
+                SendResponse([
+                    "sikeres" => false,
+                    "uzenet" => "Hiányos adat: {$to_check[$i]}"
+                ], 400);
+            } else if ($send_response) {
+                SendResponse([
+                    "uzenet" => "Hiányos adat: {$to_check[$i]}"
+                ], 400);
+            }
+            return false;
+        }
+
+        $tc = $data[$to_check[$i]];
+
+        // Megfelelő típusú-e
+        switch ($data_types[$i]) {
+            case "b":
+                if (!is_bool($tc)) {
+                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    return false;
+                }
+                break;
+            case "s":
+                if (!is_string($tc) || $tc == "") {
+                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    return false;
+                }
+                break;
+            case "e":
+                if (!is_string($tc)) {
+                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    return false;
+                }
+                break;
+            case "i":
+                if (!is_int($tc)) {
+                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    return false;
+                }
+                break;
+            case "n":
+                if (!is_int($tc) && !is_null($tc)) {
+                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    return false;
+                }
+                break;
+            case "d":
+                $date_format = 'Y-m-d H:i:s'; // yyyy-MM-dd hh:mm:ss
+                $date = DateTime::createFromFormat($date_format, $tc);
+                if (!$date || $date->format($date_format) !== $tc) {
+                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    return false;
+                }
+                break;
+        }
+    }
+
+    return true;
+
 }
 
 // Bejelentkezés ellenőrzése

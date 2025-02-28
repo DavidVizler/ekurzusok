@@ -79,7 +79,7 @@ async function onNewTask(e) {
     let data = {
         title,
         desc,
-        task: 1,
+        task: true,
         deadline: due,
         maxpoint: points,
         file
@@ -103,7 +103,7 @@ async function onNewMaterial(e) {
     let data = {
         title,
         desc,
-        task: 0,
+        task: false,
         file
     };
 

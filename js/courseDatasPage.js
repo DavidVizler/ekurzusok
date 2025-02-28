@@ -84,7 +84,7 @@ async function getCardsData() {
             method : 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            },body:JSON.stringify({course_id:courseId})
+            },body:JSON.stringify({course_id:parseInt(courseId)})
         });
         if(eredmeny.ok){
             cardData = await eredmeny.json()
@@ -312,7 +312,7 @@ async function PublishContent(radios) {
     let selectedValue;
     radios.forEach(radio => {
         if (radio.checked) {
-            selectedValue = radio.value;
+            selectedValue = parseInt(radio.value);
         }
     });
     try {

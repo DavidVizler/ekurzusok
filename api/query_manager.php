@@ -51,7 +51,7 @@ function CourseDataQuery() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"])) {
+    if (!PostDataCheck(["course_id"], "i")) {
         return;
     }
     
@@ -88,7 +88,7 @@ function CourseMembersQuery() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"])) {
+    if (!PostDataCheck(["course_id"], "i")) {
         return;
     }
     
@@ -137,7 +137,7 @@ function CourseContentQuery() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"])) {
+    if (!PostDataCheck(["course_id"], "i")) {
         return;
     }
     
@@ -172,7 +172,7 @@ function CourseContentDataQuery() {
         return;
     }
 
-    if (!PostDataCheck(["content_id"])) {
+    if (!PostDataCheck(["content_id"], "i")) {
         return;
     }
     

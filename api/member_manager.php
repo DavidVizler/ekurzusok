@@ -9,7 +9,7 @@ function AddCourseMember() {
         return;
     }
 
-    if (!PostDataCheck(["code"])) {
+    if (!PostDataCheck(["code"], "s")) {
         return;
     }
 
@@ -69,7 +69,7 @@ function RemoveCourseMember() {
         return;
     }
 
-    if (!PostDataCheck(["user_id", "course_id"])) {
+    if (!PostDataCheck(["user_id", "course_id"], "ii")) {
         return;
     }
 

@@ -11,7 +11,7 @@ function AdminGetUsers() {
         return;
     }
 
-    if (!PostDataCheck(["rows", "page"])) {
+    if (!PostDataCheck(["rows", "page"], "ii")) {
         return;
     }
 
@@ -69,7 +69,7 @@ function AdminGetCourses() {
         return;
     }
 
-    if (!PostDataCheck(["rows", "page"])) {
+    if (!PostDataCheck(["rows", "page"], "ii")) {
         return;
     }
 
@@ -125,7 +125,7 @@ function AdminGetCourseInfo() {
         return;
     }
 
-    if (!PostDataCheck(["rows", "page", "id"])) {
+    if (!PostDataCheck(["rows", "page", "id"], "iii")) {
         return;
     }
 
@@ -191,7 +191,7 @@ function AdminGetUserInfo() {
         return;
     }
 
-    if (!PostDataCheck(["rows", "page", "id"])) {
+    if (!PostDataCheck(["rows", "page", "id"], "iii")) {
         return;
     }
 
@@ -236,7 +236,7 @@ function AdminGetUserInfo() {
 }
 
 function AdminLogin() {
-    if (!PostDataCheck(["username", "password"])) {
+    if (!PostDataCheck(["username", "password"], "ss")) {
         return;
     }
     global $data;
@@ -277,7 +277,7 @@ function AdminDeleteUser() {
         return;
     }
 
-    if (!PostDataCheck(["user_id"])) {
+    if (!PostDataCheck(["user_id"], "i")) {
         return;
     }
 
@@ -316,7 +316,7 @@ function AdminDeleteCourse() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"])) {
+    if (!PostDataCheck(["course_id"], "i")) {
         return;
     }
 
@@ -349,7 +349,7 @@ function AdminRemoveMember() {
         return;
     }
 
-    if (!PostDataCheck(["membership_id"])) {
+    if (!PostDataCheck(["membership_id"], "i")) {
         return;
     }
 
@@ -400,7 +400,7 @@ function AdminModifyUserData() {
         return;
     }
 
-    if (!PostDataCheck(["user_id", "email", "firstname", "lastname"])) {
+    if (!PostDataCheck(["user_id", "email", "firstname", "lastname"], "isss")) {
         return;
     }
 
