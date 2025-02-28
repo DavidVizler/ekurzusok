@@ -208,6 +208,26 @@ function CourseContentDataQuery() {
     
 }
 
+function DeadlineTasksQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("GET")) {
+        return;
+    }
+
+    $user_id = $_SESSION["user_id"];
+
+    $sql_statement = "SELECT t.content_id, t.deadline, t.title, c.name AS course_name FROM content t
+    INNER JOIN courses c ON t.course_id = c.course_id
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE t.deadline IS NOT NULL AND m.user_id = ?;";
+    $tasks = DataQuery($sql_statement, "i", [$user_id]);
+
+    SendResponse($tasks);
+}
+
 function Manage($action) {
     switch ($action) {
         case "user-data":
@@ -227,6 +247,9 @@ function Manage($action) {
             break;
         case "content-data":
             CourseContentDataQuery();
+            break;
+        case "deadline-tasks":
+            DeadlineTasksQuery();
             break;
         default:
             SendResponse([
