@@ -154,8 +154,19 @@ function ModifyUserData() {
 
     $sql_statement = "UPDATE users SET ";
     $new_data = [];
-
+    
     if ($user_data[0]["email"] != $email) {
+
+        $email_check_sql_statement = "SELECT email FROM users WHERE email = ?";
+        $used_emails = DataQuery($email_check_sql_statement, "s", [$email]);
+        if (count($used_emails) > 0) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Az e-mail cím már foglalt"
+            ]);
+            return;
+        }
+
         $sql_statement .= "email = ?";
         array_push($new_data, $email);
     }
@@ -266,7 +277,6 @@ function ChangeUserPassword() {
 }
 
 function DeleteUser() {
-    session_start();
     if (!LoginCheck()) {
         return;
     }
