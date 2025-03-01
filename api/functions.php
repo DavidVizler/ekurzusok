@@ -166,7 +166,7 @@ function SendInvalidDataRespone($send_success, $key, $value) {
     e -> empty string (lehet üres)
     i -> integer number (csak egész szám)
     n -> nullable integer (egész szám vagy NULL)
-    d -> datetime (yyyy-MM-dd hh:mm:ss)
+    d -> datetime (yyyy-MM-dd hh:mm:ss vagy NULL)
 
 */
 function PostDataCheck($to_check, $data_types, $send_response = true, $send_success = true) {
@@ -212,6 +212,7 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
         }
 
         $tc = $data[$to_check[$i]];
+        $key = $to_check[$i];
 
         // Megfelelő típusú-e
         switch ($data_types[$i]) {
@@ -223,36 +224,38 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
                 break;
             case "s":
                 if (!is_string($tc) || $tc == "") {
-                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                     return false;
                 }
                 break;
             case "e":
                 if (!is_string($tc)) {
-                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                     return false;
                 }
                 break;
             case "i":
                 if (!is_int($tc)) {
-                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                     return false;
                 }
                 break;
             case "n":
                 if (!is_int($tc) && !is_null($tc)) {
-                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                     return false;
                 }
                 break;
             case "d":
-                $date_format = 'Y-m-d H:i:s'; // yyyy-MM-dd hh:mm:ss
-                $date = DateTime::createFromFormat($date_format, $tc);
-                if (!$date || $date->format($date_format) !== $tc) {
-                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
-                    return false;
+                if (!is_null($tc)) {
+                    $date_format = 'Y-m-d H:i:s'; // yyyy-MM-dd hh:mm:ss
+                    $date = DateTime::createFromFormat($date_format, $tc);
+                    if (!$date || $date->format($date_format) !== $tc) {
+                        if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
+                        return false;
+                    }
+                    break;
                 }
-                break;
         }
     }
 

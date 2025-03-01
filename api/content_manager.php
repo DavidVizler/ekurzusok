@@ -101,10 +101,10 @@ function PublishCourseContent() {
     $user_id = $_SESSION["user_id"];
 
     // A felhasználóé-e a tartalom
-    $sql_statement = "SELECT user_id FROM content WHERE content_id = ?";
-    $content_owner_check = DataQuery($sql_statement, "i", [$content_id]);
+    $sql_statement = "SELECT user_id, published FROM content WHERE content_id = ?";
+    $content_data = DataQuery($sql_statement, "i", [$content_id]);
 
-    if (count($content_owner_check) == 0) {
+    if (count($content_data) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nincs tartalom ilyen ID-val"
@@ -112,7 +112,7 @@ function PublishCourseContent() {
         return;
     }
 
-    if ($content_owner_check[0]["user_id"] != $user_id) {
+    if ($content_data[0]["user_id"] != $user_id) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
@@ -120,23 +120,32 @@ function PublishCourseContent() {
         return;
     }
 
-    $sql_statement = "UPDATE content SET published = NOW(), last_modified = NOW() WHERE content_id = ?;";
+    $unpublished = is_null($content_data[0]["published"]);
+
+    if ($unpublished) {
+        $sql_statement = "UPDATE content SET published = NOW(), last_modified = NOW() WHERE content_id = ?;";
+        $word = "közzététel";
+    } else {
+        $sql_statement = "UPDATE content SET published = NULL WHERE content_id = ?";
+        $word = "elrejtés";
+    }
+
     $result = ModifyData($sql_statement, "i", [$content_id]);
 
     if ($result) {
         SendResponse([
             "sikeres" => true,
-            "uzenet" => "Tartalom sikeresen közzétéve"
-        ], 201);
+            "uzenet" => "Sikeres tartalom {$word}"
+        ]);
     } else {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "A tartalom közzététele sikertelen"
+            "uzenet" => "Sikertelen tartalom {$word}"
         ]);
     }
 }
 
-function ModifyCourseContent() {
+function ModifyCourseContentData() {
     if (!LoginCheck()) {
         return;
     }
@@ -145,11 +154,103 @@ function ModifyCourseContent() {
         return;
     }
 
-    if (!PostDataCheck(["content_id", "title", "desc", "task", "maxpoint", "deadline"])) {
+    if (!PostDataCheck(["content_id", "title", "desc", "task", "maxpoint", "deadline"], "isebnd")) {
         return;
     }
 
-    // TODO
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $content_id = $data["content_id"];
+    $title = $data["title"];
+    $description = $data["desc"];
+    $task = $data["task"];
+    $maxpoint = $data["maxpoint"];
+    $deadline = $data["deadline"];
+
+    // Tartalom adatok lekérdezése
+    $sql_statement = "SELECT title, description, task, deadline, max_points 
+    FROM content WHERE content_id = ? AND user_id = ?;";
+    $content_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($content_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "UPDATE content SET ";
+    $new_data = [];
+    $new_data_types = "";
+
+    if ($content_data[0]["title"] != $title) {
+        $sql_statement .= "title = ?";
+        array_push($new_data, $title);
+        $new_data_types .= "s";
+    }
+
+    if ($content_data[0]["description"] != $description) {
+        if (count($new_data) > 0) $sql_statement .= ", ";
+        $sql_statement .= "description = ?";
+        array_push($new_data, $description);
+        $new_data_types .= "s";
+    }
+
+    if ($content_data[0]["task"] != $task) {
+        if (count($new_data) > 0) $sql_statement .= ", ";
+        $sql_statement .= "task = ?";
+        array_push($new_data, $task);
+        $new_data_types .= "i";
+
+        if (!$task) {
+            $sql_statement .= ", deadline = NULL, max_points = NULL";
+        }
+    }
+
+    if ($task) {
+        if ($content_data[0]["deadline"] != $deadline) {
+            if (count($new_data) > 0) $sql_statement .= ", ";
+            $sql_statement .= "deadline = ?";
+            array_push($new_data, $deadline);
+            $new_data_types .= "s";
+        }
+
+        if ($content_data[0]["max_points"] != $maxpoint) {
+            if (count($new_data) > 0) $sql_statement .= ", ";
+            $sql_statement .= "max_points = ?";
+            array_push($new_data, $maxpoint);
+            $new_data_types .= "i";
+        }
+    }
+
+    // Ha semmi sem változik, akkor nincs adatbázis művelet
+    if (count($new_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem érkezett változtatandó adat"
+        ]);
+        return;
+    }
+
+    // Időbélyeg hozzáadása és where záradék hozzáadása
+    $sql_statement .= ", last_modified = NOW() WHERE content_id = ?;";
+    $new_data_types .= "i";
+    array_push($new_data, $content_id);
+
+    $result = ModifyData($sql_statement, $new_data_types, $new_data);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres adatmódosítás"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen adatmódosítás"
+        ]);
+    }
     
 }
 
@@ -160,6 +261,9 @@ function Manage($action) {
             break;
         case "publish":
             PublishCourseContent();
+            break;
+        case "modify-data":
+            ModifyCourseContentData();
             break;
         default:
             SendResponse([
