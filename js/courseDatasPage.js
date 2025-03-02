@@ -169,15 +169,11 @@ function viewByRole(userslist) {
     let addContentButton = document.getElementById("addContentButton");
     let settingsButton = document.getElementById("settingsButton");
     let navbar = document.getElementById("contentNavbar");
-    let user = userslist[0];
-    if (user.role == 1) {
+    let isStudent = userslist.some(user => user.role == 1);
+    if (isStudent) {
         addContentButton.style.display = "none";
         settingsButton.style.display = "none";
-        navbar.style.display = "none";
-    } else {
-        addContentButton.style.display = "flex";
-        settingsButton.style.display = "flex";
-        navbar.style.display = "block";
+        navbar.style.display = "none"
     }
 }
 
@@ -210,7 +206,7 @@ async function showCourseUsers(userslist) {
             scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
         }
-        else{
+        if(userslist[i].role == 1){
             let li = create('li')
             li.value = userslist[i].felhasznaloId
             li.textContent = userslist[i].lastname + " " + userslist[i].firstname
