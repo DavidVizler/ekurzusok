@@ -447,3 +447,13 @@ a#openModal:hover, a#openModalUsers:hover {
     cursor: pointer;
     box-shadow: 0px 4px 8px #5271ff;
 }
+
+.containerdiv{
+    display: flex;
+    flex-direction: row;
+}
+
+.containerdiv{
+    text-decoration: none;
+    color: black;
+}

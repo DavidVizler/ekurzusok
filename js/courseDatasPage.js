@@ -244,10 +244,12 @@ function showCourseContent(content) {
         let div = create('div', 'ContentTypeDiv', c.task ? 'feladatDiv' : 'tananyagDiv', );
         div.id = c.content_id
         
+        let container = create('a','containerdiv')
+
         let iconDiv = create('div', 'Icon');
         
         let a = create('a');
-        a.href =  c.task ? `../feladat.html?id=${c.content_id}` : `../tananyag.html?id=${c.content_id}`;
+        container.href =  c.task ? `../feladat.html?id=${c.content_id}` : `../tananyag.html?id=${c.content_id}`;
         
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
@@ -275,7 +277,7 @@ function showCourseContent(content) {
         svg.appendChild(path);
         a.appendChild(svg);
         iconDiv.appendChild(a);
-        div.appendChild(iconDiv);
+        container.appendChild(iconDiv);
         divContent.appendChild(h1);
 
         if (c.published == null) {
@@ -287,7 +289,8 @@ function showCourseContent(content) {
             divContent.appendChild(radioButton);
         }
 
-        div.appendChild(divContent);
+        container.appendChild(divContent);
+        div.appendChild(container)
         if(c.published == null){
             notPublishedDiv.appendChild(div)
             button.style.display = "block"
