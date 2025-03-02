@@ -143,7 +143,6 @@ async function getCourseContent(courseId) {
     }
 }
 
-let userslist
 async function getCourseUsers(courseid){
     try {
         let data = {
@@ -156,23 +155,36 @@ async function getCourseUsers(courseid){
             },
             body: JSON.stringify(data)
         })
-        userslist = await valasz.json();
-        if(valasz.ok){
-            console.log(userslist);
-            showCourseUsers();
-        }
+        let userslist = await valasz.json();
+        showCourseUsers(userslist)
+        viewByRole(userslist)
+        
     } catch (e) {
         console.error(e);
         alert("Sikertelen adatlekérés!");
     }
 }
 
-async function showCourseUsers() {
+function viewByRole(userslist) {
+    let addContentButton = document.getElementById("addContentButton");
+    let settingsButton = document.getElementById("settingsButton");
+    let navbar = document.getElementById("contentNavbar");
+    let user = userslist[0];
+    if (user.role == 1) {
+        addContentButton.style.display = "none";
+        settingsButton.style.display = "none";
+        navbar.style.display = "none";
+    } else {
+        addContentButton.style.display = "flex";
+        settingsButton.style.display = "flex";
+        navbar.style.display = "block";
+    }
+}
+
+async function showCourseUsers(userslist) {
     let usersDiv = document.querySelector('.courseUsers')
     let ownerp = create('p')
     let deleteButton = $('deleteButton')
-    ownerp.textContent = "Oktató: " + userslist[0].lastname + " " + userslist[0].firstname
-    console.log(userslist)
     let tags = create('p')
     tags.textContent = "Tagok:"
     usersDiv.appendChild(ownerp)
@@ -180,7 +192,10 @@ async function showCourseUsers() {
     let scrollDiv = create("div");
     scrollDiv.id = "scrollDiv";
     let ul = create("ul")
-    for(let i = 1; i < userslist.length; i++){
+    for(let i = 0; i < userslist.length; i++){
+        if(userslist[i].role != 1){
+            ownerp.textContent = "Oktató: " + userslist[i].lastname + " " + userslist[i].firstname
+        }
         if(userslist[i].user_id != null){
             let userRadio = create('input')
             userRadio.type = "radio"
@@ -194,7 +209,8 @@ async function showCourseUsers() {
             scrollDiv.appendChild(name)
             scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
-        }else{
+        }
+        else{
             let li = create('li')
             li.value = userslist[i].felhasznaloId
             li.textContent = userslist[i].lastname + " " + userslist[i].firstname
@@ -357,7 +373,7 @@ $('deleteButton').addEventListener('click', deleteUserFromCourse)
 
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
     let courseId = parseInt(getUrlEndpoint());
     if (isNaN(courseId)) {
         location.href = '../kurzusok.html';
