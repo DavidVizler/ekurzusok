@@ -108,11 +108,11 @@ function CourseMembersQuery() {
 
     // Ha tulajdonos, akkor a tagok ID-ja is lekérdezésre kerül, hogy el tudja őket távolítani a kurzusból
     if ($membership_data[0]["role"] == 3) {
-        $sql_statement = "SELECT u.user_id, u.lastname, u.firstname 
+        $sql_statement = "SELECT u.user_id, u.lastname, u.firstname, m.role 
         FROM users u INNER JOIN memberships m ON u.user_id = m.user_id
         WHERE m.course_id = ? ORDER BY u.lastname, u.firstname;";
     } else {
-        $sql_statement = "SELECT u.lastname, u.firstname 
+        $sql_statement = "SELECT u.lastname, u.firstname , m.role
         FROM users u INNER JOIN memberships m ON u.user_id = m.user_id
         WHERE m.course_id = ? ORDER BY u.lastname, u.firstname;";
     }
