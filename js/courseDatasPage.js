@@ -16,7 +16,7 @@ async function fillDeadlineList() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ course_id: courseId })
+            body: JSON.stringify({ course_id: parseInt(courseId) })
         });
 
         let div = document.querySelector('.deadlineExercises');

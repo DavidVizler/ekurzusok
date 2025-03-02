@@ -10,29 +10,10 @@ async function openCalendarPopUp(){
    let div = $('toDoExercises');
 
    try {
-      let tasks = [];
+      let deadlineTasks =  await fetch("./api/query/deadline-tasks");
 
-      let responseCourses = await fetch("./api/query/user-courses");
-
-      let userCourses = await responseCourses.json();
-
-      let courses = userCourses.map(x => x.course_id);
-
-      for (const courseId of courses) {
-         let response = await fetch("./api/query/course-content", {
-            method : 'POST',
-            headers: {
-               'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ course_id: courseId })
-         });
-         
-         
-         let result = await response.json();
-         result = result.filter(x => x.deadline != null);
-         tasks.push(...result)
-      }
-
+      let tasks = await deadlineTasks.json();
+   
       if (tasks.length > 0) {
          div.innerHTML = '';
          tasks = tasks.map(x => {
