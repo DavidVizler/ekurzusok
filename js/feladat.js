@@ -44,6 +44,7 @@ $('modifyBtn').addEventListener('click', () => {
     // Feladat szerkesztése
 });
 
+let adatok;
 window.addEventListener('load',async()=>{
     let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');
@@ -59,15 +60,15 @@ window.addEventListener('load',async()=>{
             body : JSON.stringify(reqData)
         })
         if(request.ok){
-            let response = await request.json()
-            showContentData(response)
+            adatok = await request.json()
+            showContentData()
         }
     } catch (error) {
         console.log(error)
     }
 })
 
-function showContentData(adatok){
+function showContentData(){
     console.log(adatok)
     let title = $("title")
     let createdDate = $("creatingDate")
@@ -86,3 +87,65 @@ function showContentData(adatok){
         max_points.innerHTML = "<b>Ponthatár: </b>" + adatok.max_points + " p"
     }
 }
+
+function showModal(){
+    $("edit-modal").style.display = "flex";
+    let title = $("ContentTitle").value = adatok.title
+    let max_points =  $("maxPoints").value = adatok.max_points
+    let limitDate = $("deadline-input").value = adatok.deadline
+    let description = $("description-input").value = adatok.description
+}
+
+async function ModifyData() {
+    let title = $("ContentTitle").value
+    let max_points = $("maxPoints").value
+    if(max_points == ""){max_points = null}
+    let limitDate = $("deadline-input").value
+    let description = $("description-input").value
+    let urlParams = getUrlParams();
+    let tartalomId = urlParams.get('id');
+    let reqData = {
+        "content_id" : parseInt(tartalomId),
+        "title" : title,
+        "desc" : description,
+        "task" : true,
+        "maxpoint" : parseInt(max_points),
+        "deadline" : limitDate
+    }
+    try {
+        let request = await fetch("api/content/modify-data",{
+            method : "POST",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify(reqData)
+        })
+        let response = await request.json()
+        if(response.sikeres == true){
+            location.reload()
+        }
+        else{
+            showAlert(response.uzenet)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function showAlert(uzenet){
+    let alertDiv = $("alertDiv")
+    alertDiv.style.display = "flex"
+    alertDiv.innerHTML = uzenet
+}
+
+$("save-btn").addEventListener("click",ModifyData)
+
+document.getElementById("modifyBtn").addEventListener("click", showModal);
+
+// Modal bezárása a "close" gombra kattintva
+document.querySelector(".close").addEventListener("click", function () {
+    document.getElementById("edit-modal").style.display = "none";
+});
+
+// Mentés gombra kattintva frissítjük az adatokat
+document.getElementById("save-btn").addEventListener("click", function () {
+    
+});

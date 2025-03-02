@@ -22,7 +22,6 @@ body::-webkit-scrollbar{
 .header{
     display: flex;
     width: 100%;
-    z-index: 10;
     padding-inline: 0;
     height: 350px;
     background-size: cover;
@@ -68,7 +67,7 @@ body::-webkit-scrollbar{
     height:30px;
     box-sizing:border-box;
     cursor:pointer;
-    z-index: 10;
+    z-index: 1001;
 }
 
 .hamburger-menu{
@@ -82,6 +81,7 @@ body::-webkit-scrollbar{
     height: 50px;
     border-bottom: 1px solid #E6E6E6;
     background-color: white;
+    z-index: 1001;
 }
 
 .hamburger-menu:hover.line{
@@ -107,6 +107,7 @@ body::-webkit-scrollbar{
 .hamburger-menu .hamburger-menu-content{
     position: fixed;
     top: 0;
+    left: 0;
     width: 300px;
     box-sizing: border-box;
     height: 100vh;
@@ -119,7 +120,7 @@ body::-webkit-scrollbar{
     transition: opacity 0.5s, visibility 0.5s; 
     opacity: 0;
     visibility: hidden;
-    z-index: 1;
+    z-index: 1000;
 }
 
 .hamburger-menu.active .hamburger-menu-content{
@@ -127,7 +128,7 @@ body::-webkit-scrollbar{
     opacity: 1;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
     visibility: visible;
-    z-index: 1;
+    z-index: 10;
 }
 
 .hamburger-menu-content li{

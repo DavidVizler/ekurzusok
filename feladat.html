@@ -71,6 +71,30 @@
             <button type="button" id="uploadExerciseButton">Feladat leadása</button>
         </div>
     </div>
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Feladat szerkesztése</h2>
+            <div>
+                <label for="ContentTitle">Feladat címe: </label>
+                <input type="text" name="ContentTitle" id="ContentTitle">
+            </div>
+            <div>
+                <label for="maxPoints">Ponthatár:</label>
+                <input type="number" name="maxPoints" id="maxPoints">
+            </div>
+            <div>
+                <label>Határidő:</label>
+                <input type="datetime" id="deadline-input">
+            </div>
+            <div>
+                <label>Feladat leírása:</label>
+                <textarea name="description-input" id="description-input"></textarea>
+            </div>
+            <div id="alertDiv"></div>
+            <button id="save-btn">Mentés</button>
+        </div>
+    </div>
     <script src="./js/utils.js"></script>
     <script src="./js/feladat.js"></script>
 </body>
