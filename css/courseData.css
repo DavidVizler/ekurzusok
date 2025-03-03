@@ -468,6 +468,7 @@ a#openModal:hover, a#openModalUsers:hover {
 .containerdiv{
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .containerdiv{
