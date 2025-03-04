@@ -37,12 +37,13 @@ body::-webkit-scrollbar{
 
 .line{
     position: absolute;
-    width: 100%;
+    /* width: 100%; */
     background-color: #B3B3B3;
     border-radius: 10px;
     box-sizing: border-box;
     transition: all 0.3s cubic-bezier(0.77,0.2,0.05,1.0);
-    height: 5px;
+    height: 4px;
+    width: 35px;
 }
 
 #line1{
@@ -111,7 +112,6 @@ body::-webkit-scrollbar{
     width: 300px;
     box-sizing: border-box;
     height: 100vh;
-    padding: 50px;
     border: 1px solid grey;
     overflow: hidden;
     border-radius: 0 15px 15px 0;
@@ -121,6 +121,10 @@ body::-webkit-scrollbar{
     opacity: 0;
     visibility: hidden;
     z-index: 1000;
+}
+
+.hamburger-menu .hamburger-menu-content h2{
+    padding-left: 50px;
 }
 
 .hamburger-menu.active .hamburger-menu-content{
@@ -133,7 +137,8 @@ body::-webkit-scrollbar{
 
 .hamburger-menu-content li{
     padding: 0;
-    margin: 0;
+    margin-left: 20px;
+    margin-bottom: 10px;
     padding-left: 40px;
     position: relative;
     font-size: 20px;
@@ -166,6 +171,13 @@ body::-webkit-scrollbar{
 
 #addedCourses{
     padding: 0;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+#addedCourses::-webkit-scrollbar{
+    display: none;
 }
 
 .courseDatas{
