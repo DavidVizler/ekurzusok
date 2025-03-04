@@ -24,7 +24,7 @@ async function openCalendarPopUp(){
          });
          tasks.sort((a, b) => b.deadline - a.deadline);
          tasks.forEach(feladat => {
-             div.innerHTML += `<p>${feladat.deadline.toLocaleString()} - <a href="./feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
+             div.innerHTML += `<p>${feladat.deadline.toLocaleString()} - ${feladat.course_name} - <a href="./feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
          })
       }
       else {
@@ -145,7 +145,7 @@ function GenerateCards(){
 async function logout() {
    let request = await fetch("./api/user/logout")
    if (request.ok) {
-      window.location.replace("login.html");
+      window.location.replace("./");
    }
 }
 

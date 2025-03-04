@@ -155,13 +155,16 @@ async function getCourseUsers(courseid){
             },
             body: JSON.stringify(data)
         })
-        let userslist = await valasz.json();
-        showCourseUsers(userslist)
-        viewByRole(userslist)
+        if(valasz.ok){
+            let userslist = await valasz.json();
+            showCourseUsers(userslist)
+            viewByRole(userslist)
+        }else{
+            throw valasz.status
+        }
         
     } catch (e) {
         console.error(e);
-        alert("Sikertelen adatlekérés!");
     }
 }
 
