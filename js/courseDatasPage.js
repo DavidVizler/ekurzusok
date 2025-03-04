@@ -165,12 +165,11 @@ async function getCourseUsers(courseid){
     }
 }
 
-function viewByRole(userslist) {
+function viewByRole() {
     let addContentButton = document.getElementById("addContentButton");
     let settingsButton = document.getElementById("settingsButton");
     let navbar = document.getElementById("contentNavbar");
-    let isStudent = userslist.some(user => user.role == 1);
-    if (isStudent) {
+    if (cardData.owned != 1) {
         addContentButton.style.display = "none";
         settingsButton.style.display = "none";
         navbar.style.display = "none"
@@ -192,7 +191,7 @@ async function showCourseUsers(userslist) {
         if(userslist[i].role != 1){
             ownerp.textContent = "Oktató: " + userslist[i].lastname + " " + userslist[i].firstname
         }
-        if(userslist[i].user_id != null){
+        if(cardData.owned == 1){
             let userRadio = create('input')
             userRadio.type = "radio"
             userRadio.name = "radioButtons"
