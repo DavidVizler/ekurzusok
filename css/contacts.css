@@ -1,80 +1,86 @@
-body{
+body {
     display: flex;
     flex-direction: column;
-    font-family: "Varela Round";
+    font-family: "Varela Round", sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
     font-weight: lighter;
 }
 
-.backToMainPageIcon svg{
-    height: 30px;
-    width: 30px;
-    color: black;
-}
-
-.header{
+.header {
     display: flex;
     align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid grey;
 }
 
-.title{
+.title {
     display: flex;
     justify-content: center;
     text-align: center;
 }
 
-.backToMainPageIcon{
+.title h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.backToMainPageIcon {
     display: flex;
     margin: 15px;
 }
 
-table {
-    width: fit-content;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 18px;
-    text-align: left;
+.backToMainPageIcon a svg {
+    width: 30px;
+    height: 30px;
+    color: black;
 }
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-th {
-    background-color: #f4f4f4;
-}
+
 a {
-    color: #007bff;
+    color: #5271ff;
     text-decoration: none;
 }
 a:hover {
     text-decoration: underline;
 }
 
-.contactDiv{
+.contactDiv {
     display: flex;
     flex-direction: column;
     margin-left: 15px;
 }
 
-#contactTable{
-    display: flex;
-}
-
-form{
+form {
     display: flex;
     flex-direction: column;
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-input{
-    width: 500px;
+label {
+    font-weight: bold;
+    display: flex;
+    margin: 10px 0 5px;
 }
 
-textarea{
+input, textarea {
     width: 500px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
     min-width: 500px;
 }
 
-#uzenetKuldes{
-    height: 50px;
+#uzenetKuldes {
     width: 100px;
     color: white;
     background-color: #5271ff;
@@ -83,16 +89,54 @@ textarea{
     margin-top: 15px;
     font-family: "Varela Round";
     font-size: large;
+    padding: 5px;
 }
 
-#uzenetKuldes:hover{
-    cursor: pointer;
+#uzenetKuldes:hover {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.stepincontactDiv{
+.stepincontactDiv {
     border: 1px solid grey;
     border-radius: 15px;
     padding: 15px;
     width: fit-content;
+}
+
+.faq {
+    width: 90%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.faq p {
+    margin: 5px 0;
+}
+
+.contact-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.contact-list li {
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.contact-list li strong {
+    font-weight: bold;
+    color: #333;
+}
+
+.contact-list li a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact-list li a:hover {
+    text-decoration: underline;
 }
