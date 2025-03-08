@@ -24,6 +24,9 @@
         </svg>
         <h1 class="title" id="title">Tananyag címe</h1> 
     </div>
+    <div id="modifyDiv">
+        <button type="button" role="button" id="modifyBtn">Szerkesztés</button>
+    </div>
     <div class="attributes">
         <div class="creatingDateDiv">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -46,7 +49,22 @@
             <h1 class="fileName">Fájl neve</h1>
         </div>
     </div>
-
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Tananyag szerkesztése</h2>
+            <div>
+                <label for="ContentTitle">Tanyanyag címe: </label>
+                <input type="text" name="ContentTitle" id="ContentTitle">
+            </div>
+            <div>
+                <label>Tananyag leírása:</label>
+                <textarea name="description-input" id="description-input"></textarea>
+            </div>
+            <div id="alertDiv"></div>
+            <button id="save-btn">Mentés</button>
+        </div>
+    </div>
     <script src="./js/utils.js"></script>
     <script src="./js/tananyag.js"></script>
 </body>

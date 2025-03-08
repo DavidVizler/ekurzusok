@@ -120,7 +120,9 @@ async function ModifyData() {
         })
         let response = await request.json()
         if(response.sikeres == true){
-            location.reload()
+            setTimeout(function(){
+                location.reload()
+            }, 1500)
         }
         else{
             showAlert(response.uzenet)
@@ -143,9 +145,4 @@ document.getElementById("modifyBtn").addEventListener("click", showModal);
 // Modal bezárása a "close" gombra kattintva
 document.querySelector(".close").addEventListener("click", function () {
     document.getElementById("edit-modal").style.display = "none";
-});
-
-// Mentés gombra kattintva frissítjük az adatokat
-document.getElementById("save-btn").addEventListener("click", function () {
-    
 });
