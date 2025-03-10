@@ -32,3 +32,14 @@ function convertDate(date) {
     let iso8601 = `${date.substring(0, 10)}T${date.substring(11, 19)}.000Z`;
     return new Date(iso8601);
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = {
+        $,
+        create,
+        getUrlParams,
+        getUrlParts,
+        getUrlEndpoint,
+        convertDate
+    };
+}
