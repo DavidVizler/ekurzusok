@@ -57,6 +57,15 @@ function Signup() {
     $lastname = $data["lastname"];
     $firstname = $data["firstname"];
     $password = $data["password"];
+
+    // Email cím formátumának validálása
+    if (preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email) != 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Az email cím formátuma nem megfelelő"
+        ]);
+        return;
+    }
     
     // Ellenőrzés, hogy nincs-e már felhasználó regisztrálva azonos e-mail címmel
     $sql_statement = "SELECT email FROM users WHERE email = ?";
