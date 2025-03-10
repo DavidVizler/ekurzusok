@@ -19,7 +19,7 @@ async function openCalendarPopUp(){
          tasks = tasks.map(x => {
              return {
                  ...x,
-                 deadline: new Date(x.deadline)
+                 deadline: convertDate(x.deadline)
              };
          });
          tasks.sort((a, b) => b.deadline - a.deadline);

@@ -77,9 +77,9 @@ function showContentData(){
     let limitDate = $("timeLimitDate")
     let description = $("description")
     title.innerHTML = adatok.title
-    createdDate.innerHTML = adatok.published
+    createdDate.innerHTML = convertDate(adatok.published).toLocaleString()
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname
-    limitDate.innerHTML = "<b>Határidő: </b>" + (adatok.deadline ?? 'Nincsen határidő beállítva')
+    limitDate.innerHTML = "<b>Határidő: </b>" + (adatok.deadline != null ? convertDate(adatok.deadline).toLocaleString() : 'Nincsen határidő beállítva')
     description.innerHTML = adatok.description
     if(adatok.max_points == null){
         max_points.innerHTML = "Nincs ponthatár beállítva!"

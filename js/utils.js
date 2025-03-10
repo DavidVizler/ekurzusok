@@ -25,3 +25,10 @@ function getUrlEndpoint() {
     let parts = getUrlParts();
     return parts[parts.length - 1];
 }
+
+// A yyyy-mm-dd HH:MM:SS (UTC) formátumú dátumokat átkonvertálja JavaScript Date objektumokká
+function convertDate(date) {
+    // ISO 8601 formátumra konvertálás
+    let iso8601 = `${date.substring(0, 10)}T${date.substring(11, 19)}.000Z`;
+    return new Date(iso8601);
+}

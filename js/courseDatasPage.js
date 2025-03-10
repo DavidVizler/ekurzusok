@@ -29,9 +29,11 @@ async function fillDeadlineList() {
             result = result.map(x => {
                 return {
                     ...x,
-                    deadline: new Date(x.deadline)
+                    deadline: convertDate(x.deadline)
                 };
             });
+            // let now = new Date();
+            // result = result.filter(x => x.deadline > now);
             result.sort((a, b) => b.deadline - a.deadline);
             result.forEach(feladat => {
                 div.innerHTML += `<p>${feladat.deadline.toLocaleString()} - <a href="../feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
