@@ -1,7 +1,7 @@
 const URL = require('./url');
 
 async function login(loginData) {
-    let response = await fetch(URL + '/php/user_manager.php/login', {
+    let response = await fetch(URL + '/api/user/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

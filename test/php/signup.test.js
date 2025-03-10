@@ -1,7 +1,7 @@
 const URL = require('./url');
 
 async function signup(signupData) {
-    let response = await fetch(URL + '/php/user_manager.php/signup', {
+    let response = await fetch(URL + '/api/user/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -24,9 +24,10 @@ async function signup(signupData) {
 }
 
 let i = 0;
+let timestamp = new Date().getTime();
 function generateEmail() {
     i = i + 1;
-    return 'teszt' + i + '@teszt.com';
+    return 'teszt' + timestamp + '.' + i + '@teszt.com';
 }
 
 const lastname = 'Teszt';
