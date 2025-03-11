@@ -128,7 +128,7 @@ function GenerateCards(){
       cardTitle.textContent = cardData[i]["name"]
 
       let cardOktatok = create("h4", 'card-teachers')
-      cardOktatok.textContent = cardData[i]["Oktatok"]
+      cardOktatok.textContent = cardData[i]["lastname"] + " " + cardData[i]["firstname"]
 
       cardBody.appendChild(cardTitle)
       cardBody.appendChild(cardOktatok)
