@@ -228,6 +228,48 @@ function DeadlineTasksQuery() {
     SendResponse($tasks);
 }
 
+function SubmissionFilesQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["submission_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $submission_id = $data["submission_id"];
+    $user_id = $_SESSION["user_id"];
+
+    // A felhasználó tulajdonosa-e a beadandónak vagy létrehozója a tartalomnak
+    $sql_statement = "SELECT c.user_id AS content_owner, s.user_id AS submission_owner FROM submissions s
+    INNER JOIN content c ON s.content_id = c.content_id WHERE submission_id = ?;";
+    $submission_data = DataQuery($sql_statement, "i", [$submission_id]);
+
+    if (count($submission_data) == 0) {
+        SendResponse([
+            "uzenet" => "Nincs beadandó ilyen azonosítóval"
+        ], 404);
+        return;
+    }
+
+    if ($submission_data[0]["content_owner"] != $user_id && $submission_data[0]["submission_owner"] != $user_id) {
+        SendResponse([
+            "uzenet" => "A felhasználó nem tulajdonosa sem a beadandónak, sem a feladatnak"
+        ], 403);
+        return;
+    }
+    
+    $sql_statement = "SELECT file_id, name, size FROM files WHERE submission_id = ?;";
+    $files = DataQuery($sql_statement, "i", [$submission_id]);
+
+    SendResponse($files);
+}
+
 function Manage($action) {
     switch ($action) {
         case "user-data":
@@ -250,6 +292,9 @@ function Manage($action) {
             break;
         case "deadline-tasks":
             DeadlineTasksQuery();
+            break;
+        case "submission-files":
+            SubmissionFilesQuery();
             break;
         default:
             SendResponse([
