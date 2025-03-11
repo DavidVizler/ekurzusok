@@ -264,13 +264,15 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
 }
 
 // Bejelentkezés ellenőrzése
-function LoginCheck() {
+function LoginCheck($send_response = true) {
     session_start();
     if (!isset($_SESSION["user_id"])) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "A felhasználó nincs bejelentkezve"
-        ], 401);
+        if ($send_response) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "A felhasználó nincs bejelentkezve"
+            ], 401);
+        }
         return false;
     }
     return true;
