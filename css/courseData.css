@@ -37,7 +37,6 @@ body::-webkit-scrollbar{
 
 .line{
     position: absolute;
-    /* width: 100%; */
     background-color: #B3B3B3;
     border-radius: 10px;
     box-sizing: border-box;
