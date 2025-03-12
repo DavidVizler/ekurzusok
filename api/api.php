@@ -15,13 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Műveletkezelés
-if (in_array($field_endpoint,  ["user", "course", "member", "content", "assignment", "query"])) {
+if (in_array($field_endpoint,  ["user", "course", "member", "content", "submission", "query"])) {
     include "./{$field_endpoint}_manager.php";
     Manage($action_endpoint);
 } else {
     SendResponse([
         "sikeres" => "false",
-        "uzenet" => "Hibás műveletmegadás"
+        "uzenet" => "Hibás műveletmegadás: {$field_endpoint}"
     ], 400);
 }
 

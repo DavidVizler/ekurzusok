@@ -46,13 +46,13 @@ body::-webkit-scrollbar {
 }
 
 .line{
-    position:absolute;
-    width: 100%;
+    position: absolute;
     background-color: white;
-    border-radius:10px;
-    box-sizing:border-box;
-    transition:all 0.3s cubic-bezier(0.77,0.2,0.05,1.0);
-    height: 5px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.77,0.2,0.05,1.0);
+    height: 4px;
+    width: 35px;
 }
 
 #line1{
@@ -115,6 +115,7 @@ body::-webkit-scrollbar {
     box-sizing: border-box;
     height: 100vh;
     padding: 50px;
+    padding-top: 0;
     border: 1px solid grey;
     overflow: hidden;
     border-radius: 0 15px 15px 0;
