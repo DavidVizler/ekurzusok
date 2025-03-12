@@ -42,15 +42,10 @@ test('convertDate - Dátum átkonvertálása', () => {
     // ISO 8601
     let iso8601 = now.toISOString();
 
-    // yyyy-mm-dd HH:MM:SS
-    now.setMinutes(now.getMinutes() + now.getTimezoneOffset());
-    // Hibás
-    let hms = `${now.getFullYear()}-${now.getMonth()}-${now.getDay()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    // yyyy-mm-dd HH:MM:SS (UTC)
+    let hms = `${now.toJSON().substring(0, 10)} ${now.toJSON().substring(11, 19)}`;
 
     let testDate = Utils.convertDate(hms);
 
-    console.log(now.toISOString())
-    console.log(iso8601);
-    console.log(testDate);
     expect(testDate.toISOString()).toBe(iso8601);
 })
