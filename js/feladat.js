@@ -63,6 +63,9 @@ window.addEventListener('load',async()=>{
             adatok = await request.json()
             showContentData()
         }
+        else if (request.status == 401) {
+            window.location.href = './login.html';
+        }
     } catch (error) {
         console.log(error)
     }
