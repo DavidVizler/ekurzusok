@@ -92,7 +92,7 @@ async function getCardsData() {
             cardData = await eredmeny.json()
             ModifyActualData(cardData)
         }
-        else if (eredmeny.status == 403) {
+        else if (eredmeny.status == 403 || eredmeny.status == 401) {
             location.href = '../login.html';
         }
         else{
