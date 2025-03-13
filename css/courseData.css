@@ -179,6 +179,15 @@ body::-webkit-scrollbar{
     display: none;
 }
 
+.archivedDiv{
+    flex-direction: column;
+}
+
+.archivedCourses{
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+
 .courseDatas{
     display: inline;
     color: white;

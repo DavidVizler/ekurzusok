@@ -25,24 +25,37 @@ body{
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: overlay !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     font-family: "Varela Round";
     font-weight: 200;
     font-style: normal;
     transition: filter 0.3s ease-in-out;
 }
 
-body::-webkit-scrollbar {
+html{
+    overflow: overlay;
+}
+
+html::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
 }
 
 .content{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     flex: 1;
-    width: 100vw;
+    width: 100%;
     padding: 10px;
+    gap: 16px;
+}
+
+.archivedCards{
+    display: flex;
+    flex-direction: column;
 }
 
 .line{
@@ -138,11 +151,11 @@ body::-webkit-scrollbar {
 #menuContent li {
     padding: 0;
     margin: 0;
-    padding-left: 40px; /* Elég helyet hagyunk a köröknek */
+    padding-left: 40px;
     position: relative;
     font-size: 20px;
     color: black;
-    list-style-type: none; /* Eltüntetjük az alapértelmezett pöttyöt */
+    list-style-type: none;
 }
 
 #menuContent li::before {
@@ -172,6 +185,15 @@ body::-webkit-scrollbar {
 #menuContent #addedCourses {
     margin: 0 0 5px 0;
     padding: 0;
+}
+
+#menuContent #archivedCourses{
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+
+#archivedDiv{
+    flex-direction: column;
 }
 
 .plusIcon{
@@ -361,4 +383,26 @@ a{
 
 .menu a:hover, .menu button:hover {
     background-color: #f0f0f0;
+}
+
+#archiveSvg{
+    height: 30px;
+    width: 30px;
+    color: black;
+    margin: 10px;
+    margin-top: 60px;
+}
+
+.custom-tooltip {
+    position: absolute;
+    border: 1px solid gray;
+    background-color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    display: none;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    pointer-events: none; /* Ne blokkolja az egérműveleteket */
 }
