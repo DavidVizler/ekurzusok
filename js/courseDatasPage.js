@@ -69,7 +69,6 @@ closeButton.addEventListener("click", () => {
 
 closeButtonUsers.addEventListener("click", ()=>{
     usersModal.style.display = "none";
-    
 })
 
 let designData 
@@ -104,6 +103,11 @@ async function getCardsData() {
 }
 
 function ModifyActualData(cardData){
+    let addButton = document.querySelector(".addIcon")
+    let settingsButton = document.querySelector(".settingIcon")
+    let deleteUserButton = document.getElementById("deleteButton")
+
+    console.log(cardData)
     let kurzusNev = $("kurzusNev")
     let oktatok = $("oktatok")
     let title = document.querySelector("title")
@@ -119,6 +123,21 @@ function ModifyActualData(cardData){
             header.style.filter = "brightness(50%);"
         }
     }
+   if(cardData.archived == 1){
+        addButton.removeAttribute("href")
+        addButton.classList.add("disabled")
+        settingsButton.removeAttribute("href")
+        settingsButton.classList.add("disabled")
+        deleteUserButton.classList.add("disabled")
+
+        const menu = document.getElementById("menu"); // A hamburger menü div-je
+        const warningBanner = document.createElement("div");
+        warningBanner.className = "archived-warning";
+        warningBanner.innerHTML = "Ez a kurzus archivált! A tartalmak elérhetők, de nem módosíthatók.";
+
+        // A menu div UTÁN illesztjük be
+        menu.parentNode.insertBefore(warningBanner, menu.nextSibling);
+   }
 }
 
 async function getCourseContent(courseId) {

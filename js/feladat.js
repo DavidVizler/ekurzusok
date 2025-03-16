@@ -89,6 +89,10 @@ function showContentData(){
     }else{
         max_points.innerHTML = "<b>Ponthatár: </b>" + adatok.max_points + " p"
     }
+
+    if(adatok.owned == 0){
+        document.getElementById("modifyBtn").classList.add("disabled")
+    }
 }
 
 function showModal(){
