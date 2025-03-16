@@ -103,8 +103,7 @@ async function getCardsData() {
 
 function GenerateCards() {
    let cardsContainer = $("cards-container");
-   let archivedDiv = document.getElementById("cards-container-archived");
-   let archivedCards = document.getElementById("archivedCards")
+   // let archivedCards = document.getElementById("archivedCards")
 
    for (let i = 0; i < cardData.length; i++) {
       let rowDiv = create("div", "row"); // Minden kártyához külön rowDiv
@@ -184,9 +183,7 @@ function GenerateCards() {
       rowDiv.appendChild(colDiv);
 
       if (cardData[i]["archived"] == 1) {
-         archivedDiv.hidden = false
-         archivedCards.appendChild(rowDiv)
-         archivedDiv.appendChild(archivedCards);
+         console.log("Kurzus sikeresen archiválva")
       } else {
          cardsContainer.appendChild(rowDiv);
       }

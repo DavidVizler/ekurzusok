@@ -24,11 +24,11 @@ async function getCoursesAsync() {
 
 function fillSideBar(courses) {
     let ul = $('addedCourses');
-    let ul2 = $('archivedCourses')
-    let div = $('archivedDiv')
-    if (ul == null|| ul2 == null ) return;
+    let ul2 = $("archivedCourses")
+    let archivedDiv = $("archivedDiv")
+    if (ul == null) return;
     ul.innerHTML = '';
-    console.log(courses)
+    ul2.innerHTML = ""
 
     courses.forEach(course => {
         let li = create('li');
@@ -44,7 +44,7 @@ function fillSideBar(courses) {
         }
         
         if(course.archived == 1){
-            div.style.display = "flex"
+            archivedDiv.style.display = "flex"
             a.appendChild(li)
             ul2.appendChild(a)
         }else{

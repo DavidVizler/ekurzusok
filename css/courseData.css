@@ -104,7 +104,7 @@ body::-webkit-scrollbar{
     background-color: black;
 }
 
-.hamburger-menu .hamburger-menu-content{
+.hamburger-menu-content{
     position: fixed;
     top: 0;
     left: 0;
@@ -168,24 +168,16 @@ body::-webkit-scrollbar{
     color: black;
 }
 
-#addedCourses{
-    padding: 0;
-    height: 100%;
-    overflow-y: auto;
-    scrollbar-width: none;
-}
-
 #addedCourses::-webkit-scrollbar{
     display: none;
 }
 
-.archivedDiv{
+#archivedDiv{
     flex-direction: column;
 }
 
-.archivedCourses{
-    margin: 0 0 5px 0;
-    padding: 0;
+#addedCourses, #archivedCourses{
+   margin: 0 0 5px 0;
 }
 
 .courseDatas{
