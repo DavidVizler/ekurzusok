@@ -82,7 +82,7 @@ async function modifySettings(e) {
         
         let name = $('courseName').value;
         let desc = $('courseDescription').value;
-        let design = $('designSelect').value;
+        let design = parseInt($('designSelect').value);
 
         let reqData = {
             id: courseId,
