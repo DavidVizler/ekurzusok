@@ -155,3 +155,31 @@ document.getElementById("modifyBtn").addEventListener("click", showModal);
 document.querySelector(".close").addEventListener("click", function () {
     document.getElementById("edit-modal").style.display = "none";
 });
+
+
+async function submitFiles() {
+    try {
+
+        let fileInput = $('fileInput');
+        let formData = new FormData();
+        // formData.append('files[]', fileInput.files);
+        // console.log(formData.get('files[]'));
+
+        for (const file of fileInput.files) {
+            formData.append('files[]', file);
+        }
+
+        // TODO: API URL megadása
+        let response = await fetch('', {
+            method: 'POST',
+            body: formData
+        });
+        // ...
+    }
+    catch (e) {
+        console.error(e);
+        alert("A beadás nem sikerült!");
+    }
+}
+
+$('uploadExerciseButton').addEventListener('click', submitFiles);

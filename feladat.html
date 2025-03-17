@@ -65,11 +65,13 @@
                 </div>
             </div>
         </div>
-        <div class="uploadOwnExercise">
-            <input type="file" multiple name="fileInput" id="fileInput" style="display: none;">
-            <button type="button" id="uploadFileButton">Fájl feltöltése</button>
-            <button type="button" id="uploadExerciseButton">Feladat leadása</button>
-        </div>
+        <form enctype="multipart/form-data">
+            <div class="uploadOwnExercise">
+                <input type="file" multiple name="fileInput" id="fileInput" style="display: none;">
+                <button type="button" id="uploadFileButton">Fájl feltöltése</button>
+                <button type="button" id="uploadExerciseButton">Feladat leadása</button>
+            </div>
+        </form>
     </div>
     <div id="edit-modal" class="modal">
         <div class="modal-content">
