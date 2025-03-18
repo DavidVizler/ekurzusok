@@ -110,6 +110,8 @@ async function ModifyData() {
     let max_points = $("maxPoints").value
     if(max_points == ""){max_points = null}
     let limitDate = $("deadline-input").value
+    let date = new Date(limitDate)
+    date = date.toISOString().slice(0, 19).replace('T', ' ');
     let description = $("description-input").value
     let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');
@@ -119,7 +121,7 @@ async function ModifyData() {
         "desc" : description,
         "task" : true,
         "maxpoint" : parseInt(max_points),
-        "deadline" : limitDate
+        "deadline" : date
     }
     try {
         let request = await fetch("api/content/modify-data",{
