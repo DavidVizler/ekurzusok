@@ -40,10 +40,6 @@ $("backToPreviousPage").addEventListener("click",()=>{
     window.history.go(-1)
 })
 
-$('modifyBtn').addEventListener('click', () => {
-    // Feladat szerkesztése
-});
-
 let adatok;
 window.addEventListener('load',async()=>{
     let urlParams = getUrlParams();
@@ -109,7 +105,7 @@ async function ModifyData() {
     let title = $("ContentTitle").value
     let max_points = $("maxPoints").value
     if(max_points == ""){max_points = null}
-    let limitDate = $("deadline-input").value
+    let limitDate = new Date($("deadline-input").value).toJSON()
     let description = $("description-input").value
     let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');
