@@ -247,7 +247,7 @@ html::-webkit-scrollbar {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    width: 250px;
+    min-width: 250px;
     max-width: 90%;
     position: relative;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
@@ -281,9 +281,10 @@ html::-webkit-scrollbar {
     border: 1px solid grey;
     border-radius: 10px;
     margin-top: 15px;
-    text-align: center;
+    text-align: left;
     font-style: italic;
     color: grey;
+    padding: 20px;
 }
 
 #calendarCloseButton{
