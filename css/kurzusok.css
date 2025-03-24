@@ -32,6 +32,7 @@ body{
     font-weight: 200;
     font-style: normal;
     transition: filter 0.3s ease-in-out;
+    min-height: 100vh;
 }
 
 html{
@@ -45,7 +46,7 @@ html::-webkit-scrollbar {
 .content{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex: 1;
     width: 100%;
