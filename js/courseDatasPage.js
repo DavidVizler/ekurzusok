@@ -242,7 +242,11 @@ async function showCourseUsers(userslist) {
 
 async function deleteUserFromCourse(){
     let course_id = parseInt(getUrlEndpoint())
-    let user_id = document.querySelector('input:checked').value
+    let user_id = document.querySelector('input:checked')?.value
+    if (user_id == null) {
+        alert("Nincsen kiválasztva személy!");
+        return
+    }
     try {
         let data = {
             "user_id" : parseInt(user_id),
