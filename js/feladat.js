@@ -115,7 +115,7 @@ async function ModifyData() {
         "desc" : description,
         "task" : true,
         "maxpoint" : parseInt(max_points),
-        "deadline" : limitDate
+        "deadline" : date
     }
     try {
         let request = await fetch("api/content/modify-data",{
