@@ -115,7 +115,7 @@ async function ModifyData() {
         "desc" : description,
         "task" : true,
         "maxpoint" : parseInt(max_points),
-        "deadline" : date
+        "deadline" : limitDate
     }
     try {
         let request = await fetch("api/content/modify-data",{
@@ -127,7 +127,7 @@ async function ModifyData() {
         if(response.sikeres == true){
             setTimeout(function(){
                 location.reload()
-            }, 1500)
+            }, 100)
         }
         else{
             showAlert(response.uzenet)
