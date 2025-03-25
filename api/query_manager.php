@@ -195,9 +195,10 @@ function CourseContentDataQuery() {
         return;
     }
 
-    $sql_statement = "SELECT c.title, c.description, c.task, c.max_points, c.deadline, c.published, c.last_modified, u.firstname, u.lastname, 
-    IF(c.user_id=?, true, false) AS owned FROM content c
-    INNER JOIN users u ON c.user_id = u.user_id WHERE content_id = ? AND c.published IS NOT NULL;";
+    $sql_statement = "SELECT t.title, t.description, t.task, t.max_points, t.deadline, t.published, t.last_modified, c.archived, u.firstname, u.lastname, 
+    IF(t.user_id=?, true, false) AS owned FROM content t
+    INNER JOIN users u ON t.user_id = u.user_id INNER JOIN courses c ON t.course_id = c.course_id
+    WHERE content_id = ? AND t.published IS NOT NULL;";
     $content = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
 
     if (count($content) > 0) {
