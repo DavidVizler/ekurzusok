@@ -15,6 +15,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
 - Kurzus törlése
 - Felhasználó fiók törlése
+- Kurzus tartalom törlése
 - Felhasználó kilépése a kurzusból (önmagától)
 - Felhasználó tanári státuszának módosítása a kurzusban
 - Kurzus tartalom törlése

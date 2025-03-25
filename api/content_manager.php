@@ -254,6 +254,51 @@ function ModifyCourseContentData() {
     
 }
 
+function DeleteCourseContent() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["content_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $content_id = $data["content_id"];
+
+    // Tartalom adatok lekérdezése
+    $sql_statement = "SELECT * FROM content WHERE content_id = ? AND user_id = ?;";
+    $content_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($content_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "DELETE FROM content WHERE content_id = ?";
+    $result = ModifyData($sql_statement, "i", [$content_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres törlés"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen törlés"
+        ]);
+    }
+}
+
 function Manage($action) {
     switch ($action) {
         case "create":
@@ -264,6 +309,9 @@ function Manage($action) {
             break;
         case "modify-data":
             ModifyCourseContentData();
+            break;
+        case "delete":
+            DeleteCourseContent();
             break;
         default:
             SendResponse([
