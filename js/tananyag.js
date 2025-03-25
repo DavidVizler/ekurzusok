@@ -34,7 +34,6 @@ window.addEventListener('load',async()=>{
 
 
 function showContentData(adatok){
-    console.log(adatok)
     let title = $("title")
     let createdDate = $("creatingDate")
     let createUser = $("createrUser")
@@ -43,6 +42,9 @@ function showContentData(adatok){
     createdDate.innerHTML = adatok.published
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname
     description.innerHTML = adatok.description
+    if(adatok.owned == 0){
+        document.getElementById("modifyBtn").classList.add("disabled")
+    }
 }
 window.addEventListener("load", currentDate)
 

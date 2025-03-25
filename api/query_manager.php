@@ -34,7 +34,7 @@ function UserCoursesQuery() {
 
     $user_id = $_SESSION["user_id"];
 
-    $sql_statement = "SELECT c.course_id, c.name, c.design_id, c.archived, 
+    $sql_statement = "SELECT c.course_id, c.name, c.design_id, c.archived, m.role,
     (SELECT u.firstname FROM users u INNER JOIN memberships m ON u.user_id = m.user_id WHERE m.role = 3 AND m.course_id = c.course_id) AS firstname,
     (SELECT u.lastname FROM users u INNER JOIN memberships m ON u.user_id = m.user_id WHERE m.role = 3 AND m.course_id = c.course_id) AS lastname
     FROM courses c INNER JOIN memberships m ON c.course_id = m.course_id INNER JOIN users u ON m.user_id = u.user_id
@@ -71,7 +71,7 @@ function CourseDataQuery() {
         return;
     }
 
-    $sql_statement = "SELECT c.name, c.description, c.design_id, u.firstname, u.lastname,
+    $sql_statement = "SELECT c.name, c.description, c.design_id, c.archived, u.firstname, u.lastname,
     IF(u.user_id = ?, true, false) AS owned FROM courses c
     INNER JOIN memberships m ON c.course_id = m.course_id
     INNER JOIN users u ON m.user_id = u.user_id

@@ -40,10 +40,6 @@ $("backToPreviousPage").addEventListener("click",()=>{
     window.history.go(-1)
 })
 
-$('modifyBtn').addEventListener('click', () => {
-    // Feladat szerkesztése
-});
-
 let adatok;
 window.addEventListener('load',async()=>{
     let urlParams = getUrlParams();
@@ -62,6 +58,9 @@ window.addEventListener('load',async()=>{
         if(request.ok){
             adatok = await request.json()
             showContentData()
+        }
+        else if (request.status == 401) {
+            window.location.href = './login.html';
         }
     } catch (error) {
         console.log(error)
@@ -86,6 +85,10 @@ function showContentData(){
     }else{
         max_points.innerHTML = "<b>Ponthatár: </b>" + adatok.max_points + " p"
     }
+
+    if(adatok.owned == 0){
+        document.getElementById("modifyBtn").classList.add("disabled")
+    }
 }
 
 function showModal(){
@@ -102,7 +105,7 @@ async function ModifyData() {
     let title = $("ContentTitle").value
     let max_points = $("maxPoints").value
     if(max_points == ""){max_points = null}
-    let limitDate = $("deadline-input").value
+    let limitDate = new Date($("deadline-input").value).toJSON()
     let description = $("description-input").value
     let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');
@@ -124,7 +127,7 @@ async function ModifyData() {
         if(response.sikeres == true){
             setTimeout(function(){
                 location.reload()
-            }, 1500)
+            }, 100)
         }
         else{
             showAlert(response.uzenet)
@@ -148,3 +151,31 @@ document.getElementById("modifyBtn").addEventListener("click", showModal);
 document.querySelector(".close").addEventListener("click", function () {
     document.getElementById("edit-modal").style.display = "none";
 });
+
+
+async function submitFiles() {
+    try {
+
+        let fileInput = $('fileInput');
+        let formData = new FormData();
+        // formData.append('files[]', fileInput.files);
+        // console.log(formData.get('files[]'));
+
+        for (const file of fileInput.files) {
+            formData.append('files[]', file);
+        }
+
+        // TODO: API URL megadása
+        let response = await fetch('', {
+            method: 'POST',
+            body: formData
+        });
+        // ...
+    }
+    catch (e) {
+        console.error(e);
+        alert("A beadás nem sikerült!");
+    }
+}
+
+$('uploadExerciseButton').addEventListener('click', submitFiles);

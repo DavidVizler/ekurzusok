@@ -24,14 +24,17 @@ async function getCoursesAsync() {
 
 function fillSideBar(courses) {
     let ul = $('addedCourses');
+    let ul2 = $("archivedCourses")
+    let archivedDiv = $("archivedDiv")
     if (ul == null) return;
     ul.innerHTML = '';
+    ul2.innerHTML = ""
 
     courses.forEach(course => {
         let li = create('li');
         li.setAttribute('data-initial', course.name.charAt(0).toUpperCase());
         li.innerText = course.name;
-
+        
         let a = create('a');
         if (window.location.href.includes('/kurzus/')) {
             a.href = `./${course.course_id}`;
@@ -39,9 +42,15 @@ function fillSideBar(courses) {
         else {
             a.href = `./kurzus/${course.course_id}`;
         }
-
-        a.appendChild(li);
-        ul.appendChild(a);
+        
+        if(course.archived == 1){
+            archivedDiv.style.display = "flex"
+            a.appendChild(li)
+            ul2.appendChild(a)
+        }else{
+            a.appendChild(li);
+            ul.appendChild(a);
+        }
     });
 }
 

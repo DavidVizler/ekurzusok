@@ -248,7 +248,7 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
                 break;
             case "d":
                 if (!is_null($tc)) {
-                    $date_format = 'Y-m-d H:i:s'; // yyyy-MM-dd hh:mm:ss
+                    $date_format = 'Y-m-d\TH:i:s.v\Z'; // ISO 8601
                     $date = DateTime::createFromFormat($date_format, $tc);
                     if (!$date || $date->format($date_format) !== $tc) {
                         if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);

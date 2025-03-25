@@ -77,7 +77,9 @@ svg:hover{
     margin-top: 10px;
     margin-right: 15px;
     display: flex;
+    align-items: end;
     justify-content: end;
+    flex-direction: column;
 }
 
 #modifyBtn {
@@ -86,9 +88,25 @@ svg:hover{
     border-radius: 5px;
     color: white;
     border: none;
+    width: 100px;
+    margin-bottom: 10px;
 }
 
 #modifyBtn:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+#deleteBtn {
+    background-color: #fe1111;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    width: 100px;
+}
+
+#deleteBtn:hover{
     cursor: pointer;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
@@ -157,4 +175,8 @@ svg:hover{
 #save-btn:hover{
     cursor: pointer;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.disabled{
+    display: none;
 }
