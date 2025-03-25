@@ -169,17 +169,19 @@ async function submitFiles() {
 
         let fileInput = $('fileInput');
         let formData = new FormData();
-        // formData.append('files[]', fileInput.files);
-        // console.log(formData.get('files[]'));
-
+        
+        let urlParams = getUrlParams();
+        let tartalomId = urlParams.get('id');
+        formData.append("content_id", tartalomId);
+        
         for (const file of fileInput.files) {
             formData.append('files[]', file);
         }
 
-        // TODO: API URL megadása
-        let response = await fetch('', {
+        let response = await fetch('api/submission/upload', {
             method: 'POST',
-            body: formData
+            body: formData,
+            redirect: "follow"
         });
         // ...
     }
