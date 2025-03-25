@@ -131,6 +131,17 @@ button:hover{
     margin-right: 15px;
     display: flex;
     justify-content: end;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#deleteBtn {
+    background-color: #fe1111;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    width: 100px;
 }
 
 #modifyBtn {
