@@ -2,6 +2,29 @@
 Technikusi vizsga 2024-2025 \
 A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
+## TODO
+- Fájl feltöltés tananyaghoz
+- Fájl feltöltés tartalomhoz
+- Feltöltött fájlok törlése
+- Több fájl feltöltése
+- Feladatleadás
+- Leadott munkák megtekintése
+- Tartalomhoz feltöltött fájlok lekérdezése
+- Fájl letöltés
+- Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
+- Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
+- Kurzus törlése
+- Felhasználó fiók törlése
+- Kurzus tartalom törlése
+- Felhasználó kilépése a kurzusból (önmagától)
+- Felhasználó tanári státuszának módosítása a kurzusban
+- Kurzus tartalom törlése
+- Frontend javítások (görgethetőség, reszponzivtás)
+- Műveletek letiltása az archivált kurzusokban
+- Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- Dokumentáció befejezése
+- Projekt beadható és tesztelhető formában
+
 ## Dokumentáció
 A részletes dokumentáció elérhető [ezen a linken](https://docs.google.com/document/d/1uhBqkqfKAe0qxYCk307rlWE4jrNmFYU45DSQCpYt-Fk/edit?usp=sharing). 
 

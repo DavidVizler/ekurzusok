@@ -225,6 +225,60 @@ function ArchiveCourse() {
     }
 }
 
+function DeleteCourse() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $course_id = $data["id"];
+
+    $sql_statement = "SELECT * FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE c.course_id = ? AND m.user_id = ?;";
+    $course_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+
+    if (count($course_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($course_data[0]["role"] != 3) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "DELETE FROM courses WHERE course_id = ?";
+    $result = ModifyData($sql_statement, "i", [$course_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Kurzus sikeresen törölve"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Kurzus törlése sikertelen"
+        ]);
+    }
+}
+
 function Manage($action) {
     switch ($action) {
         case "create":
@@ -235,6 +289,9 @@ function Manage($action) {
             break;
         case "archive":
             ArchiveCourse();
+            break;
+        case "delete":
+            DeleteCourse();
             break;
         default:
             SendResponse([

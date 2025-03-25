@@ -84,7 +84,7 @@ function RemoveCourseMember() {
     if (count($course_owner_check) == 0) {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
         ], 403);
         return;
     }
@@ -124,6 +124,60 @@ function RemoveCourseMember() {
     }
 }
 
+function LeaveCourse() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["course_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $course_id = $data["course_id"];
+
+    // Tagja-e a felhasználó a kurzusnak
+    $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $course_owner_check = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+    if (count($course_owner_check) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($course_owner_check[0]["role"] == 3) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A tulajdonos nem léphet ki a kurzusból"
+        ], 403);
+        return;
+    }
+
+    // Kurzus tag eltávolítása
+    $sql_statement = "DELETE FROM memberships WHERE user_id = ? AND course_id = ?;";
+    $result = ModifyData($sql_statement, "ii", [$user_id, $course_id]);
+    
+    // Eredmény vizsgálata
+    if ($result) { 
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Felhasználó eltávolítva a kurzusból"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem sikerült eltávolítani a felhasználót a kurzusból"
+        ]);
+    }
+}
+
 function Manage($action) {
     switch ($action) {
         case "add":
@@ -131,6 +185,9 @@ function Manage($action) {
             break;
         case "remove":
             RemoveCourseMember();
+            break;
+        case "leave":
+            LeaveCourse();
             break;
         default:
             SendResponse([
