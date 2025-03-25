@@ -2,6 +2,9 @@
 Technikusi vizsga 2024-2025 \
 A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
+## Dokumentáció
+A részletes dokumentáció elérhető [ezen a linken](https://docs.google.com/document/d/1uhBqkqfKAe0qxYCk307rlWE4jrNmFYU45DSQCpYt-Fk/edit?usp=sharing). 
+
 ## Új PHP struktúra
 Minden adatbázisshoz köthető, adatváltoztató és lekérdező művelet az api-n keresztül érhető el, POST metódussal. A műveletek megadása most már végpontok segítségével történnek (pl. `api/user/login`).
 
