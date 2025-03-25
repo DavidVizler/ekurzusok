@@ -31,6 +31,7 @@
     <div class="navbar">
         <a id="modifyData"><h2>Adatmódosítás</h2></a>
         <a id="modifyPassword"><h2>Jelszó módosítás</h2></a>
+        <a id="deleteUserAccount"><h2>Fiók törlés</h2></a>
     </div>
     <div class="content">
         <div id="alertDiv" style="display: none;"></div>
@@ -80,8 +81,17 @@
                 </div>
             </div>
         </div>
+        <div class="deleteAccountDiv">
+            <div class="input-container">
+                <label for="passwordDelete">Jelszó</label>
+                <div class="input-wrapper">
+                    <input type="password" name="passwordDelete" id="password-to-delete">
+                </div>
+            </div>
+        </div>
         <div class="button-container">
             <button type="button" id="modifyUserDataButton">Módosítás</button>
+            <button type="button" id="deleteUserAccountButton" hidden>Fiók törlése</button>
         </div>
     </div>
     <script src="./js/utils.js"></script>

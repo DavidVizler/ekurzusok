@@ -122,24 +122,40 @@ async function modifyUserPassword() {
 document.addEventListener("DOMContentLoaded", function () {
     const adatmodositasLink = document.querySelector(".navbar a:nth-child(1)");
     const jelszoModositasLink = document.querySelector(".navbar a:nth-child(2)");
+    const deleteAccountLink = document.querySelector(".navbar a:nth-child(3)")
     const saveButton = $("modifyUserDataButton");
+    let deleteAccountButton = $("deleteUserAccountButton")
 
     function showUserDataFields() {
         document.querySelector(".userDataDiv").style.display = "block";
         document.querySelector(".passwordDiv").style.display = "none";
+        document.querySelector(".deleteAccountDiv").style.display = "none"
         adatmodositasLink.classList.add("active");
         jelszoModositasLink.classList.remove("active");
+        deleteAccountLink.classList.remove("active")
     }
 
     function showPasswordFields() {
         document.querySelector(".userDataDiv").style.display = "none";
         document.querySelector(".passwordDiv").style.display = "block";
+        document.querySelector(".deleteAccountDiv").style.display = "none"
         jelszoModositasLink.classList.add("active");
         adatmodositasLink.classList.remove("active");
+        deleteAccountLink.classList.remove("active")
+    }
+
+    function showDeleteUserAccountFields(){
+        document.querySelector(".userDataDiv").style.display = "none";
+        document.querySelector(".passwordDiv").style.display = "none";
+        document.querySelector(".deleteAccountDiv").style.display = "block"
+        jelszoModositasLink.classList.remove("active");
+        adatmodositasLink.classList.remove("active");
+        deleteAccountLink.classList.add("active")
     }
 
     adatmodositasLink.addEventListener("click", showUserDataFields);
     jelszoModositasLink.addEventListener("click", showPasswordFields);
+    deleteAccountLink.addEventListener("click", showDeleteUserAccountFields)
 
     saveButton.addEventListener("click", function () {
         if (adatmodositasLink.classList.contains("active")) {
