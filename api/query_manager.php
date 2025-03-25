@@ -224,7 +224,7 @@ function DeadlineTasksQuery() {
     $sql_statement = "SELECT t.content_id, t.deadline, t.title, c.name AS course_name FROM content t
     INNER JOIN courses c ON t.course_id = c.course_id
     INNER JOIN memberships m ON c.course_id = m.course_id
-    WHERE t.deadline IS NOT NULL AND m.user_id = ?;";
+    WHERE t.deadline IS NOT NULL AND m.user_id = ? AND c.archived = 0;";
     $tasks = DataQuery($sql_statement, "i", [$user_id]);
 
     SendResponse($tasks);
