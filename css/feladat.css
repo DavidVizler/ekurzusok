@@ -231,3 +231,17 @@ p {
 .disabled{
     display: none;
 }
+
+.disabledButton{
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+#modifyBtn:disabled:hover,
+#deleteBtn:disabled:hover,
+#uploadFileButton:disabled:hover,
+#uploadExerciseButton:disabled:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+}

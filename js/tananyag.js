@@ -45,6 +45,14 @@ function showContentData(adatok){
     if(adatok.owned == 0){
         document.getElementById("modifyBtn").classList.add("disabled")
     }
+    if(adatok.archived == 1){
+        document.getElementById("modifyBtn").disabled = true
+        document.getElementById("modifyBtn").style.opacity = 0.6
+        document.getElementById("modifyBtn").style.cursor = "not-allowed"
+        document.getElementById("deleteBtn").style.opacity = 0.6
+        document.getElementById("deleteBtn").style.cursor = "not-allowed"
+        document.getElementById("deleteBtn").disabled = true
+    }
 }
 window.addEventListener("load", currentDate)
 

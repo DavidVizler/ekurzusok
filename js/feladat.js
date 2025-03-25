@@ -89,6 +89,17 @@ function showContentData(){
     if(adatok.owned == 0){
         document.getElementById("modifyBtn").classList.add("disabled")
     }
+    if(adatok.archived == 1){
+        document.getElementById("modifyBtn").disabled = true
+        document.getElementById("deleteBtn").disabled = true
+        document.getElementById("uploadFileButton").disabled = true
+        document.getElementById("uploadExerciseButton").disabled = true
+        
+        document.getElementById("deleteBtn").classList.add("disabledButton")
+        document.getElementById("modifyBtn").classList.add("disabledButton")
+        document.getElementById("uploadFileButton").classList.add("disabledButton")
+        document.getElementById("uploadExerciseButton").classList.add("disabledButton")
+    }
 }
 
 function showModal(){
