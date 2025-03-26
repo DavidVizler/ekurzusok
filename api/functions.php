@@ -169,9 +169,13 @@ function SendInvalidDataRespone($send_success, $key, $value) {
     d -> datetime (yyyy-MM-dd hh:mm:ss vagy NULL)
 
 */
-function PostDataCheck($to_check, $data_types, $send_response = true, $send_success = true) {
+function PostDataCheck($to_check, $data_types, $send_response = true, $send_success = true, $form_data = false) {
     // POST-tal érkezett adatok
-    global $data;
+    if ($form_data) {
+        $data = $_POST;
+    } else {
+        global $data;
+    }
 
     // Vannak adatok?
     if (is_null($data)) {

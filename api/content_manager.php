@@ -9,41 +9,34 @@ function CreateCourseContent() {
         return;
     }
 
-    if (!PostDataCheck(["course_id", "title", "task"], "isb")) {
+    if (!PostDataCheck(["course_id", "title", "task"], "sss", true, true, true)) {
         return;
     }
 
-    global $data;
+    // Érkeztek-e fájlok
+    $files = array_key_exists("files", $_FILES);
+
+    if ($files) {
+        // Nincsenek-e túl nagy fájlok
+        // Max fájl méret --> php.ini --> upload_max_filesize 
+        for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
+            if ($_FILES["files"]["error"][$i]) {
+                SendResponse([
+                    "sikeres" => false,
+                    "uzenet" => "A(z) '{$_FILES["files"]["name"][$i]}' túl nagy méretű"
+                ], 413);
+                return;
+            }
+        }
+    }
+
+    $data = $_POST;
 
     $user_id = $_SESSION["user_id"];
     $course_id = $data["course_id"];
     $title = $data["title"];
-    $task = $data["task"];
+    $task = $data["task"] == "true";
     !empty($data["desc"]) ? $desc = $data["desc"] : $desc = null;
-
-    // Ha feladat és a határidő nem null, akkor idő formátum ellenőrzés
-    if (array_key_exists("deadline", $data) && !is_null($data["deadline"]) && $task) {
-        $deadline = $data["deadline"];
-        $date_format = 'Y-m-d\TH:i:s.v\Z';
-        $date = DateTime::createFromFormat($date_format, $deadline);
-        if (!$date || $date->format($date_format) !== $deadline) {
-            SendInvalidDataRespone(true, "deadline", $deadline);
-            return;
-        }
-    } else {
-        $deadline = null;
-    }
-
-    // Ha van max pont és nem null, akkor megfelelő-e
-    if (array_key_exists("maxpoint", $data) && !is_null($data["maxpoint"]) && $task) {
-        $maxpoint = $data["maxpoint"];
-        if (!is_int($maxpoint) || $maxpoint < 5 || $maxpoint > 1000) {
-            SendInvalidDataRespone(true, "maxpoint", $maxpoint);
-            return;
-        }
-    } else {
-        $maxpoint = null;
-    }
 
     // Tanár-e a kurzusban a felhasználó
     $sql_statement = "SELECT role FROM memberships WHERE user_id = ? AND course_id = ?";
@@ -64,11 +57,59 @@ function CreateCourseContent() {
         ], 403);
         return;
     }
+
+    // Ellenőrzés, hogy létezik-e vagy nem-e archivált a kurzs
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $course_data = DataQuery($sql_statement, "i", [$course_id]);
+    if ($course_data[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
+    // Ha feladat és a határidő nem null, akkor idő formátum ellenőrzés
+    if (array_key_exists("deadline", $data) && $data["deadline"] != "null" && $task) {
+        $deadline = $data["deadline"];
+        $date_format = 'Y-m-d\TH:i:s.v\Z';
+        $date = DateTime::createFromFormat($date_format, $deadline);
+        if (!$date || $date->format($date_format) !== $deadline) {
+            SendInvalidDataRespone(true, "deadline", $deadline);
+            return;
+        }
+    } else {
+        $deadline = null;
+    }
+
+    // Ha van max pont és nem null, akkor megfelelő-e
+    if (array_key_exists("maxpoint", $data) && !is_null($data["maxpoint"]) && $task) {
+        $maxpoint = (int)$data["maxpoint"];
+        if ($maxpoint < 5 || $maxpoint > 1000) {
+            SendInvalidDataRespone(true, "maxpoint", $maxpoint);
+            return;
+        }
+    } else {
+        $maxpoint = null;
+    }
     
     // Tartalom létrehozása
+    $sql_statement = "SELECT MAX(content_id) AS max_id FROM content;";
+    $contents = DataQuery($sql_statement)[0]["max_id"];
+    if (is_null($contents)) {
+        $content_id = 1;
+    } else {
+        $content_id = $contents + 1;
+    }
+
     $sql_statement = "INSERT INTO content (content_id, user_id, course_id, title, description, task, max_points, deadline, published, last_modified) 
-    VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, NULL, current_timestamp())";
-    $result = ModifyData($sql_statement, "iissiis", [$user_id, $course_id, $title, $desc, $task, $maxpoint, $deadline]);
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL, current_timestamp())";
+    $result = ModifyData($sql_statement, "iiissiis", [$content_id, $user_id, $course_id, $title, $desc, $task, $maxpoint, $deadline]);
+
+    // Fájlok feltöltése
+    if ($files) {
+        FileUpload($content_id, "content");
+    }
 
     if ($result) {
         SendResponse([

@@ -198,7 +198,7 @@ function CourseContentDataQuery() {
     $sql_statement = "SELECT t.title, t.description, t.task, t.max_points, t.deadline, t.published, t.last_modified, c.archived, u.firstname, u.lastname, 
     IF(t.user_id=?, true, false) AS owned FROM content t
     INNER JOIN users u ON t.user_id = u.user_id INNER JOIN courses c ON t.course_id = c.course_id
-    WHERE content_id = ? AND t.published IS NOT NULL;";
+    WHERE content_id = ?;";
     $content = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
 
     if (count($content) > 0) {
