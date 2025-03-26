@@ -74,6 +74,15 @@ svg:hover{
     align-items: center;
 }
 
+#selectFileButton {
+    height: 30px;
+    border: none;
+    background-color: #5274ff;
+    color: white;
+    font-family: "Varela Round";
+    border-radius: 10px;
+}
+
 #uploadFileButton{
     height: 30px;
     border: none;

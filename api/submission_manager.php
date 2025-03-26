@@ -17,10 +17,39 @@ function SubmitSubmission() {
     $user_id = $_SESSION["user_id"];
     $content_id = $data["content_id"];
 
-    $sql_statement = "SELECT submission_id FROM submissions WHERE user_id = ? AND content_id = ?;";
+    $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
     $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
 
-    // TODO
+    // Van-e már beadandó
+    if (count($submission_data) == 0) {
+        // Ha nincs, akkor üres leadása
+        $sql_statement = "INSERT INTO submissions (submission_id, user_id, content_id, submitted, rating) VALUES (NULL, ?, ?, UTC_TIMESTAMP(), NULL);";
+        $results = ModifyData($sql_statement, "ii", [$user_id, $content_id]);
+    } else {
+        // Be van-e már adva
+        if (is_null($submission_data[0]["submitted"])) {
+            $sql_statement = "UPDATE submissions SET submitted = NOW() WHERE submission_id = ?;";
+            $results = ModifyData($sql_statement, "i", [$submission_data[0]["submission_id"]]);
+        } else {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Már le van adva a feladat"
+            ]);
+            return;
+        }
+    }
+
+    if ($results) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Feladat sikeresen leadva"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Feladat leadása sikertelen"
+        ]);
+    }
 }
 
 function AttachSubmissionFiles() {
@@ -38,6 +67,27 @@ function AttachSubmissionFiles() {
             "uzenet" => "Hiányos adatok: content_id"
         ], 400);
         return;
+    }
+
+    // Érkeztek-e fájlok
+    if (!array_key_exists("files", $_FILES)) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem érkeztek fájlok"
+        ], 400);
+        return;
+    }
+
+    // Nincsenek-e túl nagy fájlok
+    // Max fájl méret --> php.ini --> upload_max_filesize 
+    for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
+        if ($_FILES["files"]["error"][$i]) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "A(z) '{$_FILES["files"]["name"][$i]}' túl nagy méretű"
+            ], 413);
+            return;
+        }
     }
 
     $content_id = $_POST["content_id"];
@@ -59,21 +109,12 @@ function AttachSubmissionFiles() {
 
     $submission_id = $submission_data[0]["submission_id"];
     
-    // Fájlok feltöltése
-    var_dump($_FILES);
+    FileUpload($submission_id, "submission");
 
-    for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
-        $file_name = $_FILES["files"]["name"][$i];
-        $file_size = $_FILES["files"]["size"][$i] / 1000; // Byte -> KB
-    
-        $sql_statement = "SELECT MAX(file_id) AS max_id FROM files;";
-        $file_id = DataQuery($sql_statement)[0]["max_id"] + 1;
-    
-        var_dump(move_uploaded_file($_FILES["files"]["tmp_name"][$i], "../files/" . $file_id));
-    
-        $sql_statement = "INSERT INTO files (file_id, content_id, submission_id, name, size) VALUES (?, NULL, ?, ?, ?);";
-        ModifyData($sql_statement, "iisi", [$file_id, $submission_id, $file_name, $file_size]);
-    }
+    SendResponse([
+        "sikeres" => true,
+        "uzenet" => "Fájlok sikeresen feltöltve"
+    ], 201);
 }
 
 function Manage($action) {
@@ -83,6 +124,7 @@ function Manage($action) {
             break;
         case "submit":
             SubmitSubmission();
+            break;
         default:
             SendResponse([
                 "sikeres" => false,

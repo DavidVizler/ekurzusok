@@ -32,7 +32,7 @@ window.addEventListener("load", currentDateLoad)
 
 $('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
 
-$("uploadFileButton").addEventListener("click",()=>{
+$("selectFileButton").addEventListener("click",()=>{
     $("fileInput").click()
 })
 
@@ -187,8 +187,26 @@ async function submitFiles() {
     }
     catch (e) {
         console.error(e);
-        alert("A beadás nem sikerült!");
     }
 }
 
-$('uploadExerciseButton').addEventListener('click', submitFiles);
+async function submitSubmission() {
+    let urlParams = getUrlParams();
+    let tartalomId = urlParams.get('id');
+
+    try {
+        let request = await fetch("api/submission/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({"content_id": parseInt(tartalomId)})
+        });
+        // ...
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+$('uploadFileButton').addEventListener('click', submitFiles);
+$('uploadExerciseButton').addEventListener('click', submitSubmission)

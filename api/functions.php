@@ -291,4 +291,33 @@ function AdminLoginCheck() {
     return true;
 }
 
+// Fájl feltöltés
+function FileUpload($id, $attach_to) {
+    for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
+        $file_name = $_FILES["files"]["name"][$i];
+        $file_size = $_FILES["files"]["size"][$i] / 1000; // Byte -> KB
+
+        // Fájl ID meghatározása
+        $sql_statement = "SELECT MAX(file_id) AS max_id FROM files;";
+        $files = DataQuery($sql_statement)[0]["max_id"];
+        if (is_null($files)) {
+            $file_id = 1;
+        } else {
+            $file_id = $files + 1;
+        }
+    
+        // Fájl eltárolása
+        if (move_uploaded_file($_FILES["files"]["tmp_name"][$i], "../files/" . $file_id)) {
+            // Fájl adatok feltöltése adatbázisba
+            if ($attach_to == "content") {
+                $sql_statement = "INSERT INTO files (file_id, content_id, submission_id, name, size) VALUES (?, ?, NULL, ?, ?);";
+            } else if ($attach_to == "submission") {
+                $sql_statement = "INSERT INTO files (file_id, content_id, submission_id, name, size) VALUES (?, NULL, ?, ?, ?);";
+            }
+    
+            ModifyData($sql_statement, "iisi", [$file_id, $id, $file_name, $file_size]);
+        }
+    }
+}
+
 ?>

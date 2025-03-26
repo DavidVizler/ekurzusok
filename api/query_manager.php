@@ -232,7 +232,23 @@ function DeadlineTasksQuery() {
     SendResponse($tasks);
 }
 
-function SubmissionFilesQuery() {
+function SubmissionsQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["content_id"], "i")) {
+        return;
+    }
+
+    // ...
+}
+
+function SubmittedFilesQuery() {
     if (!LoginCheck()) {
         return;
     }
@@ -274,6 +290,22 @@ function SubmissionFilesQuery() {
     SendResponse($files);
 }
 
+function FileDownloadQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["attached_to", "id", "file_id"], "sii")) {
+        return;
+    }
+
+    // ...
+}
+
 function Manage($action) {
     switch ($action) {
         case "user-data":
@@ -297,8 +329,14 @@ function Manage($action) {
         case "deadline-tasks":
             DeadlineTasksQuery();
             break;
+        case "submissions":
+            SubmissionsQuery();
+            break;
         case "submission-files":
-            SubmissionFilesQuery();
+            SubmittedFilesQuery();
+            break;
+        case "file":
+            FileDownloadQuery();
             break;
         default:
             SendResponse([
