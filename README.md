@@ -3,27 +3,44 @@ Technikusi vizsga 2024-2025 \
 A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
 ## TODO
-- Fájl feltöltés tananyaghoz
-- Fájl feltöltés tartalomhoz
+**Frontend**
+- Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
+- Kurzus törlése
+- Felhasználó kilépése a kurzusból (önmagától)
+- Frontend javítások (görgethetőség, reszponzivtás)
+- Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- Kurzus tartalom törlése (csak össze kell kötni az API-val)
+
+**Backend**
+- Kurzus tartalom törlése
+- Felhasználó fiók törlése
+
+**Mindkettő**
+- Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
+- Több fájl feltöltése a meglévők mellé
 - Feltöltött fájlok törlése
-- Több fájl feltöltése
-- Feladatleadás
 - Leadott munkák megtekintése
 - Tartalomhoz feltöltött fájlok lekérdezése
-- Fájl letöltés
+- Beadandóhoz feltöltött fájlok lekérdezése
+- Beadott munkák megtekintése
 - Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
-- Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
-- Kurzus törlése
-- Felhasználó fiók törlése
-- Kurzus tartalom törlése
-- Felhasználó kilépése a kurzusból (önmagától)
 - Felhasználó tanári státuszának módosítása a kurzusban
-- Kurzus tartalom törlése
-- Frontend javítások (görgethetőség, reszponzivtás)
 - Műveletek letiltása az archivált kurzusokban
-- Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- Ne engedjen 10-nél több fájlt feltölteni egy helyre, sem egyszerre, sem külön
+
+**Egyéb**
 - Dokumentáció befejezése
 - Projekt beadható és tesztelhető formában
+
+## Fájlfeltöltéshez szükséges teendők
+**php.ini**-ben pár paramétert át kell állítani.\
+A fájl itt található Windows-on: `C:\xampp\php\php.ini`
+```
+file_uploads = On
+upload_max_filesize = "30M"
+max_file_uploads = 10
+post_max_size = "300M"
+```
 
 ## Dokumentáció
 A részletes dokumentáció elérhető [ezen a linken](https://docs.google.com/document/d/1uhBqkqfKAe0qxYCk307rlWE4jrNmFYU45DSQCpYt-Fk/edit?usp=sharing). 
