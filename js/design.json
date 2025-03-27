@@ -28,5 +28,17 @@
         "designName" : "Informatika",
         "image" : "./img/courseThemes/IT_background.png",
         "courseImage" : "../img/courseDataPageThemes/IT_background_course.png"
+    },
+    {
+        "designId" : 6,
+        "designName" : "Kémia",
+        "image" : "./img/courseThemes/Chemistry_background.png",
+        "courseImage" : "../img/courseDataPageThemes/Chemistry_background_coursePage.png"
+    },
+    {
+        "designId" : 7,
+        "designName" : "Biológia",
+        "image" : "./img/courseThemes/Biology_background.png",
+        "courseImage" : "../img/courseThemes/Biology_background.png"
     }
 ]
