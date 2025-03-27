@@ -226,7 +226,7 @@ async function submitFiles() {
             formData.append('files[]', file);
         }
 
-        let response = await fetch('api/submission/upload', {
+        let response = await fetch('api/submission/upload-files', {
             method: 'POST',
             body: formData,
             redirect: "follow"

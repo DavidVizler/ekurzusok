@@ -261,7 +261,7 @@ function SubmissionsQuery() {
         return;
     }
 
-    $sql_statement = "SELECT u.lastname, u.firstname, s.submitted, COUNT(f.file_id) AS files_count FROM submissions s
+    $sql_statement = "SELECT s.submission_id, u.lastname, u.firstname, s.submitted, COUNT(f.file_id) AS files_count FROM submissions s
     INNER JOIN content c ON s.content_id = c.content_id
     INNER JOIN users u ON s.user_id = u.user_id
     INNER JOIN files f ON s.submission_id = f.submission_id
@@ -331,6 +331,8 @@ function FileDownloadQuery() {
     $attached_to = $data["attached_to"];
     $id = $data["id"];
     $file_id = $data["file_id"];
+
+    // TODO: felhasználó tagja-e a kurzusnak vagy tulajdonosa-e a beadandónak vagy a feladatnak
     
     if ($attached_to == "submission") {
         $sql_statement = "SELECT s.user_id, f.name FROM files f 

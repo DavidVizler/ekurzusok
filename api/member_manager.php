@@ -152,6 +152,7 @@ function LeaveCourse() {
         return;
     }
 
+    // Tulajdonos-e
     if ($course_owner_check[0]["role"] == 3) {
         SendResponse([
             "sikeres" => false,
@@ -178,6 +179,83 @@ function LeaveCourse() {
     }
 }
 
+function ChangeMemberTeacherRole() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["course_id", "user_id"], "ii")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $target_user_id = $data["user_id"];
+    $course_id = $data["course_id"];
+
+    // Nem-e a saját státuszát akarja módosítani
+    if ($user_id == $target_user_id) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A tulajdonos nem módosíthatja saját tanári státuszát"
+        ], 403);
+        return;
+    }
+
+    // Tagja-e a felhasználó a kurzusnak
+    $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $owner_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+    if (count($owner_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A bejelentkezett felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    // Tulajdonos-e
+    if ($owner_data[0]["role"] != 3) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A bejelentkezett felhasználó nem tulajdonosa a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT role FROM memberships WHERE user_id = ? AND course_id = ?;";
+    $member_data = DataQuery($sql_statement, "ii", [$target_user_id, $course_id]);
+
+    if (count($member_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A módosítandó státuszú felhasználó nem tagja a kurzusnak"
+        ], 400);
+        return;
+    }
+
+    $new_status = $member_data[0]["role"] == 1 ? 2 : 1;
+    $modification = $new_status == 2 ? "Tanárrá előléptetés " : "Tanári státusz elvétele ";
+
+    $sql_statement = "UPDATE memberships SET role = ? WHERE user_id = ?";
+    $result = ModifyData($sql_statement, "ii", [$new_status, $target_user_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "{$modification} sikeres"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "{$modification} sikertelen"
+        ]);
+    }
+}
+
 function Manage($action) {
     switch ($action) {
         case "add":
@@ -188,6 +266,9 @@ function Manage($action) {
             break;
         case "leave":
             LeaveCourse();
+            break;
+        case "teacher":
+            ChangeMemberTeacherRole();
             break;
         default:
             SendResponse([

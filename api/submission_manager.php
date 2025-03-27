@@ -126,7 +126,7 @@ function AttachSubmissionFiles() {
 
 function Manage($action) {
     switch ($action) {
-        case "upload":
+        case "upload-files":
             AttachSubmissionFiles();
             break;
         case "submit":
