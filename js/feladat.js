@@ -163,6 +163,54 @@ document.querySelector(".close").addEventListener("click", function () {
     document.getElementById("edit-modal").style.display = "none";
 });
 
+function confirmationModal(){
+    let alertDiv = $('confirmationModalDiv')
+    alertDiv.style.display = "flex"
+
+    let modal_content = create("div", 'modal-content')
+    alertDiv.appendChild(modal_content)
+
+    let message = create("p")
+    modal_content.appendChild(message)
+    message.innerHTML = "Biztosan törölni akarja a tartalmat?"
+
+    let yes_button = create("button")
+    modal_content.appendChild(yes_button)
+    yes_button.innerHTML = "Igen"
+    yes_button.addEventListener("click", DeleteContent)
+
+    let no_button = create("button")
+    modal_content.appendChild(no_button)
+    no_button.innerHTML = "Nem"
+
+    no_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
+async function DeleteContent() {
+    let urlParams = getUrlParams();
+    let tartalomId = urlParams.get('id');
+    try {
+        let request = await fetch('api/content/delete',{
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify({"content_id" : parseInt(tartalomId)})
+        })
+        let response = await request.json()
+        if(response.sikeres == false){
+            showAlert(response.uzenet)
+        }
+        else{
+            window.location.href = document.referrer;
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+document.getElementById("deleteBtn").addEventListener("click", confirmationModal)
 
 async function submitFiles() {
     try {

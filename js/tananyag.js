@@ -76,6 +76,7 @@ function confirmationModal(){
     let yes_button = create("button")
     modal_content.appendChild(yes_button)
     yes_button.innerHTML = "Igen"
+    yes_button.addEventListener("click", DeleteContent)
 
     let no_button = create("button")
     modal_content.appendChild(no_button)
@@ -127,11 +128,14 @@ async function DeleteContent() {
         let request = await fetch('api/content/delete',{
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify({"content_id" : tartalomId})
+            body : JSON.stringify({"content_id" : parseInt(tartalomId)})
         })
         let response = await request.json()
         if(response.sikeres == false){
             showAlert(response.uzenet)
+        }
+        else{
+            window.location.href = document.referrer;
         }
     } catch (error) {
         console.log(error)
