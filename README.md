@@ -9,10 +9,8 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Felhasználó kilépése a kurzusból (önmagától)
 - Frontend javítások (görgethetőség, reszponzivtás)
 - Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- Kurzus tartalom törlése (csak össze kell kötni az API-val)
 
 **Backend**
-- Kurzus tartalom törlése
 - Felhasználó fiók törlése
 
 **Mindkettő**
