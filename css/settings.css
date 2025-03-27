@@ -40,10 +40,24 @@ body{
     border-bottom: 1px solid grey;
 }
 
-.contentDiv div input{
-    height: 20px;
+.contentDiv div input, select{
+    height: 30px;
     border-radius: 5px;
     border: 1px solid grey;
+    width: 80%;
+}
+
+.contentDiv div{
+    display: flex;
+    flex-direction: column;
+}
+
+.contentDiv button{
+    width: 80%;
+}
+
+.contentDiv label{
+    margin-bottom: 5px;
 }
 
 #previewDiv{
@@ -51,6 +65,7 @@ body{
     width: 50%;
     aspect-ratio: 2;
     background-size: cover;
+    margin-left: 15px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -172,4 +187,19 @@ body{
 
 .modal-content button:active {
     background-color: #8fa3ff;
+}
+
+#deleteCourseButton{
+    height: 30px;
+    border: 1px solid #D7263D;
+    border-radius: 10px;
+    background-color: #D7263D;
+    color: white;
+    text-transform: uppercase;
+    font-family: "Varela Round";
+}
+
+#deleteCourseButton:hover{
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
 }
