@@ -128,6 +128,7 @@ async function onLoad() {
     catch (e) {
         location.href = '../kurzusok.html';
     }
+    loadPreview();
 }
 
 async function loadCurrentValues(courseId) {

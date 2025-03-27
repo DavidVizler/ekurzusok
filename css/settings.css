@@ -47,10 +47,16 @@ body{
 }
 
 #previewDiv{
-    height: 600px;
     border-radius: 10px;
-    width: 100%;
+    width: 50%;
+    aspect-ratio: 2;
     background-size: cover;
+}
+
+@media only screen and (max-width: 600px) {
+    #previewDiv {
+        width: 100%;
+    }
 }
 
 .archivaltDiv{
