@@ -24,7 +24,6 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
 - Felhasználó tanári státuszának módosítása a kurzusban
 - Műveletek letiltása az archivált kurzusokban
-- Ne engedjen 10-nél több fájlt feltölteni egy helyre, sem egyszerre, sem külön
 
 **Egyéb**
 - Dokumentáció befejezése

@@ -297,6 +297,13 @@ function AdminLoginCheck() {
 
 // Fájl feltöltés
 function FileUpload($id, $attach_to) {
+    $sql_statement = "SELECT COUNT(file_id) AS file_count FROM files WHERE {$attach_to}_id = ?";
+    $file_count = DataQuery($sql_statement, "i", [$id]);
+
+    if ($file_count[0]["file_count"] + count($_FILES["files"]["name"]) > 10) {
+        return false;
+    }
+
     for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
         $file_name = $_FILES["files"]["name"][$i];
         $file_size = $_FILES["files"]["size"][$i] / 1000; // Byte -> KB
@@ -322,6 +329,8 @@ function FileUpload($id, $attach_to) {
             ModifyData($sql_statement, "iisi", [$file_id, $id, $file_name, $file_size]);
         }
     }
+
+    return true;
 }
 
 ?>

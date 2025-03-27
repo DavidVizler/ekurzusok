@@ -109,12 +109,19 @@ function AttachSubmissionFiles() {
 
     $submission_id = $submission_data[0]["submission_id"];
     
-    FileUpload($submission_id, "submission");
+    $results = FileUpload($submission_id, "submission");
 
-    SendResponse([
-        "sikeres" => true,
-        "uzenet" => "Fájlok sikeresen feltöltve"
-    ], 201);
+    if ($results) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Fájlok sikeresen feltöltve"
+        ], 201);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Maximum 10 fájl tölthető fel"
+        ], 413);
+    }
 }
 
 function Manage($action) {
