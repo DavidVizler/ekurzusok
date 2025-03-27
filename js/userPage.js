@@ -47,6 +47,33 @@ function resultModal(result){
     })
 }
 
+function confirmationModal(){
+    let modal = create("div",'modal')
+    let alertDiv = $('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = create("div", 'modal-content')
+    modal.appendChild(modal_content)
+
+    let message = create("p")
+    modal_content.appendChild(message)
+    message.innerHTML = "Biztosan törölni akarja a fiókját?"
+
+    let yes_button = create("button")
+    modal_content.appendChild(yes_button)
+    yes_button.innerHTML = "Igen"
+
+    let no_button = create("button")
+    modal_content.appendChild(no_button)
+    no_button.innerHTML = "Nem"
+
+    no_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
 async function modifyUserData(){
     let email = $('emailInput').value
     let lastname = $('lastname').value
@@ -119,6 +146,21 @@ async function modifyUserPassword() {
     }
 }
 
+async function DeleteUserAccount() {
+    let password = document.getElementById("password-to-delete").value
+    try {
+        let request = await fetch('./api/user/delete',{
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            }, body : JSON.stringify({"password" : password})
+        })
+        let response = await request.json()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const adatmodositasLink = document.querySelector(".navbar a:nth-child(1)");
     const jelszoModositasLink = document.querySelector(".navbar a:nth-child(2)");
@@ -176,6 +218,8 @@ document.addEventListener("DOMContentLoaded", function () {
             modifyUserPassword();
         }
     });
+
+    deleteAccountButton.addEventListener("click", confirmationModal)
 
     showUserDataFields();
 
