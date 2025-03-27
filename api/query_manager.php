@@ -245,7 +245,30 @@ function SubmissionsQuery() {
         return;
     }
 
-    // ...
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $content_id = $data["content_id"];
+
+    // Tulajdonosa-e a felhasználó a tartalomnak
+    $sql_statement = "SELECT * FROM content WHERE user_id = ? AND content_id = ?;";
+    $owner_check = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
+
+    if (count($owner_check) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a feladatnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT u.lastname, u.firstname, s.submitted, COUNT(f.file_id) AS files_count FROM submissions s
+    INNER JOIN content c ON s.content_id = c.content_id
+    INNER JOIN users u ON s.user_id = u.user_id
+    INNER JOIN files f ON s.submission_id = f.submission_id
+    WHERE c.content_id = ? AND s.submitted IS NOT NULL GROUP BY u.user_id;";
+    $submissions = DataQuery($sql_statement, "i", [$content_id]);
+
+    SendResponse($submissions);
 }
 
 function SubmittedFilesQuery() {
@@ -303,7 +326,50 @@ function FileDownloadQuery() {
         return;
     }
 
-    // ...
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $attached_to = $data["attached_to"];
+    $id = $data["id"];
+    $file_id = $data["file_id"];
+    
+    if ($attached_to == "submission") {
+        $sql_statement = "SELECT s.user_id, f.name FROM files f 
+        INNER JOIN submissions s ON f.submission_id = s.submission_id 
+        WHERE f.file_id = ? AND s.submission_id = ?;";
+    } else if ($attached_to == "content") {
+        $sql_statement = "SELECT c.user_id, f.name FROM files f 
+        INNER JOIN content c ON f.content_id = c.content_id
+        WHERE f.file_id = ? AND c.content_id = ?;";
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Érvénytelen adat (attached_to : '{$attached_to}')" 
+        ], 400);
+        return;
+    }
+
+    $file_data = DataQuery($sql_statement, "ii", [$file_id, $id]);
+
+    if (count($file_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs fájl ilyen ID-val" 
+        ], 404);
+        return;
+    }
+
+    $file_name = $file_data[0]["name"];
+    $file_path = "../files/" . $file_id;
+
+    // Fájl letöltése
+    header("Content-Description: File Transfer");
+    header("Content-Type: application/octet-stream");
+    header("Content-Disposition: attachment; filename={$file_name}");
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate");
+    header("Pragma: public");
+    header("Content-Length: " . filesize($file_path));
+    readfile($file_path);
 }
 
 function Manage($action) {
