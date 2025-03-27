@@ -70,6 +70,33 @@ function resultModal(result){
     })
 }
 
+function confirmationModal(){
+    let modal = create("div", 'modal')
+    let alertDiv = $('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = create("div", 'modal-content')
+    modal.appendChild(modal_content)
+
+    let message = document.createElement("p")
+    modal_content.appendChild(message)
+    message.innerHTML = "Ez egy nem visszavonható művelet! Biztosan szeretné törölni a kurzust?"
+
+    let yes_button = document.createElement("button")
+    modal_content.appendChild(yes_button)
+    yes_button.innerHTML = "Igen"
+    yes_button.addEventListener("click",DeleteCourse)
+
+    let no_button = document.createElement("button")
+    modal_content.appendChild(no_button)
+    no_button.innerHTML = "Nem"
+    no_button.addEventListener('click',()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
 async function modifySettings(e) {
     e.preventDefault();
     try {
@@ -110,6 +137,32 @@ async function modifySettings(e) {
     catch (e) {
         console.error(e);
         resultModal("A módosítások elmentése nem sikerült! Kérjük próbálja meg később.");
+    }
+}
+
+async function DeleteCourse() {
+    try {
+        let urlParams = getUrlParams();
+        if (!urlParams.has('id')) {
+            throw new Error("Nincs 'id' paraméter megadva az URL-ben.");
+        }
+
+        let courseId = parseInt(urlParams.get('id'));
+        let request = await fetch('../api/course/delete',{
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify({"id" : courseId})
+        })
+        let response = await request.json()
+        if(response.sikeres){
+            resultModal("Sikeres törlés")
+            location.href = '../kurzusok.html';
+        }
+        else{
+            resultModal(response.uzenet)
+        }
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -159,5 +212,6 @@ async function loadCurrentValues(courseId) {
 window.addEventListener('load', loadDesign)
 $("designSelect").addEventListener("change", loadPreview)
 document.querySelector(".openPreviewDiv").addEventListener('click', toggleArrow)
+document.getElementById("deleteCourseButton").addEventListener('click', confirmationModal)
 window.addEventListener('load', async () => await onLoad());
 $('settingsForm').addEventListener('submit', async (e) => await modifySettings(e));
