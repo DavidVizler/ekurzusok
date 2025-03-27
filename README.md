@@ -11,6 +11,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - Beadott munkák megtekintése
 - Beadandóhoz feltöltött fájlok lekérdezése
+- Felhasználó tanári státuszának módosítása a kurzusban
 
 **Backend**
 - Felhasználó fiók törlése
@@ -22,7 +23,6 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Leadott munkák megtekintése
 - Tartalomhoz feltöltött fájlok lekérdezése
 - Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
-- Felhasználó tanári státuszának módosítása a kurzusban
 - Műveletek letiltása az archivált kurzusokban
 
 **Egyéb**
