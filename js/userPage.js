@@ -63,6 +63,7 @@ function confirmationModal(){
     let yes_button = create("button")
     modal_content.appendChild(yes_button)
     yes_button.innerHTML = "Igen"
+    yes_button.addEventListener("click", DeleteUserAccount)
 
     let no_button = create("button")
     modal_content.appendChild(no_button)
@@ -156,6 +157,11 @@ async function DeleteUserAccount() {
             }, body : JSON.stringify({"password" : password})
         })
         let response = await request.json()
+        if(response.sikeres){
+            location.href = "./index.html"
+        }else{
+            resultModal(response.uzenet)
+        }
     } catch (error) {
         console.log(error)
     }

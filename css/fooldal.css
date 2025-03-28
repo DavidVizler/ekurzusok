@@ -71,17 +71,16 @@ body{
     color: white;
     position: fixed;
     bottom: 0;
-    height: 120px;
     width: 100%;
+    padding: 1rem;
     justify-content: center;
-    padding: 0 50px;
 }
 
 .links a{
     color: white;
     text-decoration: none;
     font-size: 16px;
-    padding-right: 100px;
+    padding-right: 50px;
 }
 
 .links a:hover{
@@ -90,17 +89,19 @@ body{
 
 .links{
     display: flex;
-    width: 100%;
-    justify-content: space-between;
+    margin-inline: auto;
     align-items: center;
-    margin: 15px;
+}
+
+.links:first-child{
+    padding-left: 25px;
 }
 
 .copyrightDiv{
     display: flex;
-    margin-left: 15px;
     color: rgba(255, 255, 255, 0.5);
     justify-content: center;
+    padding-top: 1rem;
 }
 
 .contentDiv{
