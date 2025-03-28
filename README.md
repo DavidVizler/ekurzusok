@@ -4,30 +4,30 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
 ## TODO
 **Frontend**
-- Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
-- Kurzus törlése
-- Felhasználó kilépése a kurzusból (önmagától)
-- Frontend javítások (görgethetőség, reszponzivtás)
-- Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- Beadott munkák megtekintése
-- Beadandóhoz feltöltött fájlok lekérdezése
-- Felhasználó tanári státuszának módosítása a kurzusban
+- [ ] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
+- [x] Kurzus törlése
+- [ ] Felhasználó kilépése a kurzusból (önmagától)
+- [ ] Frontend javítások (görgethetőség, reszponzivtás)
+- [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- [ ] Beadott munkák megtekintése
+- [ ] Beadandóhoz feltöltött fájlok lekérdezése
+- [ ] Felhasználó tanári státuszának módosítása a kurzusban
 
 **Backend**
-- Felhasználó fiók törlése
+- [ ] Felhasználó fiók törlése
 
 **Mindkettő**
-- Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
-- Több fájl feltöltése a meglévők mellé
-- Feltöltött fájlok törlése
-- Leadott munkák megtekintése
-- Tartalomhoz feltöltött fájlok lekérdezése
-- Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
-- Műveletek letiltása az archivált kurzusokban
+- [ ] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
+- [ ] Több fájl feltöltése a meglévők mellé
+- [ ] Feltöltött fájlok törlése
+- [ ] Leadott munkák megtekintése
+- [ ] Tartalomhoz feltöltött fájlok lekérdezése
+- [ ] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
+- [ ] Műveletek letiltása az archivált kurzusokban
 
 **Egyéb**
-- Dokumentáció befejezése
-- Projekt beadható és tesztelhető formában
+- [ ] Dokumentáció befejezése
+- [ ] Projekt beadható és tesztelhető formában
 
 ## Fájlfeltöltéshez szükséges teendők
 **php.ini**-ben pár paramétert át kell állítani.\
