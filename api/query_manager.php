@@ -211,6 +211,42 @@ function CourseContentDataQuery() {
     
 }
 
+function CourseContentFilesQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["content_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $content_id = $data["content_id"];
+
+    // Benne van-e a felhasználó a kurzusban
+    $sql_statement = "SELECT m.user_id FROM memberships m
+    INNER JOIN courses c ON m.course_id = c.course_id
+    INNER JOIN content t ON t.course_id = c.course_id
+    WHERE t.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+    if (count($membership_data) == 0) {
+        SendResponse([
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT file_id, name, size FROM files WHERE content_id = ?;";
+    $files = DataQuery($sql_statement, "i", [$content_id]);
+
+    SendResponse($files);
+}
+
 function DeadlineTasksQuery() {
     if (!LoginCheck()) {
         return;
@@ -332,6 +368,9 @@ function Manage($action) {
             break;
         case "content-data":
             CourseContentDataQuery();
+            break;
+        case "content-files":
+            CourseContentFilesQuery();
             break;
         case "deadline-tasks":
             DeadlineTasksQuery();
