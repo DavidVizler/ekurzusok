@@ -17,6 +17,15 @@ function CreateCourseContent() {
     $files = array_key_exists("files", $_FILES);
 
     if ($files) {
+        // Fájl feltöltés limit
+        if (count($_FILES["files"]["name"]) > 10) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Maximum 10 fájl tölthető fel"
+            ], 413);
+            return;
+        }
+
         // Nincsenek-e túl nagy fájlok
         // Max fájl méret --> php.ini --> upload_max_filesize 
         for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
@@ -27,7 +36,7 @@ function CreateCourseContent() {
                 ], 413);
                 return;
             }
-        }
+        } 
     }
 
     $data = $_POST;

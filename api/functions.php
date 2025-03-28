@@ -26,10 +26,7 @@ function DataQuery($operation, $var_types = null, $parameters = null) {
     );
 
     if ($db -> connect_errno != 0) {
-        SendResponse([
-            "hiba" => "Nem sikerült kapcsolódni az adatbázishoz"
-        ], 500);
-        exit;
+        return $db -> connect_error;
     }
 
     if (!is_null($var_types) && !is_null($parameters)) {
@@ -42,10 +39,7 @@ function DataQuery($operation, $var_types = null, $parameters = null) {
     }
 
     if ($db -> errno != 0) {
-        SendResponse([
-            "hiba" => "Hiba adótott az adatbázis művelet végrehajtásakor"
-        ], 500);
-        exit;
+        return $db -> error;
     }
 
     return $results -> fetch_all(MYSQLI_ASSOC);
@@ -63,10 +57,7 @@ function ModifyData($operation, $var_types = null, $parameters = null) {
     );
 
     if ($db -> connect_errno != 0) {
-        SendResponse([
-            "hiba" => "Nem sikerült kapcsolódni az adatbázishoz"
-        ], 500);
-        exit;
+        return $db -> connect_error;
     }
 
     if (!is_null($var_types) && !is_null($parameters)) {
@@ -78,10 +69,7 @@ function ModifyData($operation, $var_types = null, $parameters = null) {
     }
 
     if ($db -> errno != 0) {
-        SendResponse([
-            "hiba" => "Hiba adótott az adatbázis művelet végrehajtásakor"
-        ], 500);
-        exit;
+        return $db -> error;
     }
 
     return $db -> affected_rows;
@@ -108,32 +96,7 @@ function CheckMethod($method) {
     }
 }
 
-/*
-function PostDataCheck($to_check, $send_response = true) {
-    global $data;
-    if (is_null($data)) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Hiányos adatok"
-        ], 400);
-        return false;
-    }
-
-    foreach ($to_check as $tc) {
-        if (!isset($data[$tc]) || (empty($data[$tc]) && $data[$tc] !== 0 && $data[$tc] !== false)) {
-            if ($send_response) {
-                SendResponse([
-                    "sikeres" => false,
-                    "uzenet" => "Hiányos adatok"
-                ], 400);
-            }
-            return false;
-        }
-    }
-    return true;
-}
-*/
-
+// PostDataCheck segédfüggvénye
 function SendInvalidDataRespone($send_success, $key, $value) {
     if (is_string($value)) {
         $print_value = "'{$value}'";
@@ -301,6 +264,10 @@ function FileUpload($id, $attach_to) {
     $file_count = DataQuery($sql_statement, "i", [$id]);
 
     if ($file_count[0]["file_count"] + count($_FILES["files"]["name"]) > 10) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Maximum 10 fájl tölthető fel"
+        ], 413);
         return false;
     }
 

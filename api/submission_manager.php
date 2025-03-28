@@ -116,11 +116,6 @@ function AttachSubmissionFiles() {
             "sikeres" => true,
             "uzenet" => "Fájlok sikeresen feltöltve"
         ], 201);
-    } else {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Maximum 10 fájl tölthető fel"
-        ], 413);
     }
 }
 
