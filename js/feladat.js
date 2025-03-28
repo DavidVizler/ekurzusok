@@ -65,6 +65,29 @@ window.addEventListener('load',async()=>{
     } catch (error) {
         console.log(error)
     }
+
+    // **TODO**
+    // Feladathoz tartozó fájlok
+    // try {
+    //     let response = await fetch('/api/query/content-files', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ content_id: tartalomId })
+    //     });
+
+    //     // teszt:
+    //     // showContentFiles([ {name: 'a'}, {name: 'b'} ])
+
+    //     if (response.ok) {
+    //         let files = await response.json();
+    //         showContentFiles(files);
+    //     }
+    // }
+    // catch (e) {
+    //     console.error(e);
+    // }
 })
 
 function showContentData(){
@@ -99,6 +122,40 @@ function showContentData(){
         document.getElementById("modifyBtn").classList.add("disabledButton")
         document.getElementById("uploadFileButton").classList.add("disabledButton")
         document.getElementById("uploadExerciseButton").classList.add("disabledButton")
+    }
+}
+
+// **TODO**
+// Feladathoz tartozó fájlok megjelentése
+function showContentFiles(files) {
+    let filesContainer = $('contentFilesContainer');
+    filesContainer.innerHTML = '';
+
+    for (const file of files) {
+        let fileDiv = create('div', 'filesDiv');
+        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('stroke-width', '1.5');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.classList.add('size-6');
+
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        path.setAttribute('d', 'M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5');
+
+        let h1 = create('h1', 'fileName');
+        h1.innerText = file.name;
+
+        // fileDiv.addEventListener('click', () => {
+        //     location.href = `downloader?file_id=${file.file_id}&attached_to=${}`;
+        // })
+
+        svg.appendChild(path);
+        fileDiv.appendChild(svg);
+        fileDiv.appendChild(h1);
+        filesContainer.appendChild(fileDiv);
     }
 }
 
