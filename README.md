@@ -6,7 +6,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 **Frontend**
 - [ ] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
 - [x] Kurzus törlése
-- [ ] Felhasználó kilépése a kurzusból (önmagától)
+- [x] Felhasználó kilépése a kurzusból (önmagától)
 - [ ] Frontend javítások (görgethetőség, reszponzivtás)
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [ ] Beadott munkák megtekintése

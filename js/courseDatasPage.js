@@ -394,6 +394,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
 $('deleteButton').addEventListener('click', deleteUserFromCourse)
 
+// Kurzus elhagyása
+async function leaveCourse() {
+    let confirmation = confirm("Biztosan ki szeretne lépni a kurzusból?");
+    if (!confirmation) {
+        return;
+    }
+    let courseId = parseInt(getUrlEndpoint());
+    let response = await fetch('../api/member/leave', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ course_id: courseId })
+    });
+    
+    let result = await response.json();
+
+    if (response.ok) {
+        location.href = '../kurzusok.html';
+    }
+    else {
+        alert(result.uzenet);
+    }
+}
+
+$('leaveButton').addEventListener('click', leaveCourse);
+
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
 window.addEventListener("load", () => {

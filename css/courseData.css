@@ -505,3 +505,17 @@ a#openModal:hover, a#openModalUsers:hover {
     border-radius: 5px;
     width: 90%;
 }
+
+.leaveButtonDiv {
+    align-self: center;
+    margin-left: auto;
+}
+
+#leaveButton {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
