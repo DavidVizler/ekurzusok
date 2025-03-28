@@ -154,6 +154,86 @@ function AttachSubmissionFiles() {
     }
 }
 
+function RemoveFileFromSubmission() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["file_id", "content_id"], "ii")) {
+        return;
+    }
+
+    global $data;
+    $file_id = $data["file_id"];
+    $content_id = $data["content_id"];
+    $user_id = $_SESSION["user_id"];
+
+    // Ellenőrzés, hogy van-e beadandó
+    $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
+    $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
+
+    if (count($submission_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs beadandó vagy nem a felhasználóé"
+        ], 403);
+        return;
+    } 
+
+    if (!is_null($submission_data[0]["submitted"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A feladat már le van adva"
+        ], 403);
+        return;
+    }
+
+    $submission_id = $submission_data[0]["submission_id"];
+
+    // A felhasználó-e a beadandó tulajdonosa
+    $sql_statement = "SELECT s.user_id FROM submissions s
+    INNER JOIN files f ON s.submission_id = f.submission_id
+    WHERE s.submission_id = ? AND f.file_id = ?;";
+    $file_data = DataQuery($sql_statement, "ii", [$submission_id, $file_id]);
+
+    if (count($file_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs fájl vagy tartalom ilyen ID-val"
+        ], 404);
+        return;
+    }
+
+    if ($file_data[0]["user_id"] != $user_id) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "DELETE FROM files WHERE file_id = ?;";
+    $result = ModifyData($sql_statement, "i", [$file_id]);
+
+    unlink("../files/" . $file_id);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres törlés"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen törlés"
+        ]);
+    }
+}
+
 function RateSubmission() {
     if (!LoginCheck()) {
         return;
@@ -236,6 +316,9 @@ function Manage($action) {
             break;
         case "submit":
             SubmitSubmission();
+            break;
+        case "remove-file":
+            RemoveFileFromSubmission();
             break;
         case "rate":
             RateSubmission();
