@@ -313,67 +313,6 @@ function SubmittedFilesQuery() {
     SendResponse($files);
 }
 
-function FileDownloadQuery() {
-    if (!LoginCheck()) {
-        return;
-    }
-
-    if (!CheckMethod("POST")) {
-        return;
-    }
-
-    if (!PostDataCheck(["attached_to", "id", "file_id"], "sii")) {
-        return;
-    }
-
-    global $data;
-    $user_id = $_SESSION["user_id"];
-    $attached_to = $data["attached_to"];
-    $id = $data["id"];
-    $file_id = $data["file_id"];
-
-    // TODO: felhasználó tagja-e a kurzusnak vagy tulajdonosa-e a beadandónak vagy a feladatnak
-    
-    if ($attached_to == "submission") {
-        $sql_statement = "SELECT s.user_id, f.name FROM files f 
-        INNER JOIN submissions s ON f.submission_id = s.submission_id 
-        WHERE f.file_id = ? AND s.submission_id = ?;";
-    } else if ($attached_to == "content") {
-        $sql_statement = "SELECT c.user_id, f.name FROM files f 
-        INNER JOIN content c ON f.content_id = c.content_id
-        WHERE f.file_id = ? AND c.content_id = ?;";
-    } else {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Érvénytelen adat (attached_to : '{$attached_to}')" 
-        ], 400);
-        return;
-    }
-
-    $file_data = DataQuery($sql_statement, "ii", [$file_id, $id]);
-
-    if (count($file_data) == 0) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Nincs fájl ilyen ID-val" 
-        ], 404);
-        return;
-    }
-
-    $file_name = $file_data[0]["name"];
-    $file_path = "../files/" . $file_id;
-
-    // Fájl letöltése
-    header("Content-Description: File Transfer");
-    header("Content-Type: application/octet-stream");
-    header("Content-Disposition: attachment; filename={$file_name}");
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate");
-    header("Pragma: public");
-    header("Content-Length: " . filesize($file_path));
-    readfile($file_path);
-}
-
 function Manage($action) {
     switch ($action) {
         case "user-data":
@@ -402,9 +341,6 @@ function Manage($action) {
             break;
         case "submission-files":
             SubmittedFilesQuery();
-            break;
-        case "file":
-            FileDownloadQuery();
             break;
         default:
             SendResponse([

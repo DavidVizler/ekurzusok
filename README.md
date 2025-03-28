@@ -42,13 +42,21 @@ post_max_size = "300M"
 ## Dokumentáció
 A részletes dokumentáció elérhető [ezen a linken](https://docs.google.com/document/d/1uhBqkqfKAe0qxYCk307rlWE4jrNmFYU45DSQCpYt-Fk/edit?usp=sharing). 
 
-## Új PHP struktúra
-Minden adatbázisshoz köthető, adatváltoztató és lekérdező művelet az api-n keresztül érhető el, POST metódussal. A műveletek megadása most már végpontok segítségével történnek (pl. `api/user/login`).
+## PHP struktúra és API
+Minden adatbázisshoz köthető, adatváltoztató és lekérdező művelet az api-n keresztül érhető el, POST metódussal. A műveletek megadása végpontok segítségével történnek (pl. `api/user/login`).
 
-**Fetch útmutató:**\
 A műveletek és lekérdezések megadások és a hozzájuk tartozó várt/visszatérő adatok megtalálhatóak [ebben a segédletben](https://docs.google.com/spreadsheets/d/1QqVU3NuwNTp1Xk_SZ8jrgYIF6DXR1OvF8vQTprfVUaY/edit?usp=sharing), ahol a végpontok állapota is nyilván van tartva.
 
-## Új adatbázis
+## Fájlok letöltése
+A letöltendő fájlok esetén az alábbi linket kell megnyitni a megfelelő értékkel behelyettesítve:
+
+`downloader/?file_id=x&attached_to=y&id=z`
+
+A `file_id` a fájl ID-ja, az `attached_to` azt jelenti, hogy mihez van csatolva a fájl: ha tartalomhoz, akkor ennek az értéke `content`, ha beadandóhoz, akkor `submission`. Az `id` a tartalom vagy beadandó ID-ját jelöli.
+
+## Adatbázis
+(Az `admins` tábla nélkül)
+
 ![Adatbázis relációs modell](./db/db.png)
 
 ## Tesztek
