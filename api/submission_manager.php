@@ -17,6 +17,28 @@ function SubmitSubmission() {
     $user_id = $_SESSION["user_id"];
     $content_id = $data["content_id"];
 
+    // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
+    $sql_statement = "SELECT m.role FROM memberships m
+    INNER JOIN content c ON m.course_id = c.course_id
+    WHERE c.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($membership_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($membership_data[0]["role"] != 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tauló a kurzusban"
+        ], 403);
+        return;
+    }
+
     $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
     $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
 
@@ -34,7 +56,7 @@ function SubmitSubmission() {
             SendResponse([
                 "sikeres" => false,
                 "uzenet" => "Már le van adva a feladat"
-            ]);
+            ], 400);
             return;
         }
     }
@@ -61,7 +83,7 @@ function AttachSubmissionFiles() {
         return;
     }
     
-    if (!PostDataCheck(["content_id"], "i", true, true, true)) {
+    if (!PostDataCheck(["content_id"], "s", true, true, true)) {
         return;
     }
 
@@ -77,8 +99,30 @@ function AttachSubmissionFiles() {
     $content_id = $_POST["content_id"];
     $user_id = $_SESSION["user_id"];
 
+    // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
+    $sql_statement = "SELECT m.role FROM memberships m
+    INNER JOIN content c ON m.course_id = c.course_id
+    WHERE c.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($membership_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($membership_data[0]["role"] != 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tauló a kurzusban"
+        ], 403);
+        return;
+    }
+
     // Ellenőrzés, hogy van-e beadandó
-    $sql_statement = "SELECT submission_id FROM submissions WHERE user_id = ? AND content_id = ?;";
+    $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
     $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
 
     if (count($submission_data) == 0) {
@@ -89,6 +133,14 @@ function AttachSubmissionFiles() {
         $sql_statement = "SELECT submission_id FROM submissions WHERE user_id = ? AND content_id = ?;";
         $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);  
     } 
+
+    if (!is_null($submission_data[0]["submitted"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A feladat már le van adva"
+        ], 403);
+        return;
+    }
 
     $submission_id = $submission_data[0]["submission_id"];
     

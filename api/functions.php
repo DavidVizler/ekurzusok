@@ -276,7 +276,7 @@ function FileUpload($id, $attach_to) {
     if ($file_count[0]["file_count"] + count($_FILES["files"]["name"]) > 10) {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "Maximum 10 fájl tölthető fel"
+            "uzenet" => "Maximum 10 fájl tölthető fel, ({$file_count[0]["file_count"]} van jelenleg feltöltve)"
         ], 413);
         return false;
     }

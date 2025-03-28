@@ -365,7 +365,7 @@ function Manage($action) {
         default:
             SendResponse([
                 "sikeres" => false,
-                "uzenet" => "Hibás műveletmegadás"
+                "uzenet" => "Hibás műveletmegadás: {$action}"
             ], 400);
             break;
     }

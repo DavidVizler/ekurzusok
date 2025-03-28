@@ -313,7 +313,7 @@ function AttachFileToContent() {
         return;
     }
     
-    if (!PostDataCheck(["content_id"], "i", true, true, true)) {
+    if (!PostDataCheck(["content_id"], "s", true, true, true)) {
         return;
     }
 
@@ -330,7 +330,7 @@ function AttachFileToContent() {
     $user_id = $_SESSION["user_id"];
 
     // Ellenőrzés, hogy a felhaználóé-e a tartalom
-    $sql_statement = "SELECT user_id FROM content WHERE content_id = 11;";
+    $sql_statement = "SELECT user_id FROM content WHERE content_id = ?;";
     $content_data = DataQuery($sql_statement, "i", [$content_id]);
 
     if (count($content_data) == 0) {
@@ -424,7 +424,7 @@ function Manage($action) {
         default:
             SendResponse([
                 "sikeres" => false,
-                "uzenet" => "Hibás műveletmegadás"
+                "uzenet" => "Hibás műveletmegadás: {$action}"
             ], 400);
             break;
     }
