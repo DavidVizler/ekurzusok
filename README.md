@@ -50,7 +50,7 @@ A műveletek és lekérdezések megadások és a hozzájuk tartozó várt/vissza
 ## Fájlok letöltése
 A letöltendő fájlok esetén az alábbi linket kell megnyitni a megfelelő értékkel behelyettesítve:
 
-`downloader/?file_id=x&attached_to=y&id=z`
+`downloader?file_id=x&attached_to=y&id=z`
 
 A `file_id` a fájl ID-ja, az `attached_to` azt jelenti, hogy mihez van csatolva a fájl: ha tartalomhoz, akkor ennek az értéke `content`, ha beadandóhoz, akkor `submission`. Az `id` a tartalom vagy beadandó ID-ját jelöli.
 
