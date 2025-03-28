@@ -396,10 +396,6 @@ $('deleteButton').addEventListener('click', deleteUserFromCourse)
 
 // Kurzus elhagyása
 async function leaveCourse() {
-    let confirmation = confirm("Biztosan ki szeretne lépni a kurzusból?");
-    if (!confirmation) {
-        return;
-    }
     let courseId = parseInt(getUrlEndpoint());
     let response = await fetch('../api/member/leave', {
         method: 'POST',
@@ -415,11 +411,59 @@ async function leaveCourse() {
         location.href = '../kurzusok.html';
     }
     else {
-        alert(result.uzenet);
+        showAlert(result.uzenet);
     }
 }
 
-$('leaveButton').addEventListener('click', leaveCourse);
+function confirmationModal(){
+    let alertDiv = $('alertDiv')
+    alertDiv.style.display = "flex"
+
+    let modal_content = create("div", 'confirmation-modal-content')
+    alertDiv.appendChild(modal_content)
+
+    let message = create("p")
+    modal_content.appendChild(message)
+    message.innerHTML = "Biztosan ki szeretne lépni a kurzusból?"
+
+    let yes_button = create("button")
+    modal_content.appendChild(yes_button)
+    yes_button.innerHTML = "Igen"
+    yes_button.addEventListener("click", leaveCourse)
+
+    let no_button = create("button")
+    modal_content.appendChild(no_button)
+    no_button.innerHTML = "Nem"
+
+    no_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
+function showAlert(uzenet){
+    let alertDiv = $('alertDiv')
+    alertDiv.style.display = "flex"
+
+    let modal_content = create("div", 'alert-modal-content')
+    alertDiv.appendChild(modal_content)
+
+    let message = create("p")
+    modal_content.appendChild(message)
+    message.innerHTML = uzenet
+
+    let ok_button = create("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+    ok_button.id = "ok_button"
+
+    ok_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
+$('leaveButton').addEventListener('click',confirmationModal);
 
 window.addEventListener("load",getDesignJson)
 window.addEventListener("load",getCardsData)
