@@ -359,6 +359,64 @@ function AttachFileToContent() {
     }
 }
 
+function RemoveFileFromContent() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["file_id", "content_id"], "ii")) {
+        return;
+    }
+
+    global $data;
+    $file_id = $data["file_id"];
+    $content_id = $data["content_id"];
+    $user_id = $_SESSION["user_id"];
+
+    // A felhasználó-e a tartalom tulajdonosa
+    $sql_statement = "SELECT c.user_id FROM content c
+    INNER JOIN files f ON c.content_id = f.content_id
+    WHERE c.content_id = ? AND f.file_id = ?;";
+    $file_data = DataQuery($sql_statement, "ii", [$content_id, $file_id]);
+
+    if (count($file_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs fájl vagy tartalom ilyen ID-val"
+        ], 404);
+        return;
+    }
+
+    if ($file_data[0]["user_id"] != $user_id) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "DELETE FROM files WHERE file_id = ?;";
+    $result = ModifyData($sql_statement, "i", [$file_id]);
+
+    unlink("../files/" . $file_id);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Sikeres törlés"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen törlés"
+        ]);
+    }
+}
+
 function DeleteCourseContent() {
     if (!LoginCheck()) {
         return;
@@ -417,6 +475,9 @@ function Manage($action) {
             break;
         case "upload-files":
             AttachFileToContent();
+            break;
+        case "remove-file":
+            RemoveFileFromContent();
             break;
         case "delete":
             DeleteCourseContent();
