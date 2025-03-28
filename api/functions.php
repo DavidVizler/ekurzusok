@@ -260,6 +260,16 @@ function AdminLoginCheck() {
 
 // Fájl feltöltés
 function FileUpload($id, $attach_to) {
+    for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
+        if ($_FILES["files"]["error"][$i]) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "A(z) '{$_FILES["files"]["name"][$i]}' túl nagy méretű"
+            ], 413);
+            return;
+        }
+    }
+
     $sql_statement = "SELECT COUNT(file_id) AS file_count FROM files WHERE {$attach_to}_id = ?";
     $file_count = DataQuery($sql_statement, "i", [$id]);
 

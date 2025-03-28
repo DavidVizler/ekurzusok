@@ -304,6 +304,61 @@ function ModifyCourseContentData() {
     
 }
 
+function AttachFileToContent() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+    
+    if (!PostDataCheck(["content_id"], "i", true, true, true)) {
+        return;
+    }
+
+    // Érkeztek-e fájlok
+    if (!array_key_exists("files", $_FILES)) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nem érkeztek fájlok"
+        ], 400);
+        return;
+    }
+
+    $content_id = $_POST["content_id"];
+    $user_id = $_SESSION["user_id"];
+
+    // Ellenőrzés, hogy a felhaználóé-e a tartalom
+    $sql_statement = "SELECT user_id FROM content WHERE content_id = 11;";
+    $content_data = DataQuery($sql_statement, "i", [$content_id]);
+
+    if (count($content_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs tartalom ilyen ID-val"
+        ], 404);
+        return;
+    }
+
+    if ($content_data[0]["user_id"] != $user_id) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+    
+    $results = FileUpload($content_id, "content");
+
+    if ($results) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Fájlok sikeresen feltöltve"
+        ], 201);
+    }
+}
+
 function DeleteCourseContent() {
     if (!LoginCheck()) {
         return;
@@ -359,6 +414,9 @@ function Manage($action) {
             break;
         case "modify-data":
             ModifyCourseContentData();
+            break;
+        case "upload-files":
+            AttachFileToContent();
             break;
         case "delete":
             DeleteCourseContent();

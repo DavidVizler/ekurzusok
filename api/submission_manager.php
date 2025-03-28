@@ -61,11 +61,7 @@ function AttachSubmissionFiles() {
         return;
     }
     
-    if (!isset($_POST["content_id"])) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Hiányos adatok: content_id"
-        ], 400);
+    if (!PostDataCheck(["content_id"], "i", true, true, true)) {
         return;
     }
 
@@ -78,20 +74,7 @@ function AttachSubmissionFiles() {
         return;
     }
 
-    // Nincsenek-e túl nagy fájlok
-    // Max fájl méret --> php.ini --> upload_max_filesize 
-    for ($i = 0; $i < count($_FILES["files"]["name"]); $i++) {
-        if ($_FILES["files"]["error"][$i]) {
-            SendResponse([
-                "sikeres" => false,
-                "uzenet" => "A(z) '{$_FILES["files"]["name"][$i]}' túl nagy méretű"
-            ], 413);
-            return;
-        }
-    }
-
     $content_id = $_POST["content_id"];
-
     $user_id = $_SESSION["user_id"];
 
     // Ellenőrzés, hogy van-e beadandó
