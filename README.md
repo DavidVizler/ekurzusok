@@ -12,16 +12,16 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [ ] Beadott munkák megtekintése
 - [ ] Beadandóhoz feltöltött fájlok lekérdezése
 - [ ] Felhasználó tanári státuszának módosítása a kurzusban
+- [ ] Feltöltött fájlok törlése
+- [ ] Tartalomhoz feltöltött fájlok lekérdezése
+- [ ] Több fájl feltöltése a meglévők mellé
+- [ ] Leadott munkák megtekintése
 
 **Backend**
-- [ ] Felhasználó fiók törlése
+- [x] Felhasználó fiók törlése
 
 **Mindkettő**
 - [ ] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
-- [ ] Több fájl feltöltése a meglévők mellé
-- [ ] Feltöltött fájlok törlése
-- [ ] Leadott munkák megtekintése
-- [ ] Tartalomhoz feltöltött fájlok lekérdezése
 - [ ] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
 - [ ] Műveletek letiltása az archivált kurzusokban
 
