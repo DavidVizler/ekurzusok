@@ -313,5 +313,58 @@ async function submitSubmission() {
     }
 }
 
+async function GetContentFiles() {
+    let urlParams = getUrlParams();
+    let tartalomId = urlParams.get('id');
+    let reqData = {
+        "content_id" : parseInt(tartalomId)
+    }
+    try {
+        let request = await fetch('api/query/content-files',{
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(reqData)
+        })
+        if(request.ok){
+            let response = await request.json()
+            console.log(response)
+            showFiles(response)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function showFiles(files){
+    let ki = document.getElementById("contentFilesContainer")
+    for(let file of files){
+        let fileDiv = document.createElement("div")
+        fileDiv.classList.add("fileDiv")
+        fileDiv.id = "fileDiv" + file.file_id
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        svg.setAttribute("xlmns","https://www.w3.org/2000/svg")
+        svg.setAttribute("fill","none")
+        svg.setAttribute("viewBox","0 0 24 24")
+        svg.setAttribute("stroke-width","1.5")
+        svg.setAttribute("stroke","currentColor")
+        svg.classList.add("size-6")
+
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute("stroke-linecap","round")
+        path.setAttribute("stroke-linejoin","round")
+        path.setAttribute("d","M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5")
+
+        let h1 = document.createElement("h1")
+        h1.classList.add("fileName")
+        h1.innerHTML = file.name
+
+        fileDiv.appendChild(svg)
+        svg.appendChild(path)
+        fileDiv.appendChild(h1)
+        ki.appendChild(fileDiv)
+    }
+}
+
 $('uploadFileButton').addEventListener('click', submitFiles);
 $('uploadExerciseButton').addEventListener('click', submitSubmission)
+window.addEventListener("load",GetContentFiles)
