@@ -34,7 +34,7 @@ function SubmitSubmission() {
     if ($membership_data[0]["role"] != 1) {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "A felhasználó nem tauló a kurzusban"
+            "uzenet" => "A felhasználó nem tanuló a kurzusban"
         ], 403);
         return;
     }
@@ -116,7 +116,7 @@ function AttachSubmissionFiles() {
     if ($membership_data[0]["role"] != 1) {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "A felhasználó nem tauló a kurzusban"
+            "uzenet" => "A felhasználó nem tanuló a kurzusban"
         ], 403);
         return;
     }
