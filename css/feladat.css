@@ -176,6 +176,14 @@ button:hover{
     width: 100%;
 }
 
+#showSubmissions{
+    background-color: white;
+    color: #5271ff;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #5271ff;
+}
+
 #alertDiv{
     display: none;
     border: 1px solid #f1aeb5;
@@ -205,6 +213,11 @@ p {
 }
 
 #save-btn:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+#showSubmissions:hover{
     cursor: pointer;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }

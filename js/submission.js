@@ -1,0 +1,90 @@
+document.getElementById("backToPreviousPage").addEventListener("click", () => {
+    window.history.go(-1);
+});
+
+async function GetSubmissions() {
+    let params = new URLSearchParams(window.location.search);
+    let tartalomId = params.get('id');
+    console.log(tartalomId);
+    let reqData = {
+        "content_id": parseInt(tartalomId)
+    };
+
+    try {
+        let request = await fetch('api/query/submissions', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reqData)
+        });
+        let response = await request.json();
+        console.log(response);
+        showSubedData(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function showSubedData(adatok) {
+    let ki = document.querySelector(".content");
+
+    for (let adat of adatok) {
+        let dataDiv = document.createElement("div")
+        dataDiv.classList.add("dataDiv")
+
+        let div = document.createElement("div");
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.gap = "15px";
+
+        let h1 = document.createElement("h1");
+        h1.innerHTML = adat.lastname + " " + adat.firstname;
+
+        let div2 = document.createElement("div");
+        div2.classList.add("open");
+        div2.addEventListener('click', toggleArrow);
+
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("arrow");
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("stroke-width", "1");
+        svg.setAttribute("stroke", "currentColor");
+        svg.classList.add("size-6");
+
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        path.setAttribute("d", "m4.5 18.75 7.5-7.5 7.5 7.5");
+
+        let path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path2.setAttribute("stroke-linecap", "round");
+        path2.setAttribute("stroke-linejoin", "round");
+        path2.setAttribute("d", "m4.5 12.75 7.5-7.5 7.5 7.5");
+
+        let datas = document.createElement("div")
+        datas.id = "datasDiv"
+
+        datas.innerHTML = "Beadva: " + adat.submitted + "<br>"
+        datas.innerHTML += "Fájlok: "
+
+        div.appendChild(h1);
+        div.appendChild(div2);
+        div2.append(svg);
+        svg.appendChild(path);
+        svg.appendChild(path2);
+
+        dataDiv.appendChild(div);
+        dataDiv.appendChild(datas)
+        ki.appendChild(dataDiv)
+    }
+}
+
+function toggleArrow(event) {
+    let arrow = event.currentTarget.querySelector('.arrow');
+    if (arrow) {
+        arrow.classList.toggle('flipped');
+    }
+}
+
+window.addEventListener("load", GetSubmissions);

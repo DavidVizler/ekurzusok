@@ -68,7 +68,7 @@ window.addEventListener('load',async()=>{
 })
 
 function showResultModal(uzenet){
-    let alertDiv = $('confirmationModalDiv')
+    let alertDiv = document.getElementById('confirmationModalDiv')
     alertDiv.style.display = "flex"
 
     let modal_content = create("div", 'modal-content')
@@ -109,6 +109,8 @@ function showContentData(){
 
     if(adatok.owned == 0){
         document.getElementById("modifyBtn").classList.add("disabled")
+        document.getElementById("showSubmissions").classList.add("disabled")
+        document.getElementById("deleteBtn").classList.add("disabled")
     }
     if(adatok.archived == 1){
         document.getElementById("modifyBtn").disabled = true
@@ -242,7 +244,7 @@ async function submitFiles() {
         let urlParams = getUrlParams();
         let tartalomId = urlParams.get('id');
         formData.append("content_id", tartalomId);
-        
+
         for (const file of fileInput.files) {
             formData.append('files[]', file);
         }
@@ -274,7 +276,10 @@ async function submitSubmission() {
             },
             body: JSON.stringify({"content_id": parseInt(tartalomId)})
         });
-        // ...
+        let response = await request.json()
+        if(response.sikeres == false){
+            showResultModal(response.uzenet)    
+        }
     } catch (error) {
         console.log(error);
     }
@@ -332,6 +337,15 @@ function showFiles(files){
     }
 }
 
+function navigateToSubmissions(){
+    let urlParams = getUrlParams();
+    let tartalomId = urlParams.get('id');
+    if(tartalomId){
+        window.location.href = `submissions.html?id=${tartalomId}`;
+    }
+}
+
 $('uploadFileButton').addEventListener('click', submitFiles);
 $('uploadExerciseButton').addEventListener('click', submitSubmission)
 window.addEventListener("load",GetContentFiles)
+$('showSubmissions').addEventListener('click', navigateToSubmissions)
