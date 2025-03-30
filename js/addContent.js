@@ -42,6 +42,9 @@ async function contentPublish(reqData) {
 
         // TODO
         let result = await response.json();
+        if(result.sikeres == false){
+            resultModal(result.uzenet)
+        }
 
         console.log(result);
         if (response.ok) {
@@ -89,6 +92,29 @@ async function onNewTask(e) {
     }
 
     await contentPublish(reqData);
+}
+
+function resultModal(result){
+    let modal = create("div", 'modal')
+    let alertDiv = $('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(modal)
+
+    let modal_content = create("div", 'modal-content')
+    modal.appendChild(modal_content)
+
+    let message = create("p")
+    modal_content.appendChild(message)
+    message.innerHTML = result
+
+    let ok_button = create("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+
+    ok_button.addEventListener("click",()=>{
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
 }
 
 // Tananyag

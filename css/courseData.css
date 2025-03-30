@@ -112,7 +112,7 @@ body::-webkit-scrollbar{
     box-sizing: border-box;
     height: 100vh;
     border: 1px solid grey;
-    overflow: hidden;
+    overflow-y: auto;
     border-radius: 0 15px 15px 0;
     list-style-type: none;
     -webkit-font-smoothing: antialiased; 
@@ -120,6 +120,10 @@ body::-webkit-scrollbar{
     opacity: 0;
     visibility: hidden;
     z-index: 1000;
+}
+
+body.menu-open {
+    overflow: hidden;
 }
 
 .hamburger-menu .hamburger-menu-content h2{
