@@ -1,12 +1,14 @@
 body{
     font-family: "Varela Round";
+    scrollbar-width: none;
+    margin: 0;
 }
 
 .header{
     display: flex;
     gap: 10px;
-    border-bottom: 1px solid rgb(167, 164, 164);
     align-items: center;
+    border-bottom: 1px solid gray;
 }
 
 svg{
@@ -16,6 +18,13 @@ svg{
 
 svg:hover{
     cursor: pointer;
+}
+
+#feladatSvg{
+    background-color: #dd4335;
+    border-radius: 35px;
+    padding: 5px;
+    color: white;
 }
 
 .content{
@@ -36,20 +45,63 @@ svg:hover{
     transition: transform 0.3 ease;
     height: 40px;
     width: 40px;
+    color: black;
 }
 
 .arrow.flipped {
     transform: rotate(180deg);
 }
 
-.dataDiv{
-    padding: 15px;
-}
-
-#datasDiv{
-    display: flex;
-    margin: 15px;
-    border: 1px solid gray;
+.datasDiv {
+    display: none;
+    flex-direction: column;
+    margin-left: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     padding: 10px;
+    width: fit-content;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.datasDiv.active {
+    display: flex;
+    opacity: 1;
+    transform: scaleY(1);
+}
+
+.fileDiv{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid gray;
+    border-radius: 10px;;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.fileDiv svg{
+    border-right: 1px solid gray;
+    padding-right: 10px;
+    height: 100%;
+    color: black;
+}
+
+.fileName{
+    font-weight: 300;
+    font-size: 25px;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+    margin: 10px 0;
+    width: 35%;
+}
+
+.body::-webkit-scrollbar {
+    width: 0;
 }
