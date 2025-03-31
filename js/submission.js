@@ -143,6 +143,10 @@ function showFiles(files, submissionId) {
         fileDiv.classList.add("fileDiv");
         fileDiv.id = "fileDiv" + file.file_id;
 
+        fileDiv.addEventListener('click', () => {
+            window.location.href = `downloader?file_id=${file.file_id}&attached_to=submission&id=${submissionId}`;
+        });
+
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("fill", "none");
