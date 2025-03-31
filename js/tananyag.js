@@ -193,6 +193,13 @@ function showFiles(files){
         h1.classList.add("fileName")
         h1.innerHTML = file.name
 
+        let urlParams = getUrlParams();
+        let id = urlParams.get('id');
+
+        fileDiv.addEventListener('click', () => {
+            window.location.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${id}`;
+        });
+
         fileDiv.appendChild(svg)
         svg.appendChild(path)
         fileDiv.appendChild(h1)
