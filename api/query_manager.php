@@ -285,14 +285,24 @@ function SubmissionsQuery() {
     $user_id = $_SESSION["user_id"];
     $content_id = $data["content_id"];
 
-    // Tulajdonosa-e a felhasználó a tartalomnak
-    $sql_statement = "SELECT * FROM content WHERE user_id = ? AND content_id = ?;";
-    $owner_check = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
+    // Tanár-e a felhasználó a kurzusban
+    $sql_statement = "SELECT m.role FROM memberships m
+    INNER JOIN content c ON m.course_id = c.course_id
+    WHERE c.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
 
-    if (count($owner_check) == 0) {
+    if (count($membership_data) == 0) {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "A felhasználó nem tulajdonosa a feladatnak"
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($membership_data[0]["role"] == 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tanár a kurzusban"
         ], 403);
         return;
     }
@@ -302,6 +312,55 @@ function SubmissionsQuery() {
     INNER JOIN users u ON s.user_id = u.user_id
     INNER JOIN files f ON s.submission_id = f.submission_id
     WHERE c.content_id = ? AND s.submitted IS NOT NULL GROUP BY u.user_id;";
+    $submissions = DataQuery($sql_statement, "i", [$content_id]);
+
+    SendResponse($submissions);
+}
+
+function SubmissionCountQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["content_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $content_id = $data["content_id"];
+
+    // Tanár-e a felhasználó a kurzusban
+    $sql_statement = "SELECT m.role, c.course_id FROM memberships m
+    INNER JOIN content c ON m.course_id = c.course_id
+    WHERE c.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($membership_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($membership_data[0]["role"] == 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tanár a kurzusban"
+        ], 403);
+        return;
+    }
+
+    $course_id = $membership_data[0]["course_id"];
+
+    $sql_statement = "SELECT COUNT(submission_id) AS submission_count,
+    (SELECT COUNT(membership_id) FROM memberships WHERE course_id = 4291 AND role = 1) AS student_count
+    FROM submissions WHERE content_id = 1 AND submitted IS NOT NULL;";
     $submissions = DataQuery($sql_statement, "i", [$content_id]);
 
     SendResponse($submissions);
@@ -377,6 +436,9 @@ function Manage($action) {
             break;
         case "submissions":
             SubmissionsQuery();
+            break;
+        case "submission-count":
+            SubmissionCountQuery();
             break;
         case "submission-files":
             SubmittedFilesQuery();
