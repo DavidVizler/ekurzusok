@@ -92,7 +92,7 @@ function CreateCourseContent() {
     }
 
     // Ha van max pont és nem null, akkor megfelelő-e
-    if (array_key_exists("maxpoint", $data) && !is_null($data["maxpoint"]) && $task) {
+    if (array_key_exists("maxpoint", $data) && $data["maxpoint"] != "null" && $task) {
         $maxpoint = (int)$data["maxpoint"];
         if ($maxpoint < 5 || $maxpoint > 1000) {
             SendInvalidDataRespone(true, "maxpoint", $maxpoint);

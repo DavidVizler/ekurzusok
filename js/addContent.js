@@ -71,7 +71,12 @@ async function onNewTask(e) {
     } else {
         due = new Date(localTime).toJSON();
     }
-    let points = parseInt($('fpont').value);
+    let points;
+    if ($('fpont').value == "") {
+        points = null;
+    } else {
+        parseInt($('fpont').value);
+    }
     let filesInput = $('ffile');
 
     if (title == '') {
