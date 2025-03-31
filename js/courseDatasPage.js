@@ -105,7 +105,7 @@ async function getCardsData() {
 function ModifyActualData(cardData){
     let addButton = document.querySelector(".addIcon")
     let settingsButton = document.querySelector(".settingIcon")
-    let deleteUserButton = document.getElementById("deleteButton")
+    let deleteUserButton = $("deleteButton")
 
     console.log(cardData)
     let kurzusNev = $("kurzusNev")
@@ -130,9 +130,8 @@ function ModifyActualData(cardData){
         settingsButton.classList.add("disabled")
         deleteUserButton.classList.add("disabled")
 
-        const menu = document.getElementById("menu"); // A hamburger menü div-je
-        const warningBanner = document.createElement("div");
-        warningBanner.className = "archived-warning";
+        const menu = $("menu"); // A hamburger menü div-je
+        const warningBanner = create('div', 'archived-warning');
         warningBanner.innerHTML = "Ez a kurzus archivált! A tartalmak elérhetők, de nem módosíthatók.";
 
         // A menu div UTÁN illesztjük be
@@ -190,9 +189,9 @@ async function getCourseUsers(courseid){
 }
 
 function viewByRole() {
-    let addContentButton = document.getElementById("addContentButton");
-    let settingsButton = document.getElementById("settingsButton");
-    let navbar = document.getElementById("contentNavbar");
+    let addContentButton = $("addContentButton");
+    let settingsButton = $("settingsButton");
+    let navbar = $("contentNavbar");
     if (cardData.owned != 1) {
         addContentButton.style.display = "none";
         settingsButton.style.display = "none";

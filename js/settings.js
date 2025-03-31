@@ -79,16 +79,16 @@ function confirmationModal(){
     let modal_content = create("div", 'modal-content')
     modal.appendChild(modal_content)
 
-    let message = document.createElement("p")
+    let message = create('p');
     modal_content.appendChild(message)
     message.innerHTML = "Ez egy nem visszavonható művelet! Biztosan szeretné törölni a kurzust?"
 
-    let yes_button = document.createElement("button")
+    let yes_button = create('button');
     modal_content.appendChild(yes_button)
     yes_button.innerHTML = "Igen"
     yes_button.addEventListener("click",DeleteCourse)
 
-    let no_button = document.createElement("button")
+    let no_button = create('button');
     modal_content.appendChild(no_button)
     no_button.innerHTML = "Nem"
     no_button.addEventListener('click',()=>{
@@ -212,6 +212,6 @@ async function loadCurrentValues(courseId) {
 window.addEventListener('load', loadDesign)
 $("designSelect").addEventListener("change", loadPreview)
 document.querySelector(".openPreviewDiv").addEventListener('click', toggleArrow)
-document.getElementById("deleteCourseButton").addEventListener('click', confirmationModal)
+$("deleteCourseButton").addEventListener('click', confirmationModal)
 window.addEventListener('load', async () => await onLoad());
 $('settingsForm').addEventListener('submit', async (e) => await modifySettings(e));

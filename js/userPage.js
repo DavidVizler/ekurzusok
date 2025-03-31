@@ -148,7 +148,7 @@ async function modifyUserPassword() {
 }
 
 async function DeleteUserAccount() {
-    let password = document.getElementById("password-to-delete").value
+    let password = $("password-to-delete").value
     try {
         let request = await fetch('./api/user/delete',{
             method : 'POST',

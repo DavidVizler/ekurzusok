@@ -68,7 +68,7 @@ window.addEventListener('load',async()=>{
 })
 
 function showResultModal(uzenet){
-    let alertDiv = document.getElementById('confirmationModalDiv')
+    let alertDiv = $('confirmationModalDiv')
     alertDiv.style.display = "flex"
 
     let modal_content = create("div", 'modal-content')
@@ -108,20 +108,20 @@ function showContentData(){
     }
 
     if(adatok.owned == 0){
-        document.getElementById("modifyBtn").classList.add("disabled")
-        document.getElementById("showSubmissions").classList.add("disabled")
-        document.getElementById("deleteBtn").classList.add("disabled")
+        $("modifyBtn").classList.add("disabled")
+        $("showSubmissions").classList.add("disabled")
+        $("deleteBtn").classList.add("disabled")
     }
     if(adatok.archived == 1){
-        document.getElementById("modifyBtn").disabled = true
-        document.getElementById("deleteBtn").disabled = true
-        document.getElementById("uploadFileButton").disabled = true
-        document.getElementById("uploadExerciseButton").disabled = true
+        $("modifyBtn").disabled = true
+        $("deleteBtn").disabled = true
+        $("uploadFileButton").disabled = true
+        $("uploadExerciseButton").disabled = true
         
-        document.getElementById("deleteBtn").classList.add("disabledButton")
-        document.getElementById("modifyBtn").classList.add("disabledButton")
-        document.getElementById("uploadFileButton").classList.add("disabledButton")
-        document.getElementById("uploadExerciseButton").classList.add("disabledButton")
+        $("deleteBtn").classList.add("disabledButton")
+        $("modifyBtn").classList.add("disabledButton")
+        $("uploadFileButton").classList.add("disabledButton")
+        $("uploadExerciseButton").classList.add("disabledButton")
     }
 }
 
@@ -179,11 +179,11 @@ function showAlert(uzenet){
 
 $("save-btn").addEventListener("click",ModifyData)
 
-document.getElementById("modifyBtn").addEventListener("click", showModal);
+$("modifyBtn").addEventListener("click", showModal);
 
 // Modal bezárása a "close" gombra kattintva
 document.querySelector(".close").addEventListener("click", function () {
-    document.getElementById("edit-modal").style.display = "none";
+    $("edit-modal").style.display = "none";
 });
 
 function confirmationModal(){
@@ -233,7 +233,7 @@ async function DeleteContent() {
     }
 }
 
-document.getElementById("deleteBtn").addEventListener("click", confirmationModal)
+$("deleteBtn").addEventListener("click", confirmationModal)
 
 async function submitFiles() {
     try {
@@ -308,10 +308,9 @@ async function GetContentFiles() {
 }
 
 function showFiles(files){
-    let ki = document.getElementById("contentFilesContainer")
+    let ki = $("contentFilesContainer")
     for(let file of files){
-        let fileDiv = document.createElement("div")
-        fileDiv.classList.add("fileDiv")
+        let fileDiv = create('div', 'fileDiv');
         fileDiv.id = "fileDiv" + file.file_id
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         svg.setAttribute("xlmns","https://www.w3.org/2000/svg")
@@ -326,8 +325,7 @@ function showFiles(files){
         path.setAttribute("stroke-linejoin","round")
         path.setAttribute("d","M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5")
 
-        let h1 = document.createElement("h1")
-        h1.classList.add("fileName")
+        let h1 = create('h1', 'fileName');
         h1.innerHTML = file.name
 
         let urlParams = getUrlParams();

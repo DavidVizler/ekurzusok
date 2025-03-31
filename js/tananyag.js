@@ -43,15 +43,15 @@ function showContentData(adatok){
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname
     description.innerHTML = adatok.description
     if(adatok.owned == 0){
-        document.getElementById("modifyBtn").classList.add("disabled")
+        $("modifyBtn").classList.add("disabled")
     }
     if(adatok.archived == 1){
-        document.getElementById("modifyBtn").disabled = true
-        document.getElementById("modifyBtn").style.opacity = 0.6
-        document.getElementById("modifyBtn").style.cursor = "not-allowed"
-        document.getElementById("deleteBtn").style.opacity = 0.6
-        document.getElementById("deleteBtn").style.cursor = "not-allowed"
-        document.getElementById("deleteBtn").disabled = true
+        $("modifyBtn").disabled = true
+        $("modifyBtn").style.opacity = 0.6
+        $("modifyBtn").style.cursor = "not-allowed"
+        $("deleteBtn").style.opacity = 0.6
+        $("deleteBtn").style.cursor = "not-allowed"
+        $("deleteBtn").disabled = true
     }
 }
 window.addEventListener("load", currentDate)
@@ -173,8 +173,7 @@ async function GetContentFiles() {
 function showFiles(files){
     let ki = document.querySelector('.content')
     for(let file of files){
-        let fileDiv = document.createElement("div")
-        fileDiv.classList.add("fileDiv")
+        let fileDiv = create('div', 'fileDiv');
         fileDiv.id = "fileDiv" + file.file_id
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         svg.setAttribute("xlmns","https://www.w3.org/2000/svg")
@@ -189,8 +188,7 @@ function showFiles(files){
         path.setAttribute("stroke-linejoin","round")
         path.setAttribute("d","M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5")
 
-        let h1 = document.createElement("h1")
-        h1.classList.add("fileName")
+        let h1 = create('h1', 'fileName');
         h1.innerHTML = file.name
 
         let urlParams = getUrlParams();
@@ -209,11 +207,11 @@ function showFiles(files){
 
 $("save-btn").addEventListener("click",ModifyData)
 
-document.getElementById("modifyBtn").addEventListener("click", showModal);
-document.getElementById("deleteBtn").addEventListener("click", confirmationModal)
+$("modifyBtn").addEventListener("click", showModal);
+$("deleteBtn").addEventListener("click", confirmationModal)
 
 document.querySelector(".close").addEventListener("click", function () {
-    document.getElementById("edit-modal").style.display = "none";
+    $("edit-modal").style.display = "none";
 });
 
 window.addEventListener('load', GetContentFiles)

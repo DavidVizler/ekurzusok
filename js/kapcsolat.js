@@ -1,5 +1,5 @@
-const form = document.getElementById('form');
-const result = document.getElementById('result');
+const form = $('form');
+const result = $('result');
 
 form.addEventListener('submit', function (e) {
     e.preventDefault();

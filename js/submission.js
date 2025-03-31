@@ -1,4 +1,4 @@
-document.getElementById("backToPreviousPage").addEventListener("click", () => {
+$("backToPreviousPage").addEventListener("click", () => {
     window.history.go(-1);
 });
 
@@ -28,19 +28,17 @@ function showSubedData(adatok) {
     let ki = document.querySelector(".content");
 
     for (let adat of adatok) {
-        let dataDiv = document.createElement("div")
-        dataDiv.classList.add("dataDiv")
+        let dataDiv = create('div', 'dataDiv');
 
-        let div = document.createElement("div");
+        let div = create('div');
         div.style.display = 'flex';
         div.style.alignItems = 'center';
         div.style.gap = "15px";
 
-        let h1 = document.createElement("h2");
+        let h1 = create('h2');
         h1.innerHTML = adat.lastname + " " + adat.firstname;
 
-        let div2 = document.createElement("div");
-        div2.classList.add("open");
+        let div2 = create('div', 'open');
         div2.addEventListener('click', (event) => toggleArrow(event, adat.submission_id)); 
 
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -62,16 +60,15 @@ function showSubedData(adatok) {
         path2.setAttribute("stroke-linejoin", "round");
         path2.setAttribute("d", "m4.5 12.75 7.5-7.5 7.5 7.5");
 
-        let datas = document.createElement("div")
+        let datas = $('div', 'datasDiv');
         datas.id = `datasDiv-${adat.submission_id}`;
-        datas.style.display =  "none"
-        datas.classList.add("datasDiv")
+        datas.style.display =  "none";
 
         datas.innerHTML = "Beadva: " + adat.submitted + "<br>"
         datas.innerHTML += "Beadott fájlok száma: " + adat.files_count + "<br>"
         datas.innerHTML += "Fájlok: "
 
-        let hiddenSubId = document.createElement("input")
+        let hiddenSubId = create('input');
         hiddenSubId.type = "number"
         hiddenSubId.value = adat.submission_id
         hiddenSubId.id = "subId"
@@ -87,7 +84,7 @@ function showSubedData(adatok) {
         dataDiv.appendChild(datas)
         dataDiv.appendChild(hiddenSubId)
 
-        let hr = document.createElement("hr");
+        let hr = create("hr");
         dataDiv.appendChild(hr);
 
         ki.appendChild(dataDiv)
@@ -96,7 +93,7 @@ function showSubedData(adatok) {
 
 function toggleArrow(event, submissionId) {
     let arrow = event.currentTarget.querySelector('.arrow');
-    let previewDiv = document.getElementById(`datasDiv-${submissionId}`);
+    let previewDiv = $(`datasDiv-${submissionId}`);
 
     if (arrow) {
         arrow.classList.toggle('flipped');
@@ -139,8 +136,7 @@ function showFiles(files, submissionId) {
     }
 
     for (let file of files) {
-        let fileDiv = document.createElement("div");
-        fileDiv.classList.add("fileDiv");
+        let fileDiv = create('div', 'fileDiv');
         fileDiv.id = "fileDiv" + file.file_id;
 
         fileDiv.addEventListener('click', () => {
@@ -160,8 +156,7 @@ function showFiles(files, submissionId) {
         path.setAttribute("stroke-linejoin", "round");
         path.setAttribute("d", "M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5");
 
-        let h1 = document.createElement("h1");
-        h1.classList.add("fileName");
+        let h1 = create('h1', 'fileName');
         h1.innerHTML = file.name;
 
         fileDiv.appendChild(svg);
