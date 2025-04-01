@@ -18,14 +18,22 @@ function AddCourseMember() {
     $user_id = $_SESSION["user_id"];
 
     // Kurzus lekérdezése kód alapján
-    $sql_statement = "SELECT course_id FROM courses WHERE code = ?;";
+    $sql_statement = "SELECT course_id, archived FROM courses WHERE code = ?;";
     $course_check = DataQuery($sql_statement, "s", [$code]);
 
-    if (!is_array($course_check)) {
+    if (count($course_check) == 0) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nincs kurzus a megadott kóddal"
-        ]);
+        ], 404);
+        return;
+    }
+
+    if ($course_check[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
         return;
     }
 
