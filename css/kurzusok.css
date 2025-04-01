@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     margin: 0 !important;
-    position: sticky;
+    position: sticky !important;
     top: 0;
     padding-inline: 0px;
     z-index: 10;
