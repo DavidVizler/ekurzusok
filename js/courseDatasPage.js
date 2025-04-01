@@ -107,7 +107,6 @@ function ModifyActualData(cardData){
     let settingsButton = document.querySelector(".settingIcon")
     let deleteUserButton = $("deleteButton")
 
-    console.log(cardData)
     let kurzusNev = $("kurzusNev")
     let oktatok = $("oktatok")
     let title = document.querySelector("title")
@@ -192,7 +191,7 @@ function viewByRole() {
     let addContentButton = $("addContentButton");
     let settingsButton = $("settingsButton");
     let navbar = $("contentNavbar");
-    if (cardData.owned != 1) {
+    if (cardData.role == 1) {
         addContentButton.style.display = "none";
         settingsButton.style.display = "none";
         navbar.style.display = "none"
@@ -214,7 +213,7 @@ async function showCourseUsers(userslist) {
         if(userslist[i].role != 1){
             ownerp.textContent = "Oktató: " + userslist[i].lastname + " " + userslist[i].firstname
         }
-        if(cardData.owned == 1){
+        if(cardData.role == 3){
             let userRadio = create('input')
             userRadio.type = "radio"
             userRadio.name = "radioButtons"
@@ -228,7 +227,7 @@ async function showCourseUsers(userslist) {
             scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
         }
-        if(userslist[i].role == 1 && cardData.owned != 1){
+        if(userslist[i].role == 1 && cardData.role != 3){
             let li = create('li')
             li.value = userslist[i].felhasznaloId
             li.textContent = userslist[i].lastname + " " + userslist[i].firstname
