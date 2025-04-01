@@ -191,10 +191,10 @@ function viewByRole() {
     let addContentButton = $("addContentButton");
     let settingsButton = $("settingsButton");
     let navbar = $("contentNavbar");
-    if (cardData.role == 1) {
-        addContentButton.style.display = "none";
-        settingsButton.style.display = "none";
-        navbar.style.display = "none"
+    if (cardData.role != 1) {
+        addContentButton.style.display = "flex";
+        settingsButton.style.display = "flex";
+        navbar.style.display = "block"
     }
 }
 
