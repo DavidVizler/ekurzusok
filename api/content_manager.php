@@ -98,7 +98,7 @@ function CreateCourseContent() {
             SendResponse([
                 "sikeres" => false,
                 "uzenet" => "A ponthatár 5 és 1000 közötti érték lehet"
-            ]);
+            ], 400);
             return;
         }
     } else {
