@@ -26,6 +26,7 @@ window.addEventListener('load',async()=>{
         if(request.ok){
             adatok = await request.json()
             showContentData(adatok)
+            GetContentFiles()
         }
     } catch (error) {
         console.log(error)
@@ -172,7 +173,15 @@ async function GetContentFiles() {
 
 function showFiles(files){
     let ki = document.querySelector('.content')
+    ki.innerHTML = '';
     for(let file of files){
+        let urlParams = getUrlParams();
+        let contentId = urlParams.get('id');
+
+        let a = create('a', 'download');
+        a.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${contentId}`;
+        a.target = '_blank';
+
         let fileDiv = create('div', 'fileDiv');
         fileDiv.id = "fileDiv" + file.file_id
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -191,17 +200,43 @@ function showFiles(files){
         let h1 = create('h1', 'fileName');
         h1.innerHTML = file.name
 
-        let urlParams = getUrlParams();
-        let id = urlParams.get('id');
-
-        fileDiv.addEventListener('click', () => {
-            window.location.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${id}`;
-        });
-
+        a.appendChild(fileDiv)
         fileDiv.appendChild(svg)
         svg.appendChild(path)
         fileDiv.appendChild(h1)
-        ki.appendChild(fileDiv)
+
+        if (adatok.owned) {
+            let deleteBtn = create('button', 'delete');
+            deleteBtn.style.marginLeft = 'auto';
+            deleteBtn.style.padding = '10px 20px';
+            deleteBtn.style.borderRadius = '7px';
+            deleteBtn.type = 'button';
+            deleteBtn.innerHTML = 'Törlés';
+            deleteBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                await deleteFile(contentId, file.file_id)
+            });
+            fileDiv.appendChild(deleteBtn);
+        }
+
+        ki.appendChild(a)
+    }
+}
+
+async function deleteFile(contentId, fileId) {
+    try {
+        let response = await fetch('api/content/remove-file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content_id: parseInt(contentId), file_id: fileId })
+        });
+        GetContentFiles();
+    }
+    catch (e) {
+        console.error(e);
     }
 }
 
@@ -213,5 +248,3 @@ $("deleteBtn").addEventListener("click", confirmationModal)
 document.querySelector(".close").addEventListener("click", function () {
     $("edit-modal").style.display = "none";
 });
-
-window.addEventListener('load', GetContentFiles)

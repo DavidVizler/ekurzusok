@@ -38,9 +38,10 @@ svg:hover{
     align-items: center;
     gap: 10px;
     border: 1px solid gray;
-    border-radius: 10px;;
+    border-radius: 10px;
     padding: 10px;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .fileDiv svg{
@@ -146,12 +147,15 @@ button:hover{
 }
 
 #deleteBtn {
-    background-color: #fe1111;
     padding: 10px;
     border-radius: 5px;
+    width: 100px;
+}
+
+.delete {
+    background-color: #fe1111;
     color: white;
     border: none;
-    width: 100px;
 }
 
 #modifyBtn {
@@ -316,4 +320,9 @@ p {
 
 .modal-content button:active {
     background-color: #8fa3ff;
+}
+
+.download {
+    color: black;
+    text-decoration: none;
 }

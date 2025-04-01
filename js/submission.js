@@ -60,7 +60,7 @@ function showSubedData(adatok) {
         path2.setAttribute("stroke-linejoin", "round");
         path2.setAttribute("d", "m4.5 12.75 7.5-7.5 7.5 7.5");
 
-        let datas = $('div', 'datasDiv');
+        let datas = create('div', 'datasDiv');
         datas.id = `datasDiv-${adat.submission_id}`;
         datas.style.display =  "none";
 
