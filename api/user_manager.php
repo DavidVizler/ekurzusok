@@ -300,11 +300,11 @@ function DeleteUser() {
     }
 
     $password = $data["password"];
-    $id = $_SESSION["user_id"];
+    $user_id = $_SESSION["user_id"];
 
     // Van-e ilyen felhasználó
     $sql_statement = "SELECT password FROM users WHERE user_id = ?;";
-    $hashed_password = DataQuery($sql_statement, "i", [$id]);
+    $hashed_password = DataQuery($sql_statement, "i", [$user_id]);
     if (count($hashed_password) == 0) {
         SendResponse([
             "sikeres" => false,
@@ -322,9 +322,20 @@ function DeleteUser() {
         return;
     }
 
+    // Felhasználó kurzusainak törlése
+    $sql_statement = "SELECT course_id FROM memberships WHERE user_id = ? AND role = 3;";
+    $courses = DataQuery($sql_statement, "i", [$user_id]);
+
     // Felhasználó törlése
     $sql_statement = "DELETE FROM users WHERE user_id = ?;";
-    $result = ModifyData($sql_statement, "i", [$id]);
+    $result = ModifyData($sql_statement, "i", [$user_id]);
+
+    if (count($courses) > 0) {
+        function CourseId($c) { return $c["course_id"]; }
+        $courses_ids = join(", ", array_map("CourseId", $courses));
+        $sql_statement = "DELETE FROM courses WHERE course_id IN ({$courses_ids});";
+        ModifyData($sql_statement);
+    }
     
     // Eredmény vizsgálata
     if ($result) { 
