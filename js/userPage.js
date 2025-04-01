@@ -5,6 +5,9 @@ async function getUserData() {
             let userData = await response.json()
             loadUserDataIn(userData)
         }
+        else if (response.status == 401) {
+            window.location.href = './login.html';
+        }
     } catch (error) {
         console.log(error)
     }

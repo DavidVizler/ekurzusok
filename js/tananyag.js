@@ -28,6 +28,9 @@ window.addEventListener('load',async()=>{
             showContentData(adatok)
             GetContentFiles()
         }
+        else if (request.status == 401) {
+            window.location.href = './login.html';
+        }
     } catch (error) {
         console.log(error)
     }

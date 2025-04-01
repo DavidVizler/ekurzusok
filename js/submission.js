@@ -16,6 +16,9 @@ async function GetSubmissions() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(reqData)
         });
+        if (request.status == 401) {
+            window.location.href = './login.html';
+        }
         let response = await request.json();
         console.log(response);
         showSubedData(response);
