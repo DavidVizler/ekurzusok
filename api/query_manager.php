@@ -71,14 +71,14 @@ function CourseDataQuery() {
         return;
     }
 
-    $sql_statement = "SELECT c.name, c.description, c.design_id, c.archived, u.firstname, u.lastname,
-    IF(u.user_id = ?, true, false) AS owned FROM courses c
-    INNER JOIN memberships m ON c.course_id = m.course_id
-    INNER JOIN users u ON m.user_id = u.user_id
-    WHERE c.course_id = ? AND m.role = 3;";
-    $course_data = DataQuery($sql_statement, "ii", [$user_id, $course_id]);
+    $sql_statement = "SELECT c.name, c.description, c.design_id, c.archived, u.firstname, u.lastname
+    FROM courses c INNER JOIN memberships m ON c.course_id = m.course_id
+    INNER JOIN users u ON m.user_id = u.user_id WHERE c.course_id = ? AND m.role = 3;";
+    $course_data = DataQuery($sql_statement, "i", [$course_id])[0];
 
-    SendResponse($course_data[0]);
+    $course_data["role"] = $membership_data[0]["role"];
+
+    SendResponse($course_data);
 }
 
 function CourseMembersQuery() {
