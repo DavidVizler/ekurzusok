@@ -54,6 +54,10 @@ html::-webkit-scrollbar {
     gap: 16px;
 }
 
+.no-scroll {
+    overflow: hidden;
+}
+
 .line{
     position: absolute;
     background-color: white;

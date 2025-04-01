@@ -54,8 +54,19 @@ function fillSideBar(courses) {
     });
 }
 
+const menu = document.getElementById("menu");
+
+const toggleScroll = () => {
+    if (menu.classList.contains("active")) {
+        document.documentElement.classList.add("no-scroll");
+    } else {
+        document.documentElement.classList.remove("no-scroll");
+    }
+};
+
 function toggleSideBar() {
     $('menu').classList.toggle('active');
+    toggleScroll()
 }
 
 
