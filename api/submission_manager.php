@@ -18,7 +18,7 @@ function SubmitSubmission() {
     $content_id = $data["content_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
-    $sql_statement = "SELECT m.role FROM memberships m
+    $sql_statement = "SELECT m.role, c.course_id FROM memberships m
     INNER JOIN content c ON m.course_id = c.course_id
     WHERE c.content_id = ? AND m.user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
@@ -35,6 +35,17 @@ function SubmitSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tanuló a kurzusban"
+        ], 403);
+        return;
+    }
+
+    $course_id = $membership_data[0]["course_id"];
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived = DataQuery($sql_statement, "i", [$course_id]);
+    if ($archived[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
         ], 403);
         return;
     }
@@ -100,7 +111,7 @@ function AttachSubmissionFiles() {
     $user_id = $_SESSION["user_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
-    $sql_statement = "SELECT m.role FROM memberships m
+    $sql_statement = "SELECT m.role, c.course_id FROM memberships m
     INNER JOIN content c ON m.course_id = c.course_id
     WHERE c.content_id = ? AND m.user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
@@ -117,6 +128,17 @@ function AttachSubmissionFiles() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tanuló a kurzusban"
+        ], 403);
+        return;
+    }
+
+    $course_id = $membership_data[0]["course_id"];
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived = DataQuery($sql_statement, "i", [$course_id]);
+    if ($archived[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
         ], 403);
         return;
     }
