@@ -95,7 +95,10 @@ function CreateCourseContent() {
     if (array_key_exists("maxpoint", $data) && $data["maxpoint"] != "null" && $task) {
         $maxpoint = (int)$data["maxpoint"];
         if ($maxpoint < 5 || $maxpoint > 1000) {
-            SendInvalidDataRespone(true, "maxpoint", $maxpoint);
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "A ponthatár 5 és 1000 közötti érték lehet"
+            ]);
             return;
         }
     } else {
