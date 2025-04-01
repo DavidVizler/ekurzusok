@@ -14,6 +14,10 @@ body::-webkit-scrollbar{
     display: none;
 }
 
+.no-scroll {
+    overflow: hidden;
+}
+
 .mainDiv{
     margin-top: 15px;
     width: 80%;
@@ -120,10 +124,6 @@ body::-webkit-scrollbar{
     opacity: 0;
     visibility: hidden;
     z-index: 1000;
-}
-
-body.menu-open {
-    overflow: hidden;
 }
 
 .hamburger-menu .hamburger-menu-content h2{
