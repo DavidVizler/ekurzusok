@@ -16,6 +16,9 @@ async function GetSubmissions() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(reqData)
         });
+        if (request.status == 401) {
+            window.location.href = './login.html';
+        }
         let response = await request.json();
         console.log(response);
         showSubedData(response);
@@ -60,7 +63,7 @@ function showSubedData(adatok) {
         path2.setAttribute("stroke-linejoin", "round");
         path2.setAttribute("d", "m4.5 12.75 7.5-7.5 7.5 7.5");
 
-        let datas = $('div', 'datasDiv');
+        let datas = create('div', 'datasDiv');
         datas.id = `datasDiv-${adat.submission_id}`;
         datas.style.display =  "none";
 
@@ -74,6 +77,26 @@ function showSubedData(adatok) {
         hiddenSubId.id = "subId"
         hiddenSubId.hidden = true
 
+        let p = create('p');
+        p.innerHTML = `Értékelés: ${/* elért pont */ null ?? '-'} / ${/* max pont */ 0} p (${/* százalék */ 0}%)`;
+
+        let modifyPointsInput = create('input');
+        modifyPointsInput.id = `modifyPointsInput-${adat.submission_id}`;
+        modifyPointsInput.type = 'number';
+        modifyPointsInput.min = 0;
+        modifyPointsInput.max = /* max pont */ 0;
+
+        let modifyPointsBtn = create('button', 'rateButton');
+        modifyPointsBtn.innerHTML = 'Értékelés';
+        modifyPointsBtn.addEventListener('click', () => {
+            let points = parseInt($(`modifyPointsInput-${adat.submission_id}`).value);
+            if (isNaN(points) || points > /* max pont */ 0 || points < 0) {
+                alert("A megadott pontszám érvénytelen!");
+                return;
+            }
+            rate(adat.submission_id, points);
+        });
+
         div.appendChild(h1);
         div.appendChild(div2);
         div2.append(svg);
@@ -83,6 +106,10 @@ function showSubedData(adatok) {
         dataDiv.appendChild(div);
         dataDiv.appendChild(datas)
         dataDiv.appendChild(hiddenSubId)
+
+        dataDiv.appendChild(p);
+        dataDiv.appendChild(modifyPointsInput);
+        dataDiv.appendChild(modifyPointsBtn);
 
         let hr = create("hr");
         dataDiv.appendChild(hr);
@@ -163,6 +190,29 @@ function showFiles(files, submissionId) {
         svg.appendChild(path);
         fileDiv.appendChild(h1);
         ki.appendChild(fileDiv);
+    }
+}
+
+async function rate(submission_id, points) {
+    try {
+        let response = await fetch('api/submission/rate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ submission_id, points })
+        });
+
+        if (response.ok) {
+            alert("Sikeres értékelés!");
+            location.reload();
+        }
+        else {
+            alert("Hiba történt az értékelés közben!");
+        }
+    }
+    catch (e) {
+        console.error(e);
     }
 }
 

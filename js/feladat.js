@@ -58,6 +58,7 @@ window.addEventListener('load',async()=>{
         if(request.ok){
             adatok = await request.json()
             showContentData()
+            GetContentFiles()
         }
         else if (request.status == 401) {
             window.location.href = './login.html';
@@ -122,6 +123,10 @@ function showContentData(){
         $("modifyBtn").classList.add("disabledButton")
         $("uploadFileButton").classList.add("disabledButton")
         $("uploadExerciseButton").classList.add("disabledButton")
+    }
+    if(adatok.owned == 1){
+        document.querySelector('.uploadOwnExercise').style.display = "none"
+        $('files').style.display = "none"
     }
 }
 
@@ -307,9 +312,17 @@ async function GetContentFiles() {
     }
 }
 
-function showFiles(files){
+function showFiles(files) {
     let ki = $("contentFilesContainer")
-    for(let file of files){
+    ki.innerHTML = '';
+    for (let file of files) {
+        let urlParams = getUrlParams();
+        let contentId = urlParams.get('id');
+
+        let a = create('a', 'download');
+        a.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${contentId}`;
+        a.target = '_blank';
+
         let fileDiv = create('div', 'fileDiv');
         fileDiv.id = "fileDiv" + file.file_id
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -326,19 +339,30 @@ function showFiles(files){
         path.setAttribute("d","M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5")
 
         let h1 = create('h1', 'fileName');
-        h1.innerHTML = file.name
+        h1.innerHTML = file.name;
 
-        let urlParams = getUrlParams();
-        let id = urlParams.get('id');
 
-        fileDiv.addEventListener('click', () => {
-            window.location.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${id}`;
-        });
-
+        a.appendChild(fileDiv)
         fileDiv.appendChild(svg)
         svg.appendChild(path)
         fileDiv.appendChild(h1)
-        ki.appendChild(fileDiv)
+
+        if (adatok.owned) {
+            let deleteBtn = create('button', 'delete');
+            deleteBtn.style.marginLeft = 'auto';
+            deleteBtn.style.padding = '10px 20px';
+            deleteBtn.style.borderRadius = '7px';
+            deleteBtn.type = 'button';
+            deleteBtn.innerHTML = 'Törlés';
+            deleteBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                await deleteFile(contentId, file.file_id)
+            });
+            fileDiv.appendChild(deleteBtn);
+        }
+
+        ki.appendChild(a)
     }
 }
 
@@ -350,7 +374,22 @@ function navigateToSubmissions(){
     }
 }
 
+async function deleteFile(contentId, fileId) {
+    try {
+        let response = await fetch('api/content/remove-file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content_id: parseInt(contentId), file_id: fileId })
+        });
+        GetContentFiles();
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
 $('uploadFileButton').addEventListener('click', submitFiles);
 $('uploadExerciseButton').addEventListener('click', submitSubmission)
-window.addEventListener("load",GetContentFiles)
 $('showSubmissions').addEventListener('click', navigateToSubmissions)

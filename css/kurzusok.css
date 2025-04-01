@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     margin: 0 !important;
-    position: sticky;
+    position: sticky !important;
     top: 0;
     padding-inline: 0px;
     z-index: 10;
@@ -52,6 +52,10 @@ html::-webkit-scrollbar {
     width: 100%;
     padding: 10px;
     gap: 16px;
+}
+
+.no-scroll {
+    overflow: hidden;
 }
 
 .line{
@@ -134,10 +138,6 @@ html::-webkit-scrollbar {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-}
-
-body.menu-open {
-    overflow: hidden;
 }
 
 #menu.active #menuContent {
