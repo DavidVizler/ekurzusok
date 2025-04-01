@@ -75,7 +75,7 @@ async function onNewTask(e) {
     if ($('fpont').value == "") {
         points = null;
     } else {
-        parseInt($('fpont').value);
+        points = parseInt($('fpont').value);
     }
     let filesInput = $('ffile');
 
