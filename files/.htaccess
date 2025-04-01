@@ -1,2 +1,1 @@
-Order Deny,Allow
-Deny from all
+RedirectMatch 404 /ekurzusok/files/.*$
