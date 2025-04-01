@@ -140,10 +140,6 @@ html::-webkit-scrollbar {
     z-index: 1;
 }
 
-body.menu-open {
-    overflow: hidden;
-}
-
 #menu.active #menuContent {
     background-color: white;
     opacity: 1;

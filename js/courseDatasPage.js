@@ -177,7 +177,7 @@ async function getCourseUsers(courseid){
         if(valasz.ok){
             let userslist = await valasz.json();
             showCourseUsers(userslist)
-            viewByRole(userslist)
+            viewByRole()
         }else{
             throw valasz.status
         }
