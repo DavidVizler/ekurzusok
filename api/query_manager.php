@@ -78,6 +78,8 @@ function CourseDataQuery() {
     INNER JOIN users u ON m.user_id = u.user_id WHERE c.course_id = ? AND m.role = 3;";
     $course_data = DataQuery($sql_statement, "i", [$course_id])[0];
 
+    $course_data["role"] = $membership_data[0]["role"];
+
     SendResponse($course_data);
 }
 
