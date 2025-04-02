@@ -216,11 +216,14 @@ body::-webkit-scrollbar{
     color: #B3B3B3;
 }
 
+.functionIcons svg{
+    height: 35px;
+    width: 35px;
+}
+
 .functionIcons a{
     display: flex;
     margin-right: 15px;
-    height: 60px;
-    width: 60px;
 }
 
 .functionIcons svg{
@@ -522,6 +525,7 @@ a#openModal:hover, a#openModalUsers:hover {
     border: none;
     border-radius: 7px;
     cursor: pointer;
+    font-family: "Varela Round";
 }
 
 #leaveButton:hover{
