@@ -185,7 +185,7 @@ function CourseContentDataQuery() {
     $content_id = $data["content_id"];
 
     // Benne van-e a felhasználó a kurzusban
-    $sql_statement = "SELECT m.user_id FROM memberships m
+    $sql_statement = "SELECT m.user_id, m.role FROM memberships m
     INNER JOIN courses c ON m.course_id = c.course_id
     INNER JOIN content t ON t.course_id = c.course_id
     WHERE t.content_id = ? AND m.user_id = ?;";
@@ -201,10 +201,11 @@ function CourseContentDataQuery() {
     IF(t.user_id=?, true, false) AS owned FROM content t
     INNER JOIN users u ON t.user_id = u.user_id INNER JOIN courses c ON t.course_id = c.course_id
     WHERE content_id = ?;";
-    $content = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
+    $content = DataQuery($sql_statement, "ii", [$user_id, $content_id])[0];
+    $content["role"] = $membership_data[0]["role"];
 
     if (count($content) > 0) {
-        SendResponse($content[0]);
+        SendResponse($content);
     } else {
         SendResponse([
             "uzenet" => "Nincs tartalom ilyen ID-val"
