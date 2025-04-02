@@ -307,27 +307,29 @@ function OwnSubmissionQuery() {
         return;
     }
 
-    $sql_statement = "SELECT submitted, rating FROM submissions WHERE content_id = ? AND user_id = ?;";
+    $sql_statement = "SELECT submission_id, submitted, rating FROM submissions WHERE content_id = ? AND user_id = ?;";
     $submission_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
 
-    if (count($submission_data) == 0 || is_null($submission_data[0]["submitted"])) {
-        SendResponse(["submitted" => false]);
-    } else {
-        $sub_data = [
-            "submitted" => true,
-            "date" => $submission_data[0]["submitted"]
-        ];
+    $sub_data = [];
 
-        if (is_null($submission_data[0]["rating"])) {
-            $sub_data["rated"] = false;
-        } else {
-            $sub_data["rated"] = true;
-            $sub_data["rating"] = $submission_data[0]["rating"];
-            $sub_data["max_points"] = $membership_data[0]["max_points"];
+    // Létezik-e beadandó
+    $sub_data["submission_exists"] = count($submission_data) > 0;
+    if ($sub_data["submission_exists"]) {
+        $sub_data["submission_id"] = $submission_data[0]["submission_id"];
+        // Be van-e adva
+        $sub_data["submitted"] = (count($submission_data) > 0 && !is_null($submission_data[0]["submitted"]));
+        if ($sub_data["submitted"]) {
+            $sub_data["date"] = $submission_data[0]["submitted"];
+            // Van-e értékelve
+            $sub_data["rated"] = !is_null($submission_data[0]["rating"]);
+            if ($sub_data["rated"]) {
+                $sub_data["rating"] = $submission_data[0]["rating"];
+                $sub_data["max_points"] = $membership_data[0]["max_points"];
+            }
         }
-
-        SendResponse($sub_data);
     }
+
+    SendResponse($sub_data);
 }
 
 function SubmissionsQuery() {
