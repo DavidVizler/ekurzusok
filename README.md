@@ -4,10 +4,10 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
 ## TODO
 **Frontend**
-- [ ] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
+- [x] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
 - [x] Kurzus törlése
 - [x] Felhasználó kilépése a kurzusból (önmagától)
-- [ ] Frontend javítások (görgethetőség, reszponzivtás)
+- [x] Frontend javítások (görgethetőség, reszponzivtás)
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [x] Beadott munkák megtekintése
 - [x] Beadandóhoz feltöltött fájlok lekérdezése
@@ -17,15 +17,15 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [ ] Több fájl feltöltése a meglévők mellé
 - [x] Leadott munkák megtekintése
 - [x] Kilépés gomb ne jelenjen meg a felhasználó saját kurzusában
-- [ ] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
+- [x] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
 
 **Backend**
 - [x] Felhasználó fiók törlése
+- [ ] Műveletek letiltása az archivált kurzusokban
 
 **Mindkettő**
-- [ ] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
-- [ ] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
-- [ ] Műveletek letiltása az archivált kurzusokban
+- [x] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
+- [x] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
 - [x] Kurzus csatlakozási kód lekérése és megjelenítése
 - [x] Annak lekérése, hogy a felhasználó már leadta-e az adott feladatot
 
