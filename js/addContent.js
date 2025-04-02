@@ -62,7 +62,7 @@ async function onNewTask(e) {
     e.preventDefault();
     let title = $('fcim').value;
     let desc = $('fleiras').value;
-    let due = convertDate($('fhatarido').value + ':00');
+    let due = convertDate($('fhatarido').value);
     let points;
     if ($('fpont').value == "") {
         points = null;

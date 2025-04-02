@@ -26,8 +26,9 @@ function getUrlEndpoint() {
     return parts[parts.length - 1];
 }
 
-// A dátumot yyyy-mm-dd HH:MM:SS formátumú szöveggé alakítja
+// A dátumot yyyy-mm-dd HH:MM:SS formátumú szöveggé alakítja. Üres érték esetén null-t ad vissza.
 function convertDate(datetime) {
+    if (datetime == '' || datetime == null) return null;
     let [date, time] = datetime.split('T');
     // Másodperc hiányzik-e
     if ((time.match(/:/g) || []).length == 1) {
