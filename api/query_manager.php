@@ -286,7 +286,7 @@ function OwnSubmissionQuery() {
     $content_id = $data["content_id"];
 
     // Tanuló-e a felhasználó a kurzusban
-    $sql_statement = "SELECT m.role FROM memberships m
+    $sql_statement = "SELECT m.role, c.max_points FROM memberships m
     INNER JOIN content c ON m.course_id = c.course_id
     WHERE c.content_id = ? AND m.user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
@@ -307,16 +307,26 @@ function OwnSubmissionQuery() {
         return;
     }
 
-    $sql_statement = "SELECT submitted FROM submissions WHERE content_id = ? AND user_id = ?;";
+    $sql_statement = "SELECT submitted, rating FROM submissions WHERE content_id = ? AND user_id = ?;";
     $submission_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
 
     if (count($submission_data) == 0 || is_null($submission_data[0]["submitted"])) {
         SendResponse(["submitted" => false]);
     } else {
-        SendResponse([
+        $sub_data = [
             "submitted" => true,
             "date" => $submission_data[0]["submitted"]
-        ]);
+        ];
+
+        if (is_null($submission_data[0]["rating"])) {
+            $sub_data["rated"] = false;
+        } else {
+            $sub_data["rated"] = true;
+            $sub_data["rating"] = $submission_data[0]["rating"];
+            $sub_data["max_points"] = $membership_data[0]["max_points"];
+        }
+
+        SendResponse($sub_data);
     }
 }
 
@@ -359,7 +369,7 @@ function SubmissionsQuery() {
         return;
     }
 
-    $sql_statement = "SELECT s.submission_id, u.lastname, u.firstname, s.submitted, COUNT(f.file_id) AS files_count FROM submissions s
+    $sql_statement = "SELECT s.submission_id, u.lastname, u.firstname, s.submitted, COUNT(f.file_id), s.rating AS files_count FROM submissions s
     INNER JOIN content c ON s.content_id = c.content_id
     INNER JOIN users u ON s.user_id = u.user_id
     INNER JOIN files f ON s.submission_id = f.submission_id
