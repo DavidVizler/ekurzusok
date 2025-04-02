@@ -16,6 +16,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Tartalomhoz feltöltött fájlok lekérdezése
 - [ ] Több fájl feltöltése a meglévők mellé
 - [ ] Leadott munkák megtekintése
+- [ ] Kilépés gomb ne jelenjen meg a felhasználó saját kurzusában
 
 **Backend**
 - [x] Felhasználó fiók törlése
@@ -24,12 +25,12 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [ ] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
 - [ ] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
 - [ ] Műveletek letiltása az archivált kurzusokban
-- [ ] Kurzus csatlakozási kód lekérése és megjelenítése
-- [ ] Annak lekérése, hogy a felhasználó már leadta-e az adott feladatot
+- [x] Kurzus csatlakozási kód lekérése és megjelenítése
+- [x] Annak lekérése, hogy a felhasználó már leadta-e az adott feladatot
 - [ ] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
 
 **Egyéb**
-- [ ] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
+- [x] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
 - [ ] Dokumentáció befejezése
 - [ ] Projekt beadható és tesztelhető formában
 
