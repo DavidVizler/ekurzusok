@@ -461,7 +461,7 @@ async function loginAdmin() {
 }
 
 async function modifyUserData() {
-    let user_id = $("user_id").value;
+    let user_id = parseInt($("user_id").value);
     let email = $("email").value;
     let lastname = $("lastname").value;
     let firstname = $("firstname").value;
