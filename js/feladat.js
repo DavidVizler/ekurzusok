@@ -5,29 +5,7 @@ function currentDateLoad(){
     let time = actualDate.getHours() + ":" + actualDate.getMinutes()
     creatingDate.innerHTML += currentDate + ", " + time
 }
-/*
-function displaySelectedFiles(files) {
-    $('selectedFiles').innerHTML = '';
-    if (files.length == 0) {
-        let div = create('div');
 
-        let em = create('em');
-        em.innerText = "Nincs kiválasztott fájl";
-
-        div.appendChild(em);
-
-        $('selectedFiles').appendChild(div);
-        return
-    }
-    for (const file of files) {
-        let div = create('div');
-        let title = create('h5');
-        title.innerText = file.name;
-        div.appendChild(title);
-        $('selectedFiles').appendChild(div);
-    }
-}
-*/
 window.addEventListener("load", currentDateLoad)
 
 $('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
@@ -259,7 +237,7 @@ function showContentData(){
     }
     if(adatok.owned == 0){
         document.querySelector('.uploadOwnExercise').style.display = "flex"
-        $('files').style.display = "flex"
+        $('files').removeAttribute("style")
     }
 }
 
