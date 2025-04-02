@@ -397,6 +397,8 @@ async function submitSubmission() {
         let response = await request.json()
         if(response.sikeres == false){
             showResultModal(response.uzenet)    
+        } else {
+            window.location.reload();
         }
     } catch (error) {
         console.log(error);
