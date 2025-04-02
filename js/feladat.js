@@ -255,7 +255,8 @@ async function ModifyData() {
     let title = $("ContentTitle").value
     let max_points = $("maxPoints").value
     if(max_points == ""){max_points = null}
-    let limitDate = new Date($("deadline-input").value).toJSON()
+    let [date, time] = $("deadline-input").value.split('T');
+    let limitDate = `${date} ${time}:00`;
     let description = $("description-input").value
     let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');
