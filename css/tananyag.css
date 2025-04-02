@@ -131,13 +131,6 @@ svg:hover{
     background-color: rgba(0,0,0,0.5);
 }
 
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    margin: 15% auto;
-    width: 50%;
-    border-radius: 8px;
-}
 
 .modal-content div{
     margin: 10px;
@@ -157,7 +150,8 @@ svg:hover{
     border-radius: 5px;
     color: white;
     border: none;
-    width: 100%;
+    width: 480px;
+    font-family: "Varela Round";
 }
 
 #alertDiv{
@@ -212,6 +206,7 @@ svg:hover{
     width: 500px;
     font-size: large;
     opacity: 0;
+    margin: 15% auto;
     animation: slideDown 0.3s ease-out forwards;
 }
 
@@ -225,6 +220,7 @@ svg:hover{
     width: 100px;
     margin: 5px;
     color: white;
+    font-family: "Varela Round";
 }
 
 .modal-content button:hover {
@@ -232,11 +228,22 @@ svg:hover{
     cursor: pointer;
 }
 
-.modal-content button:active {
-    background-color: #8fa3ff;
-}
-
 .download {
     color: black;
     text-decoration: none;
+}
+
+#edit-modal label{
+    text-align: left;
+    margin-bottom: 2px;
+}
+
+#edit-modal input, textarea{
+    height: 30px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+button{
+    font-family: "Varela Round";
 }
