@@ -5,7 +5,7 @@ function currentDateLoad(){
     let time = actualDate.getHours() + ":" + actualDate.getMinutes()
     creatingDate.innerHTML += currentDate + ", " + time
 }
-
+/*
 function displaySelectedFiles(files) {
     $('selectedFiles').innerHTML = '';
     if (files.length == 0) {
@@ -27,7 +27,7 @@ function displaySelectedFiles(files) {
         $('selectedFiles').appendChild(div);
     }
 }
-
+*/
 window.addEventListener("load", currentDateLoad)
 
 $('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
@@ -39,6 +39,136 @@ $("uploadFileButton").addEventListener("click",()=>{
 $("backToPreviousPage").addEventListener("click",()=>{
     window.history.go(-1)
 })
+
+async function getSubmissionData() {
+    let urlParams = getUrlParams();
+    let tartalomId = urlParams.get('id');
+    try {
+        let request = await fetch("api/query/own-submission", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "content_id": parseInt(tartalomId)
+            })
+        });
+        if (request.ok) {
+            let response = await request.json();
+            submissionLoad(response);
+        } else {
+            throw request.status;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function submissionLoad(submission_data) {
+    if (submission_data.submission_exists) {
+        getSubmissionFiles(submission_data.submission_id);
+
+        if (submission_data.submitted) {
+            $("uploadExerciseButton").disabled = true;
+            $("uploadExerciseButton").classList.add("disabledButton")
+            $("uploadFileButton").disabled = true;
+            $("uploadFileButton").classList.add("disabledButton")
+            $("uploadExerciseButton").innerHTML = "Feladat leadva"
+        }
+    }
+
+}
+
+async function getSubmissionFiles(submission_id) {
+    try {
+        let request = await fetch("api/query/submission-files", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "submission_id": parseInt(submission_id)
+            })
+        });
+        if (request.ok) {
+            let response = await request.json();
+            submissionFilesLoad(response, submission_id);
+        } else {
+            throw request.status;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function submissionFilesLoad(files, submission_id) {
+    if (files.length > 0) {
+        let ki = $("selectedFiles")
+        ki.innerHTML = '';
+        for (let file of files) {
+            let urlParams = getUrlParams();
+            let contentId = urlParams.get('id');
+
+            let a = create('a', 'download');
+            a.href = `downloader?file_id=${file.file_id}&attached_to=submission&id=${submission_id}`;
+            a.target = '_self';
+
+            let fileDiv = create('div', 'fileDiv');
+            fileDiv.id = "fileDiv" + file.file_id
+            let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+            svg.setAttribute("xlmns","https://www.w3.org/2000/svg")
+            svg.setAttribute("fill","none")
+            svg.setAttribute("viewBox","0 0 24 24")
+            svg.setAttribute("stroke-width","1.5")
+            svg.setAttribute("stroke","currentColor")
+            svg.classList.add("size-6")
+
+            let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute("stroke-linecap","round")
+            path.setAttribute("stroke-linejoin","round")
+            path.setAttribute("d","M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5")
+
+            let h1 = create('h1', 'fileName');
+            h1.innerHTML = file.name;
+
+
+            a.appendChild(fileDiv)
+            fileDiv.appendChild(svg)
+            svg.appendChild(path)
+            fileDiv.appendChild(h1)
+
+            if (adatok.owned) {
+                let deleteBtn = document.createElementNS('http://www.w3.org/2000/svg','svg');
+                deleteBtn.style.marginLeft = 'auto';
+                deleteBtn.style.padding = '10px 20px';
+
+                deleteBtn.setAttribute("xlmns","https://www.w3.org/2000/svg")
+                deleteBtn.setAttribute("fill","none")
+                deleteBtn.setAttribute("viewBox","0 0 24 24")
+                deleteBtn.setAttribute("stroke-width","1.5")
+                deleteBtn.setAttribute("stroke","currentColor")
+                deleteBtn.classList.add("size-6")
+                deleteBtn.classList.add("delete")
+
+                let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute("stroke-linecap","round")
+                path.setAttribute("stroke-linejoin","round")
+                path.setAttribute("d","M6 18 18 6M6 6l12 12")
+
+                deleteBtn.appendChild(path)
+
+                deleteBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    await deleteFile(contentId, file.file_id)
+                });
+                fileDiv.appendChild(deleteBtn);
+            }
+
+            ki.appendChild(a)
+        }
+    }
+}
 
 let adatok;
 window.addEventListener('load',async()=>{
@@ -59,6 +189,9 @@ window.addEventListener('load',async()=>{
             adatok = await request.json()
             showContentData()
             GetContentFiles()
+            if (adatok.role == 1) {
+                getSubmissionData()
+            }
         }
         else if (request.status == 401) {
             window.location.href = './login.html';
@@ -241,7 +374,6 @@ async function DeleteContent() {
 $("deleteBtn").addEventListener("click", confirmationModal)
 
 async function submitFiles() {
-    console.log("Feltöltés")
     try {
 
         let fileInput = $('fileInput');
