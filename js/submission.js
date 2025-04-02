@@ -78,19 +78,19 @@ function showSubedData(adatok) {
         hiddenSubId.hidden = true
 
         let p = create('p');
-        p.innerHTML = `Értékelés: ${adat.rating ?? '-'} / ${/* max pont */ 0} p (${/* százalék */ 0}%)`;
+        p.innerHTML = `Értékelés: ${adat.rating ?? '-'} / ${adat.max_points} p (${Math.round(adat.rating / adat.max_points * 100)}%)`;
 
         let modifyPointsInput = create('input');
         modifyPointsInput.id = `modifyPointsInput-${adat.submission_id}`;
         modifyPointsInput.type = 'number';
         modifyPointsInput.min = 0;
-        modifyPointsInput.max = /* max pont */ 0;
+        modifyPointsInput.max = adat.max_points;
 
         let modifyPointsBtn = create('button', 'rateButton');
         modifyPointsBtn.innerHTML = 'Értékelés';
         modifyPointsBtn.addEventListener('click', () => {
             let points = parseInt($(`modifyPointsInput-${adat.submission_id}`).value);
-            if (isNaN(points) || points > /* max pont */ 0 || points < 0) {
+            if (isNaN(points) || points > adat.max_points || points < 0) {
                 alert("A megadott pontszám érvénytelen!");
                 return;
             }
