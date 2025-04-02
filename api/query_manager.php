@@ -270,6 +270,58 @@ function DeadlineTasksQuery() {
     SendResponse($tasks);
 }
 
+function OwnSubmissionQuery() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["content_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_SESSION["user_id"];
+    $content_id = $data["content_id"];
+
+    // Tanuló-e a felhasználó a kurzusban
+    $sql_statement = "SELECT m.role FROM memberships m
+    INNER JOIN content c ON m.course_id = c.course_id
+    WHERE c.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($membership_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tagja a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($membership_data[0]["role"] != 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tanuló a kurzusban"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT submitted FROM submissions WHERE content_id = ? AND user_id = ?;";
+    $submission_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    if (count($submission_data) == 0 || is_null($submission_data[0]["submitted"])) {
+        SendResponse(["submitted" => false]);
+    } else {
+        SendResponse([
+            "submitted" => true,
+            "date" => $submission_data[0]["submitted"]
+        ]);
+    }
+}
+
 function SubmissionsQuery() {
     if (!LoginCheck()) {
         return;
@@ -435,6 +487,9 @@ function Manage($action) {
             break;
         case "deadline-tasks":
             DeadlineTasksQuery();
+            break;
+        case "own-submission":
+            OwnSubmissionQuery();
             break;
         case "submissions":
             SubmissionsQuery();
