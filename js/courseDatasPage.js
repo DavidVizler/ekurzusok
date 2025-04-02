@@ -90,6 +90,7 @@ async function getCardsData() {
         if (eredmeny.ok) {
             cardData = await eredmeny.json()
             ModifyActualData(cardData)
+            viewByRole()
         }
         else if (eredmeny.status == 403 || eredmeny.status == 401) {
             location.href = '../login.html';
@@ -177,7 +178,6 @@ async function getCourseUsers(courseid) {
         if (valasz.ok) {
             let userslist = await valasz.json();
             showCourseUsers(userslist)
-            viewByRole(userslist)
         } else {
             throw valasz.status
         }
