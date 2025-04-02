@@ -87,6 +87,14 @@ function CreateCourseContent() {
             SendInvalidDataRespone(true, "deadline", $deadline);
             return;
         }
+        $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
+        if ($now->format('Y-m-d H:i:s') > $deadline) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Túl korai határidő"
+            ], 403);
+            return;
+        }
     } else {
         $deadline = null;
     }
@@ -263,6 +271,14 @@ function ModifyCourseContentData() {
 
     if ($task) {
         if ($content_data[0]["deadline"] != $deadline) {
+            $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
+            if ($now->format('Y-m-d H:i:s') > $deadline) {
+                SendResponse([
+                    "sikeres" => false,
+                    "uzenet" => "Túl korai határidő"
+                ], 403);
+                return;
+            }
             if (count($new_data) > 0) $sql_statement .= ", ";
             $sql_statement .= "deadline = ?";
             array_push($new_data, $deadline);
