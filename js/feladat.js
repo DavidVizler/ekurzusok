@@ -32,7 +32,7 @@ window.addEventListener("load", currentDateLoad)
 
 $('fileInput').addEventListener('change', (e) => displaySelectedFiles(e.target.files));
 
-$("selectFileButton").addEventListener("click",()=>{
+$("uploadFileButton").addEventListener("click",()=>{
     $("fileInput").click()
 })
 
@@ -241,6 +241,7 @@ async function DeleteContent() {
 $("deleteBtn").addEventListener("click", confirmationModal)
 
 async function submitFiles() {
+    console.log("Feltöltés")
     try {
 
         let fileInput = $('fileInput');
@@ -390,6 +391,6 @@ async function deleteFile(contentId, fileId) {
     }
 }
 
-$('uploadFileButton').addEventListener('click', submitFiles);
+$("fileInput").addEventListener('change', submitFiles)
 $('uploadExerciseButton').addEventListener('click', submitSubmission)
 $('showSubmissions').addEventListener('click', navigateToSubmissions)
