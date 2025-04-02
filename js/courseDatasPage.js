@@ -12,7 +12,7 @@ let courseId = getUrlEndpoint();
 async function fillDeadlineList() {
     try {
         let response = await fetch("../api/query/course-content", {
-            method : 'POST',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -20,7 +20,7 @@ async function fillDeadlineList() {
         });
 
         let div = document.querySelector('.deadlineExercises');
-        
+
         let result = await response.json();
         result = result.filter(x => x.deadline != null);
 
@@ -50,51 +50,51 @@ async function fillDeadlineList() {
 
 
 openModalLink.addEventListener("click", (event) => {
-  event.preventDefault();
-  deadlineModal.style.display = "flex";
-  document.body.classList.add("modal-open");
-  fillDeadlineList();
+    event.preventDefault();
+    deadlineModal.style.display = "flex";
+    document.body.classList.add("modal-open");
+    fillDeadlineList();
 });
 
-openModalUsersLink.addEventListener("click", (event) =>{
+openModalUsersLink.addEventListener("click", (event) => {
     event.preventDefault();
     usersModal.style.display = "flex";
     document.body.classList.add("modal-open");
 });
 
 closeButton.addEventListener("click", () => {
-  deadlineModal.style.display = "none";
-  document.body.classList.remove("modal-open");
+    deadlineModal.style.display = "none";
+    document.body.classList.remove("modal-open");
 });
 
-closeButtonUsers.addEventListener("click", ()=>{
+closeButtonUsers.addEventListener("click", () => {
     usersModal.style.display = "none";
 })
 
-let designData 
+let designData
 
 async function getDesignJson() {
     let response = await fetch("../js/design.json")
     designData = await response.json()
- }
+}
 
 let cardData;
 async function getCardsData() {
     try {
-        let eredmeny = await fetch("../api/query/course-data",{
-            method : 'POST',
+        let eredmeny = await fetch("../api/query/course-data", {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            },body:JSON.stringify({course_id:parseInt(courseId)})
+            }, body: JSON.stringify({ course_id: parseInt(courseId) })
         });
-        if(eredmeny.ok){
+        if (eredmeny.ok) {
             cardData = await eredmeny.json()
             ModifyActualData(cardData)
         }
         else if (eredmeny.status == 403 || eredmeny.status == 401) {
             location.href = '../login.html';
         }
-        else{
+        else {
             throw eredmeny.status
         }
     } catch (error) {
@@ -102,7 +102,7 @@ async function getCardsData() {
     }
 }
 
-function ModifyActualData(cardData){
+function ModifyActualData(cardData) {
     let addButton = document.querySelector(".addIcon")
     let settingsButton = document.querySelector(".settingIcon")
     let deleteUserButton = $("deleteButton")
@@ -113,16 +113,16 @@ function ModifyActualData(cardData){
     let header = $("header")
     let kurzusLeiras = $('kurzusLeiras');
     kurzusNev.innerHTML = cardData.name
-    oktatok.innerHTML = cardData.lastname +" " +  cardData.firstname
+    oktatok.innerHTML = cardData.lastname + " " + cardData.firstname
     title.innerHTML = cardData.name
     kurzusLeiras.innerHTML = cardData.description;
     for (const design of designData) {
-        if(design.designId == cardData.design_id){
+        if (design.designId == cardData.design_id) {
             header.style.backgroundImage = `url('${design.courseImage}')`
             header.style.filter = "brightness(50%);"
         }
     }
-   if(cardData.archived == 1){
+    if (cardData.archived == 1) {
         addButton.removeAttribute("href")
         addButton.classList.add("disabled")
         settingsButton.removeAttribute("href")
@@ -135,7 +135,7 @@ function ModifyActualData(cardData){
 
         // A menu div UTÁN illesztjük be
         menu.parentNode.insertBefore(warningBanner, menu.nextSibling);
-   }
+    }
 }
 
 async function getCourseContent(courseId) {
@@ -162,26 +162,26 @@ async function getCourseContent(courseId) {
     }
 }
 
-async function getCourseUsers(courseid){
+async function getCourseUsers(courseid) {
     try {
         let data = {
             course_id: courseid
         }
-        let valasz = await fetch('../api/query/course-members',{
-            method : "POST",
+        let valasz = await fetch('../api/query/course-members', {
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-        if(valasz.ok){
+        if (valasz.ok) {
             let userslist = await valasz.json();
             showCourseUsers(userslist)
             viewByRole(userslist)
-        }else{
+        } else {
             throw valasz.status
         }
-        
+
     } catch (e) {
         console.error(e);
     }
@@ -209,28 +209,29 @@ async function showCourseUsers(userslist) {
     let scrollDiv = create("div");
     scrollDiv.id = "scrollDiv";
     let ul = create("ul")
-    for(let i = 0; i < userslist.length; i++){
-        if(userslist[i].role != 1){
-            ownerp.textContent = "Oktató: " + userslist[i].lastname + " " + userslist[i].firstname
-        }
-        if(userslist[i].role == 3){
+    if (cardData.role == 3) {
+        ownerp.textContent = "Oktató: " + cardData.lastname + " " + cardData.firstname
+        for (let user of userslist) {
             let userRadio = create('input')
             userRadio.type = "radio"
             userRadio.name = "radioButtons"
-            userRadio.value = userslist[i].user_id
+            userRadio.value = user.user_id
             userRadio.style.marginBottom = "10px"
             let name = create("label")
-            name.textContent = userslist[i].lastname + " " + userslist[i].firstname
+            name.textContent = user.lastname + " " + user.firstname
             let br = create('br')
             scrollDiv.appendChild(userRadio)
             scrollDiv.appendChild(name)
             scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
         }
-        if(userslist[i].role == 1 && userslist[i].role != 3){
+    }
+    else {
+        ownerp.textContent = "Oktató: " + cardData.lastname + " " + cardData.firstname
+        for (let user of userslist) {
             let li = create('li')
-            li.value = userslist[i].felhasznaloId
-            li.textContent = userslist[i].lastname + " " + userslist[i].firstname
+            li.value = user.felhasznaloId
+            li.textContent = user.lastname + " " + user.firstname
             ul.appendChild(li)
             scrollDiv.appendChild(ul)
         }
@@ -238,7 +239,7 @@ async function showCourseUsers(userslist) {
     usersDiv.appendChild(scrollDiv)
 }
 
-async function deleteUserFromCourse(){
+async function deleteUserFromCourse() {
     let course_id = parseInt(getUrlEndpoint())
     let user_id = document.querySelector('input:checked')?.value
     if (user_id == null) {
@@ -247,22 +248,21 @@ async function deleteUserFromCourse(){
     }
     try {
         let data = {
-            "user_id" : parseInt(user_id),
-            "course_id" : course_id
+            "user_id": parseInt(user_id),
+            "course_id": course_id
         }
-        let keres = await fetch('../api/member/remove',{
-            method : "POST",
-            headers : {
-                'Content-Type' : 'application/json'
-            }, body : JSON.stringify(data)
+        let keres = await fetch('../api/member/remove', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify(data)
         })
-        if(keres.ok){
+        if (keres.ok) {
             let response = await keres.json()
-            alert("Sikeres felhasználó törlés a kurzusból!")
-            if(response.sikeres == true){
+            if (response.sikeres == true) {
                 location.reload()
             }
-        }else{
+        } else {
             alert(response.uzenet)
         }
     } catch (error) {
@@ -278,16 +278,16 @@ function showCourseContent(content) {
     let notpublishedLink = $("link2")
 
     content.forEach(c => {
-        let div = create('div', 'ContentTypeDiv', c.task ? 'feladatDiv' : 'tananyagDiv', );
+        let div = create('div', 'ContentTypeDiv', c.task ? 'feladatDiv' : 'tananyagDiv',);
         div.id = c.content_id
-        
-        let container = create('a','containerdiv')
+
+        let container = create('a', 'containerdiv')
 
         let iconDiv = create('div', 'Icon');
-        
+
         let a = create('a');
-        container.href =  c.task ? `../feladat.html?id=${c.content_id}` : `../tananyag.html?id=${c.content_id}`;
-        
+        container.href = c.task ? `../feladat.html?id=${c.content_id}` : `../tananyag.html?id=${c.content_id}`;
+
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         svg.setAttribute('fill', 'none');
@@ -295,7 +295,7 @@ function showCourseContent(content) {
         svg.setAttribute('stroke-width', '1');
         svg.setAttribute('stroke', 'currentColor');
         svg.classList.add('size-6');
-        
+
         let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('stroke-linecap', 'round');
         path.setAttribute('stroke-linejoin', 'round');
@@ -310,7 +310,7 @@ function showCourseContent(content) {
 
         let h1 = create('h1');
         h1.innerText = c.title;
-        
+
         svg.appendChild(path);
         a.appendChild(svg);
         iconDiv.appendChild(a);
@@ -328,24 +328,24 @@ function showCourseContent(content) {
 
         container.appendChild(divContent);
         div.appendChild(container)
-        if(c.published == null){
+        if (c.published == null) {
             notPublishedDiv.appendChild(div)
             button.style.display = "block"
-        }else{
+        } else {
             contentList.appendChild(div)
         }
 
-        if(button.style.display == "none"){
+        if (button.style.display == "none") {
             notpublishedLink.style.display = "none"
             links.style.setProperty('--items', '1');
             links.style.justifyContent = 'center';
         }
-        else{
+        else {
             links.style.setProperty('--items', '2');
         }
     });
 
-    $("publishButton").addEventListener("click",function(){PublishContent(document.querySelectorAll(".radioButton"))})
+    $("publishButton").addEventListener("click", function () { PublishContent(document.querySelectorAll(".radioButton")) })
 }
 
 async function PublishContent(radios) {
@@ -356,13 +356,13 @@ async function PublishContent(radios) {
         }
     });
     try {
-        let request = await fetch("../api/content/publish",{
-            method : "POST",
-            headers : {"Content-Type" : "application/json"},
-            body : JSON.stringify({"content_id" : selectedValue})
+        let request = await fetch("../api/content/publish", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "content_id": selectedValue })
         })
         let response = await request.json()
-        if(response.sikeres){
+        if (response.sikeres) {
             location.reload()
         }
     } catch (error) {
@@ -370,20 +370,20 @@ async function PublishContent(radios) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const link1 = $('link1');
     const link2 = $('link2');
     const content1 = $('contentList');
     const content2 = $('not_published');
 
     content1.classList.add("active")
-    link1.addEventListener('click', function(event) {
+    link1.addEventListener('click', function (event) {
         event.preventDefault();
         content1.classList.add('active');
         content2.classList.remove('active');
     });
 
-    link2.addEventListener('click', function(event) {
+    link2.addEventListener('click', function (event) {
         event.preventDefault();
         content2.classList.add('active');
         content1.classList.remove('active');
@@ -402,7 +402,7 @@ async function leaveCourse() {
         },
         body: JSON.stringify({ course_id: courseId })
     });
-    
+
     let result = await response.json();
 
     if (response.ok) {
@@ -413,7 +413,7 @@ async function leaveCourse() {
     }
 }
 
-function confirmationModal(){
+function confirmationModal() {
     let alertDiv = $('alertDiv')
     alertDiv.style.display = "flex"
 
@@ -433,13 +433,13 @@ function confirmationModal(){
     modal_content.appendChild(no_button)
     no_button.innerHTML = "Nem"
 
-    no_button.addEventListener("click",()=>{
+    no_button.addEventListener("click", () => {
         alertDiv.style.display = "none"
         alertDiv.innerHTML = ""
     })
 }
 
-function showAlert(uzenet){
+function showAlert(uzenet) {
     let alertDiv = $('alertDiv')
     alertDiv.style.display = "flex"
 
@@ -455,16 +455,16 @@ function showAlert(uzenet){
     ok_button.innerHTML = "OK"
     ok_button.id = "ok_button"
 
-    ok_button.addEventListener("click",()=>{
+    ok_button.addEventListener("click", () => {
         alertDiv.style.display = "none"
         alertDiv.innerHTML = ""
     })
 }
 
-$('leaveButton').addEventListener('click',confirmationModal);
+$('leaveButton').addEventListener('click', confirmationModal);
 
-window.addEventListener("load",getDesignJson)
-window.addEventListener("load",getCardsData)
+window.addEventListener("load", getDesignJson)
+window.addEventListener("load", getCardsData)
 window.addEventListener("load", () => {
     let courseId = parseInt(getUrlEndpoint());
     if (isNaN(courseId)) {
