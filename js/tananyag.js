@@ -38,6 +38,7 @@ window.addEventListener('load',async()=>{
 
 
 function showContentData(adatok){
+    console.log(adatok)
     let title = $("title")
     let createdDate = $("creatingDate")
     let createUser = $("createrUser")
@@ -176,7 +177,7 @@ async function GetContentFiles() {
 
 function showFiles(files){
     let ki = document.querySelector('.content')
-    ki.innerHTML = '';
+    
     for(let file of files){
         let urlParams = getUrlParams();
         let contentId = urlParams.get('id');

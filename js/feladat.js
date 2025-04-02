@@ -124,9 +124,9 @@ function showContentData(){
         $("uploadFileButton").classList.add("disabledButton")
         $("uploadExerciseButton").classList.add("disabledButton")
     }
-    if(adatok.owned == 1){
-        document.querySelector('.uploadOwnExercise').style.display = "none"
-        $('files').style.display = "none"
+    if(adatok.owned == 0){
+        document.querySelector('.uploadOwnExercise').style.display = "flex"
+        $('files').style.display = "flex"
     }
 }
 
