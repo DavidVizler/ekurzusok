@@ -40,7 +40,7 @@ async function fillDeadlineList() {
             })
         }
         else {
-            div.innerHTML = '<p style="color: gray; font-style: italic; font-weight: bold;">Egyelőre nincsenek határidős feladatai!</p>';
+            div.innerHTML = '<p style="color: gray; font-style: italic; font-weight: bold;">Nincsenek határidős feladatai!</p>';
         }
     }
     catch (e) {
@@ -195,6 +195,9 @@ function viewByRole() {
         addContentButton.style.display = "flex";
         settingsButton.style.display = "flex";
         navbar.style.display = "block"
+    }
+    else{
+        $('leaveButton').style.display = "flex"
     }
 }
 
