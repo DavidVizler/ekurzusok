@@ -293,7 +293,6 @@ function OwnSubmissionQuery() {
 
     if (count($membership_data) == 0) {
         SendResponse([
-            "sikeres" => false,
             "uzenet" => "A felhasználó nem tagja a kurzusnak"
         ], 403);
         return;
@@ -301,7 +300,6 @@ function OwnSubmissionQuery() {
 
     if ($membership_data[0]["role"] != 1) {
         SendResponse([
-            "sikeres" => false,
             "uzenet" => "A felhasználó nem tanuló a kurzusban"
         ], 403);
         return;
@@ -357,7 +355,6 @@ function SubmissionsQuery() {
 
     if (count($membership_data) == 0) {
         SendResponse([
-            "sikeres" => false,
             "uzenet" => "A felhasználó nem tagja a kurzusnak"
         ], 403);
         return;
@@ -365,7 +362,6 @@ function SubmissionsQuery() {
 
     if ($membership_data[0]["role"] == 1) {
         SendResponse([
-            "sikeres" => false,
             "uzenet" => "A felhasználó nem tanár a kurzusban"
         ], 403);
         return;
@@ -406,7 +402,6 @@ function SubmissionCountQuery() {
 
     if (count($membership_data) == 0) {
         SendResponse([
-            "sikeres" => false,
             "uzenet" => "A felhasználó nem tagja a kurzusnak"
         ], 403);
         return;
@@ -414,7 +409,6 @@ function SubmissionCountQuery() {
 
     if ($membership_data[0]["role"] == 1) {
         SendResponse([
-            "sikeres" => false,
             "uzenet" => "A felhasználó nem tanár a kurzusban"
         ], 403);
         return;
@@ -512,7 +506,6 @@ function Manage($action) {
             break;
         default:
             SendResponse([
-                "sikeres" => false,
                 "uzenet" => "Hibás műveletmegadás: {$action}"
             ], 400);
             break;
