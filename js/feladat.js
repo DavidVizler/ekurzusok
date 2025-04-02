@@ -245,10 +245,10 @@ function showModal(){
     $("edit-modal").style.display = "flex";
     let title = $("ContentTitle").value = adatok.title
     let max_points =  $("maxPoints").value = adatok.max_points
+    $("description-input").value = adatok.description;
     let deadline = convertDate(adatok.deadline);
     deadline.setMinutes(deadline.getMinutes() - deadline.getTimezoneOffset());
     let limitDate = $("deadline-input").value = deadline.toISOString().slice(0, 16);
-    let description = $("description-input").value = adatok.description
 }
 
 async function ModifyData() {
