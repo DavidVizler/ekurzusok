@@ -103,6 +103,8 @@ svg:hover{
     padding: 10px;
     border-radius: 5px;
     width: 100px;
+    color: white;
+    background-color: red;
 }
 
 #deleteBtn:hover{
@@ -111,9 +113,8 @@ svg:hover{
 }
 
 .delete {
-    background-color: #fe1111;
-    color: white;
     border: none;
+    border-right: none !important;
 }
 
 .modal {

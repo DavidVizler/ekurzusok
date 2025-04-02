@@ -203,6 +203,7 @@ async function loadCurrentValues(courseId) {
         $('courseName').value = courseData['name'];
         $('courseDescription').value = courseData['description'];
         $('designSelect').value = courseData['design_id'];
+        $('code').value = courseData["code"]
     }
     catch (e) {
         console.error(e);

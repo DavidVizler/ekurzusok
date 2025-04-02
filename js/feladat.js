@@ -349,12 +349,25 @@ function showFiles(files) {
         fileDiv.appendChild(h1)
 
         if (adatok.owned) {
-            let deleteBtn = create('button', 'delete');
+            let deleteBtn = document.createElementNS('http://www.w3.org/2000/svg','svg');
             deleteBtn.style.marginLeft = 'auto';
             deleteBtn.style.padding = '10px 20px';
-            deleteBtn.style.borderRadius = '7px';
-            deleteBtn.type = 'button';
-            deleteBtn.innerHTML = 'Törlés';
+
+            deleteBtn.setAttribute("xlmns","https://www.w3.org/2000/svg")
+            deleteBtn.setAttribute("fill","none")
+            deleteBtn.setAttribute("viewBox","0 0 24 24")
+            deleteBtn.setAttribute("stroke-width","1.5")
+            deleteBtn.setAttribute("stroke","currentColor")
+            deleteBtn.classList.add("size-6")
+            deleteBtn.classList.add("delete")
+
+            let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute("stroke-linecap","round")
+            path.setAttribute("stroke-linejoin","round")
+            path.setAttribute("d","M6 18 18 6M6 6l12 12")
+
+            deleteBtn.appendChild(path)
+
             deleteBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 e.stopPropagation();

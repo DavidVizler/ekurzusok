@@ -71,9 +71,7 @@ function CourseDataQuery() {
         return;
     }
 
-    $code_query = $membership_data[0]["role"] > 1 ? " c. code," : "";
-
-    $sql_statement = "SELECT c.name, c.description, c.design_id, c.archived,{$code_query} u.firstname, u.lastname
+    $sql_statement = "SELECT c.name, c.description, c.design_id, c.archived, u.firstname, u.lastname
     FROM courses c INNER JOIN memberships m ON c.course_id = m.course_id
     INNER JOIN users u ON m.user_id = u.user_id WHERE c.course_id = ? AND m.role = 3;";
     $course_data = DataQuery($sql_statement, "i", [$course_id])[0];
