@@ -321,7 +321,7 @@ function showFiles(files) {
 
         let a = create('a', 'download');
         a.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${contentId}`;
-        a.target = '_blank';
+        a.target = '_self';
 
         let fileDiv = create('div', 'fileDiv');
         fileDiv.id = "fileDiv" + file.file_id
