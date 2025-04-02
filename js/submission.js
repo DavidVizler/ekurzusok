@@ -78,7 +78,7 @@ function showSubedData(adatok) {
         hiddenSubId.hidden = true
 
         let p = create('p');
-        p.innerHTML = `Értékelés: ${/* elért pont */ null ?? '-'} / ${/* max pont */ 0} p (${/* százalék */ 0}%)`;
+        p.innerHTML = `Értékelés: ${adat.rating ?? '-'} / ${/* max pont */ 0} p (${/* százalék */ 0}%)`;
 
         let modifyPointsInput = create('input');
         modifyPointsInput.id = `modifyPointsInput-${adat.submission_id}`;

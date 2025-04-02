@@ -15,8 +15,8 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Feltöltött fájlok törlése
 - [x] Tartalomhoz feltöltött fájlok lekérdezése
 - [ ] Több fájl feltöltése a meglévők mellé
-- [ ] Leadott munkák megtekintése
-- [ ] Kilépés gomb ne jelenjen meg a felhasználó saját kurzusában
+- [x] Leadott munkák megtekintése
+- [x] Kilépés gomb ne jelenjen meg a felhasználó saját kurzusában
 - [ ] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
 
 **Backend**
