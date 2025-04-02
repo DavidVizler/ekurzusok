@@ -77,26 +77,6 @@ function showSubedData(adatok) {
         hiddenSubId.id = "subId"
         hiddenSubId.hidden = true
 
-        let p = create('p');
-        p.innerHTML = `Értékelés: ${adat.rating ?? '-'} / ${adat.max_points} p (${Math.round(adat.rating / adat.max_points * 100)}%)`;
-
-        let modifyPointsInput = create('input');
-        modifyPointsInput.id = `modifyPointsInput-${adat.submission_id}`;
-        modifyPointsInput.type = 'number';
-        modifyPointsInput.min = 0;
-        modifyPointsInput.max = adat.max_points;
-
-        let modifyPointsBtn = create('button', 'rateButton');
-        modifyPointsBtn.innerHTML = 'Értékelés';
-        modifyPointsBtn.addEventListener('click', () => {
-            let points = parseInt($(`modifyPointsInput-${adat.submission_id}`).value);
-            if (isNaN(points) || points > adat.max_points || points < 0) {
-                alert("A megadott pontszám érvénytelen!");
-                return;
-            }
-            rate(adat.submission_id, points);
-        });
-
         div.appendChild(h1);
         div.appendChild(div2);
         div2.append(svg);
@@ -107,9 +87,31 @@ function showSubedData(adatok) {
         dataDiv.appendChild(datas)
         dataDiv.appendChild(hiddenSubId)
 
-        dataDiv.appendChild(p);
-        dataDiv.appendChild(modifyPointsInput);
-        dataDiv.appendChild(modifyPointsBtn);
+        if (adat.max_points != null) {
+            let p = create('p');
+            p.innerHTML = `Értékelés: ${adat.rating ?? '-'} / ${adat.max_points} p (${Math.round(adat.rating / adat.max_points * 100)}%)`;
+
+            let modifyPointsInput = create('input');
+            modifyPointsInput.id = `modifyPointsInput-${adat.submission_id}`;
+            modifyPointsInput.type = 'number';
+            modifyPointsInput.min = 0;
+            modifyPointsInput.max = adat.max_points;
+
+            let modifyPointsBtn = create('button', 'rateButton');
+            modifyPointsBtn.innerHTML = 'Értékelés';
+            modifyPointsBtn.addEventListener('click', () => {
+                let points = parseInt($(`modifyPointsInput-${adat.submission_id}`).value);
+                if (isNaN(points) || points > adat.max_points || points < 0) {
+                    alert("A megadott pontszám érvénytelen!");
+                    return;
+                }
+                rate(adat.submission_id, points);
+            });
+
+            dataDiv.appendChild(p);
+            dataDiv.appendChild(modifyPointsInput);
+            dataDiv.appendChild(modifyPointsBtn);
+        }
 
         let hr = create("hr");
         dataDiv.appendChild(hr);
