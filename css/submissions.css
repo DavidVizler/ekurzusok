@@ -106,3 +106,12 @@ hr {
 .body::-webkit-scrollbar {
     width: 0;
 }
+
+.rateButton {
+    background-color: #5271ff;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    margin-left: 15px;
+}

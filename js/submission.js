@@ -71,6 +71,10 @@ function showSubedData(adatok) {
         datas.innerHTML += "Beadott fájlok száma: " + adat.files_count + "<br>"
         datas.innerHTML += "Fájlok: "
 
+        let filesList = create('div');
+        filesList.id = `filesList-${adat.submission_id}`;
+        datas.appendChild(filesList);
+
         let hiddenSubId = create('input');
         hiddenSubId.type = "number"
         hiddenSubId.value = adat.submission_id
@@ -91,6 +95,8 @@ function showSubedData(adatok) {
             let p = create('p');
             p.innerHTML = `Értékelés: ${adat.rating ?? '-'} / ${adat.max_points} p (${Math.round(adat.rating / adat.max_points * 100)}%)`;
 
+            let modifyDiv = create('div');
+
             let modifyPointsInput = create('input');
             modifyPointsInput.id = `modifyPointsInput-${adat.submission_id}`;
             modifyPointsInput.type = 'number';
@@ -108,9 +114,10 @@ function showSubedData(adatok) {
                 rate(adat.submission_id, points);
             });
 
-            dataDiv.appendChild(p);
-            dataDiv.appendChild(modifyPointsInput);
-            dataDiv.appendChild(modifyPointsBtn);
+            datas.appendChild(p);
+            modifyDiv.appendChild(modifyPointsInput);
+            modifyDiv.appendChild(modifyPointsBtn);
+            datas.appendChild(modifyDiv);
         }
 
         let hr = create("hr");
@@ -157,7 +164,7 @@ async function GetSubmittedFiles(submissionId) {
 }
 
 function showFiles(files, submissionId) {
-    let ki = document.querySelector(`#datasDiv-${submissionId}`);
+    let ki = document.querySelector(`#filesList-${submissionId}`);
     
     if (ki.querySelectorAll(".fileDiv").length > 0) {
         console.log("Fájlok már megvannak jelenítve.");
