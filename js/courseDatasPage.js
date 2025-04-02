@@ -76,6 +76,12 @@ let designData
 async function getDesignJson() {
     let response = await fetch("../js/design.json")
     designData = await response.json()
+    for (const design of designData) {
+        if (design.designId == cardData.design_id) {
+            header.style.backgroundImage = `url('${design.courseImage}')`
+            header.style.filter = "brightness(50%);"
+        }
+    }
 }
 
 let cardData;
@@ -91,6 +97,8 @@ async function getCardsData() {
             cardData = await eredmeny.json()
             ModifyActualData(cardData)
             viewByRole()
+            getDesignJson()
+            getCourseUsers(courseId);
         }
         else if (eredmeny.status == 403 || eredmeny.status == 401) {
             location.href = '../login.html';
@@ -117,12 +125,6 @@ function ModifyActualData(cardData) {
     oktatok.innerHTML = cardData.lastname + " " + cardData.firstname
     title.innerHTML = cardData.name
     kurzusLeiras.innerHTML = cardData.description;
-    for (const design of designData) {
-        if (design.designId == cardData.design_id) {
-            header.style.backgroundImage = `url('${design.courseImage}')`
-            header.style.filter = "brightness(50%);"
-        }
-    }
     if (cardData.archived == 1) {
         addButton.removeAttribute("href")
         addButton.classList.add("disabled")
@@ -166,7 +168,7 @@ async function getCourseContent(courseId) {
 async function getCourseUsers(courseid) {
     try {
         let data = {
-            course_id: courseid
+            course_id: parseInt(courseid)
         }
         let valasz = await fetch('../api/query/course-members', {
             method: "POST",
@@ -466,7 +468,6 @@ function showAlert(uzenet) {
 
 $('leaveButton').addEventListener('click', confirmationModal);
 
-window.addEventListener("load", getDesignJson)
 window.addEventListener("load", getCardsData)
 window.addEventListener("load", () => {
     let courseId = parseInt(getUrlEndpoint());
@@ -480,6 +481,5 @@ window.addEventListener("load", () => {
         settingsButton.href += `?id=${courseId}`;
 
         getCourseContent(courseId);
-        getCourseUsers(courseId);
     }
 });
