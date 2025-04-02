@@ -34,18 +34,3 @@ test('getUrlEndpoint - URL utolsó részének lekérése', () => {
     let endpoint = Utils.getUrlEndpoint();
     expect(endpoint).toBe('index.html?testParam=5&testParam2=9');
 })
-
-test('convertDate - Dátum átkonvertálása', () => {
-    let now = new Date();
-    now.setMilliseconds(0);
-
-    // ISO 8601
-    let iso8601 = now.toISOString();
-
-    // yyyy-mm-dd HH:MM:SS (UTC)
-    let hms = `${now.toJSON().substring(0, 10)} ${now.toJSON().substring(11, 19)}`;
-
-    let testDate = Utils.convertDate(hms);
-
-    expect(testDate.toISOString()).toBe(iso8601);
-})

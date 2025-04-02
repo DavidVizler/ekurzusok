@@ -1,9 +1,5 @@
-function currentDateLoad(){
-    let creatingDate = $("creatingDate")
-    let actualDate = new Date()
-    let currentDate = actualDate.toISOString().split("T")[0]
-    let time = actualDate.getHours() + ":" + actualDate.getMinutes()
-    creatingDate.innerHTML += currentDate + ", " + time
+function currentDateLoad() {
+    $("creatingDate").innerHTML = getCurrentTime();
 }
 
 window.addEventListener("load", currentDateLoad)
@@ -209,9 +205,9 @@ function showContentData(){
     let limitDate = $("timeLimitDate")
     let description = $("description")
     title.innerHTML = adatok.title
-    createdDate.innerHTML = convertDate(adatok.published).toLocaleString()
+    createdDate.innerHTML = adatok.published
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname
-    limitDate.innerHTML = "<b>Határidő: </b>" + (adatok.deadline != null ? convertDate(adatok.deadline).toLocaleString() : 'Nincsen határidő beállítva')
+    limitDate.innerHTML = "<b>Határidő: </b>" + (adatok.deadline != null ? adatok.deadline : 'Nincsen határidő beállítva')
     description.innerHTML = adatok.description
     if(adatok.max_points == null){
         max_points.innerHTML = "Nincs ponthatár beállítva!"
@@ -246,17 +242,14 @@ function showModal(){
     let title = $("ContentTitle").value = adatok.title
     let max_points =  $("maxPoints").value = adatok.max_points
     $("description-input").value = adatok.description;
-    let deadline = convertDate(adatok.deadline);
-    deadline.setMinutes(deadline.getMinutes() - deadline.getTimezoneOffset());
-    let limitDate = $("deadline-input").value = deadline.toISOString().slice(0, 16);
+    let limitDate = $("deadline-input").value = adatok.deadline;
 }
 
 async function ModifyData() {
     let title = $("ContentTitle").value
     let max_points = $("maxPoints").value
     if(max_points == ""){max_points = null}
-    let [date, time] = $("deadline-input").value.split('T');
-    let limitDate = `${date} ${time}:00`;
+    let limitDate = convertDate($("deadline-input").value);
     let description = $("description-input").value
     let urlParams = getUrlParams();
     let tartalomId = urlParams.get('id');

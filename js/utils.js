@@ -26,12 +26,29 @@ function getUrlEndpoint() {
     return parts[parts.length - 1];
 }
 
-// A yyyy-mm-dd HH:MM:SS (UTC) formátumú dátumokat átkonvertálja JavaScript Date objektumokká
-function convertDate(date) {
-    // ISO 8601 formátumra konvertálás
-    let iso8601 = `${date.substring(0, 10)}T${date.substring(11, 19)}.000Z`;
-    return new Date(iso8601);
+// A dátumot yyyy-mm-dd HH:MM:SS formátumú szöveggé alakítja
+function convertDate(datetime) {
+    let [date, time] = datetime.split('T');
+    // Másodperc hiányzik-e
+    if ((time.match(/:/g) || []).length == 1) {
+        time += ':00';
+    }
+    return date + ' ' + time;
 }
+
+// Jelenlegi idő lekérése yyyy-mm-dd HH:MM:SS formátumban
+function getCurrentTime() {
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = String(now.getMonth() + 1).padStart(2, '0');
+    let day = String(now.getDate()).padStart(2, '0');
+    let hours = String(now.getHours()).padStart(2, '0');
+    let minutes = String(now.getMinutes()).padStart(2, '0');
+    let seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 
 if (typeof module !== 'undefined') {
     module.exports = {

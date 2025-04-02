@@ -62,15 +62,7 @@ async function onNewTask(e) {
     e.preventDefault();
     let title = $('fcim').value;
     let desc = $('fleiras').value;
-    // Az input mező értéke helyi (UTC+1) időben van. Az időzóna nincs tárolva.
-    let localTime = $('fhatarido').value;
-    // Konvertálás UTC 0 időzónás dátumra (Z betű a végén). (ISO 8601 formátum)
-    let due;
-    if (localTime == "") {
-        due = null;
-    } else {
-        due = new Date(localTime).toJSON();
-    }
+    let due = convertDate($('fhatarido').value + ':00');
     let points;
     if ($('fpont').value == "") {
         points = null;

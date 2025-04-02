@@ -16,15 +16,9 @@ async function openCalendarPopUp() {
 
       if (tasks.length > 0) {
          div.innerHTML = '';
-         tasks = tasks.map(x => {
-            return {
-               ...x,
-               deadline: convertDate(x.deadline)
-            };
-         });
          tasks.sort((a, b) => b.deadline - a.deadline);
          tasks.forEach(feladat => {
-            div.innerHTML += `<p>${feladat.deadline.toLocaleString()} - ${feladat.course_name} - <a href="./feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
+            div.innerHTML += `<p>${feladat.deadline} - ${feladat.course_name} - <a href="./feladat.html?id=${feladat.content_id}">${feladat.title}</a></p>`;
          })
       }
       else {

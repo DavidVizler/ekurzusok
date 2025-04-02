@@ -1,8 +1,5 @@
 function currentDate(){
-    let creatingDate = $("creatingDate")
-    let actualDate = new Date()
-    let currentDate = actualDate.toISOString().split('T')[0];
-    creatingDate.innerHTML += currentDate
+    $("creatingDate").innerHTML = getCurrentTime();
 }
 
 $("backToPreviousPage").addEventListener("click",()=>{
