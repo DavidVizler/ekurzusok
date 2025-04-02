@@ -323,20 +323,15 @@ function DeleteUser() {
     }
 
     // Felhasználó kurzusainak törlése
-    $sql_statement = "SELECT course_id FROM memberships WHERE user_id = ? AND role = 3;";
-    $courses = DataQuery($sql_statement, "i", [$user_id]);
+    $sql_statement = "DELETE courses, memberships FROM courses
+    INNER JOIN memberships ON courses.course_id = memberships.course_id
+    WHERE memberships.user_id = ? AND memberships.role = 3;";
+    ModifyData($sql_statement, "i", [$user_id]);
 
     // Felhasználó törlése
-    $sql_statement = "DELETE FROM users WHERE user_id = ?;";
+    $sql_statement = "DELETE FROM users WHERE user_id = ?";
     $result = ModifyData($sql_statement, "i", [$user_id]);
 
-    if (count($courses) > 0) {
-        function CourseId($c) { return $c["course_id"]; }
-        $courses_ids = join(", ", array_map("CourseId", $courses));
-        $sql_statement = "DELETE FROM courses WHERE course_id IN ({$courses_ids});";
-        ModifyData($sql_statement);
-    }
-    
     // Eredmény vizsgálata
     if ($result) { 
         session_unset();
