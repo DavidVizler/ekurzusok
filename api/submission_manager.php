@@ -56,7 +56,7 @@ function SubmitSubmission() {
     // Van-e már beadandó
     if (count($submission_data) == 0) {
         // Ha nincs, akkor üres leadása
-        $sql_statement = "INSERT INTO submissions (submission_id, user_id, content_id, submitted, rating) VALUES (NULL, ?, ?, UTC_TIMESTAMP(), NULL);";
+        $sql_statement = "INSERT INTO submissions (submission_id, user_id, content_id, submitted, rating) VALUES (NULL, ?, ?, NOW(), NULL);";
         $results = ModifyData($sql_statement, "ii", [$user_id, $content_id]);
     } else {
         // Be van-e már adva

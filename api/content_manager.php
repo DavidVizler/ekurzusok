@@ -81,7 +81,7 @@ function CreateCourseContent() {
     // Ha feladat és a határidő nem null, akkor idő formátum ellenőrzés
     if (array_key_exists("deadline", $data) && $data["deadline"] != "null" && $task) {
         $deadline = $data["deadline"];
-        $date_format = 'Y-m-d\TH:i:s.v\Z';
+        $date_format = 'Y-m-d H:i:s';
         $date = DateTime::createFromFormat($date_format, $deadline);
         if (!$date || $date->format($date_format) !== $deadline) {
             SendInvalidDataRespone(true, "deadline", $deadline);
@@ -176,7 +176,7 @@ function PublishCourseContent() {
     $unpublished = is_null($content_data[0]["published"]);
 
     if ($unpublished) {
-        $sql_statement = "UPDATE content SET published = UTC_TIMESTAMP(), last_modified = UTC_TIMESTAMP() WHERE content_id = ?;";
+        $sql_statement = "UPDATE content SET published = NOW(), last_modified = NOW() WHERE content_id = ?;";
         $word = "közzététel";
     } else {
         $sql_statement = "UPDATE content SET published = NULL WHERE content_id = ?";
@@ -287,7 +287,7 @@ function ModifyCourseContentData() {
     }
 
     // Időbélyeg hozzáadása és where záradék hozzáadása
-    $sql_statement .= ", last_modified = UTC_TIMESTAMP() WHERE content_id = ?;";
+    $sql_statement .= ", last_modified = NOW() WHERE content_id = ?;";
     $new_data_types .= "i";
     array_push($new_data, $content_id);
 
