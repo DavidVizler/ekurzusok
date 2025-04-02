@@ -177,7 +177,7 @@ async function getCourseUsers(courseid){
         if(valasz.ok){
             let userslist = await valasz.json();
             showCourseUsers(userslist)
-            viewByRole()
+            viewByRole(userslist)
         }else{
             throw valasz.status
         }
@@ -213,7 +213,7 @@ async function showCourseUsers(userslist) {
         if(userslist[i].role != 1){
             ownerp.textContent = "Oktató: " + userslist[i].lastname + " " + userslist[i].firstname
         }
-        if(cardData.role == 3){
+        if(userslist[i].role == 3){
             let userRadio = create('input')
             userRadio.type = "radio"
             userRadio.name = "radioButtons"
@@ -227,7 +227,7 @@ async function showCourseUsers(userslist) {
             scrollDiv.appendChild(br)
             deleteButton.style.display = "flex"
         }
-        if(userslist[i].role == 1 && cardData.role != 3){
+        if(userslist[i].role == 1 && userslist[i].role != 3){
             let li = create('li')
             li.value = userslist[i].felhasznaloId
             li.textContent = userslist[i].lastname + " " + userslist[i].firstname
