@@ -152,7 +152,7 @@ function AttachSubmissionFiles() {
         $sql_statement = "INSERT INTO submissions (submission_id, user_id, content_id, submitted, rating) VALUES (NULL,  ?, ?, NULL, NULL);";
         ModifyData($sql_statement, "ii", [$user_id, $content_id]);
 
-        $sql_statement = "SELECT submission_id FROM submissions WHERE user_id = ? AND content_id = ?;";
+        $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
         $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);  
     } 
 
