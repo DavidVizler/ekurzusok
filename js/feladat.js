@@ -395,6 +395,8 @@ async function submitFiles() {
         let valasz = await response.json()
         if(valasz.sikeres == false){
             showResultModal(valasz.uzenet)
+        } else {
+            window.location.reload();
         }
     }
     catch (e) {
