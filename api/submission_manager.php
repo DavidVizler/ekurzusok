@@ -214,6 +214,18 @@ function RemoveFileFromSubmission() {
         return;
     }
 
+    $sql_statement = "SELECT c.archived FROM courses c
+    INNER JOIN content t ON c.course_id = t.course_id
+    WHERE t.content_id = ?;";
+    $archived = DataQuery($sql_statement, "i", [$content_id]);
+    if ($archived[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
     $submission_id = $submission_data[0]["submission_id"];
 
     // A felhasználó-e a beadandó tulajdonosa
@@ -285,6 +297,17 @@ function RateSubmission() {
             "sikeres" => false,
             "uzenet" => "Nincs beadandó ilyen ID-val"
         ], 404);
+        return;
+    }
+
+    $course_id = $content_data[0]["course_id"];
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived = DataQuery($sql_statement, "i", [$course_id]);
+    if ($archived[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
         return;
     }
 

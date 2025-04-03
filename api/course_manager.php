@@ -93,7 +93,7 @@ function ModifyCourseData() {
     $design_id = $data["design"];
 
     // kurzus adatok lekérdezése
-    $sql_statement = "SELECT c.name, c.description, c.design_id, m.role FROM courses c
+    $sql_statement = "SELECT c.name, c.description, c.design_id, m.role, c.archived FROM courses c
     INNER JOIN memberships m ON c.course_id = m.course_id
     WHERE c.course_id = ? AND m.user_id = ?;";
     $course_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
@@ -110,6 +110,14 @@ function ModifyCourseData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a kurzusnak"
+        ], 403);
+        return;
+    }
+
+    if ($course_data[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
         ], 403);
         return;
     }
