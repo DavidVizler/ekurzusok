@@ -136,9 +136,15 @@ async function getCourseContent(courseId) {
 
         let contentList = await response.json();
 
-        if (response.ok) {
+        let contentNavbar = document.getElementById("contentNavbar")
+
+        if (contentList.length > 0) {
+            contentNavbar.style.display = 'block';
             showCourseContent(contentList);
+        } else {
+            contentNavbar.style.display = 'none';
         }
+        
     }
     catch (e) {
         console.error(e);
