@@ -248,6 +248,7 @@ function UserDataForm($id) {
                 <div id="modify-submit">
                     <input type="submit" value="Módosítás">
                 </div>
+                <div id="modal-container"></div>
             </form>
         </div>
     HTML;
