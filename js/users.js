@@ -78,6 +78,15 @@ function viewByRole() {
             }
         });
     }
+
+    if(userData.archived == 1){
+        modRoleBtns.forEach(btn => {
+            btn.style.display = "none"
+        })
+        deleteBtns.forEach(btn => {
+            btn.style.display = "none";
+        });
+    }
 }
 
 async function showCourseUsers(userslist) {
