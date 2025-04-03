@@ -1,5 +1,4 @@
 body{
-    display: flex;
     flex-direction: column;
     font-family: "Varela Round";
     font-weight: lighter;
@@ -77,4 +76,51 @@ body{
 
 #usersList, #modifyRole {
     display: none;
+}
+
+.content{
+    margin:15px;
+	width: 100%;
+}
+
+.mainDiv{
+	width: 100%;
+}
+
+#usersList{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box; 
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li .text {
+    flex-grow: 1;
+    text-align: center;
+}
+
+li svg {
+    margin-left: 10px;
+    width: 35px;
+    height: 35px;
 }
