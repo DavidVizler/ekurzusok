@@ -40,7 +40,7 @@ async function getCourseUsers() {
         if (valasz.ok) {
             let userslist = await valasz.json();
             console.log(userslist)
-            getCardsData()
+            await getCardsData()
             showCourseUsers(userslist)
         } else {
             throw valasz.status
@@ -53,40 +53,27 @@ async function getCourseUsers() {
 
 function viewByRole() {
     let navbar = document.getElementById("contentNavbar");
+    let deleteBtns = document.querySelectorAll('.deleteBtn');
+    let modRoleBtns = document.querySelectorAll('.modeRoleBtn');
+
+    deleteBtns.forEach(btn => {
+        btn.style.display = "none";
+    });
+    modRoleBtns.forEach(btn => {
+        btn.style.display = "none"
+    })
+
     if (userData.role == 3) {
+        deleteBtns.forEach(btn => {
+            btn.style.display = "flex";
+        });
         navbar.style.display = "block"
+        modRoleBtns.forEach(btn => {
+            btn.style.display = "flex";
+        });
     }
+    
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-    const link1 = document.getElementById('link1');
-    const link2 = document.getElementById('link2');
-    const content1 = document.getElementById('usersList');
-    const content2 = document.getElementById('modifyRole');
-
-    content1.classList.add("active");
-    link1.classList.add("active");
-
-    link1.addEventListener('click', function (event) {
-        event.preventDefault();
-
-        link1.classList.add('active');
-        link2.classList.remove('active');
-
-        content1.classList.add('active');
-        content2.classList.remove('active');
-    });
-
-    link2.addEventListener('click', function (event) {
-        event.preventDefault();
-
-        link2.classList.add('active');
-        link1.classList.remove('active');
-
-        content2.classList.add('active');
-        content1.classList.remove('active');
-    });
-});
 
 async function showCourseUsers(userslist) {
     const usersDiv = document.querySelector('.courseUsers');
@@ -104,34 +91,59 @@ async function showCourseUsers(userslist) {
 
     usersDiv.append(ownerp, tags, scrollDiv);
 
-    //<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
-  
-
     userslist.forEach(user => {
         const li = document.createElement('li');
         li.innerHTML = `${user.lastname} ${user.firstname}`;
+        li.value = user.user_id
 
-        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        svg.setAttribute('fill', 'none');
-        svg.setAttribute('viewBox', '0 0 24 24');
-        svg.setAttribute('stroke-width', '1');
-        svg.setAttribute('stroke', 'currentColor');
-        svg.classList.add('size-6');
+        const svgContainer = document.createElement('div');
+        svgContainer.classList.add('svg-container');
+
+        //deleteBtn
+        let deleteBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        deleteBtn.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        deleteBtn.setAttribute('fill', 'none');
+        deleteBtn.setAttribute('viewBox', '0 0 24 24');
+        deleteBtn.setAttribute('stroke-width', '1');
+        deleteBtn.setAttribute('stroke', 'currentColor');
+        deleteBtn.classList.add('size-6');
+        deleteBtn.classList.add("deleteBtn")
 
         let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('stroke-linecap', 'round');
         path.setAttribute('stroke-linejoin', 'round');
 
-        path.setAttribute('d','M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z');
-        svg.appendChild(path)
+        path.setAttribute('d','M6 18 18 6M6 6l12 12');
+        deleteBtn.appendChild(path)
 
-        li.appendChild(svg)
+        //modRoleBtn
+        let modRoleBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        modRoleBtn.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        modRoleBtn.setAttribute('fill', 'none');
+        modRoleBtn.setAttribute('viewBox', '0 0 24 24');
+        modRoleBtn.setAttribute('stroke-width', '1');
+        modRoleBtn.setAttribute('stroke', 'currentColor');
+        modRoleBtn.classList.add('size-6');
+        modRoleBtn.classList.add("modeRoleBtn")
 
+        let path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path2.setAttribute('stroke-linecap', 'round');
+        path2.setAttribute('stroke-linejoin', 'round');
+        path2.setAttribute('d','m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125');
+        modRoleBtn.appendChild(path2)
+        
         if (user.role == 2 || user.role == 3) {
             tanarUl.appendChild(li);
         } else {
+            svgContainer.appendChild(modRoleBtn)
+            svgContainer.appendChild(deleteBtn)
+            li.appendChild(svgContainer)
             ul.appendChild(li);
+        }
+
+        if(userData.role == 3){
+            modRoleBtn.addEventListener("click", function(){modifyRole(li.value)})
+            deleteBtn.addEventListener("click",function(){deleteUserFromCourse(li.value)})
         }
     });
 
@@ -141,6 +153,72 @@ async function showCourseUsers(userslist) {
 
     if (ul.children.length > 0) {
         scrollDiv.appendChild(ul);
+    }
+}
+
+async function deleteUserFromCourse(user_id) {
+    let params = new URLSearchParams(document.location.search);
+    let course_id = params.get("id")
+    
+    if (user_id == null) {
+        alert("Nincsen kiválasztva személy!");
+        return
+    }
+    try {
+        let data = {
+            "user_id": parseInt(user_id),
+            "course_id": parseInt(course_id)
+        }
+        let keres = await fetch('../api/member/remove', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify(data)
+        })
+        if (keres.ok) {
+            let response = await keres.json()
+            if (response.sikeres == true) {
+                location.reload()
+            }
+        } else {
+            let response = await keres.json()
+            alert(response.uzenet)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function modifyRole(user_id) {
+    let params = new URLSearchParams(document.location.search);
+    let course_id = params.get("id")
+    
+    if (user_id == null) {
+        alert("Nincsen kiválasztva személy!");
+        return
+    }
+    try {
+        let data = {
+            "user_id": parseInt(user_id),
+            "course_id": parseInt(course_id)
+        }
+        let keres = await fetch('../api/member/teacher', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify(data)
+        })
+        if (keres.ok) {
+            let response = await keres.json()
+            if (response.sikeres == true) {
+                location.reload()
+            }
+        } else {
+            let response = await keres.json()
+            alert(response.uzenet)
+        }
+    } catch (error) {
+        console.log(error)
     }
 }
 
