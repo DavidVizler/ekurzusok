@@ -493,13 +493,25 @@ function DeleteCourseContent() {
     $content_id = $data["content_id"];
 
     // Tartalom adatok lekérdezése
-    $sql_statement = "SELECT * FROM content WHERE content_id = ? AND user_id = ?;";
-    $content_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+    $sql_statement = "SELECT course_id, user_id FROM content WHERE content_id = ?;";
+    $content_data = DataQuery($sql_statement, "i", [$content_id]);
 
     if (count($content_data) == 0) {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+            "uzenet" => "Nincs tartalom ilyen ID-val"
+        ], 404);
+        return;
+    }
+
+    $course_id = $content_data[0]["course_id"];
+    $sql_statement = "SELECT user_id FROM memberships WHERE course_id = ?;";
+    $course_owner = DataQuery($sql_statement, "i", [$course_id])[0]["user_id"];
+
+    if ($content_data[0]["user_id"] != $user_id && $course_owner != $user_id) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó nem tulajdonosa sem a tartalomnak, sem a kurzusnak"
         ], 403);
         return;
     }
