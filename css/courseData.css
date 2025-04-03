@@ -388,7 +388,19 @@ a#openModal:hover, a#openModalUsers:hover {
     height: 30px;
 }
 
-#deleteButton:hover{
+#modifyRoleButton{
+    font-family: "Varela Round";
+    font-weight: lighter;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid #ffbf00;
+    border-radius: 10px;
+    background-color: white;
+    color: #ffbf00;
+    height: 30px;
+}
+
+#deleteButton:hover, #modifyRoleButton:hover{
     cursor: pointer;
     box-shadow: 0px 4px 4px rgba(215, 154, 154, 0.5);
 }

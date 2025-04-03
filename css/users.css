@@ -1,0 +1,80 @@
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: "Varela Round";
+    font-weight: lighter;
+}
+
+.backToMainPageIcon svg{
+    height: 30px;
+    width: 30px;
+    color: black;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.backToMainPageIcon{
+    display: flex;
+    margin: 15px;
+}
+
+.links {
+    color: black;
+	border-bottom: 1px solid #0003;
+	font-size: 25px;
+	font-weight: 300;
+}
+.links > a {
+    color: black;
+	padding: .75em;
+	text-align: center;
+	text-decoration: none;
+	transition: all .5s;
+}
+.links > a:hover {
+	background: #ffffff06;
+}
+.links > .line {
+	background: #50514F;
+	height: 2px;
+	pointer-events: none;
+}
+
+.links {
+	display: grid;
+	grid-template-columns: repeat(var(--items), 1fr);
+	position: relative;
+}
+
+.links > .line {
+	opacity: 0;
+	transition: all .5s;
+	position: absolute;
+	bottom: 0;
+	left: var(--left, calc(100% / var(--items) * (var(--index) - 1)));
+	width: var(--width, calc(100% / var(--items)));
+	--index: 0;
+}
+.links > a:hover ~ .line {
+	opacity: 1;
+}
+
+.links > a:nth-of-type(1):hover ~ .line { --index: 1; }
+.links > a:nth-of-type(2):hover ~ .line { --index: 2; }
+
+#usersList.active, #modifyRole.active {
+    display: flex;
+}
+
+#usersList, #modifyRole {
+    display: none;
+}

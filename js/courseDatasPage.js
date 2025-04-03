@@ -2,10 +2,8 @@
 
 const deadlineModal = $("deadlineModal");
 const openModalLink = $("openModal");
-const openModalUsersLink = $("openModalUsers");
+
 const closeButton = document.querySelector(".close-button");
-const closeButtonUsers = document.querySelector(".close-buttonUsers");
-const usersModal = $("usersModal");
 
 let courseId = getUrlEndpoint();
 
@@ -48,20 +46,10 @@ openModalLink.addEventListener("click", (event) => {
     fillDeadlineList();
 });
 
-openModalUsersLink.addEventListener("click", (event) => {
-    event.preventDefault();
-    usersModal.style.display = "flex";
-    document.body.classList.add("modal-open");
-});
-
 closeButton.addEventListener("click", () => {
     deadlineModal.style.display = "none";
     document.body.classList.remove("modal-open");
 });
-
-closeButtonUsers.addEventListener("click", () => {
-    usersModal.style.display = "none";
-})
 
 let designData
 
@@ -185,9 +173,11 @@ function viewByRole() {
     let addContentButton = $("addContentButton");
     let settingsButton = $("settingsButton");
     let navbar = $("contentNavbar");
+    let usersButton = $('openModalUsers')
     if (cardData.role != 1) {
         addContentButton.style.display = "flex";
         settingsButton.style.display = "flex";
+        usersButton.style.display = "flex"
         navbar.style.display = "block"
     }
     else{
@@ -196,44 +186,66 @@ function viewByRole() {
 }
 
 async function showCourseUsers(userslist) {
-    let usersDiv = document.querySelector('.courseUsers')
-    let ownerp = create('p')
-    let deleteButton = $('deleteButton')
-    let tags = create('p')
-    tags.textContent = "Tagok:"
-    usersDiv.appendChild(ownerp)
-    usersDiv.appendChild(tags)
-    let scrollDiv = create("div");
+    const usersDiv = document.querySelector('.courseUsers');
+    const ownerp = create('p');
+    const tags = create('p');
+    const scrollDiv = create('div');
+    const deleteButton = $('deleteButton');
+    const modifyRoleButton = $('modifyRoleButton')
+    const ul = create('ul');
+    const tanarUl = create('ul');
+
+    tags.textContent = "Tagok:";
     scrollDiv.id = "scrollDiv";
-    let ul = create("ul")
+
+    ownerp.innerHTML = "Tanárok: <br>";
+    ownerp.id = "ownerp"
+
+    usersDiv.append(ownerp, tags, scrollDiv);
+
     if (cardData.role == 3) {
-        ownerp.textContent = "Oktató: " + cardData.lastname + " " + cardData.firstname
-        for (let user of userslist) {
-            let userRadio = create('input')
-            userRadio.type = "radio"
-            userRadio.name = "radioButtons"
-            userRadio.value = user.user_id
-            userRadio.style.marginBottom = "10px"
-            let name = create("label")
-            name.textContent = user.lastname + " " + user.firstname
-            let br = create('br')
-            scrollDiv.appendChild(userRadio)
-            scrollDiv.appendChild(name)
-            scrollDiv.appendChild(br)
-            deleteButton.style.display = "flex"
+        userslist.forEach(user => {
+            const userRadio = create('input');
+            userRadio.type = "radio";
+            userRadio.style.marginBottom = "10px";
+
+            const name = create('label');
+            name.textContent = `${user.lastname} ${user.firstname}`;
+
+            const br = create('br');
+
+            if (user.role == 2 || user.role == 3) {
+                userRadio.name = "radios";
+                userRadio.value = user.user_id;
+                ownerp.append(userRadio, name, br);
+            } else {
+                userRadio.name = "radioButtons";
+                userRadio.value = user.user_id;
+                scrollDiv.append(userRadio, name, br);
+                deleteButton.style.display = "flex";
+                modifyRoleButton.style.display = "flex"
+            }
+        });
+    } else {
+        userslist.forEach(user => {
+            const li = create('li');
+            li.textContent = `${user.lastname} ${user.firstname}`;
+
+            if (user.role == 2 || user.role == 3) {
+                tanarUl.appendChild(li);
+            } else {
+                ul.appendChild(li);
+            }
+        });
+
+        if (tanarUl.children.length > 0) {
+            ownerp.appendChild(tanarUl);
+        }
+
+        if (ul.children.length > 0) {
+            scrollDiv.appendChild(ul);
         }
     }
-    else {
-        ownerp.textContent = "Oktató: " + cardData.lastname + " " + cardData.firstname
-        for (let user of userslist) {
-            let li = create('li')
-            li.value = user.felhasznaloId
-            li.textContent = user.lastname + " " + user.firstname
-            ul.appendChild(li)
-            scrollDiv.appendChild(ul)
-        }
-    }
-    usersDiv.appendChild(scrollDiv)
 }
 
 async function deleteUserFromCourse() {
@@ -469,8 +481,10 @@ window.addEventListener("load", () => {
     else {
         let addContentButton = $('addContentButton');
         let settingsButton = $('settingsButton');
+        let usersButton = $('openModalUsers')
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
+        usersButton.href += `?id=${courseId}`;
 
         getCourseContent(courseId);
     }
