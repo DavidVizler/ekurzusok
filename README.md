@@ -9,6 +9,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Felhasználó kilépése a kurzusból (önmagától)
 - [x] Frontend javítások (görgethetőség, reszponzivtás)
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
 - [x] Beadott munkák megtekintése
 - [x] Beadandóhoz feltöltött fájlok lekérdezése
 - [ ] Felhasználó tanári státuszának módosítása a kurzusban
