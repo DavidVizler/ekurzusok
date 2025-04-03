@@ -165,6 +165,7 @@ window.addEventListener('load',async()=>{
             GetContentFiles()
             if (adatok.role == 1) {
                 getSubmissionData()
+                checkDeadline()
             }
         }
         else if (request.status == 401) {
@@ -509,6 +510,15 @@ async function deleteFile(contentId, fileId) {
     }
     catch (e) {
         console.error(e);
+    }
+}
+
+function checkDeadline() {
+    if (adatok.deadline < getCurrentTime()) {
+        $("uploadExerciseButton").disabled = true;
+        $("uploadExerciseButton").classList.add("disabledButton")
+        $("uploadFileButton").disabled = true;
+        $("uploadFileButton").classList.add("disabledButton")
     }
 }
 
