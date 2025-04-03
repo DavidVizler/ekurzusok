@@ -26,6 +26,10 @@ body{
     margin: 15px;
 }
 
+.backToMainPageIcon svg:hover{
+    cursor: pointer;
+}
+
 .links {
     color: black;
 	border-bottom: 1px solid #0003;
@@ -68,7 +72,6 @@ body{
 }
 
 .links > a:nth-of-type(1):hover ~ .line { --index: 1; }
-.links > a:nth-of-type(2):hover ~ .line { --index: 2; }
 
 #usersList.active, #modifyRole.active {
     display: flex;
@@ -106,6 +109,7 @@ li {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
+    padding-right: 0 !important;
     width: 100%;
     box-sizing: border-box; 
     margin-bottom: 5px;
@@ -114,13 +118,23 @@ li {
     align-items: center;
 }
 
-li .text {
-    flex-grow: 1;
-    text-align: center;
+li .svg-container {
+    display: flex;
+    gap: 5px;
+    width: auto;
+    margin-left: auto; 
 }
 
 li svg {
-    margin-left: 10px;
     width: 35px;
     height: 35px;
+    margin-left: 5px;
+}
+
+li svg:hover {
+    cursor: pointer;
+}
+
+.deleteBtn{
+    margin-right: 5px;
 }
