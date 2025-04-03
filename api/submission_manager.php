@@ -18,7 +18,7 @@ function SubmitSubmission() {
     $content_id = $data["content_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
-    $sql_statement = "SELECT m.role, c.course_id FROM memberships m
+    $sql_statement = "SELECT m.role, c.course_id, c.deadline FROM memberships m
     INNER JOIN content c ON m.course_id = c.course_id
     WHERE c.content_id = ? AND m.user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
@@ -35,6 +35,16 @@ function SubmitSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tanuló a kurzusban"
+        ], 403);
+        return;
+    }
+
+    $deadline = $membership_data[0]["deadline"];
+    $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
+    if ($now->format('Y-m-d H:i:s') > $deadline) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Határidő után nem lehet beadni munkát"
         ], 403);
         return;
     }
