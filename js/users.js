@@ -2,6 +2,29 @@ let pageLink = document.getElementById("backtoPage").addEventListener("click", (
     history.back()
 })
 
+function showAlert(uzenet) {
+    let alertDiv = document.querySelector('.alertDiv')
+    alertDiv.style.display = "flex"
+
+    let modal_content = document.createElement("div")
+    modal_content.classList.add("alert-modal-content")
+    alertDiv.appendChild(modal_content)
+
+    let message = document.createElement("p")
+    modal_content.appendChild(message)
+    message.innerHTML = uzenet
+
+    let ok_button = document.createElement("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "OK"
+    ok_button.id = "ok_button"
+
+    ok_button.addEventListener("click", () => {
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+}
+
 let userData;
 async function getCardsData() {
     let params = new URLSearchParams(document.location.search);
@@ -42,6 +65,7 @@ async function getCourseUsers() {
             console.log(userslist)
             await getCardsData()
             showCourseUsers(userslist)
+            viewByRole()
         } else {
             throw valasz.status
         }
@@ -56,23 +80,29 @@ function viewByRole() {
     let deleteBtns = document.querySelectorAll('.deleteBtn');
     let modRoleBtns = document.querySelectorAll('.modeRoleBtn');
 
-    deleteBtns.forEach(btn => {
-        btn.style.display = "none";
-    });
-    modRoleBtns.forEach(btn => {
-        btn.style.display = "none"
-    })
-
-    if (userData.role == 3) {
+    if (deleteBtns.length > 0) {
         deleteBtns.forEach(btn => {
-            btn.style.display = "flex";
+            btn.style.display = "none";
         });
-        navbar.style.display = "block"
+
+        if (userData.role == 3) {
+            deleteBtns.forEach(btn => {
+                btn.style.display = "flex";
+            });
+            navbar.style.display = "block";
+        }
+    }
+
+    if (modRoleBtns.length > 0) {
         modRoleBtns.forEach(btn => {
-            btn.style.display = "flex";
+            btn.style.display = "none"
+        })
+        modRoleBtns.forEach(btn => {
+            if (userData.role == 3) {
+                btn.style.display = "flex";
+            }
         });
     }
-    
 }
 
 async function showCourseUsers(userslist) {
@@ -178,11 +208,12 @@ async function deleteUserFromCourse(user_id) {
         if (keres.ok) {
             let response = await keres.json()
             if (response.sikeres == true) {
+                showAlert("Sikeres eltávolítás!")
                 location.reload()
             }
         } else {
             let response = await keres.json()
-            alert(response.uzenet)
+            showAlert(response.uzenet)
         }
     } catch (error) {
         console.log(error)
@@ -211,11 +242,12 @@ async function modifyRole(user_id) {
         if (keres.ok) {
             let response = await keres.json()
             if (response.sikeres == true) {
+                showAlert("Sikeres módosítás!")
                 location.reload()
             }
         } else {
             let response = await keres.json()
-            alert(response.uzenet)
+            showAlert(response.uzenet)
         }
     } catch (error) {
         console.log(error)
