@@ -234,6 +234,17 @@ function ChangeMemberTeacherRole() {
         return;
     }
 
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived_check = DataQuery($sql_statement, "i", [$course_id]);
+
+    if ($archived_check[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
     $sql_statement = "SELECT role FROM memberships WHERE user_id = ? AND course_id = ?;";
     $member_data = DataQuery($sql_statement, "ii", [$target_user_id, $course_id]);
 

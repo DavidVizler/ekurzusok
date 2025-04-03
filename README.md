@@ -9,6 +9,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Felhasználó kilépése a kurzusból (önmagától)
 - [x] Frontend javítások (görgethetőség, reszponzivtás)
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
 - [x] Beadott munkák megtekintése
 - [x] Beadandóhoz feltöltött fájlok lekérdezése
 - [ ] Felhasználó tanári státuszának módosítása a kurzusban
@@ -21,7 +22,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
 **Backend**
 - [x] Felhasználó fiók törlése
-- [ ] Műveletek letiltása az archivált kurzusokban
+- [x] Műveletek letiltása az archivált kurzusokban
 
 **Mindkettő**
 - [x] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
@@ -32,16 +33,16 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 **Egyéb**
 - [x] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
 - [ ] Dokumentáció befejezése
-- [ ] Projekt beadható és tesztelhető formában
+- [x] Projekt beadható és tesztelhető formában
 
 ## Fájlfeltöltéshez szükséges teendők
 **php.ini**-ben pár paramétert át kell állítani.\
 A fájl itt található Windows-on: `C:\xampp\php\php.ini`
 ```
 file_uploads = On
-upload_max_filesize = "30M"
+upload_max_filesize = 30M
 max_file_uploads = 10
-post_max_size = "300M"
+post_max_size = 300M
 ```
 
 ## Dokumentáció
@@ -64,7 +65,7 @@ A `file_id` a fájl ID-ja, az `attached_to` azt jelenti, hogy mihez van csatolva
 
 ![Adatbázis relációs modell](./db/db.png)
 
-A db mappában megtalálható az `ekurzusok_ures.sql`, ami az üres adatbázis és az `ekurzusok_tesztadatokkal.sql`, ami tartalmaz 12.754 felhasználót, 4632 kurzust, 138.984 tagságot és 3 admin fiókot.
+A db mappában megtalálható az `ekurzusok_ures.sql`, ami az üres adatbázis és az `ekurzusok_tesztadatokkal.sql`, ami tartalmaz 12.754 felhasználót, 4632 kurzust, 138.984 tagságot és egy admin fiókot.
 
 Az adatgenerátor a `DataGenerator.zip` fájlban található. Kicsomagolás után a mappán belül a `dotnet run` paranccsal lehet futtatni. A program 3 CSV fájlt generál: `user.csv`, `courses.csv` és `memberships.csv`, amelyeket be lehet importálni az **üres** SQL adatbázisba. Windows-on a `DataGenerator\bin\Debug\net8.0` mappába teszi a fájlokat, Linuxon közvetlenül a `DataGenerator` gyökérkönyvtárba. **Importáláskor be kell állítani phpmyAdmin-ban, hogy az első sort (fejlécet) hagyja ki és hogy az elválsztó karakter pontosvessző legyen!**
 

@@ -162,7 +162,7 @@ function PublishCourseContent() {
     $user_id = $_SESSION["user_id"];
 
     // A felhasználóé-e a tartalom
-    $sql_statement = "SELECT user_id, published FROM content WHERE content_id = ?";
+    $sql_statement = "SELECT user_id, published, course_id FROM content WHERE content_id = ?";
     $content_data = DataQuery($sql_statement, "i", [$content_id]);
 
     if (count($content_data) == 0) {
@@ -177,6 +177,19 @@ function PublishCourseContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $course_id = $content_data[0]["course_id"];
+
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived_check = DataQuery($sql_statement, "i", [$course_id]);
+
+    if ($archived_check[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
         ], 403);
         return;
     }
@@ -229,7 +242,7 @@ function ModifyCourseContentData() {
     $deadline = $data["deadline"];
 
     // Tartalom adatok lekérdezése
-    $sql_statement = "SELECT title, description, task, deadline, max_points 
+    $sql_statement = "SELECT title, description, task, deadline, max_points, course_id
     FROM content WHERE content_id = ? AND user_id = ?;";
     $content_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
 
@@ -237,6 +250,19 @@ function ModifyCourseContentData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $course_id = $content_data[0]["course_id"];
+
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived_check = DataQuery($sql_statement, "i", [$course_id]);
+
+    if ($archived_check[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
         ], 403);
         return;
     }
@@ -349,7 +375,7 @@ function AttachFileToContent() {
     $user_id = $_SESSION["user_id"];
 
     // Ellenőrzés, hogy a felhaználóé-e a tartalom
-    $sql_statement = "SELECT user_id FROM content WHERE content_id = ?;";
+    $sql_statement = "SELECT user_id, course_id FROM content WHERE content_id = ?;";
     $content_data = DataQuery($sql_statement, "i", [$content_id]);
 
     if (count($content_data) == 0) {
@@ -364,6 +390,19 @@ function AttachFileToContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $course_id = $content_data[0]["course_id"];
+
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived_check = DataQuery($sql_statement, "i", [$course_id]);
+
+    if ($archived_check[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
         ], 403);
         return;
     }
