@@ -61,13 +61,13 @@ class API {
         return await this.fetch('api/course/create', {
             name,
             desc,
-            design
+            design: parseInt(design)
         });
     }
 
     static async courseModifyData(id, name, desc, design) {
         return await this.fetch('api/course/modify-data', {
-            id,
+            id: parseInt(id),
             name,
             desc,
             design
@@ -75,11 +75,15 @@ class API {
     }
 
     static async deleteCourse(id) {
-        return await this.fetch('api/course/delete', { id });
+        return await this.fetch('api/course/delete', {
+            id: parseInt(id)
+        });
     }
 
     static async archiveCourse(id) {
-        return await this.fetch('api/course/archive', { id });
+        return await this.fetch('api/course/archive', {
+            id: parseInt(id)
+        });
     }
 
     static async joinCourse(code) {
@@ -88,19 +92,21 @@ class API {
 
     static async kickMember(user_id, course_id) {
         return await this.fetch('api/member/remove', {
-            user_id,
-            course_id
+            user_id: parseInt(user_id),
+            course_id: parseInt(course_id)
         });
     }
 
     static async leaveCourse(course_id) {
-        return await this.fetch('api/member/leave', { course_id });
+        return await this.fetch('api/member/leave', {
+            course_id: parseInt(course_id)
+        });
     }
 
     static async makeTeacher(user_id, course_id) {
         return await this.fetch('api/member/teacher', {
-            user_id,
-            course_id
+            user_id: parseInt(user_id),
+            course_id: parseInt(course_id)
         });
     }
 
@@ -112,55 +118,63 @@ class API {
     // }
 
     static async publishContent(content_id) {
-        return await this.fetch('api/content/publish', { content_id });
+        return await this.fetch('api/content/publish', {
+            content_id: parseInt(content_id)
+        });
     }
 
     // TODO: upload files
 
     static async contentRemoveFile(content_id, file_id) {
         return await this.fetch('api/content/remove-file', {
-            content_id,
-            file_id
+            content_id: parseInt(content_id),
+            file_id: parseInt(file_id)
         });
     }
 
     static async contentModifyData(content_id, title, desc, task, maxpoint, deadline) {
         return await this.fetch('api/content/modify-data', {
-            content_id,
+            content_id: parseInt(content_id),
             title,
             desc,
             task,
-            maxpoint,
+            maxpoint: parseInt(maxpoint),
             deadline
         });
     }
 
     static async deleteContent(content_id) {
-        return await this.fetch('api/content/delete', { content_id });
+        return await this.fetch('api/content/delete', {
+            content_id: parseInt(content_id)
+        });
     }
 
     // TODO: submission upload file
 
     static async submissionRemoveFile(content_id, file_id) {
         return await this.fetch('api/submission/remove-file', {
-            content_id,
-            file_id
+            content_id: parseInt(content_id),
+            file_id: parseInt(file_id)
         });
     }
 
     static async submitSubmission(content_id) {
-        return await this.fetch('api/submission/submit', { content_id });
+        return await this.fetch('api/submission/submit', { 
+            content_id: parseInt(content_id)
+        });
     }
 
     static async rateSubmission(content_id, points) {
         return await this.fetch('api/submission/rate', {
-            content_id,
-            points
+            content_id: parseInt(content_id),
+            points: parseInt(points)
         });
     }
 
     static async getCourseMembers(course_id) {
-        return await this.fetch('api/query/course-members', { course_id });
+        return await this.fetch('api/query/course-members', {
+            course_id: parseInt(course_id)
+        });
     }
 
     static async getUserCourses() {
@@ -168,7 +182,9 @@ class API {
     }
 
     static async getCourseData(course_id) {
-        return await this.fetch('api/query/course-data', { course_id });
+        return await this.fetch('api/query/course-data', {
+            course_id: parseInt(course_id)
+        });
     }
 
     static async getUserData() {
@@ -176,11 +192,15 @@ class API {
     }
 
     static async getCourseContent(course_id) {
-        return await this.fetch('api/query/course-content', { course_id });
+        return await this.fetch('api/query/course-content', {
+            course_id: parseInt(course_id)
+        });
     }
 
     static async getContentData(content_id) {
-        return await this.fetch('api/query/content-data', { content_id });
+        return await this.fetch('api/query/content-data', {
+            content_id: parseInt(content_id)
+        });
     }
 
     static async getDeadlineTasks() {
@@ -188,23 +208,33 @@ class API {
     }
 
     static async getContentFiles(content_id) {
-        return await this.fetch('api/query/content-files', { content_id });
+        return await this.fetch('api/query/content-files', {
+            content_id: parseInt(content_id)
+        });
     }
 
     static async getOwnSubmission(content_id) {
-        return await this.fetch('api/query/own-submission', { content_id });
+        return await this.fetch('api/query/own-submission', {
+            content_id: parseInt(content_id)
+        });
     }
 
     static async getSubmissions(content_id) {
-        return await this.fetch('api/query/submissions', { content_id });
+        return await this.fetch('api/query/submissions', {
+            content_id: parseInt(content_id)
+        });
     }
 
     static async getSubmissionCount(content_id) {
-        return await this.fetch('api/query/submission-count', { content_id });
+        return await this.fetch('api/query/submission-count', {
+            content_id: parseInt(content_id)
+        });
     }
 
     static async getSubmissionFiles(submission_id) {
-        return await this.fetch('api/query/submission-files', { submission_id });
+        return await this.fetch('api/query/submission-files', {
+            submission_id: parseInt(submission_id)
+        });
     }
 }
 

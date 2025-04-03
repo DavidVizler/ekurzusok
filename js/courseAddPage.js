@@ -93,19 +93,7 @@ async function sendNewCourseData() {
     let desc = $("Leiras").value;
     let courseDesgin = parseInt($("DesignSelect").value);
 
-    let newCourseData = {
-        "name": name,
-        "desc": desc,
-        "design": courseDesgin
-    };
-
-    let request = await fetch("./api/course/create", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCourseData)
-    });
+    let [request, response] = await API.createCourse(name, desc, courseDesgin);
 
     if (request.ok) {
         window.open("./kurzusok.html", "_self");

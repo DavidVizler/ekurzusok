@@ -9,17 +9,18 @@ let courseId = getUrlEndpoint();
 
 async function fillDeadlineList() {
     try {
-        let response = await fetch("../api/query/course-content", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ course_id: parseInt(courseId) })
-        });
+        // let response = await fetch("../api/query/course-content", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ course_id: parseInt(courseId) })
+        // });
+        let [response, result] = await API.getCourseContent(courseId);
 
         let div = document.querySelector('.deadlineExercises');
 
-        let result = await response.json();
+        // let result = await response.json();
         result = result.filter(x => x.deadline != null);
 
         if (result.length > 0) {
