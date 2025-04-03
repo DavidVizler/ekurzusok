@@ -8,6 +8,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Kurzus törlése
 - [x] Felhasználó kilépése a kurzusból (önmagától)
 - [x] Frontend javítások (görgethetőség, reszponzivtás)
+- [ ] Jogosultságkezelés
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
 - [x] Beadott munkák megtekintése
@@ -34,6 +35,9 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
 - [ ] Dokumentáció befejezése
 - [x] Projekt beadható és tesztelhető formában
+
+## Jogosultságok
+![](./db/jogosultsagok.png)
 
 ## Fájlfeltöltéshez szükséges teendők
 **php.ini**-ben pár paramétert át kell állítani.\
