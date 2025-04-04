@@ -2,29 +2,6 @@ let pageLink = document.getElementById("backtoPage").addEventListener("click", (
     history.back()
 })
 
-function showAlert(uzenet) {
-    let alertDiv = document.querySelector('.alertDiv')
-    alertDiv.style.display = "flex"
-
-    let modal_content = document.createElement("div")
-    modal_content.classList.add("alert-modal-content")
-    alertDiv.appendChild(modal_content)
-
-    let message = document.createElement("p")
-    modal_content.appendChild(message)
-    message.innerHTML = uzenet
-
-    let ok_button = document.createElement("button")
-    modal_content.appendChild(ok_button)
-    ok_button.innerHTML = "OK"
-    ok_button.id = "ok_button"
-
-    ok_button.addEventListener("click", () => {
-        alertDiv.style.display = "none"
-        alertDiv.innerHTML = ""
-    })
-}
-
 let userData;
 async function getCardsData() {
     let params = new URLSearchParams(document.location.search);
@@ -76,7 +53,6 @@ async function getCourseUsers() {
 }
 
 function viewByRole() {
-    let navbar = document.getElementById("contentNavbar");
     let deleteBtns = document.querySelectorAll('.deleteBtn');
     let modRoleBtns = document.querySelectorAll('.modeRoleBtn');
 
@@ -89,7 +65,6 @@ function viewByRole() {
             deleteBtns.forEach(btn => {
                 btn.style.display = "flex";
             });
-            navbar.style.display = "block";
         }
     }
 
@@ -101,6 +76,15 @@ function viewByRole() {
             if (userData.role == 3) {
                 btn.style.display = "flex";
             }
+        });
+    }
+
+    if(userData.archived == 1){
+        modRoleBtns.forEach(btn => {
+            btn.style.display = "none"
+        })
+        deleteBtns.forEach(btn => {
+            btn.style.display = "none";
         });
     }
 }
@@ -129,7 +113,6 @@ async function showCourseUsers(userslist) {
         const svgContainer = document.createElement('div');
         svgContainer.classList.add('svg-container');
 
-        //deleteBtn
         let deleteBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         deleteBtn.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         deleteBtn.setAttribute('fill', 'none');
@@ -146,7 +129,6 @@ async function showCourseUsers(userslist) {
         path.setAttribute('d','M6 18 18 6M6 6l12 12');
         deleteBtn.appendChild(path)
 
-        //modRoleBtn
         let modRoleBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         modRoleBtn.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         modRoleBtn.setAttribute('fill', 'none');
@@ -159,12 +141,25 @@ async function showCourseUsers(userslist) {
         let path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path2.setAttribute('stroke-linecap', 'round');
         path2.setAttribute('stroke-linejoin', 'round');
-        path2.setAttribute('d','m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125');
+        path2.setAttribute('d','m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10');
         modRoleBtn.appendChild(path2)
+
+        if (user.role == 3) {
+            tanarUl.prepend(li);
+        }
+
+        if(user.role == 2){
+            modRoleBtn.style.marginRight = "10px"
+            svgContainer.appendChild(modRoleBtn)
+            li.appendChild(svgContainer)
+            if (tanarUl.lastChild) {
+                tanarUl.lastChild.insertAdjacentElement("afterend", li);
+            } else {
+                tanarUl.appendChild(li);
+            }
+        }
         
-        if (user.role == 2 || user.role == 3) {
-            tanarUl.appendChild(li);
-        } else {
+        if(user.role == 1) {
             svgContainer.appendChild(modRoleBtn)
             svgContainer.appendChild(deleteBtn)
             li.appendChild(svgContainer)
@@ -208,12 +203,13 @@ async function deleteUserFromCourse(user_id) {
         if (keres.ok) {
             let response = await keres.json()
             if (response.sikeres == true) {
-                showAlert("Sikeres eltávolítás!")
-                location.reload()
+                setTimeout(()=>{
+                    location.reload()
+                },500)
             }
         } else {
             let response = await keres.json()
-            showAlert(response.uzenet)
+            console.log(response)
         }
     } catch (error) {
         console.log(error)
@@ -228,6 +224,7 @@ async function modifyRole(user_id) {
         alert("Nincsen kiválasztva személy!");
         return
     }
+
     try {
         let data = {
             "user_id": parseInt(user_id),
@@ -242,12 +239,13 @@ async function modifyRole(user_id) {
         if (keres.ok) {
             let response = await keres.json()
             if (response.sikeres == true) {
-                showAlert("Sikeres módosítás!")
-                location.reload()
+                setTimeout(()=>{
+                    location.reload()
+                },500)
             }
         } else {
             let response = await keres.json()
-            showAlert(response.uzenet)
+            console.log(response)
         }
     } catch (error) {
         console.log(error)
