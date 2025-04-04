@@ -1,10 +1,14 @@
 Options -Indexes
 RewriteEngine on
 
-RewriteCond %(REQUEST_FILENAME) !-f
-RewriteCond %(REQUEST_FILENAME) !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule kurzus/api/(.*)$ api/$1 [L]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule kurzus/(\d*) kurzus/index.html [L]
+RewriteRule kurzus/(\d+) kurzus/index.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) $1 [L,R=404]
