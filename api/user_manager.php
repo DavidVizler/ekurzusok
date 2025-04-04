@@ -33,9 +33,8 @@ function Login() {
         return;
     }
 
-    // Session elindítása
-    session_start();
-    $_SESSION["user_id"] = $user_data[0]["user_id"];
+    // Süti beállítása 10 évre
+    setcookie("user_id", $user_data[0]["user_id"], time() + (10 * 365 * 24 * 60 * 60), "/", "", true, true);
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
@@ -105,7 +104,6 @@ function Signup() {
 }
 
 function Logout() {
-    session_start();
     if (!LoginCheck()) {
         SendResponse([
             "sikeres" => false,
@@ -113,8 +111,8 @@ function Logout() {
         ], 401);
         return;
     }
-    session_unset();
-    session_destroy();
+
+    setcookie("user_id", "", time() - 3600, "/");
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Felhasználó kijelentkezve"

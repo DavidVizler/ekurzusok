@@ -14,7 +14,7 @@ function SubmitSubmission() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $content_id = $data["content_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
@@ -118,7 +118,7 @@ function AttachSubmissionFiles() {
     }
 
     $content_id = $_POST["content_id"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
     $sql_statement = "SELECT m.role, c.course_id FROM memberships m
@@ -202,7 +202,7 @@ function RemoveFileFromSubmission() {
     global $data;
     $file_id = $data["file_id"];
     $content_id = $data["content_id"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
 
     // Ellenőrzés, hogy van-e beadandó
     $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
@@ -292,7 +292,7 @@ function RateSubmission() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $submission_id = $data["submission_id"];
     $points = $data["points"];
 

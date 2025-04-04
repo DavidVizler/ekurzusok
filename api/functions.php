@@ -232,8 +232,7 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
 
 // Bejelentkezés ellenőrzése
 function LoginCheck($send_response = true) {
-    session_start();
-    if (!isset($_SESSION["user_id"])) {
+    if (!isset($_COOKIE["user_id"])) {
         if ($send_response) {
             SendResponse([
                 "sikeres" => false,

@@ -28,7 +28,7 @@ function CreateCourse() {
     $name = $data["name"];
     $design = $data["design"];
     $desc = isset($data["desc"]) ? $data["desc"] : NULL;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
 
     $sql_statement = "SELECT code FROM courses";
     $used_codes = DataQuery($sql_statement);
@@ -86,7 +86,7 @@ function ModifyCourseData() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $course_id = $data["id"];
     $name = $data["name"];
     $description = $data["desc"] ;
@@ -189,7 +189,7 @@ function ArchiveCourse() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $course_id = $data["id"];
 
     // kurzus adatok lekérdezése
@@ -247,7 +247,7 @@ function DeleteCourse() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $course_id = $data["id"];
 
     $sql_statement = "SELECT * FROM courses c
