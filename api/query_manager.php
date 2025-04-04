@@ -373,7 +373,7 @@ function SubmissionsQuery() {
     $sql_statement = "SELECT s.submission_id, u.lastname, u.firstname, s.submitted, COUNT(f.file_id) AS files_count, s.rating, c.max_points FROM submissions s
     INNER JOIN content c ON s.content_id = c.content_id
     INNER JOIN users u ON s.user_id = u.user_id
-    INNER JOIN files f ON s.submission_id = f.submission_id
+    LEFT JOIN files f ON s.submission_id = f.submission_id
     WHERE c.content_id = ? AND s.submitted IS NOT NULL GROUP BY u.user_id;";
     $submissions = DataQuery($sql_statement, "i", [$content_id]);
 

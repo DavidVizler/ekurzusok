@@ -60,11 +60,14 @@ function showSubedData(adatok) {
 
         datas.innerHTML = "Beadva: " + adat.submitted + "<br>"
         datas.innerHTML += "Beadott fájlok száma: " + adat.files_count + "<br>"
-        datas.innerHTML += "Fájlok: "
-
-        let filesList = create('div');
-        filesList.id = `filesList-${adat.submission_id}`;
-        datas.appendChild(filesList);
+        
+        if (adat.files_count > 0) {
+            datas.innerHTML += "Fájlok: "
+            
+            let filesList = create('div');
+            filesList.id = `filesList-${adat.submission_id}`;
+            datas.appendChild(filesList);
+        }
 
         let hiddenSubId = create('input');
         hiddenSubId.type = "number"
@@ -154,6 +157,10 @@ function showFiles(files, submissionId) {
     
     if (ki.querySelectorAll(".fileDiv").length > 0) {
         console.log("Fájlok már megvannak jelenítve.");
+        return;
+    }
+
+    if (files.length == 0) {
         return;
     }
 

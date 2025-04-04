@@ -141,7 +141,7 @@ window.addEventListener('load',async()=>{
                 checkDeadline()
             }
         }
-        else if (response.status == 401) {
+        else if (response.status == 401 || response.status == 403) {
             window.location.href = './login.html';
         }
     } catch (error) {
