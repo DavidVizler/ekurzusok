@@ -1,6 +1,6 @@
 async function getUserData() {
     try {
-        let [response, userData] = API.getUserData();
+        let [response, userData] = await API.getUserData();
         if(response.ok){
             loadUserDataIn(userData)
         }
