@@ -47,6 +47,7 @@ function resultModal(result){
         alertDiv.style.display = "none"
         alertDiv.innerHTML = ""
     })
+    ok_button.focus()
 }
 
 function confirmationModal(){
