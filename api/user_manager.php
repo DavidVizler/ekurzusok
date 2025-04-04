@@ -5,14 +5,14 @@ function Login() {
         return;
     }
 
-    if (!PostDataCheck(["email", "password"], "ss")) {
+    if (!PostDataCheck(["email", "password", "keep_login"], "ssb")) {
         return;
     }
 
     global $data;
     $email = $data["email"];
     $password = $data["password"];
-    //$keep_login = $data["keep_login"];
+    $keep_login = $data["keep_login"];
 
     // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
     $sql_statement = "SELECT user_id, password FROM users WHERE email = ?;";
@@ -34,11 +34,10 @@ function Login() {
         return;
     }
 
-    //$cookie_time = $keep_login ? (10 * 365 * 24 * 60 * 60) : 0;
-    $keep_login = 10 * 365 * 24 * 60 * 60; // 10 év
+    $cookie_time = $keep_login ? (10 * 365 * 24 * 60 * 60) : 0;
 
     // Süti beállítása
-    setcookie("user_id", $user_data[0]["user_id"], time() + $keep_login, "/", "", true, true);
+    setcookie("user_id", $user_data[0]["user_id"], time() + $cookie_time, "/", "", true, true);
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
@@ -93,8 +92,7 @@ function Signup() {
     if ($result) { 
         $sql_statement = "SELECT user_id FROM users WHERE email = ?;";
         $user_id = DataQuery($sql_statement, "s", [$email]);
-        session_start();
-        $_SESSION["user_id"] = $user_id[0]["user_id"];
+        setcookie("user_id", $user_id, time() + (10 * 365 * 24 * 60 * 60), "/", "", true, true);
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Felhasználó regisztrálva és bejelentkezve"
