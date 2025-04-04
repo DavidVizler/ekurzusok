@@ -24,14 +24,15 @@ function NavBar($rows = null) {
     }
     echo <<<HTML
         <div id="navbar-container">
-            <ul id="navbar">
-                <li id="navitem-logo"><span id="nav-logo">eKurzusok Admin Felület</span></li>
-                <li id="navitem-logo-side"></li>
-                <li class="navitem" id="nav-home"><a href=".">Főoldal</a></li>
-                <li class="navitem" id="nav-users"><a href="users?page=1&rows={$rows}">Felhasználók</a></li>
-                <li class="navitem" id="nav-courses"><a href="courses?page=1&rows={$rows}">Kurzusok</a></li>
-                <li class="navitem"><form method="post"><input id="logout-button" type="submit" value="Kijelentkezés" name="logout"></form></li>
-            </ul>
+            <div id="navbar">
+                <div id="navitem-logo"><span id="nav-logo">eKurzusok</span></div>
+                    <div id="navbar-center">
+                        <div class="navitem" id="nav-home"><a href=".">Főoldal</a></div>
+                        <div class="navitem" id="nav-users"><a href="users?page=1&rows={$rows}">Felhasználók</a></div>
+                        <div class="navitem" id="nav-courses"><a href="courses?page=1&rows={$rows}">Kurzusok</a></div>
+                    </div>
+                <div class="navitem" id="logout-container"><form method="post"><input id="logout-button" type="submit" value="Kijelentkezés" name="logout"></form></div>
+            </div>
         </div>
     HTML;
 }
