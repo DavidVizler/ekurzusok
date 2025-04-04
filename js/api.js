@@ -37,6 +37,10 @@ class API {
         });
     }
 
+    static async logout() {
+        return await this.fetch('api/user/logout');
+    }
+
     static async modifyUserData(email, firstname, lastname, password) {
         return await this.fetch('api/user/modify-data', {
             email,
@@ -138,7 +142,7 @@ class API {
             title,
             desc,
             task,
-            maxpoint: parseInt(maxpoint),
+            maxpoint: maxpoint != null ? parseInt(maxpoint) : null,
             deadline
         });
     }
@@ -164,9 +168,9 @@ class API {
         });
     }
 
-    static async rateSubmission(content_id, points) {
+    static async rateSubmission(submission_id, points) {
         return await this.fetch('api/submission/rate', {
-            content_id: parseInt(content_id),
+            submission_id: parseInt(submission_id),
             points: parseInt(points)
         });
     }

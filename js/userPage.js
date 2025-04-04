@@ -1,8 +1,7 @@
 async function getUserData() {
     try {
-        let response = await fetch('./api/query/user-data')
+        let [response, userData] = API.getUserData();
         if(response.ok){
-            let userData = await response.json()
             loadUserDataIn(userData)
         }
         else if (response.status == 401) {

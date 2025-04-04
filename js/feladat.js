@@ -16,22 +16,13 @@ $("backToPreviousPage").addEventListener("click",()=>{
 
 async function getSubmissionData() {
     let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
+    let contentId = urlParams.get('id');
     try {
-        let request = await fetch("api/query/own-submission", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "content_id": parseInt(tartalomId)
-            })
-        });
-        if (request.ok) {
-            let response = await request.json();
-            submissionLoad(response);
+        let [response, result] = await API.getOwnSubmission(contentId);
+        if (response.ok) {
+            submissionLoad(result);
         } else {
-            throw request.status;
+            throw response.status;
         }
     } catch (error) {
         console.log(error);
@@ -55,20 +46,11 @@ function submissionLoad(submission_data) {
 
 async function getSubmissionFiles(submission_id) {
     try {
-        let request = await fetch("api/query/submission-files", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "submission_id": parseInt(submission_id)
-            })
-        });
-        if (request.ok) {
-            let response = await request.json();
-            submissionFilesLoad(response, submission_id);
+        let [response, result] = await API.getSubmissionFiles(submission_id);
+        if (response.ok) {
+            submissionFilesLoad(result, submission_id);
         } else {
-            throw request.status;
+            throw response.status;
         }
     } catch (error) {
         console.log(error);
@@ -147,20 +129,11 @@ function submissionFilesLoad(files, submission_id) {
 let adatok;
 window.addEventListener('load',async()=>{
     let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
-    let reqData = {
-        "content_id" : parseInt(tartalomId)
-    }
+    let contentId = urlParams.get('id');
     try {
-        let request = await fetch("api/query/content-data",{
-            method : "POST",
-            headers : {
-                "Content-Type" : "application/json"
-            },
-            body : JSON.stringify(reqData)
-        })
-        if(request.ok){
-            adatok = await request.json()
+        let [response, result] = await API.getContentData(contentId);
+        if(response.ok) {
+            adatok = result;
             showContentData()
             GetContentFiles()
             if (adatok.role == 1) {
@@ -168,7 +141,7 @@ window.addEventListener('load',async()=>{
                 checkDeadline()
             }
         }
-        else if (request.status == 401) {
+        else if (response.status == 401) {
             window.location.href = './login.html';
         }
     } catch (error) {
@@ -253,29 +226,16 @@ async function ModifyData() {
     let limitDate = convertDate($("deadline-input").value);
     let description = $("description-input").value
     let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
-    let reqData = {
-        "content_id" : parseInt(tartalomId),
-        "title" : title,
-        "desc" : description,
-        "task" : true,
-        "maxpoint" : parseInt(max_points),
-        "deadline" : limitDate
-    }
+    let contentId = urlParams.get('id');
     try {
-        let request = await fetch("api/content/modify-data",{
-            method : "POST",
-            headers : {"Content-Type" : "application/json"},
-            body : JSON.stringify(reqData)
-        })
-        let response = await request.json()
-        if(response.sikeres == true){
+        let [response, result] = await API.contentModifyData(contentId, title, description, true, max_points, limitDate);
+        if(result.sikeres == true){
             setTimeout(function(){
                 location.reload()
             }, 100)
         }
         else{
-            showAlert(response.uzenet)
+            showAlert(result.uzenet)
         }
     } catch (error) {
         console.log(error)
@@ -325,16 +285,11 @@ function confirmationModal(){
 
 async function DeleteContent() {
     let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
+    let contentId = urlParams.get('id');
     try {
-        let request = await fetch('api/content/delete',{
-            method : 'POST',
-            headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify({"content_id" : parseInt(tartalomId)})
-        })
-        let response = await request.json()
-        if(response.sikeres == false){
-            showAlert(response.uzenet)
+        let [response, result] = await API.deleteContent(contentId);
+        if(result.sikeres == false){
+            showAlert(result.uzenet)
         }
         else{
             window.location.href = document.referrer;
@@ -379,19 +334,12 @@ async function submitFiles() {
 
 async function submitSubmission() {
     let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
+    let contentId = urlParams.get('id');
 
     try {
-        let request = await fetch("api/submission/submit", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({"content_id": parseInt(tartalomId)})
-        });
-        let response = await request.json()
-        if(response.sikeres == false){
-            showResultModal(response.uzenet)    
+        let [response, result] = await API.submitSubmission(contentId);
+        if(result.sikeres == false){
+            showResultModal(result.uzenet)    
         } else {
             window.location.reload();
         }
@@ -402,20 +350,12 @@ async function submitSubmission() {
 
 async function GetContentFiles() {
     let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
-    let reqData = {
-        "content_id" : parseInt(tartalomId)
-    }
+    let contentId = urlParams.get('id');
     try {
-        let request = await fetch('api/query/content-files',{
-            method : 'POST',
-            headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify(reqData)
-        })
-        if(request.ok){
-            let response = await request.json()
-            console.log(response)
-            showFiles(response)
+        let [response, result] = await API.getContentFiles(contentId);
+        if(response.ok){
+            console.log(result)
+            showFiles(result)
         }
     } catch (error) {
         console.log(error)
@@ -499,13 +439,7 @@ function navigateToSubmissions(){
 
 async function deleteFile(contentId, fileId) {
     try {
-        let response = await fetch('api/content/remove-file', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ content_id: parseInt(contentId), file_id: fileId })
-        });
+        let [response, result] = await API.contentRemoveFile(contentId, fileId);
         GetContentFiles();
     }
     catch (e) {

@@ -7,14 +7,9 @@ async function getCardsData() {
     let params = new URLSearchParams(document.location.search);
     let courseId = params.get("id")
     try {
-        let eredmeny = await fetch("../api/query/course-data", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }, body: JSON.stringify({ course_id: parseInt(courseId) })
-        });
-        if (eredmeny.ok) {
-            cardData = await eredmeny.json()
+        let [response, result] = await API.getCourseData(courseId);
+        if (response.ok) {
+            cardData = result
             console.log(cardData)
         }
     } catch (error) {
@@ -26,22 +21,12 @@ async function getCourseUsers() {
     let params = new URLSearchParams(document.location.search);
     let courseid = params.get("id")
     try {
-        let data = {
-            course_id: parseInt(courseid)
-        }
-        let valasz = await fetch('../api/query/course-members', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        if (valasz.ok) {
-            let userslist = await valasz.json();
-            console.log(userslist)
+        let [response, userList] = await API.getCourseMembers(courseid);
+        if (response.ok) {
+            console.log(userList)
             viewByRole()
         } else {
-            throw valasz.status
+            throw response.status
         }
 
     } catch (e) {

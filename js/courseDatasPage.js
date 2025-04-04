@@ -9,18 +9,10 @@ let courseId = getUrlEndpoint();
 
 async function fillDeadlineList() {
     try {
-        // let response = await fetch("../api/query/course-content", {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ course_id: parseInt(courseId) })
-        // });
         let [response, result] = await API.getCourseContent(courseId);
 
         let div = document.querySelector('.deadlineExercises');
 
-        // let result = await response.json();
         result = result.filter(x => x.deadline != null);
 
         if (result.length > 0) {
@@ -68,24 +60,20 @@ async function getDesignJson() {
 let cardData;
 async function getCardsData() {
     try {
-        let eredmeny = await fetch("../api/query/course-data", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }, body: JSON.stringify({ course_id: parseInt(courseId) })
-        });
-        if (eredmeny.ok) {
-            cardData = await eredmeny.json()
+        let [response, result] = await API.getCourseData(courseId);
+
+        if (response.ok) {
+            cardData = result
             ModifyActualData(cardData)
             viewByRole()
             getDesignJson()
             getCourseUsers(courseId);
         }
-        else if (eredmeny.status == 403 || eredmeny.status == 401) {
+        else if (response.status == 403 || response.status == 401) {
             location.href = '../login.html';
         }
         else {
-            throw eredmeny.status
+            throw response.status
         }
     } catch (error) {
         console.log(error)
@@ -124,18 +112,7 @@ function ModifyActualData(cardData) {
 
 async function getCourseContent(courseId) {
     try {
-        let reqData = {
-            course_id: courseId
-        }
-        let response = await fetch('../api/query/course-content', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reqData)
-        });
-
-        let contentList = await response.json();
+        let [response, contentList] = await API.getCourseContent(courseId);
 
         if (response.ok) {
             showCourseContent(contentList);
@@ -146,25 +123,15 @@ async function getCourseContent(courseId) {
     }
 }
 
-async function getCourseUsers(courseid) {
+async function getCourseUsers(courseId) {
     try {
-        let data = {
-            course_id: parseInt(courseid)
-        }
-        let valasz = await fetch('../api/query/course-members', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        if (valasz.ok) {
-            let userslist = await valasz.json();
-            showCourseUsers(userslist)
-        } else {
-            throw valasz.status
-        }
+        let [response, userList] = await API.getCourseMembers(courseId);
 
+        if (response.ok) {
+            showCourseUsers(userList);
+        } else {
+            throw response.status;
+        }
     } catch (e) {
         console.error(e);
     }
@@ -257,23 +224,13 @@ async function deleteUserFromCourse() {
         return
     }
     try {
-        let data = {
-            "user_id": parseInt(user_id),
-            "course_id": course_id
-        }
-        let keres = await fetch('../api/member/remove', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            }, body: JSON.stringify(data)
-        })
-        if (keres.ok) {
-            let response = await keres.json()
-            if (response.sikeres == true) {
+        let [response, result] = await API.kickMember(user_id, course_id);
+        if (response.ok) {
+            if (result.sikeres == true) {
                 location.reload()
             }
         } else {
-            alert(response.uzenet)
+            alert(result.uzenet)
         }
     } catch (error) {
         console.log(error)
@@ -366,13 +323,8 @@ async function PublishContent(radios) {
         }
     });
     try {
-        let request = await fetch("../api/content/publish", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "content_id": selectedValue })
-        })
-        let response = await request.json()
-        if (response.sikeres) {
+        let [response, result] = await API.publishContent(selectedValue);
+        if (result.sikeres) {
             location.reload()
         }
     } catch (error) {
@@ -405,15 +357,7 @@ $('deleteButton').addEventListener('click', deleteUserFromCourse)
 // Kurzus elhagyása
 async function leaveCourse() {
     let courseId = parseInt(getUrlEndpoint());
-    let response = await fetch('../api/member/leave', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ course_id: courseId })
-    });
-
-    let result = await response.json();
+    let [response, result] = await API.leaveCourse(courseId);
 
     if (response.ok) {
         location.href = '../kurzusok.html';
