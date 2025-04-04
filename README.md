@@ -12,6 +12,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [ ] Csatolt fájl nélkül beküldött megoldások megjelenítése
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
+- [ ] Maradjon bejelentkezve gomb
 - [x] Beadott munkák megtekintése
 - [x] Beadandóhoz feltöltött fájlok lekérdezése
 - [ ] Felhasználó tanári státuszának módosítása a kurzusban

@@ -12,6 +12,7 @@ function Login() {
     global $data;
     $email = $data["email"];
     $password = $data["password"];
+    //$keep_login = $data["keep_login"];
 
     // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
     $sql_statement = "SELECT user_id, password FROM users WHERE email = ?;";
@@ -33,8 +34,11 @@ function Login() {
         return;
     }
 
-    // Süti beállítása 10 évre
-    setcookie("user_id", $user_data[0]["user_id"], time() + (10 * 365 * 24 * 60 * 60), "/", "", true, true);
+    //$cookie_time = $keep_login ? (10 * 365 * 24 * 60 * 60) : 0;
+    $keep_login = 10 * 365 * 24 * 60 * 60; // 10 év
+
+    // Süti beállítása
+    setcookie("user_id", $user_data[0]["user_id"], time() + $keep_login, "/", "", true, true);
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
