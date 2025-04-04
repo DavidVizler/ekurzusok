@@ -302,7 +302,7 @@ function ModifyCourseContentData() {
                 SendResponse([
                     "sikeres" => false,
                     "uzenet" => "Túl korai határidő"
-                ], 403);
+                ], 400);
                 return;
             }
             if (count($new_data) > 0) $sql_statement .= ", ";
@@ -312,6 +312,13 @@ function ModifyCourseContentData() {
         }
 
         if ($content_data[0]["max_points"] != $maxpoint) {
+            if ($maxpoint < 5 || $maxpoint > 1000) {
+                SendResponse([
+                    "sikeres" => false,
+                    "uzenet" => "Érvénytelen pontszám"
+                ], 400);
+                return;
+            }
             if (count($new_data) > 0) $sql_statement .= ", ";
             $sql_statement .= "max_points = ?";
             array_push($new_data, $maxpoint);
