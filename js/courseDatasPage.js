@@ -69,8 +69,11 @@ async function getCardsData() {
             getDesignJson()
             getCourseUsers(courseId);
         }
-        else if (response.status == 403 || response.status == 401) {
+        else if (response.status == 401) {
             location.href = '../login.html';
+        }
+        else if (response.status == 403) {
+            location.href = '../kurzusok.html';
         }
         else {
             throw response.status

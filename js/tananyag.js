@@ -20,6 +20,9 @@ window.addEventListener('load',async()=>{
         else if (response.status == 401) {
             window.location.href = './login.html';
         }
+        else if (response.status == 403) {
+            location.href = './kurzusok.html';
+        }
     } catch (error) {
         console.log(error)
     }

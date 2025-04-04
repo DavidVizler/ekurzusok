@@ -11,6 +11,9 @@ async function GetSubmissions() {
         if (response.status == 401) {
             window.location.href = './login.html';
         }
+        else if (response.status == 403) {
+            location.href = './kurzusok.html';
+        }
         console.log(result);
         showSubedData(result);
     } catch (error) {

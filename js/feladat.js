@@ -141,8 +141,11 @@ window.addEventListener('load',async()=>{
                 checkDeadline()
             }
         }
-        else if (response.status == 401 || response.status == 403) {
+        else if (response.status == 401) {
             window.location.href = './login.html';
+        }
+        else if (response.status == 403) {
+            location.href = './kurzusok.html';
         }
     } catch (error) {
         console.log(error)
