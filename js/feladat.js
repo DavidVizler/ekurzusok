@@ -170,7 +170,9 @@ function showResultModal(uzenet){
     ok_button.addEventListener("click",()=>{
         alertDiv.style.display = "none"
         alertDiv.innerHTML = ""
-    }) 
+    })
+
+    ok_button.focus()
 }
 
 function showContentData(){

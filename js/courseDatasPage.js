@@ -422,6 +422,8 @@ function showAlert(uzenet) {
         alertDiv.style.display = "none"
         alertDiv.innerHTML = ""
     })
+
+    ok_button.focus()
 }
 
 $('leaveButton').addEventListener('click', confirmationModal);
