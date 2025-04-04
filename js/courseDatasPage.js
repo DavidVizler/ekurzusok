@@ -114,9 +114,15 @@ async function getCourseContent(courseId) {
     try {
         let [response, contentList] = await API.getCourseContent(courseId);
 
-        if (response.ok) {
+        let contentNavbar = document.getElementById("contentNavbar")
+
+        if (contentList.length > 0) {
+            contentNavbar.style.display = 'block';
             showCourseContent(contentList);
+        } else {
+            contentNavbar.style.display = 'none';
         }
+        
     }
     catch (e) {
         console.error(e);

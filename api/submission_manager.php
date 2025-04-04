@@ -14,11 +14,11 @@ function SubmitSubmission() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $content_id = $data["content_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
-    $sql_statement = "SELECT m.role, c.course_id FROM memberships m
+    $sql_statement = "SELECT m.role, c.course_id, c.deadline FROM memberships m
     INNER JOIN content c ON m.course_id = c.course_id
     WHERE c.content_id = ? AND m.user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
@@ -35,6 +35,16 @@ function SubmitSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tanuló a kurzusban"
+        ], 403);
+        return;
+    }
+
+    $deadline = $membership_data[0]["deadline"];
+    $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
+    if ($now->format('Y-m-d H:i:s') > $deadline) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Határidő után nem lehet beadni munkát"
         ], 403);
         return;
     }
@@ -108,7 +118,7 @@ function AttachSubmissionFiles() {
     }
 
     $content_id = $_POST["content_id"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
 
     // Ellenőrzés, hogy a felhasználó nem tanár-e a kurzusban
     $sql_statement = "SELECT m.role, c.course_id FROM memberships m
@@ -192,7 +202,7 @@ function RemoveFileFromSubmission() {
     global $data;
     $file_id = $data["file_id"];
     $content_id = $data["content_id"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
 
     // Ellenőrzés, hogy van-e beadandó
     $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
@@ -282,7 +292,7 @@ function RateSubmission() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $submission_id = $data["submission_id"];
     $points = $data["points"];
 

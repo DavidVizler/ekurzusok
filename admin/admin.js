@@ -263,7 +263,7 @@ async function listUserInfo(page, rows, id, orderby) {
     }
 }
 
-function resultModal(result) {
+function resultModal(result, refresh = false) {
     let modal = create("div", "modal");
     $("modal-container").appendChild(modal);
 
@@ -277,11 +277,18 @@ function resultModal(result) {
     let ok_button = create("button");
     modal_content.appendChild(ok_button);
     ok_button.innerHTML = "OK";
+    ok_button.focus();
 
     ok_button.addEventListener("click", () => {
         $("modal-container").innerHTML = "";
-        location.reload();
+        if (refresh) location.reload();
     });
+
+    modal.addEventListener("click", (e) => {
+        if (e.target.classList[0] == "modal") {
+            $("modal-container").innerHTML = "";
+        }
+    })
 }
 
 function deleteModal(target, id, info) {
@@ -297,6 +304,7 @@ function deleteModal(target, id, info) {
     let yes_button = create("button");
     modal_content.appendChild(yes_button);
     yes_button.innerHTML = "Igen";
+    yes_button.focus();
 
     let no_button = create("button");
     modal_content.appendChild(no_button);
@@ -350,7 +358,7 @@ async function deleteUser(id) {
 
         if (request.ok) {
             let result = await request.json();
-            resultModal(result.uzenet);
+            resultModal(result.uzenet, true);
         } else {
             resultModal("Művelet sikertelen! Hiba történt!");
             throw(request.status);
@@ -376,7 +384,7 @@ async function deleteCourse(id) {
 
         if (request.ok) {
             let result = await request.json();
-            resultModal(result.uzenet);
+            resultModal(result.uzenet, true);
         } else {
             resultModal("Művelet sikertelen! Hiba történt!");
             throw(request.status);
@@ -402,7 +410,7 @@ async function deleteMember(id) {
 
         if (request.ok) {
             let result = await request.json();
-            resultModal(result.uzenet);
+            resultModal(result.uzenet, true);
         } else {
             resultModal("Művelet sikertelen! Hiba történt!");
             throw(request.status);
@@ -480,8 +488,10 @@ async function modifyUserData() {
             })
         });
         if (request.ok) {
-            let response = await request.json();
             window.location.href = "./user-info?id=" + user_id;
+        } else if (request.status == 400) {
+            let response = await request.json();
+            resultModal(response.uzenet);
         } else {
             throw request.status;
         }

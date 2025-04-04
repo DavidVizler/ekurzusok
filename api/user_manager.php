@@ -12,6 +12,7 @@ function Login() {
     global $data;
     $email = $data["email"];
     $password = $data["password"];
+    //$keep_login = $data["keep_login"];
 
     // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
     $sql_statement = "SELECT user_id, password FROM users WHERE email = ?;";
@@ -33,9 +34,11 @@ function Login() {
         return;
     }
 
-    // Session elindítása
-    session_start();
-    $_SESSION["user_id"] = $user_data[0]["user_id"];
+    //$cookie_time = $keep_login ? (10 * 365 * 24 * 60 * 60) : 0;
+    $keep_login = 10 * 365 * 24 * 60 * 60; // 10 év
+
+    // Süti beállítása
+    setcookie("user_id", $user_data[0]["user_id"], time() + $keep_login, "/", "", true, true);
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
@@ -105,7 +108,6 @@ function Signup() {
 }
 
 function Logout() {
-    session_start();
     if (!LoginCheck()) {
         SendResponse([
             "sikeres" => false,
@@ -113,8 +115,8 @@ function Logout() {
         ], 401);
         return;
     }
-    session_unset();
-    session_destroy();
+
+    setcookie("user_id", "", time() - 3600, "/");
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Felhasználó kijelentkezve"

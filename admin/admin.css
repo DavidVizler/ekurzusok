@@ -5,6 +5,10 @@ html, body {
     height: 100%;
 }
 
+button, input, a {
+    transition: 0.2s;
+}
+
 #site-container {
     height: 100%;
     max-height: 100%;
@@ -40,7 +44,7 @@ html, body {
     list-style-type: none;
     padding: 0px;
     margin: 0px;
-    min-width: 920px;
+    min-width: 750px;
     border-radius: 10px;
 }
 
@@ -48,16 +52,22 @@ html, body {
     width: 150px;
     height: 100%;
     float: left;
+    border-radius: 10px;
+    transition: 0.2s;
 }
 
-.navitem:last-child {
+#logout-container {
     float: right;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
+    background-color: #00008b;
+}
+
+#logout-container:hover {
+    background-color: #4b4baa;
 }
 
 .navitem:hover {
-    background-color: #8fa3ff;
+    background-color: #728cff;
 }
 
 .navitem a,
@@ -72,28 +82,26 @@ html, body {
 }
 
 #navitem-logo {
-    width: 250px;
+    width: 150px;
     height: 100%;
     float: left;
     background-color: #00008b;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-radius: 10px;
+}
+
+#navbar-center {
+    margin-right: auto;
+    margin-left: auto;
+    width: 450px;
 }
 
 #nav-logo {
     line-height: 50px;
     display: block;
     text-align: center;
-    color: yellow;
+    color: white;
     height: 100%;
     font-weight: 600;
-}
-
-#navitem-logo-side {
-    width: 50px;
-    height: 100%;
-    float: left;
-    background: linear-gradient(90deg, #00008b, #5271ff);
 }
 
 #logout-button {
@@ -167,6 +175,10 @@ input[type=number] {
 
 #content a:visited {
     color: blue;
+}
+
+#content a:hover {
+    color: #5271ff;
 }
 
 table {

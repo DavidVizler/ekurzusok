@@ -15,7 +15,7 @@ function AddCourseMember() {
 
     global $data;
     $code = $data["code"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
 
     // Kurzus lekérdezése kód alapján
     $sql_statement = "SELECT course_id, archived FROM courses WHERE code = ?;";
@@ -82,7 +82,7 @@ function RemoveCourseMember() {
     }
 
     global $data;
-    $owner_user_id = $_SESSION["user_id"];
+    $owner_user_id = $_COOKIE["user_id"];
     $delete_user_id = $data["user_id"];
     $course_id = $data["course_id"];
 
@@ -146,7 +146,7 @@ function LeaveCourse() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $course_id = $data["course_id"];
 
     // Tagja-e a felhasználó a kurzusnak
@@ -201,7 +201,7 @@ function ChangeMemberTeacherRole() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = $_COOKIE["user_id"];
     $target_user_id = $data["user_id"];
     $course_id = $data["course_id"];
 

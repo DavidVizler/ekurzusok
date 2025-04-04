@@ -1,5 +1,4 @@
 body{
-    display: flex;
     flex-direction: column;
     font-family: "Varela Round";
     font-weight: lighter;
@@ -27,54 +26,64 @@ body{
     margin: 15px;
 }
 
-.links {
-    color: black;
-	border-bottom: 1px solid #0003;
-	font-size: 25px;
-	font-weight: 300;
-}
-.links > a {
-    color: black;
-	padding: .75em;
-	text-align: center;
-	text-decoration: none;
-	transition: all .5s;
-}
-.links > a:hover {
-	background: #ffffff06;
-}
-.links > .line {
-	background: #50514F;
-	height: 2px;
-	pointer-events: none;
+.backToMainPageIcon svg:hover{
+    cursor: pointer;
 }
 
-.links {
-	display: grid;
-	grid-template-columns: repeat(var(--items), 1fr);
-	position: relative;
+.content{
+    margin:15px;
+	width: 100%;
 }
 
-.links > .line {
-	opacity: 0;
-	transition: all .5s;
-	position: absolute;
-	bottom: 0;
-	left: var(--left, calc(100% / var(--items) * (var(--index) - 1)));
-	width: var(--width, calc(100% / var(--items)));
-	--index: 0;
-}
-.links > a:hover ~ .line {
-	opacity: 1;
+.mainDiv{
+	width: 100%;
 }
 
-.links > a:nth-of-type(1):hover ~ .line { --index: 1; }
-.links > a:nth-of-type(2):hover ~ .line { --index: 2; }
-
-#usersList.active, #modifyRole.active {
+#usersList{
     display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
-#usersList, #modifyRole {
-    display: none;
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 10px;
+    padding-right: 0 !important;
+    width: 100%;
+    box-sizing: border-box; 
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li .svg-container {
+    display: flex;
+    gap: 5px;
+    width: auto;
+    margin-left: auto; 
+}
+
+li svg {
+    width: 35px;
+    height: 35px;
+    margin-left: 5px;
+}
+
+li svg:hover {
+    cursor: pointer;
+}
+
+.deleteBtn{
+    margin-right: 5px;
 }
