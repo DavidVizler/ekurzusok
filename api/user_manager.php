@@ -91,7 +91,7 @@ function Signup() {
     // Eredmény vizsgálata
     if ($result) { 
         $sql_statement = "SELECT user_id FROM users WHERE email = ?;";
-        $user_id = DataQuery($sql_statement, "s", [$email]);
+        $user_id = DataQuery($sql_statement, "s", [$email])[0]["user_id"];
         setcookie("user_id", $user_id, time() + (10 * 365 * 24 * 60 * 60), "/", "", true, true);
         SendResponse([
             "sikeres" => true,
