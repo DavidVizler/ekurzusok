@@ -6,25 +6,9 @@ async function signup() {
     let passwordConfirm = $('confirm-password').value;
 
     if (isValid({ lastname, firstname, email, password, passwordConfirm })) {
-        let signupData = {
-            "manage" : "user",
-            "action" : "signup",
-            lastname,
-            firstname,
-            email,
-            password
-        };
-
-        let response = await fetch("./api/user/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(signupData)
-        });
+        let [response, result] = await API.signup(email, firstname, lastname, password);
 
         if (response.ok) {
-            let result = await response.json();
             if (result.sikeres) {
                 window.location.href = './kurzusok.html';
             }

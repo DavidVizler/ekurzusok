@@ -10,9 +10,7 @@ async function openCalendarPopUp() {
    let div = $('toDoExercises');
 
    try {
-      let deadlineTasks = await fetch("./api/query/deadline-tasks");
-
-      let tasks = await deadlineTasks.json();
+      let [response, tasks] = await API.getDeadlineTasks();
 
       if (tasks.length > 0) {
          div.innerHTML = '';
@@ -78,13 +76,13 @@ async function getDesignJson() {
 
 async function getCardsData() {
    try {
-      let eredmeny = await fetch("./api/query/user-courses");
-      if (eredmeny.ok) {
-         cardData = await eredmeny.json()
+      let [response, result] = await API.getUserCourses();
+      if (response.ok) {
+         cardData = result
          GenerateCards()
       }
       else {
-         throw eredmeny.status
+         throw response.status
       }
    } catch (error) {
       console.log(error)
@@ -186,17 +184,9 @@ function GenerateCards() {
 }
 
 async function Archivalas(course_id) {
-   let reqData = {
-      "id": course_id
-   }
    try {
-      let request = await fetch("./api/course/archive", {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify(reqData)
-      })
-      let response = await request.json()
-      if(response.sikeres == true){
+      let [response, result] = await API.archiveCourse(course_id);
+      if(result.sikeres == true){
          location.reload()
       }
    } catch (error) {
@@ -205,8 +195,9 @@ async function Archivalas(course_id) {
 }
 
 async function logout() {
-   let request = await fetch("./api/user/logout")
-   if (request.ok) {
+   let response = await fetch("./api/user/logout")
+   // let [response, result] = await API.logout();
+   if (response.ok) {
       window.location.replace("./");
    }
 }
@@ -216,19 +207,7 @@ async function joinCourse(e) {
    let code = $('codeInput').value;
 
    try {
-      let reqData = {
-         code
-      };
-
-      let response = await fetch('./api/member/add', {
-         method: 'POST',
-         headers: {
-            "Content-Type": 'application/json'
-         },
-         body: JSON.stringify(reqData)
-      });
-
-      let result = await response.json();
+      let [response, result] = await API.joinCourse(code);
 
       if (response.status == 201) {
          await new Promise(() => location.reload());

@@ -31,16 +31,9 @@ async function login() {
     };
 
     if (isValid(loginData)) {
-        let response = await fetch("./api/user/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(loginData)
-        });
+        let [response, result] = await API.login(email, password);
 
         if (response.ok) {
-            let result = await response.json();
             if (result.sikeres) {
                 window.location.href = './kurzusok.html';
             }

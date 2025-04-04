@@ -4,24 +4,15 @@ $("backToPreviousPage").addEventListener("click", () => {
 
 async function GetSubmissions() {
     let params = new URLSearchParams(window.location.search);
-    let tartalomId = params.get('id');
-    console.log(tartalomId);
-    let reqData = {
-        "content_id": parseInt(tartalomId)
-    };
+    let contentId = params.get('id');
 
     try {
-        let request = await fetch('api/query/submissions', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(reqData)
-        });
-        if (request.status == 401) {
+        let [response, result] = await API.getSubmissions(contentId);
+        if (response.status == 401) {
             window.location.href = './login.html';
         }
-        let response = await request.json();
-        console.log(response);
-        showSubedData(response);
+        console.log(result);
+        showSubedData(result);
     } catch (error) {
         console.log(error);
     }
@@ -149,15 +140,10 @@ async function GetSubmittedFiles(submissionId) {
     console.log("Lekérendő Submission ID:", submissionId);
 
     try {
-        let request = await fetch("api/query/submission-files", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "submission_id": submissionId })
-        });
+        let [response, result] = await API.getSubmissionFiles(submissionId);
 
-        let response = await request.json();
-        console.log(response);
-        showFiles(response, submissionId);
+        console.log(result);
+        showFiles(result, submissionId);
     } catch (error) {
         console.log(error);
     }
@@ -204,13 +190,7 @@ function showFiles(files, submissionId) {
 
 async function rate(submission_id, points) {
     try {
-        let response = await fetch('api/submission/rate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ submission_id, points })
-        });
+        let [response, result] = await API.rateSubmission(submission_id, points);
 
         if (response.ok) {
             alert("Sikeres értékelés!");

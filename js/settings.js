@@ -111,22 +111,7 @@ async function modifySettings(e) {
         let desc = $('courseDescription').value;
         let design = parseInt($('designSelect').value);
 
-        let reqData = {
-            id: courseId,
-            name,
-            desc,
-            design
-        };
-
-        let response = await fetch('../api/course/modify-data', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(reqData)
-        });
-
-        let result = await response.json();
+        let [response, result] = await API.courseModifyData(courseId, name, desc, design);
 
         if (result.sikeres) {
             location.href = './' + courseId;
@@ -148,18 +133,13 @@ async function DeleteCourse() {
         }
 
         let courseId = parseInt(urlParams.get('id'));
-        let request = await fetch('../api/course/delete',{
-            method : 'POST',
-            headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify({"id" : courseId})
-        })
-        let response = await request.json()
-        if(response.sikeres){
+        let [response, result] = await API.deleteCourse(courseId);
+        if(result.sikeres){
             resultModal("Sikeres törlés")
             location.href = '../kurzusok.html';
         }
         else{
-            resultModal(response.uzenet)
+            resultModal(result.uzenet)
         }
     } catch (error) {
         console.log(error)
@@ -186,19 +166,7 @@ async function onLoad() {
 
 async function loadCurrentValues(courseId) {
     try {
-        let reqData = {
-            course_id: courseId
-        }
-
-        let response = await fetch('../api/query/course-data', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(reqData)
-        });
-
-        let courseData = await response.json();
+        let [response, courseData] = await API.getCourseData(courseId);
         
         $('courseName').value = courseData['name'];
         $('courseDescription').value = courseData['description'];
