@@ -39,14 +39,16 @@ function SubmitSubmission() {
         return;
     }
 
-    $deadline = $membership_data[0]["deadline"];
-    $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
-    if ($now->format('Y-m-d H:i:s') > $deadline) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Határidő után nem lehet beadni munkát"
-        ], 403);
-        return;
+    if (!is_null($membership_data[0]["deadline"])) {
+        $deadline = $membership_data[0]["deadline"];
+        $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
+        if ($now->format('Y-m-d H:i:s') > $deadline) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Határidő után nem lehet beadni munkát"
+            ], 403);
+            return;
+        }
     }
 
     $course_id = $membership_data[0]["course_id"];
