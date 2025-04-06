@@ -334,8 +334,7 @@ function DeleteUser() {
 
     // Eredmény vizsgálata
     if ($result) { 
-        session_unset();
-        session_destroy();
+        setcookie("user_id", "", time() - 3600, "/");
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Felhasználó törölve"
