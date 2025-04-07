@@ -25,12 +25,14 @@ async function login(loginData) {
 
 const email = 'teszt@teszt.com';
 const password = 'Teszt1234';
+const keep_login = false;
 
 describe('Bejelentkezés', () => {
     test('Nem létező email cím', async () => {
         let loginData = {
             email: 'nemletezo@teszt.com',
-            password
+            password,
+            keep_login
         };
 
         let result = await login(loginData);
@@ -40,7 +42,8 @@ describe('Bejelentkezés', () => {
     test('Hibás jelszó', async () => {
         let loginData = {
             email,
-            password: 'Hibás1234'
+            password: 'Hibás1234',
+            keep_login
         };
 
         let result = await login(loginData);
@@ -48,7 +51,7 @@ describe('Bejelentkezés', () => {
     });
 
     test('Sikeres', async () => {
-        let loginData = { email, password };
+        let loginData = { email, password, keep_login };
 
         let result = await login(loginData);
         await expect(result).toBe(true);
