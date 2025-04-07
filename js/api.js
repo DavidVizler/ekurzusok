@@ -165,8 +165,6 @@ class API {
         });
     }
 
-    // TODO: submission upload file
-
     static async submissionRemoveFile(content_id, file_id) {
         return await this.fetch('api/submission/remove-file', {
             content_id: parseInt(content_id),
