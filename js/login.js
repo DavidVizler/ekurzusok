@@ -26,14 +26,16 @@ function resultModal(result) {
 async function login() {
     let email = $('email').value;
     let password = $('password').value;
+    let keep_login = $('stayLoggedIn').checked;
 
     let loginData = {
         email,
-        password
+        password,
+        keep_login
     };
 
     if (isValid(loginData)) {
-        let [response, result] = await API.login(email, password);
+        let [response, result] = await API.login(email, password, keep_login);
 
         if (response.ok) {
             if (result.sikeres) {

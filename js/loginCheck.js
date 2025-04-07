@@ -1,9 +1,9 @@
 function isValid(loginData) {
-    const { email, password } = loginData;
+    const { email, password, keep_login } = loginData;
 
     let valid = true;
     
-    if (email == '' || password == '') {
+    if (email == '' || password == '' || keep_login == null) {
         valid = false;
     }
 

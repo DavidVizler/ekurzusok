@@ -21,10 +21,11 @@ class API {
         return [response, result];
     }
 
-    static async login(email, password) {
+    static async login(email, password, keep_login) {
         return await this.fetch('api/user/login', {
             email,
-            password
+            password,
+            keep_login
         });
     }
 
