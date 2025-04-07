@@ -319,15 +319,11 @@ async function submitFiles() {
         for (const file of fileInput.files) {
             formData.append('files[]', file);
         }
+        
+        let [response, result] = await API.submissionUploadFiles(formData);
 
-        let response = await fetch('api/submission/upload-files', {
-            method: 'POST',
-            body: formData,
-            redirect: "follow"
-        });
-        let valasz = await response.json()
-        if(valasz.sikeres == false){
-            showResultModal(valasz.uzenet)
+        if(result.sikeres == false){
+            showResultModal(result.uzenet)
         } else {
             window.location.reload();
         }

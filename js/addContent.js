@@ -34,14 +34,8 @@ async function contentPublish(reqData) {
 
         reqData.append("course_id", courseId);
 
-        let response = await fetch('../api/content/create', {
-            method: 'POST',
-            body: reqData,
-            redirect: "follow"
-        });
+        let [response, result] = await API.createContent(reqData);
 
-        // TODO
-        let result = await response.json();
         if(result.sikeres == false){
             resultModal(result.uzenet)
         }

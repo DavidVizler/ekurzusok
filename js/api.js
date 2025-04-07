@@ -115,12 +115,15 @@ class API {
         });
     }
 
-    // TODO
-    // static async createContent(courseId, title, desc, task, maxpoint, deadline, files) {
-    //     return await this.fetch('api/content/create', {
-
-    //     })
-    // }
+    static async createContent(contentData) {
+        let response = await fetch('api/content/create', {
+            'method': 'POST',
+            body: contentData,
+            redirect: 'follow'
+        });
+        let result = await response.json();
+        return [response, result];
+    }
 
     static async publishContent(content_id) {
         return await this.fetch('api/content/publish', {
@@ -128,7 +131,15 @@ class API {
         });
     }
 
-    // TODO: upload files
+    static async submissionUploadFiles(data) {
+        let response = await fetch('api/submission/upload-files', {
+            method: 'POST',
+            body: data,
+            redirect: 'follow'
+        });
+        let result = await response.json();
+        return [response, result];
+    }
 
     static async contentRemoveFile(content_id, file_id) {
         return await this.fetch('api/content/remove-file', {
