@@ -1,4 +1,4 @@
-const URL = require('./url');
+const URL = require('../url');
 
 async function login(loginData) {
     let response = await fetch(URL + '/api/user/login', {
