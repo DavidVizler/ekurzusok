@@ -20,7 +20,7 @@ function CreateCourse() {
         return;
     }
 
-    if (!PostDataCheck(["name", "design"], "si")) {
+    if (!PostDataCheck(["name", "design"], "st")) {
         return;
     }
 
@@ -81,7 +81,7 @@ function ModifyCourseData() {
         return;
     }
 
-    if (!PostDataCheck(["id", "name", "desc", "design"], "isei")) {
+    if (!PostDataCheck(["id", "name", "desc", "design"], "iset")) {
         return;
     }
 

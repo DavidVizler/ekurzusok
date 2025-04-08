@@ -186,7 +186,7 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
         switch ($data_types[$i]) {
             case "b":
                 if (!is_bool($tc)) {
-                    if ($send_response) SendInvalidDataRespone($send_success, $to_check[$i], $tc);
+                    if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                     return false;
                 }
                 break;
@@ -225,11 +225,13 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
                     break;
                 }
             case "t":
-                if (!is_null($tc) && !is_int($tc)) {
-                    if ($tc < 1 && $tc > 7) {
+                if (is_int($tc)) {
+                    if ($tc < 1 || $tc > 7) {
                         if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                         return false;
                     }
+                } else {
+                    return false;
                 }
                 break;
         }
