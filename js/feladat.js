@@ -183,6 +183,7 @@ function showContentData(){
     let createUser = $("createrUser")
     let limitDate = $("timeLimitDate")
     let description = $("description")
+    document.title = adatok.title
     title.innerHTML = adatok.title
     createdDate.innerHTML = adatok.published
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname

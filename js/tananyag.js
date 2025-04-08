@@ -31,10 +31,12 @@ window.addEventListener('load',async()=>{
 
 function showContentData(adatok){
     console.log(adatok)
+    document.title = adatok.title
     let title = $("title")
     let createdDate = $("creatingDate")
     let createUser = $("createrUser")
     let description = $("description")
+    console.log(description)
     title.innerHTML = adatok.title
     createdDate.innerHTML = adatok.published
     createUser.innerHTML = adatok.lastname + " " + adatok.firstname
@@ -143,7 +145,6 @@ async function GetContentFiles() {
 
 function showFiles(files){
     let ki = document.querySelector('.content')
-    ki.innerHTML = '';
     
     for(let file of files){
         let urlParams = getUrlParams();
