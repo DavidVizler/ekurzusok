@@ -162,7 +162,7 @@ async function listCourseInfo(page, rows, id, orderby) {
                             <a href="user-info?id=${member["user_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteModal("member", ${member["membership_id"]}, ["${member["lastname"]}", "${member["firstname"]}", "${data["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
+                            <button class='delete' onclick='deleteModal("member", ${member["membership_id"]}, ["${member["lastname"]}", "${member["firstname"]}", "${data["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Eltávolítás a kurzusból</button>
                         </td>
                     </tr>`
                 });
@@ -241,7 +241,7 @@ async function listUserInfo(page, rows, id, orderby) {
                             <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteModal("member", ${course["membership_id"]}, ["${data["lastname"]}", "${data["firstname"]}", "${course["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Kirúgás</button>
+                            <button class='delete' onclick='deleteModal("member", ${course["membership_id"]}, ["${data["lastname"]}", "${data["firstname"]}", "${course["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Eltávolítás a kurzusból</button>
                         </td>
                     </tr>`
                 });
