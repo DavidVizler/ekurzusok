@@ -34,10 +34,10 @@ function Login() {
         return;
     }
 
-    $cookie_time = $keep_login ? (10 * 365 * 24 * 60 * 60) : 0;
+    $cookie_time = $keep_login ? time() + (10 * 365 * 24 * 60 * 60) : 0;
 
     // Süti beállítása
-    setcookie("user_id", $user_data[0]["user_id"], time() + $cookie_time, "/", "", true, true);
+    setcookie("user_id", $user_data[0]["user_id"], $cookie_time, "/");
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
