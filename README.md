@@ -5,6 +5,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 ## TODO
 **Meggondolandó funkciók**
 - Belépés és kilépés tanári vagy tulajdonosi jóváhagyáshoz kötése
+- Admin felhasználó kijelentkeztetés
 - Feladat visszavonása beküldés után
 - Feladat leadása határidő után
 
@@ -34,6 +35,10 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 **Backend**
 - [x] Felhasználó fiók törlése
 - [x] Műveletek letiltása az archivált kurzusokban
+
+**Admin felület**
+- [ ] Felhasználó jelszó módosítás vagy visszaállítás
+- [ ] Keresés
 
 **Mindkettő**
 - [x] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
