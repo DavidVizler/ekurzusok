@@ -130,6 +130,7 @@ function SendInvalidDataRespone($send_success, $key, $value) {
     i -> integer number (csak egész szám)
     n -> nullable integer (egész szám vagy NULL)
     d -> datetime (yyyy-MM-dd hh:mm:ss vagy NULL)
+    t -> theme (desgin ID, 1 és 7 között)
 
 */
 function PostDataCheck($to_check, $data_types, $send_response = true, $send_success = true, $form_data = false) {
@@ -223,6 +224,14 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
                     }
                     break;
                 }
+            case "t":
+                if (!is_null($tc) && !is_int($tc)) {
+                    if ($tc < 1 && $tc > 7) {
+                        if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
+                        return false;
+                    }
+                }
+                break;
         }
     }
 
