@@ -222,8 +222,8 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
                         if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                         return false;
                     }
-                    break;
                 }
+                break;
             case "t":
                 if (is_int($tc)) {
                     if ($tc < 1 || $tc > 7) {
@@ -231,6 +231,7 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
                         return false;
                     }
                 } else {
+                    if ($send_response) SendInvalidDataRespone($send_success, $key, $tc);
                     return false;
                 }
                 break;
