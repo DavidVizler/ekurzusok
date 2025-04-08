@@ -3,22 +3,30 @@ Technikusi vizsga 2024-2025 \
 A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
 ## TODO
+**Meggondolandó funkciók**
+- Belépés és kilépés tanári vagy tulajdonosi jóváhagyáshoz kötése
+- Feladat visszavonása beküldés után
+- Feladat leadása határidő után
+
 **Frontend**
+- [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
+- [ ] Jogosultságkezelés
+- [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
+- [ ] Több fájl feltöltése a meglévők mellé
+- [ ] Kurzus visszaállítása archivált állapotból
+- [ ] Közzlétett, nem közzétett tartalom oldal átrendezése
+- [ ] Üres kurzusok oldal kidekorálása
 - [x] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
 - [x] Kurzus törlése
 - [x] Felhasználó kilépése a kurzusból (önmagától)
 - [x] Frontend javítások (görgethetőség, reszponzivtás)
-- [ ] Jogosultságkezelés
 - [x] Csatolt fájl nélkül beküldött megoldások megjelenítése
-- [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
 - [x] Maradjon bejelentkezve gomb
 - [x] Beadott munkák megtekintése
+- [x] Felhasználó tanári státuszának módosítása a kurzusban
 - [x] Beadandóhoz feltöltött fájlok lekérdezése
-- [ ] Felhasználó tanári státuszának módosítása a kurzusban
 - [x] Feltöltött fájlok törlése
 - [x] Tartalomhoz feltöltött fájlok lekérdezése
-- [ ] Több fájl feltöltése a meglévők mellé
 - [x] Leadott munkák megtekintése
 - [x] Kilépés gomb ne jelenjen meg a felhasználó saját kurzusában
 - [x] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
@@ -34,8 +42,8 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Annak lekérése, hogy a felhasználó már leadta-e az adott feladatot
 
 **Egyéb**
-- [x] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
 - [ ] Dokumentáció befejezése
+- [x] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
 - [x] Projekt beadható és tesztelhető formában
 
 ## Jogosultságok
