@@ -226,9 +226,9 @@ function UserDataForm($id) {
     }
 
     echo <<<HTML
-        <div id="modify-form">
+        <div id="modify-form-div">
             <h1>Felhasználó adatmódosítás (ID: {$id})</h1>
-            <form method="POST">
+            <form method="POST" id="modify-form">
                 <input hidden type="number" id="user_id" value={$id}>
                 <table>
                     <tbody>
@@ -248,6 +248,9 @@ function UserDataForm($id) {
                 </table>
                 <div id="modify-submit">
                     <input type="submit" value="Módosítás">
+                    <button type="button" id="passwd-reset" onclick="confirmModal('password', {$id}, ['{$user_data[0]['lastname']}', '{$user_data[0]['firstname']}'])">
+                        Jelszó visszaállítása
+                    </button>
                 </div>
                 <div id="modal-container"></div>
             </form>

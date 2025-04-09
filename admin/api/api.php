@@ -430,6 +430,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
 }
 
+function AdminResetUserPassword() {
+    if (!AdminLoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["user_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $data["user_id"];
+
+    $new_passwd = "ekurzusok";
+
+    for ($i = 0; $i < 8; $i++) {
+        $new_passwd .= random_int(0, 9);
+    }
+
+    $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
+
+    $sql_statement = "UPDATE users SET password = ? WHERE user_id = ?;";
+    $result = ModifyData($sql_statement, "si", [$new_hashed_passwd, $user_id]);
+
+    if ($result) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Jelszó sikeresen visszaállítva a következőre:<br><b>{$new_passwd}</b>"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs felhasználó ilyen ID-val"
+        ], 400);
+    }
+}
+
 $url = explode("/", $_SERVER["REQUEST_URI"]);
 $action = end($url);
 switch($action) {
@@ -459,6 +499,9 @@ switch($action) {
         break;
     case "modify-user-data":
         AdminModifyUserData();
+        break;
+    case "reset-user-password":
+        AdminResetUserPassword();
         break;
     default:
         SendResponse([

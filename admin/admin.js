@@ -28,7 +28,7 @@ async function listUsers(page, rows, orderby) {
                         <td>
                             <div class='actions'>
                                 <a href='modify-user-data?id=${user["user_id"]}'><button class='modify'>Adatmódosítás</button></a>
-                                <button class='delete' onclick='deleteModal("user", ${user["user_id"]}, ["${user["lastname"]}", "${user["firstname"]}", "${user["own_courses"]}"])'>Eltávolítás</button>
+                                <button class='delete' onclick='confirmModal("user", ${user["user_id"]}, ["${user["lastname"]}", "${user["firstname"]}", "${user["own_courses"]}"])'>Eltávolítás</button>
                             </div>
                         </td>
                     </tr>`
@@ -82,7 +82,7 @@ async function listCourses(page, rows, orderby) {
                             ${course["members"]} (${course["teachers"]} tanár) <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteModal("course", ${course["course_id"]}, ["${course["name"]}", "${course["members"]}"])'>Eltávolítás</button>
+                            <button class='delete' onclick='confirmModal("course", ${course["course_id"]}, ["${course["name"]}", "${course["members"]}"])'>Eltávolítás</button>
                         </td>
                     </tr>`
                 });
@@ -162,7 +162,7 @@ async function listCourseInfo(page, rows, id, orderby) {
                             <a href="user-info?id=${member["user_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteModal("member", ${member["membership_id"]}, ["${member["lastname"]}", "${member["firstname"]}", "${data["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Eltávolítás a kurzusból</button>
+                            <button class='delete' onclick='confirmModal("member", ${member["membership_id"]}, ["${member["lastname"]}", "${member["firstname"]}", "${data["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Eltávolítás a kurzusból</button>
                         </td>
                     </tr>`
                 });
@@ -241,7 +241,7 @@ async function listUserInfo(page, rows, id, orderby) {
                             <a href="course-info?id=${course["course_id"]}&rows=${rows}">Több infó</a>
                         </td>
                         <td class='action'>
-                            <button class='delete' onclick='deleteModal("member", ${course["membership_id"]}, ["${data["lastname"]}", "${data["firstname"]}", "${course["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Eltávolítás a kurzusból</button>
+                            <button class='delete' onclick='confirmModal("member", ${course["membership_id"]}, ["${data["lastname"]}", "${data["firstname"]}", "${course["name"]}"])' ${role == "Tulajdonos" ? "hidden" : ""}>Eltávolítás a kurzusból</button>
                         </td>
                     </tr>`
                 });
@@ -291,7 +291,7 @@ function resultModal(result, refresh = false) {
     })
 }
 
-function deleteModal(target, id, info) {
+function confirmModal(target, id, info) {
     let modal = create("div", "modal");
     $("modal-container").appendChild(modal);
 
@@ -327,6 +327,13 @@ function deleteModal(target, id, info) {
             message.innerHTML = `Biztosan kirúgja ${info[0]} ${info[1]} nevű felhasználót a(z) ${info[2]} nevű kurzusból?`;
             yes_button.addEventListener("click", () => {
                 deleteMember(id);
+            });
+            break;
+        case "password":
+            message.innerHTML = `Biztosan visszaállítja ${info[0]} ${info[1]} nevű felhasználó jelszavát?`;
+            yes_button.addEventListener("click", (e) => {
+                resetUserPassword(id);
+                e.preventDefault();
             });
             break;
     }
@@ -490,6 +497,29 @@ async function modifyUserData() {
         if (request.ok) {
             window.location.href = "./user-info?id=" + user_id;
         } else if (request.status == 400) {
+            let response = await request.json();
+            resultModal(response.uzenet);
+        } else {
+            throw request.status;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function resetUserPassword() {
+    let user_id = parseInt($("user_id").value);
+
+    try {
+        let request = await fetch("./api/reset-user-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({user_id})
+        });
+        $("modal-container").innerHTML = "";
+        if (request.ok || request.status == 400) {
             let response = await request.json();
             resultModal(response.uzenet);
         } else {
