@@ -189,7 +189,7 @@ async function showCourseUsers(userslist) {
             userRadio.style.marginBottom = "10px";
 
             const name = create('label');
-            name.textContent = `${user.lastname} ${user.firstname}`;
+            name.innerHTML = `${user.lastname} ${user.firstname}`;
 
             const br = create('br');
 
@@ -208,7 +208,7 @@ async function showCourseUsers(userslist) {
     } else {
         userslist.forEach(user => {
             const li = create('li');
-            li.textContent = `${user.lastname} ${user.firstname}`;
+            li.innerHTML = `${user.lastname} ${user.firstname}`;
 
             if (user.role == 2 || user.role == 3) {
                 tanarUl.appendChild(li);

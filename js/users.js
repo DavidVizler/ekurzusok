@@ -64,13 +64,22 @@ function viewByRole() {
         });
     }
 
-    if(userData.archived == 1){
+    if (userData.archived == 1) {
         modRoleBtns.forEach(btn => {
             btn.style.display = "none"
         })
         deleteBtns.forEach(btn => {
             btn.style.display = "none";
         });
+    }
+}
+
+function getRoleName(role) {
+    switch (role) {
+        case 1: return 'Diák';
+        case 2: return 'Tanár';
+        case 3: return 'Tulajdonos';
+        default: return 'Ismeretlen';
     }
 }
 
@@ -92,7 +101,20 @@ async function showCourseUsers(userslist) {
 
     userslist.forEach(user => {
         const li = document.createElement('li');
-        li.innerHTML = `${user.lastname} ${user.firstname}`;
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = `${user.lastname} ${user.firstname}`;
+
+        const roleDiv = document.createElement('div');
+        roleDiv.textContent = getRoleName(user.role);
+        roleDiv.classList.add('user-role');
+
+        const textContainer = document.createElement('div');
+        textContainer.classList.add('text-container');
+        textContainer.appendChild(nameDiv);
+        textContainer.appendChild(roleDiv);
+
+        li.appendChild(textContainer);
+
         li.value = user.user_id
 
         const svgContainer = document.createElement('div');
@@ -111,7 +133,7 @@ async function showCourseUsers(userslist) {
         path.setAttribute('stroke-linecap', 'round');
         path.setAttribute('stroke-linejoin', 'round');
 
-        path.setAttribute('d','M6 18 18 6M6 6l12 12');
+        path.setAttribute('d', 'M6 18 18 6M6 6l12 12');
         deleteBtn.appendChild(path)
 
         let modRoleBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -126,14 +148,14 @@ async function showCourseUsers(userslist) {
         let path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path2.setAttribute('stroke-linecap', 'round');
         path2.setAttribute('stroke-linejoin', 'round');
-        path2.setAttribute('d','m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10');
+        path2.setAttribute('d', 'm16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10');
         modRoleBtn.appendChild(path2)
 
         if (user.role == 3) {
             tanarUl.prepend(li);
         }
 
-        if(user.role == 2){
+        if (user.role == 2) {
             modRoleBtn.style.marginRight = "10px"
             svgContainer.appendChild(modRoleBtn)
             li.appendChild(svgContainer)
@@ -143,17 +165,17 @@ async function showCourseUsers(userslist) {
                 tanarUl.appendChild(li);
             }
         }
-        
-        if(user.role == 1) {
+
+        if (user.role == 1) {
             svgContainer.appendChild(modRoleBtn)
             svgContainer.appendChild(deleteBtn)
             li.appendChild(svgContainer)
             ul.appendChild(li);
         }
 
-        if(userData.role == 3){
-            modRoleBtn.addEventListener("click", function(){modifyRole(li.value)})
-            deleteBtn.addEventListener("click",function(){deleteUserFromCourse(li.value)})
+        if (userData.role == 3) {
+            modRoleBtn.addEventListener("click", function () { modifyRole(li.value) })
+            deleteBtn.addEventListener("click", function () { deleteUserFromCourse(li.value) })
         }
     });
 
@@ -169,7 +191,7 @@ async function showCourseUsers(userslist) {
 async function deleteUserFromCourse(user_id) {
     let params = new URLSearchParams(document.location.search);
     let course_id = params.get("id")
-    
+
     if (user_id == null) {
         alert("Nincsen kiválasztva személy!");
         return
@@ -188,9 +210,9 @@ async function deleteUserFromCourse(user_id) {
         if (keres.ok) {
             let response = await keres.json()
             if (response.sikeres == true) {
-                setTimeout(()=>{
+                setTimeout(() => {
                     location.reload()
-                },500)
+                }, 500)
             }
         } else {
             let response = await keres.json()
@@ -204,7 +226,7 @@ async function deleteUserFromCourse(user_id) {
 async function modifyRole(user_id) {
     let params = new URLSearchParams(document.location.search);
     let course_id = params.get("id")
-    
+
     if (user_id == null) {
         alert("Nincsen kiválasztva személy!");
         return
@@ -224,9 +246,9 @@ async function modifyRole(user_id) {
         if (keres.ok) {
             let response = await keres.json()
             if (response.sikeres == true) {
-                setTimeout(()=>{
+                setTimeout(() => {
                     location.reload()
-                },500)
+                }, 500)
             }
         } else {
             let response = await keres.json()

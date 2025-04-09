@@ -87,3 +87,14 @@ li svg:hover {
 .deleteBtn{
     margin-right: 5px;
 }
+
+.user-role {
+    font-size: 0.9em;
+    color: gray;
+    margin-top: 4px;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+}
