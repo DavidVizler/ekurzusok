@@ -189,7 +189,7 @@ async function showCourseUsers(userslist) {
             userRadio.style.marginBottom = "10px";
 
             const name = create('label');
-            name.textContent = `${user.lastname} ${user.firstname}`;
+            name.innerHTML = `${user.lastname} ${user.firstname}`;
 
             const br = create('br');
 
@@ -208,7 +208,7 @@ async function showCourseUsers(userslist) {
     } else {
         userslist.forEach(user => {
             const li = create('li');
-            li.textContent = `${user.lastname} ${user.firstname}`;
+            li.innerHTML = `${user.lastname} ${user.firstname}`;
 
             if (user.role == 2 || user.role == 3) {
                 tanarUl.appendChild(li);
@@ -252,8 +252,6 @@ function showCourseContent(content) {
     let contentList = $('contentList');
     let notPublishedDiv = $("not_published")
     let button = $("publishButton")
-    let links = $("links")
-    let notpublishedLink = $("link2")
 
     content.forEach(c => {
         let div = create('div', 'ContentTypeDiv', c.task ? 'feladatDiv' : 'tananyagDiv',);
@@ -312,15 +310,6 @@ function showCourseContent(content) {
         } else {
             contentList.appendChild(div)
         }
-
-        if (button.style.display == "none") {
-            notpublishedLink.style.display = "none"
-            links.style.setProperty('--items', '1');
-            links.style.justifyContent = 'center';
-        }
-        else {
-            links.style.setProperty('--items', '2');
-        }
     });
 
     $("publishButton").addEventListener("click", function () { PublishContent(document.querySelectorAll(".radioButton")) })
@@ -362,19 +351,28 @@ document.addEventListener('DOMContentLoaded', function () {
     const content1 = $('contentList');
     const content2 = $('not_published');
 
-    content1.classList.add("active")
+    content1.classList.add("active");
+    link1.classList.add("active-link");
+
     link1.addEventListener('click', function (event) {
         event.preventDefault();
         content1.classList.add('active');
         content2.classList.remove('active');
+
+        link1.classList.add('active-link');
+        link2.classList.remove('active-link');
     });
 
     link2.addEventListener('click', function (event) {
         event.preventDefault();
         content2.classList.add('active');
         content1.classList.remove('active');
+
+        link2.classList.add('active-link');
+        link1.classList.remove('active-link');
     });
 });
+
 
 $('deleteButton').addEventListener('click', deleteUserFromCourse)
 

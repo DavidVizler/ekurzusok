@@ -50,22 +50,17 @@ function showSubedData(adatok) {
         let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute("stroke-linecap", "round");
         path.setAttribute("stroke-linejoin", "round");
-        path.setAttribute("d", "m4.5 18.75 7.5-7.5 7.5 7.5");
-
-        let path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path2.setAttribute("stroke-linecap", "round");
-        path2.setAttribute("stroke-linejoin", "round");
-        path2.setAttribute("d", "m4.5 12.75 7.5-7.5 7.5 7.5");
+        path.setAttribute("d", "m19.5 8.25-7.5 7.5-7.5-7.5");
 
         let datas = create('div', 'datasDiv');
         datas.id = `datasDiv-${adat.submission_id}`;
         datas.style.display =  "none";
 
-        datas.innerHTML = "Beadva: " + adat.submitted + "<br>"
-        datas.innerHTML += "Beadott fájlok száma: " + adat.files_count + "<br>"
+        datas.innerHTML = "<strong>Beadva: </strong>" + adat.submitted + "<br>"
+        datas.innerHTML += "<strong>Beadott fájlok száma: </strong>" + adat.files_count + "<br>"
         
         if (adat.files_count > 0) {
-            datas.innerHTML += "Fájlok: "
+            datas.innerHTML += "<strong>Fájlok: </strong>"
             
             let filesList = create('div');
             filesList.id = `filesList-${adat.submission_id}`;
@@ -82,7 +77,6 @@ function showSubedData(adatok) {
         div.appendChild(div2);
         div2.append(svg);
         svg.appendChild(path);
-        svg.appendChild(path2);
 
         dataDiv.appendChild(div);
         dataDiv.appendChild(datas)
@@ -116,10 +110,6 @@ function showSubedData(adatok) {
             modifyDiv.appendChild(modifyPointsBtn);
             datas.appendChild(modifyDiv);
         }
-
-        let hr = create("hr");
-        dataDiv.appendChild(hr);
-
         ki.appendChild(dataDiv)
     }
 }
