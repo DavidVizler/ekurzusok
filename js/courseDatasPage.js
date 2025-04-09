@@ -87,6 +87,7 @@ function ModifyActualData(cardData) {
     let addButton = document.querySelector(".addIcon")
     let settingsButton = document.querySelector(".settingIcon")
     let deleteUserButton = $("deleteButton")
+    let deleteCourseButton = document.querySelector(".deleteCourseIcon")
 
     let kurzusNev = $("kurzusNev")
     let oktatok = $("oktatok")
@@ -99,10 +100,11 @@ function ModifyActualData(cardData) {
     kurzusLeiras.innerHTML = cardData.description;
     if (cardData.archived == 1) {
         addButton.removeAttribute("href")
-        addButton.classList.add("disabled")
+        addButton.style.display = "none"
         settingsButton.removeAttribute("href")
-        settingsButton.classList.add("disabled")
+        settingsButton.style.display = "none"
         deleteUserButton.classList.add("disabled")
+        deleteCourseButton.style.display = "flex"
 
         const menu = $("menu"); // A hamburger menü div-je
         const warningBanner = create('div', 'archived-warning');
@@ -341,6 +343,19 @@ async function PublishContent(radios) {
     }
 }
 
+async function DeleteCourse() {
+    let course_id = parseInt(getUrlEndpoint());
+    console.log(course_id)
+    try {
+        let [response, result] = await API.deleteCourse(course_id)
+        if(result.sikeres){
+            location.href = '../kurzusok.html';
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const link1 = $('link1');
     const link2 = $('link2');
@@ -376,7 +391,7 @@ async function leaveCourse() {
     }
 }
 
-function confirmationModal() {
+function confirmationModal(messageText,fuggveny) {
     let alertDiv = $('alertDiv')
     alertDiv.style.display = "flex"
 
@@ -385,12 +400,14 @@ function confirmationModal() {
 
     let message = create("p")
     modal_content.appendChild(message)
-    message.innerHTML = "Biztosan ki szeretne lépni a kurzusból?"
+    message.innerHTML = messageText
 
     let yes_button = create("button")
     modal_content.appendChild(yes_button)
     yes_button.innerHTML = "Igen"
-    yes_button.addEventListener("click", leaveCourse)
+    yes_button.addEventListener("click", ()=>{
+        fuggveny()
+    })
 
     let no_button = create("button")
     modal_content.appendChild(no_button)
@@ -426,7 +443,9 @@ function showAlert(uzenet) {
     ok_button.focus()
 }
 
-$('leaveButton').addEventListener('click', confirmationModal);
+$('leaveButton').addEventListener('click',()=>{
+    confirmationModal("Biztosan ki szeretne lépni a kurzusból?",leaveCourse)
+});
 
 window.addEventListener("load", getCardsData)
 window.addEventListener("load", () => {
@@ -445,3 +464,7 @@ window.addEventListener("load", () => {
         getCourseContent(courseId);
     }
 });
+
+document.getElementById("deleteCourseButton").addEventListener("click", ()=>{
+    confirmationModal("Biztosan törölné a kurzust?", DeleteCourse)
+})
