@@ -366,6 +366,15 @@ a#openModal:hover, a#openModalUsers:hover {
     align-items: center;
 }
 
+.deleteCourseIcon svg{
+    height: 35px;
+    width: 35px;
+}
+
+.deleteCourseIcon svg:hover{
+    cursor: pointer;
+}
+
 #scrollDiv{
     overflow-y: auto;
     max-height: 500px;
