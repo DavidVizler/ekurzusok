@@ -59,6 +59,20 @@
         } else {
             $orderby = "default";
         }
+
+        // Keresési oszlop
+        if (isset($_GET["field"])) {
+            $field = ", '{$_GET["field"]}'";
+        } else {
+            $field = "";
+        }
+
+        // Keresett kifejezés
+        if (isset($_GET["keyword"])) {
+            $keyword = ", '{$_GET["keyword"]}'";
+        } else {
+            $keyword = "";
+        }
     }
 
     if ($endpoint == "course-info" || $endpoint == "user-info" || $endpoint == "modify-user-data") {
@@ -71,7 +85,7 @@
 
     switch($endpoint) {
         case "users":
-            $onload_js_function = "listUsers({$page}, {$rows}, '{$orderby}')";
+            $onload_js_function = "listUsers({$page}, {$rows}, '{$orderby}'{$field}{$keyword})";
             break;
         case "courses":
             $onload_js_function = "listCourses({$page}, {$rows}, '{$orderby}')";
@@ -110,7 +124,7 @@
                     break;
                 case "users":
                     NavBar($rows);
-                    PageManager($page, $rows, $endpoint);
+                    PageManager($page, $rows, $endpoint, NULL, $_GET["field"], $_GET["keyword"]);
                     UsersTable();
                     break;
                 case "courses":

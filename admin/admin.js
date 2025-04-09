@@ -1,4 +1,5 @@
-async function listUsers(page, rows, orderby) {
+async function listUsers(page, rows, orderby, field = null, keyword = null) {
+    if (field == "user_id") keyword = parseInt(keyword);
     try {
         let request = await fetch("./api/get-users", {
             method: "POST",
@@ -8,7 +9,9 @@ async function listUsers(page, rows, orderby) {
             body: JSON.stringify({
                 page,
                 rows,
-                orderby
+                orderby,
+                field,
+                keyword
             })
         });
 
@@ -38,6 +41,8 @@ async function listUsers(page, rows, orderby) {
             } 
 
             $("rows").value = rows;
+            $("field").value = field == null ? "user_id" : field;
+            $("keyword").value = keyword == null ? "" : keyword
             if (orderby == "default") {
                 $("orderby").value = "user_id";
             } else {

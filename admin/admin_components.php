@@ -37,10 +37,42 @@ function NavBar($rows = null) {
     HTML;
 }
 
-function PageManager($page, $rows, $data_type, $id = null) {
+function PageManager($page, $rows, $data_type, $id = null, $field = null, $keyword = null) {
     switch ($data_type) {
         case "users":
-            $sql_statement = "SELECT COUNT(user_id) AS count FROM users";
+            if (!empty($keyword) && !empty($field)) {
+                switch ($field) {
+                    case "user_id":
+                        if (!is_int($keyword)) {
+                            echo "Érvénytelen felhasználó ID";
+                        }
+                        $filter = "u.user_id = ?";
+                        $keyword_type = "i";
+                        break;
+                    case "name":
+                        $filter = "CONCAT(u.lastname, ' ', u.firstname) LIKE ?";
+                        $keyword = "%{$keyword}%";
+                        $keyword_type = "s";
+                        break;
+                    case "email":
+                        $filter = "u.email LIKE ?";
+                        $keyword = "%{$keyword}%";
+                        $keyword_type = "s";
+                        break;
+                    default:
+                        echo "Érvénytelen keresési terület";
+                        return;
+                }
+            } else {
+                $filter = "";
+            }
+        
+            if (!empty($data["keyword"]) && !empty($data["field"])) {
+                $sql_statement = "SELECT COUNT(user_id) AS count FROM users HAVING {$filter};";
+            } else {
+                $sql_statement = "SELECT COUNT(user_id) AS count FROM users;";
+            }
+            
             $row_word = "felhasználó van az adatbázisban";
             $order_by_options = <<<HTML
                 <option value="user_id">Felhasználó ID</option>
@@ -85,7 +117,10 @@ function PageManager($page, $rows, $data_type, $id = null) {
             break;
     }
     
-    if (is_null($id)) {
+    if (!empty($keyword) && !empty($field)) {
+        $count = DataQuery($sql_statement, $keyword_type, [$keyword])[0]["count"];
+        $id_input = "";
+    } else if (is_null($id)) {
         $count = DataQuery($sql_statement)[0]["count"];
         $id_input = "";
     } else {
@@ -100,8 +135,19 @@ function PageManager($page, $rows, $data_type, $id = null) {
     echo " 
         <div id='info'></div>
         <div id='page-control'>
-            <span id='count'></span>
             <form method='GET' id='page-form'>
+                Keresés
+                <select id='field' name='field'>
+                    <option value='user_id'>felhasználó ID</option>
+                    <option value='name'>név</option>
+                    <option value='email'>e-mail cím</option>
+                </select>
+                alapján:
+                <input type='text' name='keyword' id='keyword'>
+                <input type='submit' value='Keresés'>
+
+                <br>
+
                 <label for='page-num'>Oldal:</label>
                 <input type='button' id='page-prev' onclick='prevPage()'{$no_prev} value='<'>
                 <input type='number' name='page' id='page' value='{$page}' onkeypress='manualPageTurn(event)'> / {$page_count}
