@@ -37,25 +37,22 @@ function NavBar($rows = null) {
     HTML;
 }
 
-function PageManager($page, $rows, $data_type, $id = null, $field = null, $keyword = null) {
+function PageManager($page, $rows, $data_type, $id = null, $display_sreach = false, $field = null, $keyword = null) {
     switch ($data_type) {
         case "users":
-            if (!empty($keyword) && !empty($field)) {
+            if ($display_sreach && !empty($keyword) && !empty($field)) {
                 switch ($field) {
                     case "user_id":
-                        if (!is_int($keyword)) {
-                            echo "Érvénytelen felhasználó ID";
-                        }
-                        $filter = "u.user_id = ?";
+                        $filter = "user_id = ?";
                         $keyword_type = "i";
                         break;
                     case "name":
-                        $filter = "CONCAT(u.lastname, ' ', u.firstname) LIKE ?";
+                        $filter = "CONCAT(lastname, ' ', firstname) LIKE ?";
                         $keyword = "%{$keyword}%";
                         $keyword_type = "s";
                         break;
                     case "email":
-                        $filter = "u.email LIKE ?";
+                        $filter = "email LIKE ?";
                         $keyword = "%{$keyword}%";
                         $keyword_type = "s";
                         break;
@@ -67,13 +64,13 @@ function PageManager($page, $rows, $data_type, $id = null, $field = null, $keywo
                 $filter = "";
             }
         
-            if (!empty($data["keyword"]) && !empty($data["field"])) {
-                $sql_statement = "SELECT COUNT(user_id) AS count FROM users HAVING {$filter};";
+            if (!empty($keyword) && !empty($field)) {
+                $sql_statement = "SELECT COUNT(user_id) AS count FROM users WHERE {$filter};";
             } else {
                 $sql_statement = "SELECT COUNT(user_id) AS count FROM users;";
             }
             
-            $row_word = "felhasználó van az adatbázisban";
+            $row_word = "találat";
             $order_by_options = <<<HTML
                 <option value="user_id">Felhasználó ID</option>
                 <option value="lastname">Vezetéknév</option>
@@ -117,7 +114,7 @@ function PageManager($page, $rows, $data_type, $id = null, $field = null, $keywo
             break;
     }
     
-    if (!empty($keyword) && !empty($field)) {
+    if ($display_sreach && !empty($keyword) && !empty($field)) {
         $count = DataQuery($sql_statement, $keyword_type, [$keyword])[0]["count"];
         $id_input = "";
     } else if (is_null($id)) {
@@ -132,41 +129,50 @@ function PageManager($page, $rows, $data_type, $id = null, $field = null, $keywo
     $page_count = ceil($count/$rows);
     $no_next = $page_count == $page ? " disabled" : "";
 
+    if ($display_sreach) {
+        $search_html = "<div id='search'>
+            Keresés
+            <select id='field' name='field'>
+                <option value='user_id'>felhasználó ID</option>
+                <option value='name'>név</option>
+                <option value='email'>e-mail cím</option>
+            </select>
+            alapján:
+            <input type='text' name='keyword' id='keyword'>
+            <input type='submit' value='Keresés' id='search-button'>
+        </div>";
+    } else {
+        $search_html = "";
+    }
+
     echo " 
         <div id='info'></div>
         <div id='page-control'>
             <form method='GET' id='page-form'>
-                Keresés
-                <select id='field' name='field'>
-                    <option value='user_id'>felhasználó ID</option>
-                    <option value='name'>név</option>
-                    <option value='email'>e-mail cím</option>
-                </select>
-                alapján:
-                <input type='text' name='keyword' id='keyword'>
-                <input type='submit' value='Keresés'>
-
-                <br>
-
-                <label for='page-num'>Oldal:</label>
-                <input type='button' id='page-prev' onclick='prevPage()'{$no_prev} value='<'>
-                <input type='number' name='page' id='page' value='{$page}' onkeypress='manualPageTurn(event)'> / {$page_count}
-                <input type='button' id='page-next' onclick='nextPage()'{$no_next} value='>'>
-                <label for='rows'>Sorok oldalanként:</label>
-                <select name='rows' id='rows' onchange='this.form.submit()'>
-                    <option value='25'>25</option>
-                    <option value='50'>50</option>
-                    <option value='100'>100</option>
-                    <option value='200'>200</option>
-                </select>
-                <label for='orderby'>Rendezés:</label>
-                <select name='orderby' id='orderby' onchange='this.form.submit()'>
-                    {$order_by_options}
-                </select>
-                <span class='row-count-span'>Összesen {$count} {$row_word}</span>
-                {$id_input}
+                {$search_html}
+                <div id='pager'>
+                    <label for='page-num'>Oldal:</label>
+                    <input type='button' id='page-prev' onclick='prevPage()'{$no_prev} value='<'>
+                    <input type='number' name='page' id='page' value='{$page}' onkeypress='manualPageTurn(event)'> / {$page_count}
+                    <input type='button' id='page-next' onclick='nextPage()'{$no_next} value='>'>
+                    <label for='rows'>Sorok oldalanként:</label>
+                    <select name='rows' id='rows' onchange='this.form.submit()'>
+                        <option value='25'>25</option>
+                        <option value='50'>50</option>
+                        <option value='100'>100</option>
+                        <option value='200'>200</option>
+                    </select>
+                    <label for='orderby'>Rendezés:</label>
+                    <select name='orderby' id='orderby' onchange='this.form.submit()'>
+                        {$order_by_options}
+                    </select>
+                    <span class='row-count-span'>{$count} {$row_word}</span>
+                    {$id_input}
+                </div>
             </form>
         </div>";
+
+    return $count;
 }
 
 function UsersTable() {

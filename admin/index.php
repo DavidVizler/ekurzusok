@@ -62,16 +62,16 @@
 
         // Keresési oszlop
         if (isset($_GET["field"])) {
-            $field = ", '{$_GET["field"]}'";
+            $field = $_GET["field"];
         } else {
-            $field = "";
+            $field = null;
         }
 
         // Keresett kifejezés
         if (isset($_GET["keyword"])) {
-            $keyword = ", '{$_GET["keyword"]}'";
+            $keyword = $_GET["keyword"];
         } else {
-            $keyword = "";
+            $keyword = null;
         }
     }
 
@@ -85,7 +85,7 @@
 
     switch($endpoint) {
         case "users":
-            $onload_js_function = "listUsers({$page}, {$rows}, '{$orderby}'{$field}{$keyword})";
+            $onload_js_function = "listUsers({$page}, {$rows}, '{$orderby}', '{$field}', '{$keyword}')";
             break;
         case "courses":
             $onload_js_function = "listCourses({$page}, {$rows}, '{$orderby}')";
@@ -124,8 +124,8 @@
                     break;
                 case "users":
                     NavBar($rows);
-                    PageManager($page, $rows, $endpoint, NULL, $_GET["field"], $_GET["keyword"]);
-                    UsersTable();
+                    $count = PageManager($page, $rows, $endpoint, NULL, true, $field, $keyword);
+                    if ($count) UsersTable();
                     break;
                 case "courses":
                     NavBar($rows);

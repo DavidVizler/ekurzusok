@@ -41,8 +41,8 @@ async function listUsers(page, rows, orderby, field = null, keyword = null) {
             } 
 
             $("rows").value = rows;
-            $("field").value = field == null ? "user_id" : field;
-            $("keyword").value = keyword == null ? "" : keyword
+            $("field").value = field == "" ? "user_id" : field;
+            $("keyword").value = keyword == "" ? "" : (field == "user_id" && isNaN(keyword) ? "" : keyword)
             if (orderby == "default") {
                 $("orderby").value = "user_id";
             } else {
@@ -548,5 +548,13 @@ window.addEventListener("load", () => {
             modifyUserData();
             e.preventDefault();
         })
+    }
+
+    if ($("field") != null) {
+        $("field").addEventListener("input", (e) => {
+            if (e.target.value == "user_id") {
+                $("keyword").value = "";
+            }
+        });
     }
 })
