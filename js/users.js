@@ -86,7 +86,7 @@ function getRoleName(role) {
 async function showCourseUsers(userslist) {
     const usersDiv = document.querySelector('.courseUsers');
     const ownerp = document.createElement('p');
-    const tags = document.createElement('h1');
+    const tags = document.createElement('h2');
     const scrollDiv = document.createElement('div');
     const ul = document.createElement('ul');
     const tanarUl = document.createElement('ul');
@@ -94,7 +94,7 @@ async function showCourseUsers(userslist) {
     tags.innerHTML = "Tagok:";
     scrollDiv.id = "scrollDiv";
 
-    ownerp.innerHTML = "<h1>Tanárok: </h1>";
+    ownerp.innerHTML = "<h2>Tanárok: </h2>";
     ownerp.id = "ownerp"
 
     usersDiv.append(ownerp, tags, scrollDiv);
