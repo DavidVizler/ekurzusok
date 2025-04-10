@@ -256,13 +256,23 @@ function ModifyCourseContentData() {
 
     $course_id = $content_data[0]["course_id"];
 
-    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
-    $archived_check = DataQuery($sql_statement, "i", [$course_id]);
+    $sql_statement = "SELECT m.role, c.archived FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE c.course_id = ? AND m.user_id = ?;";
+    $permission_check = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
 
-    if ($archived_check[0]["archived"]) {
+    if ($permission_check[0]["archived"]) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
+    if ($permission_check[0]["role"] == 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó már nem tanár a kurzusban"
         ], 403);
         return;
     }
@@ -403,13 +413,23 @@ function AttachFileToContent() {
 
     $course_id = $content_data[0]["course_id"];
 
-    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
-    $archived_check = DataQuery($sql_statement, "i", [$course_id]);
+    $sql_statement = "SELECT m.role, c.archived FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE c.course_id = ? AND m.user_id = ?;";
+    $permission_check = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
 
-    if ($archived_check[0]["archived"]) {
+    if ($permission_check[0]["archived"]) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
+    if ($permission_check[0]["role"] == 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó már nem tanár a kurzusban"
         ], 403);
         return;
     }
@@ -443,7 +463,7 @@ function RemoveFileFromContent() {
     $user_id = $_COOKIE["user_id"];
 
     // A felhasználó-e a tartalom tulajdonosa
-    $sql_statement = "SELECT c.user_id FROM content c
+    $sql_statement = "SELECT c.user_id, c.course_id FROM content c
     INNER JOIN files f ON c.content_id = f.content_id
     WHERE c.content_id = ? AND f.file_id = ?;";
     $file_data = DataQuery($sql_statement, "ii", [$content_id, $file_id]);
@@ -460,6 +480,29 @@ function RemoveFileFromContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa a tartalomnak"
+        ], 403);
+        return;
+    }
+
+    $course_id = $file_data[0]["course_id"];
+
+    $sql_statement = "SELECT m.role, c.archived FROM courses c
+    INNER JOIN memberships m ON c.course_id = m.course_id
+    WHERE c.course_id = ? AND m.user_id = ?;";
+    $permission_check = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
+
+    if ($permission_check[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
+    if ($permission_check[0]["role"] == 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó már nem tanár a kurzusban"
         ], 403);
         return;
     }
@@ -512,13 +555,21 @@ function DeleteCourseContent() {
     }
 
     $course_id = $content_data[0]["course_id"];
-    $sql_statement = "SELECT user_id FROM memberships WHERE course_id = ?;";
-    $course_owner = DataQuery($sql_statement, "i", [$course_id])[0]["user_id"];
+    $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
 
-    if ($content_data[0]["user_id"] != $user_id && $course_owner != $user_id) {
+    if ($content_data[0]["user_id"] != $user_id && $membership_data[0]["role"] != 3) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó nem tulajdonosa sem a tartalomnak, sem a kurzusnak"
+        ], 403);
+        return;
+    } 
+    
+    if ($membership_data[0]["role"] == 1) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A felhasználó már nem tanár a kurzusban"
         ], 403);
         return;
     }
