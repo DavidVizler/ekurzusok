@@ -9,7 +9,7 @@ function UserDataQuery() {
         return;
     }
 
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
     $user_data = DataQuery($sql_statement, "i", [$user_id]);
@@ -32,7 +32,7 @@ function UserCoursesQuery() {
         return;
     }
 
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     $sql_statement = "SELECT c.course_id, c.name, c.design_id, c.archived, m.role,
     (SELECT u.firstname FROM users u INNER JOIN memberships m ON u.user_id = m.user_id WHERE m.role = 3 AND m.course_id = c.course_id) AS firstname,
@@ -58,7 +58,7 @@ function CourseDataQuery() {
     }
     
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $course_id = $data["course_id"];
 
     // Benne van-e a felhasználó a kurzusban
@@ -97,7 +97,7 @@ function CourseMembersQuery() {
     }
     
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $course_id = $data["course_id"];
 
     // Benne van-e a felhasználó a kurzusban
@@ -146,7 +146,7 @@ function CourseContentQuery() {
     }
     
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $course_id = $data["course_id"];
 
     // Benne van-e a felhasználó a kurzusban
@@ -181,7 +181,7 @@ function CourseContentDataQuery() {
     }
     
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
 
     // Benne van-e a felhasználó a kurzusban
@@ -228,7 +228,7 @@ function CourseContentFilesQuery() {
     }
 
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
 
     // Benne van-e a felhasználó a kurzusban
@@ -259,7 +259,7 @@ function DeadlineTasksQuery() {
         return;
     }
 
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     $sql_statement = "SELECT t.content_id, t.deadline, t.title, c.name AS course_name FROM content t
     INNER JOIN courses c ON t.course_id = c.course_id
@@ -285,7 +285,7 @@ function OwnSubmissionQuery() {
     }
 
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
 
     // Tanuló-e a felhasználó a kurzusban
@@ -347,7 +347,7 @@ function SubmissionsQuery() {
     }
 
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
 
     // Tanár-e a felhasználó a kurzusban
@@ -394,7 +394,7 @@ function SubmissionCountQuery() {
     }
 
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
 
     // Tanár-e a felhasználó a kurzusban
@@ -442,7 +442,7 @@ function SubmittedFilesQuery() {
 
     global $data;
     $submission_id = $data["submission_id"];
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // A felhasználó tanár-e a kurzusban vagy tulajdonosa-e a beadandónak
     $sql_statement = "SELECT m.role, s.user_id FROM memberships m

@@ -242,9 +242,37 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
 
 }
 
+// Süti adat kódoló
+function encrypt($data, $key) {
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    $encrypted = openssl_encrypt($data, 'aes-256-cbc', hex2bin($key), 0, $iv);
+    return base64_encode($iv . $encrypted);
+}
+
+function decrypt($data, $key) {
+    $data = base64_decode($data);
+    $iv_length = openssl_cipher_iv_length('aes-256-cbc');
+    $iv = substr($data, 0, $iv_length);
+    $encrypted = substr($data, $iv_length);
+    return openssl_decrypt($encrypted, 'aes-256-cbc', hex2bin($key), 0, $iv);
+}
+
 // Bejelentkezés ellenőrzése
 function LoginCheck($send_response = true) {
     if (!isset($_COOKIE["user_id"])) {
+        if ($send_response) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "A felhasználó nincs bejelentkezve"
+            ], 401);
+        }
+        return false;
+    }
+
+    $sql_statement = "SELECT * FROM users WHERE user_id = ?;";
+    $user_id_valid = DataQuery($sql_statement, "i", [decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"))]);
+    if (count($user_id_valid) == 0) {
+        setcookie("user_id", "", time() - 3600, "/");
         if ($send_response) {
             SendResponse([
                 "sikeres" => false,

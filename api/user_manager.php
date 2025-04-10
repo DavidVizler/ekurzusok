@@ -37,7 +37,9 @@ function Login() {
     $cookie_time = $keep_login ? time() + (10 * 365 * 24 * 60 * 60) : 0;
 
     // Süti beállítása
-    setcookie("user_id", $user_data[0]["user_id"], $cookie_time, "/");
+    $key = getenv("COOKIE_KEY");
+    $user_id = encrypt($user_data[0]["user_id"], $key);
+    setcookie("user_id", $user_id, $cookie_time, "/");
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
@@ -91,7 +93,9 @@ function Signup() {
     // Eredmény vizsgálata
     if ($result) { 
         $sql_statement = "SELECT user_id FROM users WHERE email = ?;";
-        $user_id = DataQuery($sql_statement, "s", [$email])[0]["user_id"];
+        $user_data = DataQuery($sql_statement, "s", [$email]);
+        $key = getenv("COOKIE_KEY");
+        $user_id = encrypt($user_data[0]["user_id"], $key);
         setcookie("user_id", $user_id, time() + (10 * 365 * 24 * 60 * 60), "/", "", true, true);
         SendResponse([
             "sikeres" => true,
@@ -135,7 +139,7 @@ function ModifyUserData() {
     }
 
     global $data;
-    $user_id = $_SESSION["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $email = $data["email"];
     $lastname = $data["lastname"];
     $firstname = $data["firstname"] ;
@@ -237,7 +241,7 @@ function ChangeUserPassword() {
     global $data;
     $old_passwd = $data["old_password"];
     $new_passwd = $data["new_password"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // Régi jelszó ellenőrzése
     $sql_statement = "SELECT password FROM users WHERE user_id = ?";
@@ -300,7 +304,7 @@ function DeleteUser() {
     }
 
     $password = $data["password"];
-    $user_id = $_SESSION["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // Van-e ilyen felhasználó
     $sql_statement = "SELECT password FROM users WHERE user_id = ?;";

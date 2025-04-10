@@ -33,7 +33,7 @@ if (!array_key_exists("id", $_GET)) {
 $file_id = $_GET["file_id"];
 $attached_to = $_GET["attached_to"];
 $id = $_GET["id"];
-$user_id = $_SESSION["user_id"];
+$user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
 // TODO: felhasználó tagja-e a kurzusnak vagy tulajdonosa-e a beadandónak vagy a feladatnak
 

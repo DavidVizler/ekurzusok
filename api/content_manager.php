@@ -41,7 +41,7 @@ function CreateCourseContent() {
 
     $data = $_POST;
 
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $course_id = $data["course_id"];
     $title = $data["title"];
     $task = $data["task"] == "true";
@@ -159,7 +159,7 @@ function PublishCourseContent() {
 
     global $data;
     $content_id = $data["content_id"];
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // A felhasználóé-e a tartalom
     $sql_statement = "SELECT user_id, published, course_id FROM content WHERE content_id = ?";
@@ -233,7 +233,7 @@ function ModifyCourseContentData() {
     }
 
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
     $title = $data["title"];
     $description = $data["desc"];
@@ -389,7 +389,7 @@ function AttachFileToContent() {
     }
 
     $content_id = $_POST["content_id"];
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // Ellenőrzés, hogy a felhaználóé-e a tartalom
     $sql_statement = "SELECT user_id, course_id FROM content WHERE content_id = ?;";
@@ -460,7 +460,7 @@ function RemoveFileFromContent() {
     global $data;
     $file_id = $data["file_id"];
     $content_id = $data["content_id"];
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // A felhasználó-e a tartalom tulajdonosa
     $sql_statement = "SELECT c.user_id, c.course_id FROM content c
@@ -539,7 +539,7 @@ function DeleteCourseContent() {
     }
 
     global $data;
-    $user_id = $_COOKIE["user_id"];
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $content_id = $data["content_id"];
 
     // Tartalom adatok lekérdezése

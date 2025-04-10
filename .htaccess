@@ -12,3 +12,5 @@ RewriteRule kurzus/(\d+) kurzus/index.html [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) $1 [L,R=404]
+
+SetEnv COOKIE_KEY "2ec67a7a6e3e4212e07a44b88cb0383eaf92160dcac1a2b4be3c86fb7ba6783b"
