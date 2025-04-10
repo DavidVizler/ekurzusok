@@ -161,6 +161,7 @@ function viewByRole() {
     }
     else{
         $('leaveButton').style.display = "flex"
+        navbar.style.display = "none"
     }
 }
 

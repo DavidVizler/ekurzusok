@@ -33,11 +33,15 @@ svg:hover{
 
 .content{
     display: flex;
+    flex: 1;
     flex-direction: column;
     margin-left: 15px;
     margin-right: 15px;
     overflow: visible !important;
-    width: 80%;
+}
+
+.parent {
+    display: flex;
 }
 
 .fileDiv{
@@ -156,10 +160,12 @@ button:hover{
 #modifyDiv {
     margin-top: 10px;
     margin-right: 15px;
-    display: flex;
+    display: flex !important;
     justify-content: end;
     flex-direction: row;
     gap: 5px;
+    position: absolute;  /* Ha a szülőhöz viszonyítva szeretnéd elhelyezni */
+    right: 0;  /* Igazíthatod a kívánt pozícióra */
 }
 
 #deleteBtn {
@@ -347,4 +353,9 @@ p {
 
 button{
     font-family: "Varela Round";
+}
+
+.filesAndexerciseDiv{
+    padding: 20px;
+    padding-top: 0;
 }

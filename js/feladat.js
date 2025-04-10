@@ -31,8 +31,11 @@ async function getSubmissionData() {
 }
 
 function loadInScoredPoints(result){
-    let scoredDiv = document.getElementById("scoredPoints")
-    scoredDiv.innerHTML  = "Értékelés: " +  result.rating +  "/" + result.max_points + " pont"
+    if(result.rating){
+        let scoredDiv = document.getElementById("scoredPoints")
+        scoredDiv.style.display = "block"
+        scoredDiv.innerHTML  = "Értékelés: " +  result.rating +  "/" + result.max_points + " pont"
+    }
 }
 
 function submissionLoad(submission_data) {
@@ -376,6 +379,7 @@ function showFiles(files) {
     let ki = $("contentFilesContainer")
     ki.innerHTML = '';
     for (let file of files) {
+        document.querySelector(".filesAndexerciseDiv").style.display = "block"
         let contentId = getUrlParam('id');
 
         let a = create('a', 'download');
