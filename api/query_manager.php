@@ -260,13 +260,14 @@ function DeadlineTasksQuery() {
     }
 
     $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
+    $now = (new DateTime('now', new DateTimeZone('Europe/Budapest')))->format('Y-m-d H:i:s');
 
     $sql_statement = "SELECT t.content_id, t.deadline, t.title, c.name AS course_name FROM content t
     INNER JOIN courses c ON t.course_id = c.course_id
     INNER JOIN memberships m ON c.course_id = m.course_id
-    WHERE t.deadline IS NOT NULL AND m.user_id = ? AND c.archived = 0
+    WHERE t.deadline IS NOT NULL AND m.user_id = ? AND c.archived = 0 AND t.deadline > ?
     ORDER BY t.deadline;";
-    $tasks = DataQuery($sql_statement, "i", [$user_id]);
+    $tasks = DataQuery($sql_statement, "is", [$user_id, $now]);
 
     SendResponse($tasks);
 }
