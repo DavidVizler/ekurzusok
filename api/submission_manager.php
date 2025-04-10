@@ -130,6 +130,18 @@ function UnsubmitSubmission() {
         return;
     }
 
+    if (!is_null($membership_data[0]["deadline"])) {
+        $deadline = $membership_data[0]["deadline"];
+        $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
+        if ($now->format('Y-m-d H:i:s') > $deadline) {
+            SendResponse([
+                "sikeres" => false,
+                "uzenet" => "Határidő után nem lehet visszavonni a beadást"
+            ], 403);
+            return;
+        }
+    }
+
     $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
     $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
 
