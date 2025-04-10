@@ -178,6 +178,12 @@ class API {
         });
     }
 
+    static async unsubmitSubmission(content_id) {
+        return await this.fetch('api/submission/unsubmit', {
+            content_id: parseInt(content_id)
+        });
+    }
+
     static async rateSubmission(submission_id, points) {
         return await this.fetch('api/submission/rate', {
             submission_id: parseInt(submission_id),
