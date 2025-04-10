@@ -469,7 +469,7 @@ async function unsubmitSubmission() {
         let content_id = getUrlParam('id');
         let [response, result] = await API.unsubmitSubmission(content_id);
         if (response.ok) {
-            // location.reload();
+            location.reload();
         }
     }
     catch (error) {
