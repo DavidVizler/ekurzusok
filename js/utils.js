@@ -15,6 +15,10 @@ function getUrlParams() {
     return new URL(location.href).searchParams;
 }
 
+function getUrlParam(param) {
+    return getUrlParams().get(param);
+}
+
 // Az URL részeinek lekérése ('/' jeleknél elválasztva)
 function getUrlParts() {
     return location.href.split('/');
@@ -50,14 +54,15 @@ function getCurrentTime() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-
 if (typeof module !== 'undefined') {
     module.exports = {
         $,
         create,
         getUrlParams,
+        getUrlParam,
         getUrlParts,
         getUrlEndpoint,
-        convertDate
+        convertDate,
+        getCurrentTime
     };
 }
