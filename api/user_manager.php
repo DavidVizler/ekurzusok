@@ -149,14 +149,6 @@ function ModifyUserData() {
     $sql_statement = "SELECT * FROM users WHERE user_id = ?";
     $user_data = DataQuery($sql_statement, "i", [$user_id]);
 
-    if (count($user_data) == 0) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "A bejelentkezett felhasználói fiók már nem létezik"
-        ], 410);
-        return;
-    }
-
     if (!password_verify($password, $user_data[0]["password"])) {
         SendResponse([
             "sikeres" => false,
@@ -246,14 +238,6 @@ function ChangeUserPassword() {
     // Régi jelszó ellenőrzése
     $sql_statement = "SELECT password FROM users WHERE user_id = ?";
     $passwd_check = DataQuery($sql_statement, "i", [$user_id]);
-
-    if (count($passwd_check) == 0) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "A bejelentkezett felhasználói fiók már nem létezik"
-        ], 410);
-        return;
-    }
 
     if (!password_verify($old_passwd, $passwd_check[0]["password"])) {
         SendResponse([
