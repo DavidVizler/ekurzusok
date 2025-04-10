@@ -444,9 +444,11 @@ function SubmittedFilesQuery() {
     $submission_id = $data["submission_id"];
     $user_id = $_COOKIE["user_id"];
 
-    // A felhasználó tulajdonosa-e a beadandónak vagy létrehozója a tartalomnak
-    $sql_statement = "SELECT c.user_id AS content_owner, s.user_id AS submission_owner FROM submissions s
-    INNER JOIN content c ON s.content_id = c.content_id WHERE submission_id = ?;";
+    // A felhasználó tanár-e a kurzusban vagy tulajdonosa-e a beadandónak
+    $sql_statement = "SELECT m.role, s.user_id FROM memberships m
+    INNER JOIN content c ON m.course_id = c.content_id
+    INNER JOIN submissions s ON c.content_id = s.content_id
+    WHERE s.submission_id = ?;";
     $submission_data = DataQuery($sql_statement, "i", [$submission_id]);
 
     if (count($submission_data) == 0) {
@@ -456,12 +458,12 @@ function SubmittedFilesQuery() {
         return;
     }
 
-    if ($submission_data[0]["content_owner"] != $user_id && $submission_data[0]["submission_owner"] != $user_id) {
+    if ($submission_data[0]["user_id"] != $user_id && $submission_data[0]["role"] < 2) {
         SendResponse([
-            "uzenet" => "A felhasználó nem tulajdonosa sem a beadandónak, sem a feladatnak"
-        ], 403);
+            "uzenet" => "A felhasználó nem tanár a kurzusban és nem tulajdonosa a beadandónak"
+        ], 404);
         return;
-    }
+    } 
     
     $sql_statement = "SELECT file_id, name, size FROM files WHERE submission_id = ?;";
     $files = DataQuery($sql_statement, "i", [$submission_id]);
