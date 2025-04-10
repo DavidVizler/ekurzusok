@@ -56,7 +56,8 @@ async function listUsers(page, rows, orderby, field = null, keyword = null) {
     }
 }
 
-async function listCourses(page, rows, orderby) {
+async function listCourses(page, rows, orderby, field = null, keyword = null) {
+    if (field == "user_id") keyword = parseInt(keyword);
     try {
         let request = await fetch("./api/get-courses", {
             method: "POST",
@@ -66,7 +67,9 @@ async function listCourses(page, rows, orderby) {
             body: JSON.stringify({
                 page,
                 rows,
-                orderby
+                orderby,
+                field,
+                keyword
             })
         });
 
@@ -96,6 +99,8 @@ async function listCourses(page, rows, orderby) {
             } 
 
             $("rows").value = rows; 
+            $("field").value = field == "" ? "course_id" : field;
+            $("keyword").value = keyword == "" ? "" : (field == "course_id" && isNaN(keyword) ? "" : keyword)
             if (orderby == "default") {
                 $("orderby").value = "course_id";
             } else {
@@ -552,7 +557,7 @@ window.addEventListener("load", () => {
 
     if ($("field") != null) {
         $("field").addEventListener("input", (e) => {
-            if (e.target.value == "user_id") {
+            if (e.target.value == "user_id" || e.target.value == "course_id") {
                 $("keyword").value = "";
             }
         });

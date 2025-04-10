@@ -88,7 +88,7 @@
             $onload_js_function = "listUsers({$page}, {$rows}, '{$orderby}', '{$field}', '{$keyword}')";
             break;
         case "courses":
-            $onload_js_function = "listCourses({$page}, {$rows}, '{$orderby}')";
+            $onload_js_function = "listCourses({$page}, {$rows}, '{$orderby}', '{$field}', '{$keyword}')";
             break;
         case "course-info":
             $onload_js_function = "listCourseInfo({$page}, {$rows}, {$id}, '{$orderby}')";
@@ -129,8 +129,8 @@
                     break;
                 case "courses":
                     NavBar($rows);
-                    PageManager($page, $rows, $endpoint);
-                    CoursesTable();
+                    $count = PageManager($page, $rows, $endpoint, NULL, true, $field, $keyword);
+                    if ($count) CoursesTable();
                     break;
                 case "user-info":
                     NavBar($rows);

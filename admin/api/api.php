@@ -47,12 +47,6 @@ function AdminGetUsers() {
     if (!empty($data["keyword"]) && !empty($data["field"])) {
         switch ($data["field"]) {
             case "user_id":
-                if (!is_int($data["keyword"])) {
-                    SendResponse([
-                        "uzenet" => "Érvénytelen felhasználó ID"
-                    ], 400);
-                    return;
-                }
                 $filter = "u.user_id = ?";
                 $keyword = $data["keyword"];
                 $keyword_type = "i";
@@ -73,8 +67,6 @@ function AdminGetUsers() {
                 ], 400);
                 return;
         }
-    } else {
-        $filter = "";
     }
 
     if (!empty($data["keyword"]) && !empty($data["field"])) {
@@ -103,7 +95,7 @@ function AdminGetCourses() {
         return;
     }
 
-    if (!PostDataCheck(["rows", "page"], "ii")) {
+    if (!PostDataCheck(["rows", "page"], "ii", true, false)) {
         return;
     }
 
@@ -133,17 +125,43 @@ function AdminGetCourses() {
         $order = "ORDER BY c.course_id";
     }
 
-    $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
-    COUNT(m.membership_id) AS members, COUNT(CASE WHEN m.role = 2 OR m.role = 3 THEN 1 END) AS teachers
-    FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id LEFT JOIN users u ON m.user_id = u.user_id
-    GROUP BY c.course_id {$order} LIMIT ? OFFSET ?;";
-    $courses = DataQuery($sql_statement, "ii", [$limit, $offset]);
+    if (!empty($data["keyword"]) && !empty($data["field"])) {
+        switch ($data["field"]) {
+            case "course_id":
+                $filter = "c.course_id = ?";
+                $keyword = $data["keyword"];
+                $keyword_type = "i";
+                break;
+            case "name":
+                $filter = "c.name LIKE ?";
+                $keyword = "%{$data["keyword"]}%";
+                $keyword_type = "s";
+                break;
+            case "code":
+                $filter = "c.code = ?";
+                $keyword = $data["keyword"];
+                $keyword_type = "s";
+                break;
+            default:
+                SendResponse([
+                    "uzenet" => "Érvénytelen keresési terület"
+                ], 400);
+                return;
+        }
+    }
 
-    if (count($courses) == 0) {
-        SendResponse([
-            "uzenet" => "Nincsenek kurzusok az adatbázisban"
-        ]);
-        return;
+    if (!empty($data["keyword"]) && !empty($data["field"])) {
+        $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
+        COUNT(m.membership_id) AS members, COUNT(CASE WHEN m.role = 2 OR m.role = 3 THEN 1 END) AS teachers
+        FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id LEFT JOIN users u ON m.user_id = u.user_id
+        GROUP BY c.course_id HAVING {$filter} {$order} LIMIT ? OFFSET ?;";
+        $courses = DataQuery($sql_statement, $keyword_type . "ii", [$keyword, $limit, $offset]);
+    } else {
+        $sql_statement = "SELECT c.course_id, c.name, c.code, c.archived, u.firstname, u.lastname, u.user_id, 
+        COUNT(m.membership_id) AS members, COUNT(CASE WHEN m.role = 2 OR m.role = 3 THEN 1 END) AS teachers
+        FROM courses c LEFT JOIN memberships m ON c.course_id = m.course_id LEFT JOIN users u ON m.user_id = u.user_id
+        GROUP BY c.course_id {$order} LIMIT ? OFFSET ?;";
+        $courses = DataQuery($sql_statement, "ii", [$limit, $offset]);
     }
 
     SendResponse($courses,);

@@ -81,8 +81,36 @@ function PageManager($page, $rows, $data_type, $id = null, $display_sreach = fal
             HTML;
             break;
         case "courses":
-            $sql_statement = "SELECT COUNT(course_id) AS count FROM courses";
-            $row_word = "kurzus van az adatbázisban";
+            if ($display_sreach && !empty($keyword) && !empty($field)) {
+                switch ($field) {
+                    case "course_id":
+                        $filter = "course_id = ?";
+                        $keyword_type = "i";
+                        break;
+                    case "name":
+                        $filter = "name LIKE ?";
+                        $keyword = "%{$keyword}%";
+                        $keyword_type = "s";
+                        break;
+                    case "code":
+                        $filter = "code = ?";
+                        $keyword_type = "s";
+                        break;
+                    default:
+                        echo "Érvénytelen keresési terület";
+                        return;
+                }
+            } else {
+                $filter = "";
+            }
+        
+            if (!empty($keyword) && !empty($field)) {
+                $sql_statement = "SELECT COUNT(course_id) AS count FROM courses WHERE {$filter};";
+            } else {
+                $sql_statement = "SELECT COUNT(course_id) AS count FROM courses;";
+            }
+            
+            $row_word = "találat";
             $order_by_options = <<<HTML
                 <option value="course_id">Kurzus ID</option>
                 <option value="name">Név</option>
@@ -130,17 +158,31 @@ function PageManager($page, $rows, $data_type, $id = null, $display_sreach = fal
     $no_next = $page_count == $page ? " disabled" : "";
 
     if ($display_sreach) {
-        $search_html = "<div id='search'>
-            Keresés
-            <select id='field' name='field'>
-                <option value='user_id'>felhasználó ID</option>
-                <option value='name'>név</option>
-                <option value='email'>e-mail cím</option>
-            </select>
-            alapján:
-            <input type='text' name='keyword' id='keyword'>
-            <input type='submit' value='Keresés' id='search-button'>
-        </div>";
+        if ($data_type == "users") {
+            $search_html = "<div id='search'>
+                Keresés
+                <select id='field' name='field'>
+                    <option value='user_id'>felhasználó ID</option>
+                    <option value='name'>név</option>
+                    <option value='email'>e-mail cím</option>
+                </select>
+                alapján:
+                <input type='text' name='keyword' id='keyword'>
+                <input type='submit' value='Keresés' id='search-button'>
+            </div>";
+        } else if ($data_type == "courses") {
+            $search_html = "<div id='search'>
+                Keresés
+                <select id='field' name='field'>
+                    <option value='course_id'>kurzus ID</option>
+                    <option value='name'>név</option>
+                    <option value='code'>kód</option>
+                </select>
+                alapján:
+                <input type='text' name='keyword' id='keyword'>
+                <input type='submit' value='Keresés' id='search-button'>
+            </div>";
+        }
     } else {
         $search_html = "";
     }
