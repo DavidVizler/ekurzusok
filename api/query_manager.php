@@ -444,25 +444,21 @@ function SubmittedFilesQuery() {
     $submission_id = $data["submission_id"];
     $user_id = $_COOKIE["user_id"];
 
-    // A felhasználó tanár-e a kurzusban
-    $sql_statement = "SELECT m.role FROM memberships m
+    // A felhasználó tanár-e a kurzusban vagy tulajdonosa-e a beadandónak
+    $sql_statement = "SELECT m.role, s.user_id FROM memberships m
     INNER JOIN content c ON m.course_id = c.content_id
     INNER JOIN submissions s ON c.content_id = s.content_id
     WHERE s.submission_id = ?;";
-    $role_data = DataQuery($sql_statement, "i", [$submission_id]);
+    $submission_data = DataQuery($sql_statement, "i", [$submission_id]);
 
-    if (count($role_data) == 0) {
+    if (count($submission_data) == 0) {
         SendResponse([
             "uzenet" => "Nincs beadandó ilyen azonosítóval"
         ], 404);
         return;
     }
 
-    // A felhasználó tulajdonosa-e a beadandónak vagy létrehozója a tartalomnak
-    $sql_statement = "SELECT user_id AS submission_owner FROM submissions WHERE submission_id = ?;";
-    $submission_data = DataQuery($sql_statement, "i", [$submission_id]);
-
-    if ($submission_data[0]["submission_owner"] != $user_id && $role_data[0]["role"] < 2) {
+    if ($submission_data[0]["user_id"] != $user_id && $submission_data[0]["role"] < 2) {
         SendResponse([
             "uzenet" => "A felhasználó nem tanár a kurzusban és nem tulajdonosa a beadandónak"
         ], 404);
