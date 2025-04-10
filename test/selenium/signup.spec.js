@@ -1,7 +1,5 @@
 const { Builder, Browser, By, until } = require('selenium-webdriver');
-const URL = require('../url');
-
-const SIGNUP_URL = URL + '/signup.html';
+const { SIGNUP_URL } = require('../url');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
 
