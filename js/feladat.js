@@ -15,8 +15,7 @@ $("backToPreviousPage").addEventListener("click",()=>{
 })
 
 async function getSubmissionData() {
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.getOwnSubmission(contentId);
         console.log(result)
@@ -41,11 +40,20 @@ function submissionLoad(submission_data) {
         getSubmissionFiles(submission_data.submission_id);
 
         if (submission_data.submitted) {
-            $("uploadExerciseButton").disabled = true;
-            $("uploadExerciseButton").classList.add("disabledButton")
-            $("uploadFileButton").disabled = true;
-            $("uploadFileButton").classList.add("disabledButton")
-            $("uploadExerciseButton").innerHTML = "Feladat leadva"
+            let uploadExerciseButton = $('uploadExerciseButton');
+            uploadExerciseButton.disabled = true;
+            uploadExerciseButton.classList.add('disabledButton');
+            uploadExerciseButton.hidden = true;
+            uploadExerciseButton.innerHTML = 'Feladat leadva';
+
+            let uploadFileButton = $('uploadFileButton');
+            uploadFileButton.disabled = true;
+            uploadFileButton.classList.add('disabledButton');
+
+            let unsubmitBtn = $('unsubmitButton');
+            unsubmitBtn.hidden = false;
+            unsubmitBtn.disabled = false;
+            unsubmitBtn.classList.remove('disabledButton');
         }
     }
 
@@ -69,8 +77,7 @@ function submissionFilesLoad(files, submission_id) {
         let ki = $("selectedFiles")
         ki.innerHTML = '';
         for (let file of files) {
-            let urlParams = getUrlParams();
-            let contentId = urlParams.get('id');
+            let contentId = getUrlParam('id');
 
             let a = create('a', 'download');
             a.href = `downloader?file_id=${file.file_id}&attached_to=submission&id=${submission_id}`;
@@ -134,9 +141,8 @@ function submissionFilesLoad(files, submission_id) {
 }
 
 let adatok;
-window.addEventListener('load',async()=>{
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+window.addEventListener('load',async () => {
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.getContentData(contentId);
         if(response.ok) {
@@ -238,8 +244,7 @@ async function ModifyData() {
     if(max_points == ""){max_points = null}
     let limitDate = convertDate($("deadline-input").value);
     let description = $("description-input").value
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.contentModifyData(contentId, title, description, true, max_points, limitDate);
         if(result.sikeres == true){
@@ -297,8 +302,7 @@ function confirmationModal(){
 }
 
 async function DeleteContent() {
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.deleteContent(contentId);
         if(result.sikeres == false){
@@ -320,8 +324,7 @@ async function submitFiles() {
         let fileInput = $('fileInput');
         let formData = new FormData();
         
-        let urlParams = getUrlParams();
-        let tartalomId = urlParams.get('id');
+        let tartalomId = getUrlParam('id');
         formData.append("content_id", tartalomId);
 
         for (const file of fileInput.files) {
@@ -342,8 +345,7 @@ async function submitFiles() {
 }
 
 async function submitSubmission() {
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
 
     try {
         let [response, result] = await API.submitSubmission(contentId);
@@ -358,8 +360,7 @@ async function submitSubmission() {
 }
 
 async function GetContentFiles() {
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.getContentFiles(contentId);
         if(response.ok){
@@ -375,8 +376,7 @@ function showFiles(files) {
     let ki = $("contentFilesContainer")
     ki.innerHTML = '';
     for (let file of files) {
-        let urlParams = getUrlParams();
-        let contentId = urlParams.get('id');
+        let contentId = getUrlParam('id');
 
         let a = create('a', 'download');
         a.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${contentId}`;
@@ -438,9 +438,8 @@ function showFiles(files) {
     }
 }
 
-function navigateToSubmissions(){
-    let urlParams = getUrlParams();
-    let tartalomId = urlParams.get('id');
+function navigateToSubmissions() {
+    let tartalomId = getUrlParam('id');
     if(tartalomId){
         window.location.href = `submissions.html?id=${tartalomId}`;
     }
@@ -465,6 +464,20 @@ function checkDeadline() {
     }
 }
 
+async function unsubmitSubmission() {
+    try {
+        let content_id = getUrlParam('id');
+        let [response, result] = await API.unsubmitSubmission(content_id);
+        if (response.ok) {
+            // location.reload();
+        }
+    }
+    catch (error) {
+        console.error(e);
+    }
+}
+
 $("fileInput").addEventListener('change', submitFiles)
 $('uploadExerciseButton').addEventListener('click', submitSubmission)
 $('showSubmissions').addEventListener('click', navigateToSubmissions)
+$('unsubmitButton').addEventListener('click', unsubmitSubmission);

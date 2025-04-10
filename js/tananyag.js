@@ -7,9 +7,8 @@ $("backToPreviousPage").addEventListener("click",()=>{
 })
 
 let adatok;
-window.addEventListener('load',async()=>{
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+window.addEventListener('load',async () => {
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.getContentData(contentId);
         if(response.ok){
@@ -90,8 +89,7 @@ function confirmationModal(){
 async function ModifyData() {
     let title = $("ContentTitle").value
     let description = $("description-input").value
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.contentModifyData(contentId, title, description, false, null, null);
         if(result.sikeres == true){
@@ -108,8 +106,7 @@ async function ModifyData() {
 }
 
 async function DeleteContent() {
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.deleteContent(contentId);
         if(result.sikeres == false){
@@ -130,8 +127,7 @@ function showAlert(uzenet){
 }
 
 async function GetContentFiles() {
-    let urlParams = getUrlParams();
-    let contentId = urlParams.get('id');
+    let contentId = getUrlParam('id');
     try {
         let [response, result] = await API.getContentFiles(contentId);
         if(response.ok){
@@ -146,9 +142,8 @@ async function GetContentFiles() {
 function showFiles(files){
     let ki = document.querySelector('.content')
     
-    for(let file of files){
-        let urlParams = getUrlParams();
-        let contentId = urlParams.get('id');
+    for (let file of files) {
+        let contentId = getUrlParam('id');
 
         let a = create('a', 'download');
         a.href = `downloader?file_id=${file.file_id}&attached_to=content&id=${contentId}`;
