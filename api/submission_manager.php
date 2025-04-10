@@ -165,17 +165,17 @@ function UnsubmitSubmission() {
     $submission_id = $submission_data[0]["submission_id"];
 
     $sql_statement = "UPDATE submissions SET submitted = NULL WHERE submission_id = ?;";
-    $results = ModifyData($sql_statement, "i", [$submission_data]);
+    $results = ModifyData($sql_statement, "i", [$submission_id]);
 
     if ($results) {
         SendResponse([
             "sikeres" => true,
-            "uzenet" => "Feladat sikeresen leadva"
+            "uzenet" => "Leadás sikeresen visszavonva"
         ]);
     } else {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "Feladat leadása sikertelen"
+            "uzenet" => "Leadás visszavonása sikertelen"
         ]);
     }
 }
