@@ -19,14 +19,21 @@ async function getSubmissionData() {
     let contentId = urlParams.get('id');
     try {
         let [response, result] = await API.getOwnSubmission(contentId);
+        console.log(result)
         if (response.ok) {
             submissionLoad(result);
+            loadInScoredPoints(result)
         } else {
             throw response.status;
         }
     } catch (error) {
         console.log(error);
     }
+}
+
+function loadInScoredPoints(result){
+    let scoredDiv = document.getElementById("scoredPoints")
+    scoredDiv.innerHTML  = "Értékelés: " +  result.rating +  "/" + result.max_points + " pont"
 }
 
 function submissionLoad(submission_data) {
