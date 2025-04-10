@@ -97,6 +97,77 @@ function SubmitSubmission() {
     }
 }
 
+function UnsubmitSubmission() {
+    if (!LoginCheck()) {
+        return;
+    }
+
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["content_id"], "i")) {
+        return;
+    }
+
+    global $data;
+    $user_id = $_COOKIE["user_id"];
+    $content_id = $data["content_id"];
+
+    $sql_statement = "SELECT c.course_id, c.deadline FROM memberships m
+    INNER JOIN content c ON m.course_id = c.course_id
+    WHERE c.content_id = ? AND m.user_id = ?;";
+    $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
+
+    $course_id = $membership_data[0]["course_id"];
+    $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
+    $archived = DataQuery($sql_statement, "i", [$course_id]);
+    if ($archived[0]["archived"]) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A kurzus archiválva van"
+        ], 403);
+        return;
+    }
+
+    $sql_statement = "SELECT submission_id, submitted FROM submissions WHERE user_id = ? AND content_id = ?;";
+    $submission_data = DataQuery($sql_statement, "ii", [$user_id, $content_id]);
+
+    // Van-e beadandó
+    if (count($submission_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs beadandó"
+        ], 403);
+    }
+
+    // Be van-e már adva
+    if (is_null($submission_data[0]["submitted"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "A feladat nincs leadva"
+        ], 403);
+        return;
+    }
+
+    $submission_id = $submission_data[0]["submission_id"];
+
+    $sql_statement = "UPDATE submissions SET submitted = NULL WHERE submission_id = ?;";
+    $results = ModifyData($sql_statement, "i", [$submission_data]);
+
+    if ($results) {
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Feladat sikeresen leadva"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Feladat leadása sikertelen"
+        ]);
+    }
+}
+
 function AttachSubmissionFiles() {
     if (!LoginCheck()) {
         return;
@@ -373,6 +444,9 @@ function Manage($action) {
             break;
         case "submit":
             SubmitSubmission();
+            break;
+        case "unsubmit":
+            UnsubmitSubmission();
             break;
         case "remove-file":
             RemoveFileFromSubmission();
