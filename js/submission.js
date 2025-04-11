@@ -56,14 +56,17 @@ function showSubedData(adatok) {
         datas.id = `datasDiv-${adat.submission_id}`;
         datas.style.display =  "none";
 
-        datas.innerHTML = "<strong>Beadva: </strong>" + adat.submitted + "<br>"
-        datas.innerHTML += "<strong>Beadott fájlok száma: </strong>" + adat.files_count + "<br>"
+        let details = create('div','details')
+
+        details.innerHTML = "<strong>Beadva: </strong>" + adat.submitted + "<br>"
+        details.innerHTML += "<strong>Beadott fájlok száma: </strong>" + adat.files_count + "<br>"
         
         if (adat.files_count > 0) {
-            datas.innerHTML += "<strong>Fájlok: </strong>"
+            details.innerHTML += "<strong>Fájlok: </strong>"
             
             let filesList = create('div');
             filesList.id = `filesList-${adat.submission_id}`;
+            datas.appendChild(details)
             datas.appendChild(filesList);
         }
 
