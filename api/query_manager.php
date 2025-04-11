@@ -447,7 +447,7 @@ function SubmittedFilesQuery() {
 
     // A felhasználó tanár-e a kurzusban vagy tulajdonosa-e a beadandónak
     $sql_statement = "SELECT m.role, s.user_id FROM memberships m
-    INNER JOIN content c ON m.course_id = c.content_id
+    INNER JOIN content c ON m.course_id = c.course_id
     INNER JOIN submissions s ON c.content_id = s.content_id
     WHERE s.submission_id = ?;";
     $submission_data = DataQuery($sql_statement, "i", [$submission_id]);
