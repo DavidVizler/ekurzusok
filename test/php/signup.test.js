@@ -1,4 +1,4 @@
-const URL = require('../url');
+const { URL, PASSWORD } = require('../config');
 
 async function signup(signupData) {
     let response = await fetch(URL + '/api/user/signup', {
@@ -33,7 +33,7 @@ function generateEmail() {
 const lastname = 'Teszt';
 const firstname = 'Teszt';
 const email = generateEmail();
-const password = 'Teszt1234';
+const password = PASSWORD;
 
 describe('Regisztráció', () => {
     test('Sikeres regisztráció', async () => {

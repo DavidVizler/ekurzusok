@@ -9,7 +9,7 @@ function UserDataQuery() {
         return;
     }
 
-    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
+    $user_id = (int)decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));
 
     $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
     $user_data = DataQuery($sql_statement, "i", [$user_id]);
@@ -447,7 +447,7 @@ function SubmittedFilesQuery() {
 
     // A felhasználó tanár-e a kurzusban vagy tulajdonosa-e a beadandónak
     $sql_statement = "SELECT m.role, s.user_id FROM memberships m
-    INNER JOIN content c ON m.course_id = c.content_id
+    INNER JOIN content c ON m.course_id = c.course_id
     INNER JOIN submissions s ON c.content_id = s.content_id
     WHERE s.submission_id = ?;";
     $submission_data = DataQuery($sql_statement, "i", [$submission_id]);

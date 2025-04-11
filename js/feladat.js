@@ -14,6 +14,7 @@ $("backToPreviousPage").addEventListener("click",()=>{
     window.history.go(-1)
 })
 
+let submitted = false;
 async function getSubmissionData() {
     let contentId = getUrlParam('id');
     try {
@@ -31,7 +32,7 @@ async function getSubmissionData() {
 }
 
 function loadInScoredPoints(result){
-    if(result.rating){
+    if (result.rating != null) {
         let scoredDiv = document.getElementById("scoredPoints")
         scoredDiv.style.display = "block"
         scoredDiv.innerHTML  = "Értékelés: " +  result.rating +  "/" + result.max_points + " pont"
@@ -43,6 +44,7 @@ function submissionLoad(submission_data) {
         getSubmissionFiles(submission_data.submission_id);
 
         if (submission_data.submitted) {
+            submitted = true;
             let uploadExerciseButton = $('uploadExerciseButton');
             uploadExerciseButton.disabled = true;
             uploadExerciseButton.classList.add('disabledButton');
@@ -57,6 +59,9 @@ function submissionLoad(submission_data) {
             unsubmitBtn.hidden = false;
             unsubmitBtn.disabled = false;
             unsubmitBtn.classList.remove('disabledButton');
+        }
+        else {
+            submitted = false;
         }
     }
 
@@ -76,9 +81,9 @@ async function getSubmissionFiles(submission_id) {
 }
 
 function submissionFilesLoad(files, submission_id) {
+    let ki = $("selectedFiles")
+    ki.innerHTML = '';
     if (files.length > 0) {
-        let ki = $("selectedFiles")
-        ki.innerHTML = '';
         for (let file of files) {
             let contentId = getUrlParam('id');
 
@@ -110,11 +115,11 @@ function submissionFilesLoad(files, submission_id) {
             svg.appendChild(path)
             fileDiv.appendChild(h1)
 
-            if (adatok.owned) {
+            if (!submitted) {
                 let deleteBtn = document.createElementNS('http://www.w3.org/2000/svg','svg');
                 deleteBtn.style.marginLeft = 'auto';
                 deleteBtn.style.padding = '10px 20px';
-
+                
                 deleteBtn.setAttribute("xlmns","https://www.w3.org/2000/svg")
                 deleteBtn.setAttribute("fill","none")
                 deleteBtn.setAttribute("viewBox","0 0 24 24")
@@ -122,18 +127,18 @@ function submissionFilesLoad(files, submission_id) {
                 deleteBtn.setAttribute("stroke","currentColor")
                 deleteBtn.classList.add("size-6")
                 deleteBtn.classList.add("delete")
-
-                let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                path.setAttribute("stroke-linecap","round")
-                path.setAttribute("stroke-linejoin","round")
-                path.setAttribute("d","M6 18 18 6M6 6l12 12")
-
-                deleteBtn.appendChild(path)
-
+                
+                let path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path2.setAttribute("stroke-linecap","round")
+                path2.setAttribute("stroke-linejoin","round")
+                path2.setAttribute("d","M6 18 18 6M6 6l12 12")
+                
+                deleteBtn.appendChild(path2)
+                
                 deleteBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    await deleteFile(contentId, file.file_id)
+                    await deleteSubmittedFile(file.file_id);
                 });
                 fileDiv.appendChild(deleteBtn);
             }
@@ -453,6 +458,17 @@ async function deleteFile(contentId, fileId) {
     try {
         let [response, result] = await API.contentRemoveFile(contentId, fileId);
         GetContentFiles();
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
+async function deleteSubmittedFile(fileId) {
+    try {
+        let contentId = getUrlParam('id');
+        let [response, result] = await API.submissionRemoveFile(contentId, fileId);
+        await getSubmissionData();
     }
     catch (e) {
         console.error(e);
