@@ -4,14 +4,31 @@ body{
 
 .header{
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    border-bottom: 1px solid rgb(167, 164, 164);
     align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    border-bottom: none;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 10px;
+}
+
+.header-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 14px;
+    color: #5f6368;
 }
 
 svg{
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
 }
 
 svg:hover{
@@ -28,8 +45,10 @@ svg:hover{
 .content{
     display: flex;
     flex-direction: column;
-    margin-left: 15px;
-    margin-right: 15px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .fileDiv{
@@ -247,4 +266,9 @@ svg:hover{
 
 button{
     font-family: "Varela Round";
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: translateY(-1px);
 }

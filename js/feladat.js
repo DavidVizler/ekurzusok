@@ -158,6 +158,7 @@ window.addEventListener('load',async () => {
             showContentData()
             GetContentFiles()
             if (adatok.role == 1) {
+                document.querySelector(".filesAndexerciseDiv").style.display = "block"
                 getSubmissionData()
                 checkDeadline()
             }
@@ -384,7 +385,6 @@ function showFiles(files) {
     let ki = $("contentFilesContainer")
     ki.innerHTML = '';
     for (let file of files) {
-        document.querySelector(".filesAndexerciseDiv").style.display = "block"
         let contentId = getUrlParam('id');
 
         let a = create('a', 'download');
