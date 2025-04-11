@@ -31,7 +31,7 @@ async function getSubmissionData() {
 }
 
 function loadInScoredPoints(result){
-    if(result.rating){
+    if (result.rating != null) {
         let scoredDiv = document.getElementById("scoredPoints")
         scoredDiv.style.display = "block"
         scoredDiv.innerHTML  = "Értékelés: " +  result.rating +  "/" + result.max_points + " pont"
