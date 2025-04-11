@@ -37,10 +37,12 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Műveletek letiltása az archivált kurzusokban
 
 **Admin felület**
+- [ ] Felhasználó új jelszó generálás
 - [x] Felhasználó jelszó módosítás vagy visszaállítás
 - [x] Keresés
 
 **Mindkettő**
+- [ ] Felhasználó új jelszó igénylég
 - [x] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
 - [x] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
 - [x] Kurzus csatlakozási kód lekérése és megjelenítése
