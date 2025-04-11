@@ -9,7 +9,7 @@ function UserDataQuery() {
         return;
     }
 
-    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
+    $user_id = (int)decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));
 
     $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
     $user_data = DataQuery($sql_statement, "i", [$user_id]);
