@@ -1,4 +1,4 @@
-const URL = require('../url');
+const { URL, PASSWORD, EMAIL } = require('../config');
 
 async function login(loginData) {
     let response = await fetch(URL + '/api/user/login', {
@@ -23,15 +23,13 @@ async function login(loginData) {
     }
 }
 
-const email = 'teszt@teszt.com';
-const password = 'Teszt1234';
 const keep_login = false;
 
 describe('Bejelentkezés', () => {
     test('Nem létező email cím', async () => {
         let loginData = {
             email: 'nemletezo@teszt.com',
-            password,
+            password: PASSWORD,
             keep_login
         };
 
@@ -41,7 +39,7 @@ describe('Bejelentkezés', () => {
 
     test('Hibás jelszó', async () => {
         let loginData = {
-            email,
+            email: EMAIL,
             password: 'Hibás1234',
             keep_login
         };
@@ -51,7 +49,11 @@ describe('Bejelentkezés', () => {
     });
 
     test('Sikeres', async () => {
-        let loginData = { email, password, keep_login };
+        let loginData = {
+            email: EMAIL,
+            password: PASSWORD,
+            keep_login
+        };
 
         let result = await login(loginData);
         await expect(result).toBe(true);

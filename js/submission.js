@@ -99,7 +99,7 @@ function showSubedData(adatok) {
             modifyPointsBtn.addEventListener('click', () => {
                 let points = parseInt($(`modifyPointsInput-${adat.submission_id}`).value);
                 if (isNaN(points) || points > adat.max_points || points < 0) {
-                    alert("A megadott pontszám érvénytelen!");
+                    showModal("A megadott pontszám érvénytelen!");
                     return;
                 }
                 rate(adat.submission_id, points);
@@ -193,16 +193,40 @@ async function rate(submission_id, points) {
         let [response, result] = await API.rateSubmission(submission_id, points);
 
         if (response.ok) {
-            alert("Sikeres értékelés!");
-            location.reload();
+            showModal('Sikeres értékelés!', () => location.reload());
         }
         else {
-            alert("Hiba történt az értékelés közben!");
+            showModal('Hiba történt az értékelés közben!');
         }
     }
     catch (e) {
         console.error(e);
     }
+}
+
+function showModal(text, action = () => {}) {
+    let modal = create('div', 'modal');
+    let alertDiv = $('alertDiv');
+    alertDiv.style.display = 'block';
+    alertDiv.appendChild(modal);
+
+    let modal_content = create('div', 'modal-content');
+    modal.appendChild(modal_content);
+
+    let p = create('p');
+    modal_content.appendChild(p);
+    p.innerHTML = text;
+
+    let ok_button = create('button');
+    modal_content.appendChild(ok_button);
+    ok_button.innerHTML = 'OK';
+
+    ok_button.addEventListener('click', () => {
+        alertDiv.style.display = 'none';
+        alertDiv.innerHTML = '';
+        action();
+    });
+    ok_button.focus();
 }
 
 window.addEventListener("load", GetSubmissions);

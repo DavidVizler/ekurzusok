@@ -1,5 +1,5 @@
 const { Builder, Browser } = require('selenium-webdriver');
-const URL = require('../url');
+const { URL } = require('../config');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
 

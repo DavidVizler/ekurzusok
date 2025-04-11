@@ -498,6 +498,19 @@ function AdminResetUserPassword() {
     global $data;
     $user_id = $data["user_id"];
 
+    $sql_statement = "SELECT firstname, email FROM users WHERE user_id = ?;";
+    $user_data = DataQuery($sql_statement, "i", [$user_id]);
+
+    if (count($user_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs felhasználó ilyen ID-val"
+        ], 404);
+    }
+
+    $email = $user_data[0]["email"];
+    $firstname = $user_data[0]["firstname"];
+
     $new_passwd = "ekurzusok";
 
     for ($i = 0; $i < 8; $i++) {
@@ -506,18 +519,19 @@ function AdminResetUserPassword() {
 
     $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
 
-    $sql_statement = "UPDATE users SET password = ? WHERE user_id = ?;";
-    $result = ModifyData($sql_statement, "si", [$new_hashed_passwd, $user_id]);
+    include "mail.php";
 
-    if ($result) {
+    if ($mail_success) {
+        $sql_statement = "UPDATE users SET password = ? WHERE user_id = ?;";
+        ModifyData($sql_statement, "si", [$new_hashed_passwd, $user_id]);
         SendResponse([
             "sikeres" => true,
-            "uzenet" => "Jelszó sikeresen visszaállítva a következőre:<br><b>{$new_passwd}</b>"
+            "uzenet" => "Jelszó sikeresen visszaállítva!"
         ]);
     } else {
         SendResponse([
             "sikeres" => false,
-            "uzenet" => "Nincs felhasználó ilyen ID-val"
+            "uzenet" => "Sikertelen művelet"
         ], 400);
     }
 }
