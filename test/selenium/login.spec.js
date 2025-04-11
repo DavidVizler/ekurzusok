@@ -1,5 +1,5 @@
 const { Builder, Browser, By, until } = require('selenium-webdriver');
-const { LOGIN_URL } = require('../url');
+const { LOGIN_URL, EMAIL, PASSWORD } = require('../config');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
 
@@ -34,11 +34,10 @@ browsers.map(browser => {
         })
 
         test("Bejelentkezés - hibás adatok", async () => {
-            let email = 'teszt@teszt.com';
             let password = 'Hibás1234';
 
             let emailInput = await driver.findElement(By.id('email'));
-            emailInput.sendKeys(email);
+            emailInput.sendKeys(EMAIL);
 
             let passwordInput = await driver.findElement(By.id('password'));
             passwordInput.sendKeys(password);
@@ -51,14 +50,11 @@ browsers.map(browser => {
         })
 
         test("Bejelentkezés - sikeres bejelentkezés", async () => {
-            let email = 'teszt@teszt.com';
-            let password = 'Teszt1234';
-
             let emailInput = await driver.findElement(By.id('email'));
-            emailInput.sendKeys(email);
+            emailInput.sendKeys(EMAIL);
 
             let passwordInput = await driver.findElement(By.id('password'));
-            passwordInput.sendKeys(password);
+            passwordInput.sendKeys(PASSWORD);
 
             let loginBtn = await driver.findElement(By.id('button_login'));
             await loginBtn.click();
