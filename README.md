@@ -90,4 +90,5 @@ Az adatgenerátor a `DataGenerator.zip` fájlban található. Kicsomagolás utá
 
 ## Tesztek
 A tesztek futtatása előtt a [test](test/) mappába kell belépni és futtatni kell az alábbi parancsot: `npm install` \
+A [config.js](test/config.js) fájlban be kell állítani a megfelelő adatokat. \
 A tesztek futtatásához az alábbi parancsot kell futtatni: `npm test`

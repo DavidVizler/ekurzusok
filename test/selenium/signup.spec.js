@@ -1,5 +1,5 @@
 const { Builder, Browser, By, until } = require('selenium-webdriver');
-const { SIGNUP_URL } = require('../url');
+const { SIGNUP_URL, PASSWORD } = require('../config');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
 
@@ -43,7 +43,6 @@ browsers.map(browser => {
             let lastname = 'Selenium';
             let firstname = 'Test';
             let email = 'selenium' + new Date().getTime() + '@teszt.com';
-            let password = 'Teszt1234';
             
             let lastnameInput = await driver.findElement(By.id('lastname'));
             await lastnameInput.sendKeys(lastname);
@@ -55,10 +54,10 @@ browsers.map(browser => {
             await emailInput.sendKeys(email);
 
             let passwordInput = await driver.findElement(By.id('password'));
-            await passwordInput.sendKeys(password);
+            await passwordInput.sendKeys(PASSWORD);
 
             let passwordConfirmInput = await driver.findElement(By.id('confirm-password'));
-            await passwordConfirmInput.sendKeys(password);
+            await passwordConfirmInput.sendKeys(PASSWORD);
 
             let signupBtn = await driver.findElement(By.id('signup_button'));
             await signupBtn.click();
