@@ -249,7 +249,8 @@ body::-webkit-scrollbar{
 
 .tananyagDiv{
     display: flex;
-    border: 1px solid grey;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     border-radius: 15px;
     margin: 5px;
     width: 100%;
@@ -270,7 +271,8 @@ body::-webkit-scrollbar{
 
 .feladatDiv{
     display: flex;
-    border: 1px solid grey;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     border-radius: 15px;
     margin: 5px;
     width: 100%;
