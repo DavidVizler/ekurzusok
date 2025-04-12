@@ -15,7 +15,7 @@ function Login() {
     $keep_login = $data["keep_login"];
 
     // Ellenőrzés, hogy van-e felhasználó az adott e-mail címmel
-    $sql_statement = "SELECT user_id, password FROM users WHERE email = ?;";
+    $sql_statement = "SELECT user_id, password, temp_password FROM users WHERE email = ?;";
     $user_data = DataQuery($sql_statement, "s", [$email]);
     if (count($user_data) == 0) {
         SendResponse([
@@ -26,7 +26,10 @@ function Login() {
     }
 
     // Jelszó ellenőrzése
-    if (!password_verify($password, $user_data[0]["password"])) {
+    $regular_passwd_correct = password_verify($password, $user_data[0]["password"]);
+    $temp_passwd_correct = password_verify($password, $user_data[0]["temp_password"]);
+
+    if (!$regular_passwd_correct && !$temp_passwd_correct) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail vagy jelszó nem megfelelő"
@@ -34,12 +37,21 @@ function Login() {
         return;
     }
 
+    $user_id = $user_data[0]["user_id"];
+
+    // Ideiglenes jelszó törlése, ha a rendes jelszóval lép be
+    if ($temp_passwd_correct) {
+        $sql_statement = "UPDATE users SET temp_password = NULL WHERE user_id = ?;";
+        ModifyData($sql_statement, "i", [$user_id]);
+    }
+
+    // Maradjon-e bejelentkezve
     $cookie_time = $keep_login ? time() + (10 * 365 * 24 * 60 * 60) : 0;
 
     // Süti beállítása
     $key = getenv("COOKIE_KEY");
-    $user_id = encrypt($user_data[0]["user_id"], $key);
-    setcookie("user_id", $user_id, $cookie_time, "/");
+    $hashed_user_id = encrypt($user_data[0]["user_id"], $key);
+    setcookie("user_id", $hashed_user_id, $cookie_time, "/");
     SendResponse([
         "sikeres" => true,
         "uzenet" => "Sikeres bejelentkezés"
@@ -236,10 +248,13 @@ function ChangeUserPassword() {
     $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
     // Régi jelszó ellenőrzése
-    $sql_statement = "SELECT password FROM users WHERE user_id = ?";
+    $sql_statement = "SELECT password, temp_password FROM users WHERE user_id = ?";
     $passwd_check = DataQuery($sql_statement, "i", [$user_id]);
 
-    if (!password_verify($old_passwd, $passwd_check[0]["password"])) {
+    $regular_passwd_correct = password_verify($old_passwd, $passwd_check[0]["password"]);
+    $temp_passwd_correct = password_verify($old_passwd, $passwd_check[0]["temp_password"]);
+
+    if (!$regular_passwd_correct && !$temp_passwd_correct) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen jelszó"
@@ -255,10 +270,10 @@ function ChangeUserPassword() {
         return;
     }
 
-    $passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
+    $hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
 
-    $sql_statement = "UPDATE users SET password = ? WHERE user_id = ?";
-    $result = ModifyData($sql_statement, "si", [$passwd, $user_id]);
+    $sql_statement = "UPDATE users SET password = ?, temp_password = NULL WHERE user_id = ?";
+    $result = ModifyData($sql_statement, "si", [$hashed_passwd, $user_id]);
 
     if ($result) {
         SendResponse([
@@ -270,6 +285,51 @@ function ChangeUserPassword() {
             "sikeres" => false,
             "uzenet" => "Sikertelen jelszómódosítás"
         ]);
+    }
+}
+
+function ForgottenUserPassword() {
+    if (!CheckMethod("POST")) {
+        return;
+    }
+
+    if (!PostDataCheck(["email"], "s")) {
+        return;
+    }
+
+    global $data;
+    $email = $data["email"];
+
+    $sql_statement = "SELECT firstname FROM users WHERE email = ?;";
+    $user_data = DataQuery($sql_statement, "i", [$email]);
+
+    if (count($user_data) == 0) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs felhasználó ilyen e-mail címmel"
+        ], 404);
+    }
+
+    $firstname = $user_data[0]["firstname"];
+
+    // Ideiglenes jelszó létrehozása
+    $new_hashed_passwd = GenerateTemporaryPassword();
+
+    // E-mail küldése
+    include "mail.php";
+
+    if ($mail_success) {
+        $sql_statement = "UPDATE users SET temp_password = ? WHERE email = ?;";
+        ModifyData($sql_statement, "si", [$new_hashed_passwd, $email]);
+        SendResponse([
+            "sikeres" => true,
+            "uzenet" => "Ideiglenes belépési jelszó elküldve"
+        ]);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen művelet"
+        ], 400);
     }
 }
 
@@ -351,6 +411,9 @@ function Manage($action) {
             break;
         case "change-password":
             ChangeUserPassword();
+            break;
+        case "forgotten-password":
+            ForgottenUserPassword();
             break;
         case "delete":
             DeleteUser();

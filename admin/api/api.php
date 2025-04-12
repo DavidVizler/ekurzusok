@@ -511,22 +511,16 @@ function AdminResetUserPassword() {
     $email = $user_data[0]["email"];
     $firstname = $user_data[0]["firstname"];
 
-    $new_passwd = "ekurzusok";
+    $new_passwd = GenerateTemporaryPassword();
 
-    for ($i = 0; $i < 8; $i++) {
-        $new_passwd .= random_int(0, 9);
-    }
-
-    $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
-
-    include "mail.php";
+    include "../../api/mail.php";
 
     if ($mail_success) {
-        $sql_statement = "UPDATE users SET password = ? WHERE user_id = ?;";
+        $sql_statement = "UPDATE users SET temp_password = ? WHERE user_id = ?;";
         ModifyData($sql_statement, "si", [$new_hashed_passwd, $user_id]);
         SendResponse([
             "sikeres" => true,
-            "uzenet" => "Jelszó sikeresen visszaállítva!"
+            "uzenet" => "Ideiglenes belépési jelszó elküldve"
         ]);
     } else {
         SendResponse([

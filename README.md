@@ -15,8 +15,8 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
 - [ ] Több fájl feltöltése a meglévők mellé
 - [ ] Kurzus visszaállítása archivált állapotból
-- [ ] Közzlétett, nem közzétett tartalom oldal átrendezése
 - [ ] Üres kurzusok oldal kidekorálása
+- [x] Közzlétett, nem közzétett tartalom oldal átrendezése
 - [x] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
 - [x] Kurzus törlése
 - [x] Felhasználó kilépése a kurzusból (önmagától)
@@ -80,6 +80,9 @@ A letöltendő fájlok esetén az alábbi linket kell megnyitni a megfelelő ér
 `downloader?file_id=x&attached_to=y&id=z`
 
 A `file_id` a fájl ID-ja, az `attached_to` azt jelenti, hogy mihez van csatolva a fájl: ha tartalomhoz, akkor ennek az értéke `content`, ha beadandóhoz, akkor `submission`. Az `id` a tartalom vagy beadandó ID-ját jelöli.
+
+## Új jelszó igénylése
+A felhasználó képes egy új ideiglenes jelszót igényelni, ha elfelejtette jelszavát. Az ideiglenes jelszóval csak a bejelentkezés és a jelszóváltoztatás funkciók működnek. A régi jelszó továbbra is működőképes marad. Régi jelszóval való bejelntkezés vagy jelszóváltoztatás esetén az ideiglenes jelszó törlődik az adatbázisból.
 
 ## Adatbázis
 (Az `admins` tábla nélkül)
