@@ -356,33 +356,40 @@ function MainPage() {
     $sql_statement = "SELECT COUNT(user_id) AS count FROM users";
     $user_count = DataQuery($sql_statement)[0]["count"];
 
-    $sql_statement = "SELECT COUNT(course_id) AS count FROM courses";
-    $course_count = DataQuery($sql_statement)[0]["count"];
+    if ($user_count > 0) {
+        $sql_statement = "SELECT COUNT(course_id) AS count FROM courses";
+        $course_count = DataQuery($sql_statement)[0]["count"];
 
-    $sql_statement = "SELECT AVG(user_memberships.course_count) AS average_courses 
-    FROM (SELECT COUNT(membership_id) AS course_count FROM memberships GROUP BY user_id) AS user_memberships;";
-    $average_courses = round(DataQuery($sql_statement)[0]["average_courses"]);
+        $sql_statement = "SELECT AVG(user_memberships.course_count) AS average_courses 
+        FROM (SELECT COUNT(membership_id) AS course_count FROM memberships GROUP BY user_id) AS user_memberships;";
+        $average_courses = round(DataQuery($sql_statement)[0]["average_courses"]);
 
-    $sql_statement = "SELECT AVG(user_memberships.course_count) AS average_courses 
-    FROM (SELECT COUNT(membership_id) AS course_count FROM memberships WHERE role=3 GROUP BY user_id) AS user_memberships;";
-    $average_own_courses = round(DataQuery($sql_statement)[0]["average_courses"]);
+        $sql_statement = "SELECT AVG(user_memberships.course_count) AS average_courses 
+        FROM (SELECT COUNT(membership_id) AS course_count FROM memberships WHERE role=3 GROUP BY user_id) AS user_memberships;";
+        $average_own_courses = round(DataQuery($sql_statement)[0]["average_courses"]);
 
-    $sql_statement = "SELECT COUNT(user_memberships.course_count) AS owner_count
-    FROM (SELECT COUNT(membership_id) AS course_count FROM memberships WHERE role=3 GROUP BY user_id HAVING course_count > 0) AS user_memberships;";
-    $owner_percent = round(DataQuery($sql_statement)[0]["owner_count"]/$user_count*100, 2);
+        $sql_statement = "SELECT COUNT(user_memberships.course_count) AS owner_count
+        FROM (SELECT COUNT(membership_id) AS course_count FROM memberships WHERE role=3 GROUP BY user_id HAVING course_count > 0) AS user_memberships;";
+        $owner_percent = round(DataQuery($sql_statement)[0]["owner_count"]/$user_count*100, 2);
 
-    $sql_statement = "SELECT AVG(user_memberships.member_count) AS average_members 
-    FROM (SELECT COUNT(membership_id) AS member_count FROM memberships GROUP BY course_id) AS user_memberships;";
-    $average_members = round(DataQuery($sql_statement)[0]["average_members"]);
+        $sql_statement = "SELECT AVG(user_memberships.member_count) AS average_members 
+        FROM (SELECT COUNT(membership_id) AS member_count FROM memberships GROUP BY course_id) AS user_memberships;";
+        $average_members = round(DataQuery($sql_statement)[0]["average_members"]);
 
-    echo "<div id='admin-stats'>
-    <h1>Statisztikák</h1>
-    Összesen <b>{$user_count}</b> felhasználó és <b>{$course_count}</b> kurzus van az adatbázisban.<br>
-    A felhasználók <b>{$owner_percent}%</b>-nak van saját kurzusa.<br>
-    Egy felhasználó átlagosan <b>{$average_courses}</b> kurzusnak tagja.<br>
-    Azon felhasználók, akik legalább egy kurzusnak tulajdonosai, átlagosan <b>{$average_own_courses}</b> saját kurzussal rendelkezik.<br>
-    Egy kurzusnak átlagosan <b>{$average_members}</b> tagja van.
-    </div>";
+        echo "<div id='admin-stats'>
+            <h1>Statisztikák</h1>
+            Összesen <b>{$user_count}</b> felhasználó és <b>{$course_count}</b> kurzus van az adatbázisban.<br>
+            A felhasználók <b>{$owner_percent}%</b>-nak van saját kurzusa.<br>
+            Egy felhasználó átlagosan <b>{$average_courses}</b> kurzusnak tagja.<br>
+            Azon felhasználók, akik legalább egy kurzusnak tulajdonosai, átlagosan <b>{$average_own_courses}</b> saját kurzussal rendelkezik.<br>
+            Egy kurzusnak átlagosan <b>{$average_members}</b> tagja van.
+        </div>";
+    } else {
+        echo "<div id='admin-stats'>
+            <h1>Statisztikák</h1>
+            Az adatbázis jelenleg üres.
+        </div>";
+    }
 }
 
 ?>

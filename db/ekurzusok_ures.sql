@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1deb3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 30, 2025 at 11:13 AM
--- Server version: 10.11.8-MariaDB-0ubuntu0.24.04.1
--- PHP Version: 8.3.6
+-- Host: 127.0.0.1
+-- Generation Time: Apr 12, 2025 at 02:44 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,12 +46,12 @@ CREATE TABLE `content` (
   `user_id` int(11) NOT NULL,
   `course_id` int(11) NOT NULL,
   `title` varchar(128) NOT NULL,
-  `description` varchar(512) DEFAULT NULL,
+  `description` varchar(5000) DEFAULT NULL,
   `task` tinyint(1) NOT NULL,
   `max_points` smallint(4) DEFAULT NULL COMMENT 'Min 5, max 1000',
   `deadline` datetime DEFAULT NULL,
   `published` datetime DEFAULT NULL COMMENT 'Ha nincs megadva, akkor a tartalom még nincs közzétéve',
-  `last_modified` timestamp NOT NULL
+  `last_modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -121,7 +121,8 @@ CREATE TABLE `users` (
   `email` varchar(128) NOT NULL,
   `firstname` varchar(64) NOT NULL,
   `lastname` varchar(64) NOT NULL,
-  `password` char(60) NOT NULL
+  `password` char(60) NOT NULL,
+  `temp_password` char(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
