@@ -216,10 +216,10 @@ function showContentData(){
     }else{
         max_points.innerHTML = "<b>Ponthatár: </b>" + adatok.max_points + " p"
     }
-
-    if(adatok.owned == 0){
-        $("modifyBtn").classList.add("disabled")
+    if(adatok.role == 1){
         $("showSubmissions").classList.add("disabled")
+    }
+    if(adatok.owned == 0 || adatok.role != 3){
         $("deleteBtn").classList.add("disabled")
     }
     if(adatok.archived == 1){
@@ -233,9 +233,11 @@ function showContentData(){
         $("uploadFileButton").classList.add("disabledButton")
         $("uploadExerciseButton").classList.add("disabledButton")
     }
-    if(adatok.owned == 0){
+    if(adatok.role == 1){
         document.querySelector('.uploadOwnExercise').style.display = "flex"
         $('files').removeAttribute("style")
+        $("showSubmissions").classList.add("disabled")
+        $("modifyBtn").classList.add("disabled")
     }
 }
 

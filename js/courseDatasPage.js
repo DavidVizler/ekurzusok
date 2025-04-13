@@ -148,83 +148,21 @@ async function getCourseUsers(courseId) {
     }
 }
 
+function showCourseUsers(userList){
+    console.log(userList)
+}
+
 function viewByRole() {
     let addContentButton = $("addContentButton");
     let settingsButton = $("settingsButton");
     let navbar = $("contentNavbar");
-    let usersButton = $('openModalUsers')
-    if (cardData.role != 1) {
+    if (cardData.role == 2 || cardData.role == 3) {
         addContentButton.style.display = "flex";
         settingsButton.style.display = "flex";
-        usersButton.style.display = "flex"
         navbar.style.display = "block"
     }
-    else{
+    if(cardData.role == 1 || cardData.role == 2){
         $('leaveButton').style.display = "flex"
-        navbar.style.display = "none"
-    }
-}
-
-async function showCourseUsers(userslist) {
-    const usersDiv = document.querySelector('.courseUsers');
-    const ownerp = create('p');
-    const tags = create('p');
-    const scrollDiv = create('div');
-    const deleteButton = $('deleteButton');
-    const modifyRoleButton = $('modifyRoleButton')
-    const ul = create('ul');
-    const tanarUl = create('ul');
-
-    tags.textContent = "Tagok:";
-    scrollDiv.id = "scrollDiv";
-
-    ownerp.innerHTML = "Tanárok: <br>";
-    ownerp.id = "ownerp"
-
-    usersDiv.append(ownerp, tags, scrollDiv);
-
-    if (cardData.role == 3) {
-        userslist.forEach(user => {
-            const userRadio = create('input');
-            userRadio.type = "radio";
-            userRadio.style.marginBottom = "10px";
-
-            const name = create('label');
-            name.innerHTML = `${user.lastname} ${user.firstname}`;
-
-            const br = create('br');
-
-            if (user.role == 2 || user.role == 3) {
-                userRadio.name = "radios";
-                userRadio.value = user.user_id;
-                ownerp.append(userRadio, name, br);
-            } else {
-                userRadio.name = "radioButtons";
-                userRadio.value = user.user_id;
-                scrollDiv.append(userRadio, name, br);
-                deleteButton.style.display = "flex";
-                modifyRoleButton.style.display = "flex"
-            }
-        });
-    } else {
-        userslist.forEach(user => {
-            const li = create('li');
-            li.innerHTML = `${user.lastname} ${user.firstname}`;
-
-            if (user.role == 2 || user.role == 3) {
-                tanarUl.appendChild(li);
-            } else {
-                ul.appendChild(li);
-            }
-        });
-
-        if (tanarUl.children.length > 0) {
-            ownerp.appendChild(tanarUl);
-        }
-
-        if (ul.children.length > 0) {
-            scrollDiv.appendChild(ul);
-        }
     }
 }
 

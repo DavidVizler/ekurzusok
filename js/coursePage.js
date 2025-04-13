@@ -165,7 +165,7 @@ function GenerateCards() {
 
       cardBody.appendChild(cardTitle);
       cardBody.appendChild(cardOktatok);
-      if (cardData[i]["role"] > 1) {
+      if (cardData[i]["role"] == 3) {
          cardBody.appendChild(svg);
       }
       cardHeader.appendChild(img);
