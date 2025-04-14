@@ -162,6 +162,9 @@ window.addEventListener('load',async () => {
                 getSubmissionData()
                 checkDeadline()
             }
+            if (adatok.role > 1) {
+                displayNewFileUpload();
+            }
         }
         else if (response.status == 401) {
             window.location.href = './login.html';
@@ -498,6 +501,50 @@ async function unsubmitSubmission() {
         }
     }
     catch (error) {
+        console.error(e);
+    }
+}
+
+function displayNewFileUpload() {
+    let contentDiv = document.querySelector('.content');
+    let form = create('form');
+    form.enctype = 'multipart/formdata';
+    form.id = 'newFileForm';
+    
+    let fileInput = create('input');
+    fileInput.type = 'file';
+    fileInput.multiple = true;
+    fileInput.id = 'newFileInput';
+
+    let uploadBtn = create('button');
+    uploadBtn.type = 'button';
+    uploadBtn.innerHTML = 'Fájlok feltöltése';
+    uploadBtn.id = 'newFilesUploadButton';
+
+    uploadBtn.addEventListener('click', uploadNewFile);
+
+    form.appendChild(fileInput);
+    form.appendChild(uploadBtn);
+    contentDiv.appendChild(form);
+}
+
+async function uploadNewFile() {
+    try {
+        let reqData = new FormData();
+        let newFileInput = $('newFileInput');
+
+        for (const file of newFileInput.files) {
+            reqData.append('files[]', file);
+        }
+        reqData.append('content_id', parseInt(getUrlParam('id')));
+
+        let [response, result] = await API.contentUploadFiles(reqData);
+
+        if (response.ok) {
+            location.reload();
+        }
+    }
+    catch (e) {
         console.error(e);
     }
 }

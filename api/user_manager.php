@@ -317,7 +317,8 @@ function ForgottenUserPassword() {
     $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
 
     // E-mail küldése
-    include "mail.php";
+    require "../vendor/autoload.php";
+    include "./mail.php";
 
     if ($mail_success) {
         $sql_statement = "UPDATE users SET temp_password = ? WHERE email = ?;";

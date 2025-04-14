@@ -112,6 +112,14 @@ form a:hover {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+#forgottenPasswd {
+    text-decoration: underline;
+}
+
+#forgottenPasswd:hover {
+    cursor: pointer;
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;

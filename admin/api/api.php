@@ -514,6 +514,7 @@ function AdminResetUserPassword() {
     $new_passwd = GenerateTemporaryPassword();
     $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
 
+    require "../../vendor/autoload.php";
     include "../../api/mail.php";
 
     if ($mail_success) {
