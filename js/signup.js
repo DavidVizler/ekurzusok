@@ -16,6 +16,8 @@ async function signup() {
                 alert(result.uzenet);
             }
         }
+    } else {
+        alert("Helytelen adatok!");
     }
 }
 

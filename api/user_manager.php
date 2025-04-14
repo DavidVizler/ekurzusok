@@ -301,7 +301,7 @@ function ForgottenUserPassword() {
     $email = $data["email"];
 
     $sql_statement = "SELECT firstname FROM users WHERE email = ?;";
-    $user_data = DataQuery($sql_statement, "i", [$email]);
+    $user_data = DataQuery($sql_statement, "s", [$email]);
 
     if (count($user_data) == 0) {
         SendResponse([
@@ -322,7 +322,7 @@ function ForgottenUserPassword() {
 
     if ($mail_success) {
         $sql_statement = "UPDATE users SET temp_password = ? WHERE email = ?;";
-        ModifyData($sql_statement, "si", [$new_hashed_passwd, $email]);
+        ModifyData($sql_statement, "ss", [$new_hashed_passwd, $email]);
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Ideiglenes belépési jelszó elküldve"

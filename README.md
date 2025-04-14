@@ -10,12 +10,13 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Feladat leadása határidő után
 
 **Frontend**
+- [ ] Regisztráció ellenőrzés visszajelzés
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- [ ] Jogosultságkezelés
 - [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
-- [x] Több fájl feltöltése a meglévők mellé
 - [ ] Kurzus visszaállítása archivált állapotból
 - [ ] Üres kurzusok oldal kidekorálása
+- [x] Jogosultságkezelés
+- [x] Több fájl feltöltése a meglévők mellé
 - [x] Közzlétett, nem közzétett tartalom oldal átrendezése
 - [x] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
 - [x] Kurzus törlése
@@ -37,12 +38,12 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Műveletek letiltása az archivált kurzusokban
 
 **Admin felület**
-- [ ] Felhasználó új jelszó generálás
+- [x] Felhasználó új jelszó generálás
 - [x] Felhasználó jelszó módosítás vagy visszaállítás
 - [x] Keresés
 
 **Mindkettő**
-- [ ] Felhasználó új jelszó igénylég
+- [x] Felhasználó új jelszó igénylés
 - [x] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
 - [x] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
 - [x] Kurzus csatlakozási kód lekérése és megjelenítése

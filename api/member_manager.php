@@ -88,7 +88,7 @@ function RemoveCourseMember() {
 
     // Tulajdonosa-e a felhasználó a kurzusnak
     $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
-    $course_owner_check = DataQuery($sql_statement, "ii", [$course_id, $owner_user_id]);
+    $course_owner_check = DataQuery($sql_statement, "ii", [$course_id, $delete_user_id]);
     if (count($course_owner_check) == 0) {
         SendResponse([
             "sikeres" => false,
