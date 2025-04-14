@@ -40,7 +40,7 @@ function Login() {
     $user_id = $user_data[0]["user_id"];
 
     // Ideiglenes jelszó törlése, ha a rendes jelszóval lép be
-    if ($temp_passwd_correct) {
+    if ($regular_passwd_correct) {
         $sql_statement = "UPDATE users SET temp_password = NULL WHERE user_id = ?;";
         ModifyData($sql_statement, "i", [$user_id]);
     }
@@ -245,7 +245,7 @@ function ChangeUserPassword() {
     global $data;
     $old_passwd = $data["old_password"];
     $new_passwd = $data["new_password"];
-    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
+    $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));
 
     // Régi jelszó ellenőrzése
     $sql_statement = "SELECT password, temp_password FROM users WHERE user_id = ?";
@@ -258,7 +258,7 @@ function ChangeUserPassword() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen jelszó"
-        ]);
+        ], 400);
         return;
     }
 
@@ -266,7 +266,7 @@ function ChangeUserPassword() {
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Az új jelszó megegyezik a régi jelszóval"
-        ]);
+        ], 400);
         return;
     }
 
@@ -313,7 +313,8 @@ function ForgottenUserPassword() {
     $firstname = $user_data[0]["firstname"];
 
     // Ideiglenes jelszó létrehozása
-    $new_hashed_passwd = GenerateTemporaryPassword();
+    $new_passwd = GenerateTemporaryPassword();
+    $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
 
     // E-mail küldése
     include "mail.php";

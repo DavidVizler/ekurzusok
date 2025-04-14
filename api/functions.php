@@ -352,13 +352,13 @@ function FileUpload($id, $attach_to) {
 // Ideiglenes jelszó generálás
 function GenerateTemporaryPassword() {
     $passwd = "";
-    $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for ($i = 0; $i < 20; $i++) {
         $passwd .= $characters[random_int(0, strlen($characters) - 1)];
     }
 
-    return password_hash($passwd, PASSWORD_DEFAULT);
+    return $passwd;
 }
 
 ?>

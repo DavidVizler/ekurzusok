@@ -512,6 +512,7 @@ function AdminResetUserPassword() {
     $firstname = $user_data[0]["firstname"];
 
     $new_passwd = GenerateTemporaryPassword();
+    $new_hashed_passwd = password_hash($new_passwd, PASSWORD_DEFAULT);
 
     include "../../api/mail.php";
 
