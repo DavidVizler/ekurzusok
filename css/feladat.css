@@ -441,3 +441,19 @@ button:hover {
 .fileDiv:hover {
     background-color: #f0f0f0;
 }
+
+#newFileForm {
+    margin-top: 10px;
+}
+
+#newFileInput {
+    margin-right: 5px;
+}
+
+#newFilesUploadButton {
+    background-color: #5274ff;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+}
