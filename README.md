@@ -13,7 +13,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [ ] Jogosultságkezelés
 - [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
-- [ ] Több fájl feltöltése a meglévők mellé
+- [x] Több fájl feltöltése a meglévők mellé
 - [ ] Kurzus visszaállítása archivált állapotból
 - [ ] Üres kurzusok oldal kidekorálása
 - [x] Közzlétett, nem közzétett tartalom oldal átrendezése
