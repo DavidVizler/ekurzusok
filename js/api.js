@@ -131,6 +131,16 @@ class API {
         });
     }
 
+    static async contentUploadFiles(data) {
+        let response = await fetch('api/content/upload-files', {
+            method: 'POST',
+            body: data,
+            redirect: 'follow'
+        });
+        let result = await response.json();
+        return [response, result];
+    }
+
     static async submissionUploadFiles(data) {
         let response = await fetch('api/submission/upload-files', {
             method: 'POST',
