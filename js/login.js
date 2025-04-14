@@ -73,3 +73,49 @@ document.getElementById('toggle-password').addEventListener('click', function ()
       `;
     }
 });
+
+async function forgottenPasswd(email) {
+    try {
+        let request = await fetch("./api/user/forgotten-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({"email": email})
+        });
+        if (request.ok || request.status == 400 || request.status == 404) {
+            let response = await request.json();
+            resultModal(response.uzenet)
+        } else {
+            throw request.status;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+$("forgottenPasswd").addEventListener("click", function () {
+    let emailModal = create("div", 'modal')
+    let alertDiv = $('alertDiv')
+    alertDiv.style.display = "block"
+    alertDiv.appendChild(emailModal)
+
+    let modal_content = create("div", 'modal-content')
+    emailModal.appendChild(modal_content)
+
+    let message = create("p")
+    modal_content.appendChild(message)
+    message.innerHTML = "Kérjük, adja meg e-mail címét:<br><input type='text' id='resetEmail'>";
+
+    let ok_button = create("button")
+    modal_content.appendChild(ok_button)
+    ok_button.innerHTML = "Új jelszó igénylése"
+
+    ok_button.addEventListener("click", () => {
+        forgottenPasswd($("resetEmail").value);
+        alertDiv.style.display = "none"
+        alertDiv.innerHTML = ""
+    })
+
+    ok_button.focus()
+});
