@@ -222,6 +222,9 @@ function showContentData(){
     if(adatok.owned == 0 || adatok.role != 3){
         $("deleteBtn").classList.add("disabled")
     }
+    if(adatok.owned == 0){
+        $("modifyBtn").classList.add("disabled")
+    }
     if(adatok.archived == 1){
         $("modifyBtn").disabled = true
         $("deleteBtn").disabled = true
