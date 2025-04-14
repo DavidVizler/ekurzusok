@@ -137,9 +137,9 @@ form a:hover {
     border-radius: 10px;
     text-align: center;
     position: absolute;
-    top: 10%;
+    top: 5%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -25%); 
     padding: 20px;
     width: 500px;
     font-size: large;
@@ -154,7 +154,7 @@ form a:hover {
     font-size: 18px;
     font-family: sans-serif;
     padding-block: 5px;
-    width: 100px;
+    width: 80%;
     margin: 5px;
     color: white;
 }
@@ -166,4 +166,9 @@ form a:hover {
 
 .modal-content button:active {
     background-color: #8fa3ff;
+}
+
+#resetEmail{
+    width: 80%;
+    margin: 0 !important;
 }

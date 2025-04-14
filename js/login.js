@@ -105,7 +105,7 @@ $("forgottenPasswd").addEventListener("click", function () {
 
     let message = create("p")
     modal_content.appendChild(message)
-    message.innerHTML = "Kérjük, adja meg e-mail címét:<br><input type='text' id='resetEmail'>";
+    message.innerHTML = "<label for='resetEmail'>Kérjük, adja meg e-mail címét:</label><input type='text' id='resetEmail'>";
 
     let ok_button = create("button")
     modal_content.appendChild(ok_button)
