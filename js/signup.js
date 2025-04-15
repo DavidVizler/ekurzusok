@@ -5,7 +5,9 @@ async function signup() {
     let password = $('password').value;
     let passwordConfirm = $('confirm-password').value;
 
-    if (isValid({ lastname, firstname, email, password, passwordConfirm })) {
+    let checkResult = isValid({ lastname, firstname, email, password, passwordConfirm });
+
+    if (checkResult.valid) {
         let [response, result] = await API.signup(email, firstname, lastname, password);
 
         if (response.ok) {
@@ -17,7 +19,7 @@ async function signup() {
             }
         }
     } else {
-        alert("Helytelen adatok!");
+        alert(checkResult.message);
     }
 }
 

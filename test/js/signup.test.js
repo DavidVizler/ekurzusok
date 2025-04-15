@@ -8,7 +8,8 @@ test('Üres minden adat', () => {
         password: '',
         passwordConfirm: ''
     }
-    expect(isValid(signupData)).toBe(false);
+    let result = isValid(signupData);
+    expect(result.valid).toBe(false);
 });
 
 test('Minden megfelelő', () => {
@@ -19,7 +20,8 @@ test('Minden megfelelő', () => {
         password: 'Teszt1234',
         passwordConfirm: 'Teszt1234'
     }
-    expect(isValid(signupData)).toBe(true);
+    let result = isValid(signupData);
+    expect(result.valid).toBe(true);
 });
 
 describe('Név', () => {
@@ -31,7 +33,8 @@ describe('Név', () => {
             password: 'Teszt1234',
             passwordConfirm: 'Teszt1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Hiányzó keresztnév', () => {
@@ -42,7 +45,8 @@ describe('Név', () => {
             password: 'Teszt1234',
             passwordConfirm: 'Teszt1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 });
 
@@ -55,7 +59,8 @@ describe('Email', () => {
             password: 'Teszt1234',
             passwordConfirm: 'Teszt1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Nincs TLD megadva', () => {
@@ -66,7 +71,8 @@ describe('Email', () => {
             password: 'Teszt1234',
             passwordConfirm: 'Teszt1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Tiltott karakterek', () => {
@@ -77,7 +83,8 @@ describe('Email', () => {
             password: 'Teszt1234',
             passwordConfirm: 'Teszt1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 });
 
@@ -90,7 +97,8 @@ describe('Jelszó', () => {
             password: 'Rovid1',
             passwordConfirm: 'Rovid1'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Hossz nagyobb mint 50', () => {
@@ -101,7 +109,8 @@ describe('Jelszó', () => {
             password: 'TulHosszu123456789012345678901234567890123456789012345678901234567890',
             passwordConfirm: 'TulHosszu123456789012345678901234567890123456789012345678901234567890'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Nincs számjegy', () => {
@@ -112,7 +121,8 @@ describe('Jelszó', () => {
             password: 'NincsSzam',
             passwordConfirm: 'NincsSzam'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Nincs nagybetű', () => {
@@ -123,7 +133,8 @@ describe('Jelszó', () => {
             password: 'csakkicsi1234',
             passwordConfirm: 'csakkicsi1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Nincs kisbetű', () => {
@@ -134,7 +145,8 @@ describe('Jelszó', () => {
             password: 'csaknagy1234',
             passwordConfirm: 'csaknagy1234'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 
     test('Megerősítés nem egyezik', () => {
@@ -145,6 +157,7 @@ describe('Jelszó', () => {
             password: 'Teszt1234',
             passwordConfirm: 'Teszt4321'
         }
-        expect(isValid(signupData)).toBe(false);
+        let result = isValid(signupData);
+        expect(result.valid).toBe(false);
     });
 });

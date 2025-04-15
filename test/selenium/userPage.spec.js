@@ -2,6 +2,7 @@ const { Builder, Browser, By, until } = require('selenium-webdriver');
 const { USER_URL, LOGIN_URL, EMAIL, PASSWORD } = require('../config');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
+const timeout = 20000;
 
 async function login(driver) {
     let emailInput = await driver.findElement(By.id('email'));
@@ -22,6 +23,7 @@ browsers.map(browser => {
 
         beforeAll(async () => {
             driver = new Builder().forBrowser(browser).build();
+            jest.setTimeout(60000)
         });
         
         beforeEach(async () => {
@@ -50,7 +52,7 @@ browsers.map(browser => {
 
             let buttonExists = (await driver.findElements(By.id('modifyUserDataButton'))).length > 0;
             await expect(buttonExists).toBe(true);
-        }, 20000)
+        }, timeout)
 
         test("Adatmódosítás", async () => {
             let firstnameInput = await driver.findElement(By.id('firstname'));
@@ -65,7 +67,7 @@ browsers.map(browser => {
             let modalContent = await driver.findElement(By.className('modal-content'));
             let modalText = await modalContent.findElement(By.tagName('p')).getText();
             await expect(modalText).toBe('Sikeres adatmódosítás!');
-        }, 20000)
+        }, timeout)
 
         afterAll(async () => {
             await driver.quit();
