@@ -174,6 +174,14 @@ async function loadCurrentValues(courseId) {
         $('courseDescription').value = courseData['description'];
         $('designSelect').value = courseData['design_id'];
         $('code').value = courseData["code"]
+
+        if (courseData["role"] != 3) {
+            $('courseName').disabled = true;
+            $('courseDescription').disabled = true;
+            $('designSelect').disabled = true;
+            $("modifyCourseData").hidden = true;
+            $("deleteCourseButton").hidden = true;
+        }
     }
     catch (e) {
         console.error(e);

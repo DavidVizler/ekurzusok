@@ -16,7 +16,7 @@ window.addEventListener('load',async () => {
             showContentData(adatok)
             GetContentFiles()
         }
-        if (adatok.role > 1) {
+        if (adatok.owned == 1) {
             displayNewFileUpload();
         }
         else if (response.status == 401) {
@@ -45,6 +45,9 @@ function showContentData(adatok){
     description.innerHTML = adatok.description
     if(adatok.owned == 0){
         $("modifyBtn").classList.add("disabled")
+        if (adatok.role != 3) {
+            $("deleteBtn").classList.add("disabled")
+        }
     }
     if(adatok.archived == 1){
         $("modifyBtn").disabled = true

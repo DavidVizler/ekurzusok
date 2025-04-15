@@ -162,7 +162,7 @@ window.addEventListener('load',async () => {
                 getSubmissionData()
                 checkDeadline()
             }
-            if (adatok.role > 1) {
+            if (adatok.owned == 1) {
                 displayNewFileUpload();
             }
         }
