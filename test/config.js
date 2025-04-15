@@ -1,16 +1,30 @@
+const { Browser } = require('selenium-webdriver');
+
 // A tesztek futtatása előtt ezeket az adatokat meg kell adni:
 // Weboldal URL címe (ne legyen '/' jel a végén!)
 const URL = 'http://localhost/ekurzusok';
+
 // A tesztek futtatásához létre kell hozni egy fiókot.
 // Teszt fiók email címe
 const EMAIL = '';
 // Teszt fiók jelszava
 const PASSWORD = '';
 
+// A tesztekhez használt böngészők:
+const BROWSERS = [
+    Browser.CHROME,
+    Browser.FIREFOX
+]
+
+// Mennyi ideig futhat egy teszt (ezredmásodperc)
+const TIMEOUT = 30000;
+
 module.exports = {
     URL,
     EMAIL,
     PASSWORD,
+    BROWSERS,
+    TIMEOUT,
     SIGNUP_URL:             URL + '/signup.html',
     LOGIN_URL:              URL + '/login.html',
     COURSES_URL:            URL + '/kurzusok.html',
