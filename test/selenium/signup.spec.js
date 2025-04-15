@@ -1,22 +1,19 @@
-const { Builder, Browser, By, until } = require('selenium-webdriver');
-const { SIGNUP_URL, PASSWORD } = require('../config');
+const { Builder, By, until } = require('selenium-webdriver');
+const { SIGNUP_URL, PASSWORD, BROWSERS, TIMEOUT } = require('../config');
 
-const browsers = [Browser.CHROME, Browser.FIREFOX];
-const timeout = 20000;
-
-browsers.map(browser => {
+BROWSERS.map(browser => {
     describe(browser, () => {
         let driver;
         
         beforeAll(async () => {
             driver = new Builder().forBrowser(browser).build();
             jest.setTimeout(60000)
-        });
+        }, TIMEOUT);
         
         beforeEach(async () => {
             await driver.get(SIGNUP_URL);
-            await driver.manage().setTimeouts({implicit: 2000});
-        })
+            await driver.manage().setTimeouts({implicit: 5000});
+        }, TIMEOUT)
 
         test("Regisztráció oldal", async () => {
             let title = await driver.getTitle();
@@ -39,7 +36,7 @@ browsers.map(browser => {
 
             let signupButtonExists = (await driver.findElements(By.id('signup_button'))).length > 0;
             await expect(signupButtonExists).toBe(true);
-        }, timeout);
+        }, TIMEOUT);
 
         test("Új felhasználó létrehozása", async () => {
             let lastname = 'Selenium';
@@ -68,7 +65,7 @@ browsers.map(browser => {
 
             let title = await driver.getTitle();
             await expect(title).toBe('Kurzusok');
-        }, timeout)
+        }, TIMEOUT)
         
         afterAll(async () => {
             await driver.quit();

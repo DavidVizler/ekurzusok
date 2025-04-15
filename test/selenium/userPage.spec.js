@@ -1,8 +1,5 @@
-const { Builder, Browser, By, until } = require('selenium-webdriver');
-const { USER_URL, LOGIN_URL, EMAIL, PASSWORD } = require('../config');
-
-const browsers = [Browser.CHROME, Browser.FIREFOX];
-const timeout = 20000;
+const { Builder, By, until } = require('selenium-webdriver');
+const { USER_URL, LOGIN_URL, EMAIL, PASSWORD, BROWSERS, TIMEOUT } = require('../config');
 
 async function login(driver) {
     let emailInput = await driver.findElement(By.id('email'));
@@ -17,22 +14,22 @@ async function login(driver) {
     await driver.wait(until.urlContains('kurzusok.html'));
 }
 
-browsers.map(browser => {
+BROWSERS.map(browser => {
     describe(browser, () => {
         let driver;
 
         beforeAll(async () => {
             driver = new Builder().forBrowser(browser).build();
             jest.setTimeout(60000)
-        });
+        }, TIMEOUT);
         
         beforeEach(async () => {
             await driver.get(LOGIN_URL);
-            await driver.manage().setTimeouts({implicit: 2000});
+            await driver.manage().setTimeouts({implicit: 5000});
 
             await login(driver);
             await driver.get(USER_URL);
-        }, 20000)
+        }, TIMEOUT)
 
         test("Felhasználó oldala", async () => {
             let title = await driver.getTitle();
@@ -52,10 +49,11 @@ browsers.map(browser => {
 
             let buttonExists = (await driver.findElements(By.id('modifyUserDataButton'))).length > 0;
             await expect(buttonExists).toBe(true);
-        }, timeout)
+        }, TIMEOUT)
 
         test("Adatmódosítás", async () => {
             let firstnameInput = await driver.findElement(By.id('firstname'));
+            await firstnameInput.click();
             await firstnameInput.sendKeys('2');
 
             let passwordInput = await driver.findElement(By.id('password'));
@@ -67,7 +65,7 @@ browsers.map(browser => {
             let modalContent = await driver.findElement(By.className('modal-content'));
             let modalText = await modalContent.findElement(By.tagName('p')).getText();
             await expect(modalText).toBe('Sikeres adatmódosítás!');
-        }, timeout)
+        }, TIMEOUT)
 
         afterAll(async () => {
             await driver.quit();

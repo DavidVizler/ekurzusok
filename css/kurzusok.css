@@ -54,6 +54,11 @@ html::-webkit-scrollbar {
     gap: 16px;
 }
 
+#emptyImg{
+    height: 60%;
+    width: 60%;
+}
+
 .no-scroll {
     overflow: hidden;
 }

@@ -5,7 +5,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 ## TODO
 **Frontend**
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- [ ] Üres kurzusok oldal kidekorálása
+- [x] Üres kurzusok oldal kidekorálása
 - [x] Kurzus módosításának letiltása tanároknál, akik nem tulajdonosok
 - [x] Közzétett-nem közzétett tartalom betöltési glitch javítása
 - [x] Közzétett-nem közzétett tartalom ne jelenjen meg diákoknál
@@ -92,6 +92,9 @@ Az adatgenerátor a `DataGenerator.zip` fájlban található. Kicsomagolás utá
 A tesztelés leegyszerűsítése érdekében az összes felhasználó jelszava, beleértve az adminisztrátorokat, a tesztadatokat tartalmazó adatbázisban "Almafa123".
 
 ## Tesztek
-A tesztek futtatása előtt a [test](test/) mappába kell belépni és futtatni kell az alábbi parancsot: `npm install` \
-A [config.js](test/config.js) fájlban be kell állítani a megfelelő adatokat. \
+A tesztek futtatása előtt a szükséges csomagokat le kell tölteni és meg kell adni a megfelelő adatoktat.
+1. Lépjen be a [test](test/) mappába: `cd test`
+2. Töltse le a szükséges csomagokat: `npm install`
+3. A [config.js](test/config.js) fájlban állítsa be a weboldal URL címét és a tesztekhez használt fiók email címét és jelszavát
+
 A tesztek futtatásához az alábbi parancsot kell futtatni: `npm test`
