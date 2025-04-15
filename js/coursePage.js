@@ -75,10 +75,18 @@ async function getDesignJson() {
 }
 
 async function getCardsData() {
+   let content = document.querySelector('.content')
+   console.log(content)
    try {
       let [response, result] = await API.getUserCourses();
       if (response.ok) {
          cardData = result
+         if(cardData.length == 0){
+            let img = document.createElement('img')
+            img.src = "./img/empty_course_background.png"
+            img.id = "emptyImg"
+            content.appendChild(img)
+         }
          GenerateCards()
       }
       else {
