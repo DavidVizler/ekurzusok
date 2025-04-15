@@ -16,7 +16,7 @@ window.addEventListener('load',async () => {
             showContentData(adatok)
             GetContentFiles()
         }
-        if (adatok.owned == 1) {
+        if (adatok.owned == 1 && adatok.role > 1) {
             displayNewFileUpload();
         }
         else if (response.status == 401) {

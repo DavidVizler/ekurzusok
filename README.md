@@ -5,10 +5,10 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 ## TODO
 **Frontend**
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- [ ] Kurzus módosításának letiltása tanároknál, akik nem tulajdonosok
 - [ ] Üres kurzusok oldal kidekorálása
-- [ ] Közzétett-nem közzétett tartalom betöltési glitch javítása
-- [ ] Közzétett-nem közzétett tartalom ne jelenjen meg diákoknál
+- [x] Kurzus módosításának letiltása tanároknál, akik nem tulajdonosok
+- [x] Közzétett-nem közzétett tartalom betöltési glitch javítása
+- [x] Közzétett-nem közzétett tartalom ne jelenjen meg diákoknál
 - [x] Regisztráció ellenőrzés visszajelzés
 - [x] Kurzus visszaállítása archivált állapotból
 - [x] Jogosultságkezelés

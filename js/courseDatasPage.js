@@ -123,19 +123,18 @@ function ModifyActualData(cardData) {
     }
 }
 
-async function getCourseContent(courseId) {
+async function getCourseContent(courseId, role) {
     try {
         let [response, contentList] = await API.getCourseContent(courseId);
 
         let contentNavbar = document.getElementById("contentNavbar")
 
         if (contentList.length > 0) {
-            contentNavbar.style.display = 'block';
+            if (role != 1) {
+                contentNavbar.style.display = 'block';
+            }
             showCourseContent(contentList);
-        } else {
-            contentNavbar.style.display = 'none';
-        }
-        
+        }         
     }
     catch (e) {
         console.error(e);
@@ -172,6 +171,7 @@ function viewByRole() {
     if(cardData.role == 1 || cardData.role == 2){
         $('leaveButton').style.display = "flex"
     }
+    getCourseContent(courseId, cardData.role);
 }
 
 async function deleteUserFromCourse() {
@@ -405,8 +405,6 @@ window.addEventListener("load", () => {
         addContentButton.href += `?id=${courseId}`;
         settingsButton.href += `?id=${courseId}`;
         usersButton.href += `?id=${courseId}`;
-
-        getCourseContent(courseId);
     }
 });
 

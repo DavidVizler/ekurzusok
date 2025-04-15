@@ -162,7 +162,7 @@ window.addEventListener('load',async () => {
                 getSubmissionData()
                 checkDeadline()
             }
-            if (adatok.owned == 1) {
+            if (adatok.owned == 1 && adatok.role > 1) {
                 displayNewFileUpload();
             }
         }
@@ -222,7 +222,7 @@ function showContentData(){
     if(adatok.role == 1){
         $("showSubmissions").classList.add("disabled")
     }
-    if(adatok.owned == 0 || adatok.role != 3){
+    if(adatok.owned == 0 || adatok.role < 2){
         $("deleteBtn").classList.add("disabled")
     }
     if(adatok.owned == 0){
