@@ -2,54 +2,8 @@
 Technikusi vizsga 2024-2025 \
 A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
-## TODO
-**Frontend**
-- [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- [x] Üres kurzusok oldal kidekorálása
-- [x] Kurzus módosításának letiltása tanároknál, akik nem tulajdonosok
-- [x] Közzétett-nem közzétett tartalom betöltési glitch javítása
-- [x] Közzétett-nem közzétett tartalom ne jelenjen meg diákoknál
-- [x] Regisztráció ellenőrzés visszajelzés
-- [x] Kurzus visszaállítása archivált állapotból
-- [x] Jogosultságkezelés
-- [x] Több fájl feltöltése a meglévők mellé
-- [x] Közzlétett, nem közzétett tartalom oldal átrendezése
-- [x] Feladatleadás (ne tudja mégegyszer leadni a felhasználó)
-- [x] Kurzus törlése
-- [x] Felhasználó kilépése a kurzusból (önmagától)
-- [x] Frontend javítások (görgethetőség, reszponzivtás)
-- [x] Csatolt fájl nélkül beküldött megoldások megjelenítése
-- [x] Maradjon bejelentkezve gomb
-- [x] Beadott munkák megtekintése
-- [x] Felhasználó tanári státuszának módosítása a kurzusban
-- [x] Beadandóhoz feltöltött fájlok lekérdezése
-- [x] Feltöltött fájlok törlése
-- [x] Tartalomhoz feltöltött fájlok lekérdezése
-- [x] Leadott munkák megtekintése
-- [x] Kilépés gomb ne jelenjen meg a felhasználó saját kurzusában
-- [x] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
-
-**Backend**
-- [x] Fájl letöltés jogosultságkezelés
-- [x] Felhasználó fiók törlése
-- [x] Műveletek letiltása az archivált kurzusokban
-
-**Admin felület**
-- [x] Felhasználó új jelszó generálás
-- [x] Felhasználó jelszó módosítás vagy visszaállítás
-- [x] Keresés
-
-**Mindkettő**
-- [x] Felhasználó új jelszó igénylés
-- [x] Feladaton belül a felhasználó-e a feladat készítője (fel tud-e tölteni beadandókat vagy meg tudja tekinteni a beküldött beadandókat)
-- [x] Kurzuson belül a felhasználó tanár-e (jelenleg csak azt vizsgálja, hogy tulajdonos-e)
-- [x] Kurzus csatlakozási kód lekérése és megjelenítése
-- [x] Annak lekérése, hogy a felhasználó már leadta-e az adott feladatot
-
-**Egyéb**
-- [ ] Dokumentáció befejezése
-- [x] Adatgenerátor ne generálja le ugyanazt az e-mail címet többször + adatbázis frissítése
-- [x] Projekt beadható és tesztelhető formában
+## Dokumentáció
+A részletes dokumentáció elérhető [ezen a linken](https://docs.google.com/document/d/1uhBqkqfKAe0qxYCk307rlWE4jrNmFYU45DSQCpYt-Fk/edit?usp=sharing). 
 
 ## Jogosultságok
 ![](./db/jogosultsagok.png)
@@ -63,9 +17,6 @@ upload_max_filesize = 30M
 max_file_uploads = 10
 post_max_size = 300M
 ```
-
-## Dokumentáció
-A részletes dokumentáció elérhető [ezen a linken](https://docs.google.com/document/d/1uhBqkqfKAe0qxYCk307rlWE4jrNmFYU45DSQCpYt-Fk/edit?usp=sharing). 
 
 ## PHP struktúra és API
 Minden adatbázisshoz köthető, adatváltoztató és lekérdező művelet az api-n keresztül érhető el, POST metódussal. A műveletek megadása végpontok segítségével történnek (pl. `api/user/login`).
