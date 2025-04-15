@@ -13,7 +13,7 @@ if (!CheckMethod("GET")) {
 }
 
 if (!array_key_exists("file_id", $_GET)) {
-    echo "Hiányos adat: file_id";
+    echo "Hiányos adat: file_id!";
     http_response_code(400);
     exit;
 }

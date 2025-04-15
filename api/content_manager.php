@@ -140,7 +140,7 @@ function CreateCourseContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A tartalom létrehozása sikertelen"
-        ]);
+        ], 400);
     }
 }
 
@@ -194,6 +194,7 @@ function PublishCourseContent() {
         return;
     }
 
+    // Publikált állapot módosítása az ellentétére
     $unpublished = is_null($content_data[0]["published"]);
 
     if ($unpublished) {
@@ -215,7 +216,7 @@ function PublishCourseContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen tartalom {$word}"
-        ]);
+        ], 400);
     }
 }
 
@@ -256,6 +257,7 @@ function ModifyCourseContentData() {
 
     $course_id = $content_data[0]["course_id"];
 
+    // Jogosultságok ellenőrzése
     $sql_statement = "SELECT m.role, c.archived FROM courses c
     INNER JOIN memberships m ON c.course_id = m.course_id
     WHERE c.course_id = ? AND m.user_id = ?;";
@@ -277,6 +279,7 @@ function ModifyCourseContentData() {
         return;
     }
 
+    // Változott adatok hozzáadása az SQL parancshoz
     $sql_statement = "UPDATE content SET ";
     $new_data = [];
     $new_data_types = "";
@@ -341,7 +344,7 @@ function ModifyCourseContentData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem érkezett változtatandó adat"
-        ]);
+        ], 400);
         return;
     }
 
@@ -361,7 +364,7 @@ function ModifyCourseContentData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen adatmódosítás"
-        ]);
+        ], 400);
     }
     
 }
@@ -413,6 +416,7 @@ function AttachFileToContent() {
 
     $course_id = $content_data[0]["course_id"];
 
+    // Jogosultságkezelés
     $sql_statement = "SELECT m.role, c.archived FROM courses c
     INNER JOIN memberships m ON c.course_id = m.course_id
     WHERE c.course_id = ? AND m.user_id = ?;";
@@ -434,6 +438,7 @@ function AttachFileToContent() {
         return;
     }
     
+    // Fájlok feltöltése
     $results = FileUpload($content_id, "content");
 
     if ($results) {
@@ -441,6 +446,11 @@ function AttachFileToContent() {
             "sikeres" => true,
             "uzenet" => "Fájlok sikeresen feltöltve"
         ], 201);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Sikertelen fájlfeltöltés"
+        ], 400);
     }
 }
 
@@ -486,6 +496,7 @@ function RemoveFileFromContent() {
 
     $course_id = $file_data[0]["course_id"];
 
+    // Jogosultságkezelés
     $sql_statement = "SELECT m.role, c.archived FROM courses c
     INNER JOIN memberships m ON c.course_id = m.course_id
     WHERE c.course_id = ? AND m.user_id = ?;";
@@ -521,7 +532,7 @@ function RemoveFileFromContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen törlés"
-        ]);
+        ], 400);
     }
 }
 
@@ -554,6 +565,7 @@ function DeleteCourseContent() {
         return;
     }
 
+    // Jogosultságkezelés
     $course_id = $content_data[0]["course_id"];
     $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
@@ -586,7 +598,7 @@ function DeleteCourseContent() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen törlés"
-        ]);
+        ], 400);
     }
 }
 

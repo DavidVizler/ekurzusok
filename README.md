@@ -30,6 +30,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - [x] Leadás értékelése, A beadandóhoz tartozó adatok lekérdezésénél az értékelés pontja és a max pont is legyen ott
 
 **Backend**
+- [ ] Fájl letöltés jogosultságkezelés
 - [x] Felhasználó fiók törlése
 - [x] Műveletek letiltása az archivált kurzusokban
 
