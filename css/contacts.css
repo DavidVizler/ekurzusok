@@ -140,3 +140,23 @@ textarea {
 .contact-list li a:hover {
     text-decoration: underline;
 }
+
+.success-message {
+    margin-top: 5px;
+    border: 1px solid #a3cfbb;
+    border-radius: 5px;
+    color: #0a3622;
+    text-align: center;
+    background-color: #d1e7dd;
+    padding: 5px;
+}
+
+.error-message {
+    margin-top: 5px;
+    border: 1px solid #f1aeb5;
+    border-radius: 5px;
+    color: #58151C;
+    text-align: center;
+    background-color: #F8D7DA;
+    padding: 5px;
+}

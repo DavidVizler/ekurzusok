@@ -139,7 +139,7 @@ form a:hover {
     position: absolute;
     top: 5%;
     left: 50%;
-    transform: translate(-50%, -25%); 
+    transform: translateX(-50%); 
     padding: 20px;
     width: 500px;
     font-size: large;
