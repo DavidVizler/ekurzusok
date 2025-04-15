@@ -3,12 +3,6 @@ Technikusi vizsga 2024-2025 \
 A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 
 ## TODO
-**Meggondolandó funkciók**
-- Belépés és kilépés tanári vagy tulajdonosi jóváhagyáshoz kötése
-- Admin felhasználó kijelentkeztetés
-- Feladat visszavonása beküldés után
-- Feladat leadása határidő után
-
 **Frontend**
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [ ] Kurzus módosításának letiltása tanároknál, akik nem tulajdonosok
