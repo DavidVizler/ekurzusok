@@ -1,11 +1,11 @@
-// Weboldal URL címe
-const URL = 'http://localhost/13c-vizler/ekurzusok';
-
+// A tesztek futtatása előtt ezeket az adatokat meg kell adni:
+// Weboldal URL címe (ne legyen '/' jel a végén!)
+const URL = 'http://localhost/ekurzusok';
+// A tesztek futtatásához létre kell hozni egy fiókot.
 // Teszt fiók email címe
-const EMAIL = 'teszt@teszt.com';
-
+const EMAIL = '';
 // Teszt fiók jelszava
-const PASSWORD = 'Teszt4321';
+const PASSWORD = '';
 
 module.exports = {
     URL,

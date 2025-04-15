@@ -10,7 +10,7 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Feladat leadása határidő után
 
 **Frontend**
-- [ ] Regisztráció ellenőrzés visszajelzés
+- [x] Regisztráció ellenőrzés visszajelzés
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
 - [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
 - [ ] Kurzus visszaállítása archivált állapotból
