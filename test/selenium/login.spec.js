@@ -2,7 +2,7 @@ const { Builder, Browser, By, until } = require('selenium-webdriver');
 const { LOGIN_URL, EMAIL, PASSWORD } = require('../config');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
-const timeout = 20000;
+const timeout = 30000;
 
 browsers.map(browser => {
     describe(browser, () => {
@@ -11,12 +11,12 @@ browsers.map(browser => {
         beforeAll(async () => {
             driver = new Builder().forBrowser(browser).build();
             jest.setTimeout(60000)
-        })
+        }, timeout)
 
         beforeEach(async () => {
             await driver.get(LOGIN_URL);
             await driver.manage().setTimeouts({implicit: 5000});
-        })
+        }, timeout)
 
         test("Bejelentkezés oldal", async () => {
             let title = await driver.getTitle();

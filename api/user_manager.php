@@ -21,7 +21,7 @@ function Login() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail vagy jelszó nem megfelelő"
-        ]);
+        ], 400);
         return;
     }
 
@@ -33,7 +33,7 @@ function Login() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail vagy jelszó nem megfelelő"
-        ]);
+        ], 400);
         return;
     }
 
@@ -79,7 +79,7 @@ function Signup() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Az email cím formátuma nem megfelelő"
-        ]);
+        ], 400);
         return;
     }
     
@@ -90,7 +90,7 @@ function Signup() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "E-mail cím már regisztrálva van"
-        ]);
+        ], 400);
         return;
     }
 
@@ -117,12 +117,12 @@ function Signup() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült regisztrálni a felhasználót"
-        ]);
+        ], 400);
     }
 }
 
 function Logout() {
-    if (!LoginCheck()) {
+    if (!LoginCheck(false)) {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nincs felhasználó bejelentkezve"
@@ -165,13 +165,14 @@ function ModifyUserData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen jelszó"
-        ]);
+        ], 400);
         return;
     }
 
     $sql_statement = "UPDATE users SET ";
     $new_data = [];
     
+    // Változtatandó adatok hozzáadása az SQL parancshoz
     if ($user_data[0]["email"] != $email) {
 
         $email_check_sql_statement = "SELECT email FROM users WHERE email = ?";
@@ -180,7 +181,7 @@ function ModifyUserData() {
             SendResponse([
                 "sikeres" => false,
                 "uzenet" => "Az e-mail cím már foglalt"
-            ]);
+            ], 400);
             return;
         }
 
@@ -205,7 +206,7 @@ function ModifyUserData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem érkezett változtatandó adat"
-        ]);
+        ], 400);
         return;
     }
 
@@ -225,7 +226,7 @@ function ModifyUserData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen adatmódosítás"
-        ]);
+        ], 400);
     }
 }
 
@@ -284,7 +285,7 @@ function ChangeUserPassword() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen jelszómódosítás"
-        ]);
+        ], 400);
     }
 }
 
@@ -359,7 +360,7 @@ function DeleteUser() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó már törölve van"
-        ]);
+        ], 410);
         return;
     }
 
@@ -368,7 +369,7 @@ function DeleteUser() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Helytelen jelszó"
-        ]);
+        ], 400);
         return;
     }
 
@@ -393,7 +394,7 @@ function DeleteUser() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült törölni a felhasználót"
-        ]);
+        ], 400);
     }
 }
 

@@ -37,7 +37,7 @@ async function login() {
     if (isValid(loginData)) {
         let [response, result] = await API.login(email, password, keep_login);
 
-        if (response.ok) {
+        if (response.ok || response.status == 400) {
             if (result.sikeres) {
                 window.location.href = './kurzusok.html';
             }

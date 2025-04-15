@@ -47,7 +47,7 @@ function AddCourseMember() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A felhasználó már tagja a kurzusnak"
-        ]);
+        ], 400);
         return;
     }
 
@@ -64,7 +64,7 @@ function AddCourseMember() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült felvenni a felhasználót a kurzusba"
-        ]);
+        ], 400);
     }
 }
 
@@ -128,7 +128,7 @@ function RemoveCourseMember() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült eltávolítani a felhasználót a kurzusból (előfordulhat, hogy nem tagja a kurzusnak)"
-        ]);
+        ], 400);
     }
 }
 
@@ -183,7 +183,7 @@ function LeaveCourse() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem sikerült eltávolítani a felhasználót a kurzusból"
-        ]);
+        ], 400);
     }
 }
 
@@ -256,6 +256,7 @@ function ChangeMemberTeacherRole() {
         return;
     }
 
+    // Tanári státusz módosítása az ellentétére
     $new_status = $member_data[0]["role"] == 1 ? 2 : 1;
     $modification = $new_status == 2 ? "Tanárrá előléptetés " : "Tanári státusz elvétele ";
 
@@ -271,7 +272,7 @@ function ChangeMemberTeacherRole() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "{$modification} sikertelen"
-        ]);
+        ], 400);
     }
 }
 

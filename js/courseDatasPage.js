@@ -183,7 +183,7 @@ async function deleteUserFromCourse() {
     }
     try {
         let [response, result] = await API.kickMember(user_id, course_id);
-        if (response.ok) {
+        if (response.ok || response.status == 400) {
             if (result.sikeres == true) {
                 location.reload()
             }

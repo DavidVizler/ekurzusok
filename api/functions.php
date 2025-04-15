@@ -158,7 +158,18 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
 
     // Adatok és típusok számának ellenőrzése
     if (count($to_check) != strlen($data_types)) {
-        http_response_code(500);
+        if ($send_response) {
+            if ($send_success) {
+                SendResponse([
+                    "sikeres" => false,
+                    "uzenet" => "Hiba történt az adatok ellenőrzése során"
+                ], 400);
+            } else {
+                SendResponse([
+                    "uzenet" => "Hiba történt az adatok ellenőrzése során"
+                ], 400);
+            }
+        }
         return false;
     }
 
@@ -242,13 +253,14 @@ function PostDataCheck($to_check, $data_types, $send_response = true, $send_succ
 
 }
 
-// Süti adat kódoló
+// Süti adat titkosító
 function encrypt($data, $key) {
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
     $encrypted = openssl_encrypt($data, 'aes-256-cbc', hex2bin($key), 0, $iv);
     return base64_encode($iv . $encrypted);
 }
 
+// Süti adat dekódoló
 function decrypt($data, $key) {
     $data = base64_decode($data);
     $iv_length = openssl_cipher_iv_length('aes-256-cbc');

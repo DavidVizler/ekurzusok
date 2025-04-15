@@ -11,6 +11,7 @@ function UserDataQuery() {
 
     $user_id = (int)decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));
 
+    // Felhasználó adatainak lekérdezése
     $sql_statement = "SELECT email, firstname, lastname FROM users WHERE user_id = ?";
     $user_data = DataQuery($sql_statement, "i", [$user_id]);
 
@@ -34,6 +35,7 @@ function UserCoursesQuery() {
 
     $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
 
+    // Kurzus tagjainak lekérdezése
     $sql_statement = "SELECT c.course_id, c.name, c.design_id, c.archived, m.role,
     (SELECT u.firstname FROM users u INNER JOIN memberships m ON u.user_id = m.user_id WHERE m.role = 3 AND m.course_id = c.course_id) AS firstname,
     (SELECT u.lastname FROM users u INNER JOIN memberships m ON u.user_id = m.user_id WHERE m.role = 3 AND m.course_id = c.course_id) AS lastname
@@ -53,7 +55,7 @@ function CourseDataQuery() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"], "i")) {
+    if (!PostDataCheck(["course_id"], "i", true, false)) {
         return;
     }
     
@@ -71,13 +73,16 @@ function CourseDataQuery() {
         return;
     }
 
+    // A kódot csak akkor kérdezze le, ha tanár vagy tulajdonos
     $code_query = $membership_data[0]["role"] > 1 ? " c. code," : "";
 
+    // Kurzus adatainak lekérdezése
     $sql_statement = "SELECT c.name, c.description, c.design_id, c.archived,{$code_query} u.firstname, u.lastname
     FROM courses c INNER JOIN memberships m ON c.course_id = m.course_id
     INNER JOIN users u ON m.user_id = u.user_id WHERE c.course_id = ? AND m.role = 3;";
     $course_data = DataQuery($sql_statement, "i", [$course_id])[0];
 
+    // Kurzusban betöltött szerep hozzáadása a kurzus adatokhoz
     $course_data["role"] = $membership_data[0]["role"];
 
     SendResponse($course_data);
@@ -92,7 +97,7 @@ function CourseMembersQuery() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"], "i")) {
+    if (!PostDataCheck(["course_id"], "i", true, false)) {
         return;
     }
     
@@ -141,7 +146,7 @@ function CourseContentQuery() {
         return;
     }
 
-    if (!PostDataCheck(["course_id"], "i")) {
+    if (!PostDataCheck(["course_id"], "i", true, false)) {
         return;
     }
     
@@ -176,7 +181,7 @@ function CourseContentDataQuery() {
         return;
     }
 
-    if (!PostDataCheck(["content_id"], "i")) {
+    if (!PostDataCheck(["content_id"], "i", true, false)) {
         return;
     }
     
@@ -197,6 +202,7 @@ function CourseContentDataQuery() {
         return;
     }
 
+    // Kurzus tartalom lekérdezése
     $sql_statement = "SELECT t.title, t.description, t.task, t.max_points, t.deadline, t.published, t.last_modified, c.archived, u.firstname, u.lastname, 
     IF(t.user_id=?, true, false) AS owned FROM content t
     INNER JOIN users u ON t.user_id = u.user_id INNER JOIN courses c ON t.course_id = c.course_id
@@ -223,7 +229,7 @@ function CourseContentFilesQuery() {
         return;
     }
 
-    if (!PostDataCheck(["content_id"], "i")) {
+    if (!PostDataCheck(["content_id"], "i", true, false)) {
         return;
     }
 
@@ -262,6 +268,7 @@ function DeadlineTasksQuery() {
     $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $now = (new DateTime('now', new DateTimeZone('Europe/Budapest')))->format('Y-m-d H:i:s');
 
+    // Határidős feladatok lekérdezése, ahol még nem járt le a határidő
     $sql_statement = "SELECT t.content_id, t.deadline, t.title, c.name AS course_name FROM content t
     INNER JOIN courses c ON t.course_id = c.course_id
     INNER JOIN memberships m ON c.course_id = m.course_id
@@ -281,7 +288,7 @@ function OwnSubmissionQuery() {
         return;
     }
 
-    if (!PostDataCheck(["content_id"], "i")) {
+    if (!PostDataCheck(["content_id"], "i", true, false)) {
         return;
     }
 
@@ -343,7 +350,7 @@ function SubmissionsQuery() {
         return;
     }
 
-    if (!PostDataCheck(["content_id"], "i")) {
+    if (!PostDataCheck(["content_id"], "i", true, false)) {
         return;
     }
 
@@ -371,6 +378,7 @@ function SubmissionsQuery() {
         return;
     }
 
+    // Beadandó adatainak lekérdezése
     $sql_statement = "SELECT s.submission_id, u.lastname, u.firstname, s.submitted, COUNT(f.file_id) AS files_count, s.rating, c.max_points FROM submissions s
     INNER JOIN content c ON s.content_id = c.content_id
     INNER JOIN users u ON s.user_id = u.user_id
@@ -390,7 +398,7 @@ function SubmissionCountQuery() {
         return;
     }
 
-    if (!PostDataCheck(["content_id"], "i")) {
+    if (!PostDataCheck(["content_id"], "i", true, false)) {
         return;
     }
 
@@ -418,8 +426,7 @@ function SubmissionCountQuery() {
         return;
     }
 
-    $course_id = $membership_data[0]["course_id"];
-
+    // Beküldött beadandók számának lekérdezése
     $sql_statement = "SELECT COUNT(submission_id) AS submission_count,
     (SELECT COUNT(membership_id) FROM memberships WHERE course_id = 4291 AND role = 1) AS student_count
     FROM submissions WHERE content_id = 1 AND submitted IS NOT NULL;";
@@ -437,7 +444,7 @@ function SubmittedFilesQuery() {
         return;
     }
 
-    if (!PostDataCheck(["submission_id"], "i")) {
+    if (!PostDataCheck(["submission_id"], "i", true, false)) {
         return;
     }
 

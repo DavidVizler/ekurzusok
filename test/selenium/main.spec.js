@@ -2,7 +2,7 @@ const { Builder, Browser } = require('selenium-webdriver');
 const { URL } = require('../config');
 
 const browsers = [Browser.CHROME, Browser.FIREFOX];
-const timeout = 20000;
+const timeout = 30000;
 
 browsers.map(browser => {
     describe(browser, () => {
@@ -10,7 +10,7 @@ browsers.map(browser => {
         beforeAll(async () => {
             driver = new Builder().forBrowser(browser).build();
             jest.setTimeout(60000);
-        });
+        }, timeout);
         
         test("Kezdőlap", async () => {
             await driver.get(URL);

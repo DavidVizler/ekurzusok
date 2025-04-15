@@ -35,11 +35,10 @@ async function signup() {
     if (checkResult.valid) {
         let [response, result] = await API.signup(email, firstname, lastname, password);
 
-        if (response.ok) {
+        if (response.ok || response.status == 400) {
             if (result.sikeres) {
                 window.location.href = './kurzusok.html';
-            }
-            else {
+            } else {
                 resultModal(result.uzenet);
             }
         }

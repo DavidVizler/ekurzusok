@@ -39,6 +39,7 @@ function SubmitSubmission() {
         return;
     }
 
+    // Nem-e határidő után akarja a diák beadni a munkáját
     if (!is_null($membership_data[0]["deadline"])) {
         $deadline = $membership_data[0]["deadline"];
         $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
@@ -51,6 +52,7 @@ function SubmitSubmission() {
         }
     }
 
+    // Nincs-e archviálva a kurzus
     $course_id = $membership_data[0]["course_id"];
     $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
     $archived = DataQuery($sql_statement, "i", [$course_id]);
@@ -93,7 +95,7 @@ function SubmitSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Feladat leadása sikertelen"
-        ]);
+        ], 400);
     }
 }
 
@@ -119,6 +121,7 @@ function UnsubmitSubmission() {
     WHERE c.content_id = ? AND m.user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$content_id, $user_id]);
 
+    // Kurzus nincs-e archiválva
     $course_id = $membership_data[0]["course_id"];
     $sql_statement = "SELECT archived FROM courses WHERE course_id = ?;";
     $archived = DataQuery($sql_statement, "i", [$course_id]);
@@ -130,6 +133,7 @@ function UnsubmitSubmission() {
         return;
     }
 
+    // Nem járt-e le a határidő
     if (!is_null($membership_data[0]["deadline"])) {
         $deadline = $membership_data[0]["deadline"];
         $now = new DateTime('now', new DateTimeZone('Europe/Budapest'));
@@ -176,7 +180,7 @@ function UnsubmitSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Leadás visszavonása sikertelen"
-        ]);
+        ], 400);
     }
 }
 
@@ -268,6 +272,11 @@ function AttachSubmissionFiles() {
             "sikeres" => true,
             "uzenet" => "Fájlok sikeresen feltöltve"
         ], 201);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Fájlok feltöltése sikertelene"
+        ], 400);
     }
 }
 
@@ -359,7 +368,7 @@ function RemoveFileFromSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen törlés"
-        ]);
+        ], 400);
     }
 }
 
@@ -381,6 +390,7 @@ function RateSubmission() {
     $submission_id = $data["submission_id"];
     $points = $data["points"];
 
+    // Feladat adatainak lekérdezése
     $sql_statement = "SELECT t.max_points, c.course_id FROM content t
     INNER JOIN courses c ON t.course_id = c.course_id
     INNER JOIN submissions s ON t.content_id = s.content_id
@@ -406,6 +416,14 @@ function RateSubmission() {
         return;
     }
 
+    if (is_null($content_data[0]["max_points"])) {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Nincs a feladatnak elérhető pontszám beállítva"
+        ], 403);
+        return;
+    }
+
     if ($content_data[0]["max_points"] < $points) {
         SendResponse([
             "sikeres" => false,
@@ -416,6 +434,7 @@ function RateSubmission() {
 
     $course_id = $content_data[0]["course_id"];
 
+    // Jogosultságkezelés
     $sql_statement = "SELECT role FROM memberships WHERE course_id = ? AND user_id = ?;";
     $membership_data = DataQuery($sql_statement, "ii", [$course_id, $user_id]);
     if (count($membership_data) == 0) {
@@ -445,7 +464,7 @@ function RateSubmission() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Beadandó értékelése sikertelen"
-        ]);
+        ], 400);
     }
 }
 

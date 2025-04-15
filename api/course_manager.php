@@ -49,26 +49,26 @@ function CreateCourse() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "A kurzus létrehozása sikertelen"
-        ]);
+        ], 400);
     }
 
     $sql_statement = "SELECT MAX(course_id) AS id FROM courses";
     $course_id = DataQuery($sql_statement)[0]["id"];
 
-    // Kurzus tagság hozzáadása
+    // Tulajdonos hozzáadása a kurzushoz
     $sql_statement = "INSERT INTO memberships (membership_id, user_id, course_id, role) VALUE (NULL, ?, ?, 3)";
     $result_membership = ModifyData($sql_statement, "ii", [$user_id, $course_id]);
 
-    if (!$result_membership) {
-        SendResponse([
-            "sikeres" => false,
-            "uzenet" => "Tulajdonos hozzáadása a kurzushoz sikertelen"
-        ]);
-    } else {
+    if ($result_membership) {
         SendResponse([
             "sikeres" => true,
             "uzenet" => "Kurzus sikeresen létrehozva"
         ], 201);
+    } else {
+        SendResponse([
+            "sikeres" => false,
+            "uzenet" => "Tulajdonos hozzáadása a kurzushoz sikertelen"
+        ], 400);
     }
 }
 
@@ -151,7 +151,7 @@ function ModifyCourseData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Nem érkezett változtatandó adat"
-        ]);
+        ], 400);
         return;
     }
 
@@ -171,7 +171,7 @@ function ModifyCourseData() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen adatmódosítás"
-        ]);
+        ], 400);
     }
 }
 
@@ -214,6 +214,7 @@ function ArchiveCourse() {
         return;
     }
 
+    // Archviált státusz módosítása az ellentétére
     $new_status = !$course_data[0]["archived"];
     $modification = $new_status ? "archiválás" : "visszaállítás";
 
@@ -229,7 +230,7 @@ function ArchiveCourse() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Sikertelen {$modification}"
-        ]);
+        ], 400);
     }
 }
 
@@ -250,6 +251,7 @@ function DeleteCourse() {
     $user_id = decrypt($_COOKIE["user_id"], getenv("COOKIE_KEY"));;
     $course_id = $data["id"];
 
+    // Jogosultságkezelés
     $sql_statement = "SELECT * FROM courses c
     INNER JOIN memberships m ON c.course_id = m.course_id
     WHERE c.course_id = ? AND m.user_id = ?;";
@@ -283,7 +285,7 @@ function DeleteCourse() {
         SendResponse([
             "sikeres" => false,
             "uzenet" => "Kurzus törlése sikertelen"
-        ]);
+        ], 400);
     }
 }
 
