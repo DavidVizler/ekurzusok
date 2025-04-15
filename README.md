@@ -10,11 +10,13 @@ A projekt résztvevői: Ferenczy Bálint, Iványi Anna, Vizler Dávid
 - Feladat leadása határidő után
 
 **Frontend**
-- [x] Regisztráció ellenőrzés visszajelzés
 - [ ] Saját, csatlakozott és archivált kurzusok egyértelmű elkülönítése
-- [ ] Kurzus módosításának és felhasználók kezelésének letiltása tanároknál, akik nem tulajdonosok
-- [x] Kurzus visszaállítása archivált állapotból
+- [ ] Kurzus módosításának letiltása tanároknál, akik nem tulajdonosok
 - [ ] Üres kurzusok oldal kidekorálása
+- [ ] Közzétett-nem közzétett tartalom betöltési glitch javítása
+- [ ] Közzétett-nem közzétett tartalom ne jelenjen meg diákoknál
+- [x] Regisztráció ellenőrzés visszajelzés
+- [x] Kurzus visszaállítása archivált állapotból
 - [x] Jogosultságkezelés
 - [x] Több fájl feltöltése a meglévők mellé
 - [x] Közzlétett, nem közzétett tartalom oldal átrendezése
@@ -88,9 +90,11 @@ A felhasználó képes egy új ideiglenes jelszót igényelni, ha elfelejtette j
 ## Adatbázis
 ![Adatbázis relációs modell](./db/db.png)
 
-A db mappában megtalálható az `ekurzusok_ures.sql`, ami az üres adatbázis és az `ekurzusok_tesztadatokkal.sql`, ami tartalmaz 12.754 felhasználót, 4141 kurzust, 138.468 tagságot és egy admin fiókot.
+A db mappában megtalálható az `ekurzusok_ures.sql`, ami az üres adatbázis és az `ekurzusok_tesztadatokkal.sql`, ami tartalmaz 12.754 felhasználót, 4718 kurzust, 138.174 tagságot és egy admin fiókot.
 
 Az adatgenerátor a `DataGenerator.zip` fájlban található. Kicsomagolás után a mappán belül a `dotnet run` paranccsal lehet futtatni. A program 3 CSV fájlt generál: `user.csv`, `courses.csv` és `memberships.csv`, amelyeket be lehet importálni az **üres** SQL adatbázisba. Windows-on a `DataGenerator\bin\Debug\net8.0` mappába teszi a fájlokat, Linuxon közvetlenül a `DataGenerator` gyökérkönyvtárba. **Importáláskor be kell állítani phpmyAdmin-ban, hogy az első sort (fejlécet) hagyja ki és hogy az elválsztó karakter pontosvessző legyen!**
+
+A tesztelés leegyszerűsítése érdekében az összes felhasználó jelszava, beleértve az adminisztrátorokat, a tesztadatokat tartalmazó adatbázisban "Almafa123".
 
 ## Tesztek
 A tesztek futtatása előtt a [test](test/) mappába kell belépni és futtatni kell az alábbi parancsot: `npm install` \
