@@ -614,3 +614,18 @@ a#openModal:hover, a#openModalUsers:hover {
 .modal-content button:active,#ok_button:active, .alert-modal-content button:active {
     background-color: #8fa3ff;
 }
+
+#unarchiveButton {
+    height: 30px;
+    border: none;
+    background-color: #5274ff;
+    color: white;
+    font-family: "Varela Round";
+    border-radius: 10px;
+    margin-left: 15px;
+}
+
+#unarchiveButton:hover {
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}

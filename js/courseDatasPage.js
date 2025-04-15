@@ -110,6 +110,14 @@ function ModifyActualData(cardData) {
         const warningBanner = create('div', 'archived-warning');
         warningBanner.innerHTML = "Ez a kurzus archivált! A tartalmak elérhetők, de nem módosíthatók.";
 
+        if (cardData.role == 3) {
+            let unarchiveBtn = create('button');
+            unarchiveBtn.id = 'unarchiveButton';
+            unarchiveBtn.innerText = 'Visszaállítás';
+            unarchiveBtn.addEventListener('click', unarchive);
+            warningBanner.appendChild(unarchiveBtn);
+        }
+
         // A menu div UTÁN illesztjük be
         menu.parentNode.insertBefore(warningBanner, menu.nextSibling);
     }
@@ -401,6 +409,19 @@ window.addEventListener("load", () => {
         getCourseContent(courseId);
     }
 });
+
+async function unarchive() {
+    let courseId = parseInt(getUrlEndpoint());
+    try {
+        let [response, result] = await API.archiveCourse(courseId);
+        if (response.ok) {
+            location.reload();
+        }
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
 
 document.getElementById("deleteCourseButton").addEventListener("click", ()=>{
     confirmationModal("Biztosan törölné a kurzust?", DeleteCourse)
